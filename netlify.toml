@@ -1,0 +1,16 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# The redirects are now handled by the _redirects file in the public directory
+# Remove the incorrect redirect
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200 
