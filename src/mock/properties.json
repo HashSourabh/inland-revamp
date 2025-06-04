@@ -1,0 +1,477 @@
+[
+  {
+    "id": "prop-23689",
+    "reference": "IAD-23689",
+    "title": "Charming 3 Bedroom Cortijo with Mountain Views in Antequera",
+    "description": "This beautifully renovated traditional Andalusian cortijo is nestled in the rolling hills just outside Antequera. With breathtaking mountain views and surrounded by olive groves, this property offers authentic rural living with modern comforts. The cortijo has been lovingly restored, preserving original features such as wooden beams and terracotta floors while incorporating contemporary amenities. The spacious living area features a traditional fireplace, perfect for cozy evenings. The well-equipped kitchen combines rustic charm with modern functionality. Outside, there's a private pool, various terraces for outdoor dining, and a mature garden with local plants requiring minimal maintenance. This property represents the perfect balance of traditional Andalusian charm and modern convenience, ideal as a permanent residence or holiday home.",
+    "shortDescription": "Traditional Andalusian cortijo with 3 bedrooms, mountain views, private pool, and beautiful gardens near Antequera. Perfectly renovated with modern amenities while maintaining authentic charm.",
+    "price": 249000,
+    "currency": "EUR",
+    "location": {
+      "province": "Malaga",
+      "town": "Antequera",
+      "address": "Rural Zone, Antequera",
+      "coordinates": {
+        "latitude": 37.0195,
+        "longitude": -4.5659
+      },
+      "postcode": "29200"
+    },
+    "features": {
+      "type": "Cortijo",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "buildSize": 150,
+      "plotSize": 5000,
+      "parking": true,
+      "pool": true,
+      "garden": true,
+      "terrace": true,
+      "fireplace": true,
+      "airConditioning": true,
+      "centralHeating": false,
+      "storageRoom": true,
+      "furnished": "Partially"
+    },
+    "distanceTo": {
+      "townCenter": 8,
+      "airport": 65,
+      "beach": 70,
+      "golf": 25,
+      "shops": 8,
+      "restaurants": 8
+    },
+    "images": [
+      {
+        "url": "/images/properties/23689/main.jpg",
+        "alt": "Exterior view of cortijo with mountains in the background",
+        "isFeatured": true
+      },
+      {
+        "url": "/images/properties/23689/living.jpg",
+        "alt": "Living room with fireplace and wooden beams",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23689/kitchen.jpg",
+        "alt": "Rustic kitchen with modern appliances",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23689/bedroom1.jpg",
+        "alt": "Master bedroom with traditional features",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23689/bathroom1.jpg",
+        "alt": "Modern bathroom with shower",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23689/terrace.jpg",
+        "alt": "Terrace with dining area and mountain views",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23689/pool.jpg",
+        "alt": "Private swimming pool surrounded by garden",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23689/garden.jpg",
+        "alt": "Landscaped garden with Mediterranean plants",
+        "isFeatured": false
+      }
+    ],
+    "virtualTour": null,
+    "floorPlan": "/images/properties/23689/floorplan.jpg",
+    "energyCertificate": {
+      "rating": "E",
+      "consumption": 250,
+      "emissions": 45
+    },
+    "status": "Active",
+    "featured": true,
+    "dateAdded": "2023-10-15T10:30:00Z",
+    "dateUpdated": "2024-03-25T14:45:00Z"
+  },
+  {
+    "id": "prop-23128",
+    "reference": "IAD-23128",
+    "title": "Impressive 4 Bedroom Villa with Panoramic Views in Priego de Córdoba",
+    "description": "This stunning modern villa sits in an elevated position offering spectacular panoramic views over Priego de Córdoba and the surrounding countryside. Designed with luxury and comfort in mind, the property features an open-concept living space with floor-to-ceiling windows that flood the interior with natural light and showcase the breathtaking views. The sleek, contemporary kitchen is equipped with high-end appliances and opens onto a dining terrace perfect for entertaining. The master suite includes a walk-in closet and a spa-like bathroom with a freestanding tub. Three additional bedrooms ensure plenty of space for family or guests. Outside, the infinity pool appears to merge with the horizon, while multiple terraces provide different vantage points to enjoy the views. Mature gardens with automatic irrigation surround the property, which also includes a double garage and additional storage space. Located just a short drive from the historic center of Priego de Córdoba, this villa offers privacy and tranquility while remaining accessible to amenities.",
+    "shortDescription": "Modern 4-bedroom villa with panoramic views, infinity pool, and luxury finishes near Priego de Córdoba. Featuring open living spaces, high-end kitchen, and beautiful outdoor areas.",
+    "price": 595000,
+    "currency": "EUR",
+    "location": {
+      "province": "Cordoba",
+      "town": "Priego de Córdoba",
+      "address": "Urb. Las Vistas, Priego de Córdoba",
+      "coordinates": {
+        "latitude": 37.4392,
+        "longitude": -4.1935
+      },
+      "postcode": "14800"
+    },
+    "features": {
+      "type": "Villa",
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "buildSize": 280,
+      "plotSize": 1200,
+      "parking": true,
+      "pool": true,
+      "garden": true,
+      "terrace": true,
+      "fireplace": false,
+      "airConditioning": true,
+      "centralHeating": true,
+      "storageRoom": true,
+      "furnished": "Unfurnished"
+    },
+    "distanceTo": {
+      "townCenter": 3,
+      "airport": 110,
+      "beach": 150,
+      "golf": 45,
+      "shops": 3,
+      "restaurants": 3
+    },
+    "images": [
+      {
+        "url": "/images/properties/23128/main.jpg",
+        "alt": "Modern villa with panoramic views",
+        "isFeatured": true
+      },
+      {
+        "url": "/images/properties/23128/living.jpg",
+        "alt": "Open concept living room with large windows",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23128/kitchen.jpg",
+        "alt": "Contemporary kitchen with island",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23128/bedroom1.jpg",
+        "alt": "Master bedroom with view",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23128/bathroom1.jpg",
+        "alt": "Luxury bathroom with freestanding tub",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23128/terrace.jpg",
+        "alt": "Dining terrace with panoramic views",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23128/pool.jpg",
+        "alt": "Infinity pool overlooking the landscape",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23128/aerial.jpg",
+        "alt": "Aerial view of the property and surroundings",
+        "isFeatured": false
+      }
+    ],
+    "virtualTour": "https://example.com/virtual-tours/23128",
+    "floorPlan": "/images/properties/23128/floorplan.jpg",
+    "energyCertificate": {
+      "rating": "B",
+      "consumption": 95,
+      "emissions": 18
+    },
+    "status": "Active",
+    "featured": true,
+    "dateAdded": "2023-08-05T09:15:00Z",
+    "dateUpdated": "2024-04-01T11:30:00Z"
+  },
+  {
+    "id": "prop-23450",
+    "reference": "IAD-23450",
+    "title": "Authentic 2 Bedroom Townhouse in Historic Center of Estepa",
+    "description": "This authentic townhouse is located in the heart of the historic center of Estepa, known for its whitewashed buildings and rich cultural heritage. The property retains its traditional Andalusian character with features such as an interior patio, original tiles, and wooden doors. The house is arranged over two floors, with the ground floor comprising a living room with a traditional fireplace, a dining area, and a fitted kitchen. Two bedrooms and a bathroom are located on the upper floor, with the master bedroom featuring a small balcony overlooking the charming street below. The interior patio brings light into the property and provides a peaceful space for outdoor dining or relaxation. Recently renovated with respect for the original architecture, the house includes modern conveniences such as updated plumbing and electrical systems. Its location in the historic center offers easy access to local amenities, restaurants, and cultural attractions, making it perfect for those seeking an authentic Spanish lifestyle or a lock-and-leave holiday home.",
+    "shortDescription": "Traditional 2-bedroom townhouse in Estepa's historic center. Features include interior patio, original architectural elements, and modern updates. Perfect authentic Spanish home in a charming white village.",
+    "price": 128000,
+    "currency": "EUR",
+    "location": {
+      "province": "Sevilla",
+      "town": "Estepa",
+      "address": "Calle Humilladero, Estepa",
+      "coordinates": {
+        "latitude": 37.2923,
+        "longitude": -4.8775
+      },
+      "postcode": "41560"
+    },
+    "features": {
+      "type": "Townhouse",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "buildSize": 85,
+      "plotSize": 85,
+      "parking": false,
+      "pool": false,
+      "garden": false,
+      "terrace": false,
+      "fireplace": true,
+      "airConditioning": false,
+      "centralHeating": false,
+      "storageRoom": false,
+      "furnished": "Unfurnished"
+    },
+    "distanceTo": {
+      "townCenter": 0,
+      "airport": 95,
+      "beach": 100,
+      "golf": 40,
+      "shops": 0.2,
+      "restaurants": 0.1
+    },
+    "images": [
+      {
+        "url": "/images/properties/23450/main.jpg",
+        "alt": "Traditional townhouse facade in Estepa",
+        "isFeatured": true
+      },
+      {
+        "url": "/images/properties/23450/living.jpg",
+        "alt": "Living room with traditional fireplace",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23450/kitchen.jpg",
+        "alt": "Fitted kitchen with traditional elements",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23450/bedroom1.jpg",
+        "alt": "Master bedroom with balcony",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23450/bathroom.jpg",
+        "alt": "Updated bathroom",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23450/patio.jpg",
+        "alt": "Interior patio with plants",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23450/street.jpg",
+        "alt": "View of the charming street",
+        "isFeatured": false
+      }
+    ],
+    "virtualTour": null,
+    "floorPlan": "/images/properties/23450/floorplan.jpg",
+    "energyCertificate": {
+      "rating": "G",
+      "consumption": 320,
+      "emissions": 65
+    },
+    "status": "Active",
+    "featured": false,
+    "dateAdded": "2024-01-20T14:00:00Z",
+    "dateUpdated": "2024-03-15T10:20:00Z"
+  },
+  {
+    "id": "prop-23566",
+    "reference": "IAD-23566",
+    "title": "Spacious 5 Bedroom Country House with Olive Grove in Martos",
+    "description": "Set amidst its own olive grove of 10,000 m², this substantial country house offers the perfect blend of rural living and modern convenience. Located near Martos, an area known for producing some of Spain's finest olive oil, the property consists of a main house and separate guest accommodation. The main house features a large country kitchen with wood-burning stove, a spacious living room with fireplace, three bedrooms, and two bathrooms. The separate guest house provides two additional bedrooms and a bathroom, perfect for visitors or potential rental income. The property boasts multiple outdoor spaces, including a covered porch, a summer kitchen with barbecue area, and a large pool with sun terrace. The productive olive grove currently yields approximately 500 liters of organic olive oil annually and could potentially be expanded. Additional features include a large garage/workshop, storage buildings, solar panels providing electricity, and a private well for irrigation. With good road access and only 10 minutes from Martos town, this property offers rural tranquility with practical convenience.",
+    "shortDescription": "Spacious 5-bedroom country house with guest accommodation, pool, and 10,000 m² productive olive grove near Martos. Features include multiple outdoor spaces, solar power, and private well.",
+    "price": 345000,
+    "currency": "EUR",
+    "location": {
+      "province": "Jaen",
+      "town": "Martos",
+      "address": "Countryside, Martos",
+      "coordinates": {
+        "latitude": 37.7219,
+        "longitude": -3.9639
+      },
+      "postcode": "23600"
+    },
+    "features": {
+      "type": "Country House",
+      "bedrooms": 5,
+      "bathrooms": 3,
+      "buildSize": 220,
+      "plotSize": 10000,
+      "parking": true,
+      "pool": true,
+      "garden": true,
+      "terrace": true,
+      "fireplace": true,
+      "airConditioning": false,
+      "centralHeating": false,
+      "storageRoom": true,
+      "furnished": "Partially"
+    },
+    "distanceTo": {
+      "townCenter": 10,
+      "airport": 130,
+      "beach": 180,
+      "golf": 60,
+      "shops": 10,
+      "restaurants": 10
+    },
+    "images": [
+      {
+        "url": "/images/properties/23566/main.jpg",
+        "alt": "Country house surrounded by olive groves",
+        "isFeatured": true
+      },
+      {
+        "url": "/images/properties/23566/living.jpg",
+        "alt": "Living room with fireplace",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23566/kitchen.jpg",
+        "alt": "Country kitchen with wood-burning stove",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23566/bedroom1.jpg",
+        "alt": "Master bedroom",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23566/guesthouse.jpg",
+        "alt": "Separate guest accommodation",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23566/pool.jpg",
+        "alt": "Swimming pool with sun terrace",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23566/olives.jpg",
+        "alt": "Olive grove on the property",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/23566/views.jpg",
+        "alt": "Views from the property",
+        "isFeatured": false
+      }
+    ],
+    "virtualTour": null,
+    "floorPlan": "/images/properties/23566/floorplan.jpg",
+    "energyCertificate": {
+      "rating": "F",
+      "consumption": 280,
+      "emissions": 60
+    },
+    "status": "Active",
+    "featured": true,
+    "dateAdded": "2024-02-10T11:00:00Z",
+    "dateUpdated": "2024-04-05T09:45:00Z"
+  },
+  {
+    "id": "prop-22890",
+    "reference": "IAD-22890",
+    "title": "Renovated 3 Bedroom Cortijo with Pool in Algarinejo",
+    "description": "This beautifully renovated cortijo is located in a tranquil rural setting near Algarinejo, with spectacular views of the surrounding mountains and countryside. The property has been tastefully restored to combine traditional Andalusian character with modern comfort. The main living area features a wood-burning stove, exposed wooden beams, and large windows that showcase the stunning views. The country-style kitchen is fully equipped with modern appliances while maintaining rustic charm with wooden cabinets and stone countertops. The master bedroom includes an en-suite bathroom, while two additional bedrooms share a family bathroom. Outside, there's a private pool surrounded by a stone terrace, a covered dining area, and landscaped gardens with Mediterranean plants and fruit trees. The property sits on 3,000 m² of land, offering plenty of privacy and space for outdoor activities. Additional features include a separate storage building that could be converted into additional accommodation, solar panels for hot water, and good road access. This property is perfect for those seeking a peaceful rural retreat with all modern conveniences.",
+    "shortDescription": "Tastefully renovated 3-bedroom cortijo with pool and mountain views near Algarinejo. Features traditional elements with modern comforts on 3,000 m² of land with fruit trees and Mediterranean garden.",
+    "price": 189500,
+    "currency": "EUR",
+    "location": {
+      "province": "Granada",
+      "town": "Algarinejo",
+      "address": "Countryside, Algarinejo",
+      "coordinates": {
+        "latitude": 37.3264,
+        "longitude": -4.1584
+      },
+      "postcode": "18280"
+    },
+    "features": {
+      "type": "Cortijo",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "buildSize": 120,
+      "plotSize": 3000,
+      "parking": true,
+      "pool": true,
+      "garden": true,
+      "terrace": true,
+      "fireplace": true,
+      "airConditioning": false,
+      "centralHeating": false,
+      "storageRoom": true,
+      "furnished": "Partially"
+    },
+    "distanceTo": {
+      "townCenter": 5,
+      "airport": 90,
+      "beach": 110,
+      "golf": 50,
+      "shops": 5,
+      "restaurants": 5
+    },
+    "images": [
+      {
+        "url": "/images/properties/22890/main.jpg",
+        "alt": "Renovated cortijo with mountain views",
+        "isFeatured": true
+      },
+      {
+        "url": "/images/properties/22890/living.jpg",
+        "alt": "Living area with wood-burning stove",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/22890/kitchen.jpg",
+        "alt": "Country-style kitchen with modern appliances",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/22890/bedroom1.jpg",
+        "alt": "Master bedroom with en-suite",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/22890/bathroom.jpg",
+        "alt": "Modern bathroom with traditional elements",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/22890/pool.jpg",
+        "alt": "Private pool with mountain views",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/22890/terrace.jpg",
+        "alt": "Covered dining terrace",
+        "isFeatured": false
+      },
+      {
+        "url": "/images/properties/22890/garden.jpg",
+        "alt": "Garden with fruit trees and Mediterranean plants",
+        "isFeatured": false
+      }
+    ],
+    "virtualTour": "https://example.com/virtual-tours/22890",
+    "floorPlan": "/images/properties/22890/floorplan.jpg",
+    "energyCertificate": {
+      "rating": "E",
+      "consumption": 240,
+      "emissions": 50
+    },
+    "status": "Active",
+    "featured": false,
+    "dateAdded": "2023-06-15T08:30:00Z",
+    "dateUpdated": "2024-02-20T13:15:00Z"
+  }
+] 

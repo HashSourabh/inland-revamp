@@ -1,0 +1,357 @@
+[
+  {
+    "id": "malaga",
+    "name": "Malaga",
+    "title": "Properties in Malaga Province",
+    "shortDescription": "Discover inland Malaga, where whitewashed villages offer authentic Andalusian charm just a short drive from the Costa del Sol's beaches.",
+    "description": "Inland Malaga province offers a captivating contrast to the popular Costa del Sol. Here, traditional whitewashed villages cling to hillsides, surrounded by olive groves, vineyards, and dramatic mountain scenery. The region boasts a rich cultural heritage, excellent gastronomy, and a more authentic experience of Andalusian life. Despite its rural character, the area is well-connected, with Malaga International Airport providing easy access and the beaches of the coast just a short drive away. The provincial capital, Antequera, known as 'the heart of Andalucia' due to its central location, offers impressive historical monuments including a Moorish fortress and numerous churches and convents. The area is also famous for its natural wonders, including El Torcal Nature Reserve with its unique karst limestone formations and the Lobo Park wolf sanctuary. Property prices in inland Malaga typically offer excellent value compared to coastal areas, making it an attractive option for those seeking a permanent home or holiday property in authentic Spain.",
+    "imageUrl": "/images/provinces/malaga.jpg",
+    "coverImageUrl": "/images/provinces/malaga-cover.jpg",
+    "mapImageUrl": "/images/provinces/malaga-map.jpg",
+    "climate": {
+      "summer": "Hot and dry with temperatures often exceeding 30°C",
+      "winter": "Mild with occasional rainfall and temperatures rarely dropping below 5°C",
+      "spring": "Pleasant with temperatures between 15-25°C and colorful wildflowers",
+      "autumn": "Warm days and cooler evenings with some rainfall"
+    },
+    "keyTowns": [
+      {
+        "id": "antequera",
+        "name": "Antequera",
+        "description": "Known as 'the heart of Andalucia' due to its central location, Antequera is a historic city with impressive monuments including a Moorish fortress, numerous churches, and the nearby Dolmens (prehistoric burial mounds) which are UNESCO World Heritage sites.",
+        "imageUrl": "/images/towns/antequera.jpg",
+        "propertyCount": 27
+      },
+      {
+        "id": "archidona",
+        "name": "Archidona",
+        "description": "A charming town with a distinctive octagonal Plaza Ochavada and Moorish castle ruins overlooking the surrounding countryside. Archidona offers a traditional Andalusian atmosphere with good amenities and excellent connections to Malaga and Granada.",
+        "imageUrl": "/images/towns/archidona.jpg",
+        "propertyCount": 15
+      },
+      {
+        "id": "mollina",
+        "name": "Mollina",
+        "description": "Famous for its wine production, this small town is surrounded by vineyards and olive groves. Home to the Wine Museum of Malaga and offering good amenities, Mollina attracts those seeking rural tranquility with conveniences close at hand.",
+        "imageUrl": "/images/towns/mollina.jpg",
+        "propertyCount": 19
+      },
+      {
+        "id": "alameda",
+        "name": "Alameda",
+        "description": "A traditional agricultural town known for its olive oil production, Alameda offers authentic rural living with a good selection of local amenities including shops, bars, and restaurants serving traditional cuisine.",
+        "imageUrl": "/images/towns/alameda.jpg",
+        "propertyCount": 12
+      },
+      {
+        "id": "villanueva-del-trabuco",
+        "name": "Villanueva del Trabuco",
+        "description": "Nestled at the foot of the Sierra de San Jorge mountains, this town is known for its beautiful natural surroundings and fresh water springs. Popular with nature lovers and those seeking outdoor activities in authentic rural Andalucia.",
+        "imageUrl": "/images/towns/villanueva-del-trabuco.jpg",
+        "propertyCount": 8
+      }
+    ],
+    "propertyTypes": {
+      "countryHouses": 32,
+      "townhouses": 25,
+      "villas": 18,
+      "cortijos": 14,
+      "apartments": 7
+    },
+    "averagePrice": 185000,
+    "attractions": [
+      "El Torcal Nature Reserve - Unique karst limestone formations",
+      "Lobo Park - Wolf sanctuary in natural surroundings",
+      "Caminito del Rey - Spectacular walkway through a gorge",
+      "Antequera Dolmens - Prehistoric burial sites",
+      "Lake District - Three natural lakes offering water sports and beautiful scenery"
+    ],
+    "propertyCount": 96,
+    "latitude": 36.7213,
+    "longitude": -4.4213
+  },
+  {
+    "id": "cordoba",
+    "name": "Cordoba",
+    "title": "Properties in Cordoba Province",
+    "shortDescription": "Experience the rich history and rural beauty of inland Cordoba, where olive groves stretch to the horizon and traditional villages preserve authentic Andalusian culture.",
+    "description": "Cordoba province combines rich historical heritage with stunning natural landscapes dominated by endless olive groves. The province is known for producing some of Spain's finest olive oils, with the countryside dotted with traditional white villages that have preserved their authentic character. The provincial capital, Cordoba city, is home to the magnificent Mezquita-Cathedral, a UNESCO World Heritage site reflecting the region's Moorish past. In the south of the province, the Sierras Subbéticas Natural Park offers dramatic limestone landscapes with rare flora and fauna. The lifestyle in inland Cordoba is relaxed and traditional, with local festivals celebrating the agricultural calendar and religious traditions. Despite its rural character, the province is well-connected by road and rail, with Cordoba city providing high-speed train connections to Madrid, Seville, and Malaga. Property in the region typically offers excellent value, with everything from traditional village houses to substantial country estates available at prices significantly lower than coastal areas.",
+    "imageUrl": "/images/provinces/cordoba.jpg",
+    "coverImageUrl": "/images/provinces/cordoba-cover.jpg",
+    "mapImageUrl": "/images/provinces/cordoba-map.jpg",
+    "climate": {
+      "summer": "Very hot and dry with temperatures often exceeding 35°C in July and August",
+      "winter": "Cold mornings and evenings with mild afternoons, occasional frost in higher areas",
+      "spring": "Pleasant with temperatures between 15-25°C, lush green landscapes and wildflowers",
+      "autumn": "Mild temperatures and some rainfall, ideal for outdoor activities"
+    },
+    "keyTowns": [
+      {
+        "id": "priego-de-cordoba",
+        "name": "Priego de Córdoba",
+        "description": "Known as the 'Jewel of the Baroque' for its impressive churches and mansions, Priego de Córdoba is a beautiful town with a well-preserved Moorish quarter, spectacular viewpoints, and renowned for its high-quality olive oil.",
+        "imageUrl": "/images/towns/priego-de-cordoba.jpg",
+        "propertyCount": 23
+      },
+      {
+        "id": "iznajar",
+        "name": "Iznájar",
+        "description": "Dramatically perched above a large reservoir, Iznájar offers spectacular views from its Moorish castle and white-washed streets. The nearby lake provides opportunities for water sports and relaxation on its beach.",
+        "imageUrl": "/images/towns/iznajar.jpg",
+        "propertyCount": 18
+      },
+      {
+        "id": "zuheros",
+        "name": "Zuheros",
+        "description": "One of Andalucia's most picturesque white villages, Zuheros clings to a limestone cliff topped by a Moorish castle. The surrounding area offers excellent hiking including the Via Verde greenway route through olive groves.",
+        "imageUrl": "/images/towns/zuheros.jpg",
+        "propertyCount": 9
+      },
+      {
+        "id": "lucena",
+        "name": "Lucena",
+        "description": "A prosperous town with a rich Jewish heritage, Lucena is known for its furniture manufacturing and wine production. It offers excellent amenities while maintaining its historical character and traditions.",
+        "imageUrl": "/images/towns/lucena.jpg",
+        "propertyCount": 14
+      },
+      {
+        "id": "cabra",
+        "name": "Cabra",
+        "description": "Set beneath the stunning Sierras Subbéticas mountains, Cabra is a traditional town with Baroque churches, lively squares, and the beautiful Fuente del Río (River Source) natural park at its edge.",
+        "imageUrl": "/images/towns/cabra.jpg",
+        "propertyCount": 11
+      }
+    ],
+    "propertyTypes": {
+      "countryHouses": 24,
+      "townhouses": 31,
+      "villas": 12,
+      "cortijos": 16,
+      "apartments": 9
+    },
+    "averagePrice": 165000,
+    "attractions": [
+      "Sierras Subbéticas Natural Park - Dramatic limestone landscapes",
+      "Via Verde - Former railway line converted into a recreational route",
+      "Iznájar Reservoir - Andalucia's largest lake with beach and water sports",
+      "Mezquita-Cathedral in Cordoba City - UNESCO World Heritage site",
+      "Cave of the Bats in Zuheros - Prehistoric cave paintings"
+    ],
+    "propertyCount": 75,
+    "latitude": 37.8882,
+    "longitude": -4.7794
+  },
+  {
+    "id": "granada",
+    "name": "Granada",
+    "title": "Properties in Granada Province",
+    "shortDescription": "From the snowcapped Sierra Nevada to the valleys below, inland Granada offers diverse landscapes and properties with breathtaking mountain views.",
+    "description": "Granada province offers some of Andalucia's most dramatic and diverse landscapes, from the snowcapped Sierra Nevada mountains to the fertile valleys and plains below. The area is steeped in history, with the provincial capital Granada city home to the magnificent Alhambra palace, one of Spain's most visited monuments. In the countryside, traditional villages maintain centuries-old farming traditions, particularly around the cultivation of olives, almonds, and cherries. The region is famous for its cave houses, particularly in areas like Guadix, offering unique and energy-efficient homes carved into the soft local rock. The Sierra Nevada provides exceptional outdoor activities, including skiing in winter and hiking in summer, while the Alpujarras region features picturesque villages with distinctive architecture influenced by its Moorish past. Despite its mountainous terrain, Granada is well-connected by road, with an international airport and good access to the Mediterranean coast. Property in the region is diverse, ranging from traditional village houses and restored farmhouses to modern villas, typically offering excellent value compared to coastal or more touristy areas.",
+    "imageUrl": "/images/provinces/granada.jpg",
+    "coverImageUrl": "/images/provinces/granada-cover.jpg",
+    "mapImageUrl": "/images/provinces/granada-map.jpg",
+    "climate": {
+      "summer": "Hot in the valleys, cooler in mountain areas, with very low humidity",
+      "winter": "Cold with snow in mountain areas, milder in the valleys, clear sunny days",
+      "spring": "Variable with warm days and cool nights, spectacular wildflowers in mountain areas",
+      "autumn": "Mild temperatures with increasing rainfall, beautiful fall colors in wooded areas"
+    },
+    "keyTowns": [
+      {
+        "id": "montefrio",
+        "name": "Montefrío",
+        "description": "Named one of National Geographic's top 10 towns with the best views in the world, Montefrío is dominated by a striking church built on the site of a former Moorish castle with panoramic views over the surrounding olive groves.",
+        "imageUrl": "/images/towns/montefrio.jpg",
+        "propertyCount": 16
+      },
+      {
+        "id": "algarinejo",
+        "name": "Algarinejo",
+        "description": "A tranquil town surrounded by olive groves and rugged mountains, Algarinejo offers authentic rural living with traditional white-washed architecture and a slow-paced lifestyle centered around agriculture.",
+        "imageUrl": "/images/towns/algarinejo.jpg",
+        "propertyCount": 12
+      },
+      {
+        "id": "alhama-de-granada",
+        "name": "Alhama de Granada",
+        "description": "Perched dramatically above a gorge, this historic spa town is known for its thermal waters, Moorish quarter, and spectacular location between the Sierra de Tejeda mountains and olive-covered plains.",
+        "imageUrl": "/images/towns/alhama-de-granada.jpg",
+        "propertyCount": 18
+      },
+      {
+        "id": "loja",
+        "name": "Loja",
+        "description": "Strategically located between Granada and Cordoba, Loja is set along the Rio Genil with numerous springs, parks, and historical monuments including a Moorish fortress and Renaissance-era churches.",
+        "imageUrl": "/images/towns/loja.jpg",
+        "propertyCount": 21
+      },
+      {
+        "id": "orgiva",
+        "name": "Órgiva",
+        "description": "The main town of the Alpujarras region, Órgiva is a melting pot of cultures with a bohemian atmosphere, surrounded by orange and lemon groves with the stunning backdrop of the Sierra Nevada mountains.",
+        "imageUrl": "/images/towns/orgiva.jpg",
+        "propertyCount": 14
+      }
+    ],
+    "propertyTypes": {
+      "countryHouses": 28,
+      "townhouses": 29,
+      "villas": 15,
+      "cortijos": 19,
+      "caveHouses": 11
+    },
+    "averagePrice": 178000,
+    "attractions": [
+      "Alhambra Palace in Granada City - Moorish architectural masterpiece",
+      "Sierra Nevada National Park - Skiing, hiking, and mountain villages",
+      "Alpujarras - Traditional villages with distinctive architecture",
+      "Guadix - Famous for its cave houses carved into the landscape",
+      "Cliffs of Maro-Cerro Gordo - Dramatic coastal natural park"
+    ],
+    "propertyCount": 81,
+    "latitude": 37.1773,
+    "longitude": -3.5986
+  },
+  {
+    "id": "jaen",
+    "name": "Jaen",
+    "title": "Properties in Jaen Province",
+    "shortDescription": "Explore Jaen, the world's leading olive oil producer, where endless olive groves surround traditional towns and Renaissance cities with remarkable architecture.",
+    "description": "Jaen province is renowned as the world's leading producer of olive oil, with a landscape dominated by endless olive groves that create a unique sea of silver-green stretching to the horizon. Beyond its agricultural wealth, the province boasts impressive Renaissance architecture, particularly in the cities of Úbeda and Baeza, both UNESCO World Heritage sites. The provincial capital, Jaen city, is crowned by an impressive castle offering panoramic views over the surrounding olive countryside. Natural beauty abounds in the region's four natural parks, including the rugged Sierra de Cazorla, Spain's largest protected natural area. Life in Jaen moves at a gentle pace, with traditions strongly maintained and a gastronomy centered around its exceptional olive oils. The province remains one of Andalucia's less discovered gems, offering an authentic experience of Spanish life. Property in Jaen typically offers exceptional value, with everything from traditional town houses to large country estates with productive olive groves available at prices significantly lower than other provinces, making it an excellent option for those seeking an investment or a lifestyle change in authentic Spain.",
+    "imageUrl": "/images/provinces/jaen.jpg",
+    "coverImageUrl": "/images/provinces/jaen-cover.jpg",
+    "mapImageUrl": "/images/provinces/jaen-map.jpg",
+    "climate": {
+      "summer": "Very hot and dry with temperatures regularly exceeding 35°C",
+      "winter": "Cold, especially in mountain areas, with occasional snow and frost",
+      "spring": "Mild with abundant rainfall, turning the landscape green and vibrant",
+      "autumn": "Pleasant temperatures with some rainfall, ideal for olive harvesting"
+    },
+    "keyTowns": [
+      {
+        "id": "alcala-la-real",
+        "name": "Alcalá la Real",
+        "description": "Dominated by the impressive Fortaleza de la Mota fortress, this historic border town features a fascinating mix of Christian and Moorish influences, surrounded by olive groves and cherry orchards.",
+        "imageUrl": "/images/towns/alcala-la-real.jpg",
+        "propertyCount": 24
+      },
+      {
+        "id": "martos",
+        "name": "Martos",
+        "description": "Known as the 'Sea of Olives,' Martos is perched on a dramatic rocky outcrop crowned by a castle and church. The town is a major olive oil producer with a rich historical heritage and impressive views.",
+        "imageUrl": "/images/towns/martos.jpg",
+        "propertyCount": 17
+      },
+      {
+        "id": "ubeda",
+        "name": "Úbeda",
+        "description": "A UNESCO World Heritage site, Úbeda is renowned for its exceptional Renaissance architecture, including palaces, churches, and fountains built from golden sandstone. The town offers excellent amenities and cultural attractions.",
+        "imageUrl": "/images/towns/ubeda.jpg",
+        "propertyCount": 19
+      },
+      {
+        "id": "baeza",
+        "name": "Baeza",
+        "description": "Sister city to Úbeda and sharing UNESCO status, Baeza features perfectly preserved Renaissance architecture in a more intimate setting, with beautiful plazas, a stunning cathedral, and former university buildings.",
+        "imageUrl": "/images/towns/baeza.jpg",
+        "propertyCount": 15
+      },
+      {
+        "id": "cazorla",
+        "name": "Cazorla",
+        "description": "Gateway to the Sierra de Cazorla Natural Park, this charming town combines natural beauty with historical interest, featuring a picturesque old quarter, castle, and beautiful mountain backdrop.",
+        "imageUrl": "/images/towns/cazorla.jpg",
+        "propertyCount": 18
+      }
+    ],
+    "propertyTypes": {
+      "countryHouses": 31,
+      "townhouses": 36,
+      "villas": 14,
+      "cortijos": 22,
+      "apartments": 11
+    },
+    "averagePrice": 145000,
+    "attractions": [
+      "Sierra de Cazorla Natural Park - Spain's largest protected natural area",
+      "Renaissance cities of Úbeda and Baeza - UNESCO World Heritage sites",
+      "Castle of Santa Catalina in Jaen - Impressive fortress with panoramic views",
+      "Olive oil tourism - Mill visits and tastings throughout the province",
+      "Despeñaperros Natural Park - Dramatic gorge and ancient rock art"
+    ],
+    "propertyCount": 93,
+    "latitude": 37.7796,
+    "longitude": -3.7849
+  },
+  {
+    "id": "sevilla",
+    "name": "Sevilla",
+    "title": "Properties in Sevilla Province",
+    "shortDescription": "Discover the rural charm of inland Sevilla province, where traditional farming towns and historic villages offer authentic Andalusian living within reach of the vibrant provincial capital.",
+    "description": "While the provincial capital Seville is famous for its Moorish architecture and flamenco culture, the inland areas of Sevilla province offer a quieter, more traditional aspect of Andalucian life. The countryside is characterized by gently rolling hills covered with olive groves, sunflower fields, and cereal crops, dotted with whitewashed towns and villages that maintain strong agricultural traditions. The Sierra Norte Natural Park in the north of the province provides dramatic mountain scenery, popular for hiking and outdoor activities. Many towns in the province have fascinating historical centers, with impressive churches, convents, and remains of Moorish fortresses. The region is known for its excellent food and wine, particularly the wines from the Aljarafe area. Despite its rural character, most areas of inland Sevilla province are well-connected to the provincial capital, which offers an international airport and high-speed train connections to Madrid and other major cities. Property in the inland areas typically offers excellent value compared to the capital or coastal areas, with traditional townhouses, renovated farmhouses, and modern villas available at attractive prices.",
+    "imageUrl": "/images/provinces/sevilla.jpg",
+    "coverImageUrl": "/images/provinces/sevilla-cover.jpg",
+    "mapImageUrl": "/images/provinces/sevilla-map.jpg",
+    "climate": {
+      "summer": "Very hot and dry with temperatures frequently exceeding 40°C in July and August",
+      "winter": "Mild with occasional rainfall, rarely falling below freezing",
+      "spring": "Warm and pleasant with abundant wildflowers, ideal for outdoor activities",
+      "autumn": "Mild temperatures with increasing rainfall, harvesting season for olives"
+    },
+    "keyTowns": [
+      {
+        "id": "estepa",
+        "name": "Estepa",
+        "description": "Known as the 'Balcony of Andalucia' for its spectacular viewpoints, Estepa is famous for its Christmas sweets (mantecados) and features an impressive historical center with churches and a former Moorish fortress.",
+        "imageUrl": "/images/towns/estepa.jpg",
+        "propertyCount": 20
+      },
+      {
+        "id": "osuna",
+        "name": "Osuna",
+        "description": "A town rich in baroque architecture featured in Game of Thrones, Osuna boasts impressive palaces, churches, and a university building. Its center is protected as a Historic-Artistic Site for its architectural heritage.",
+        "imageUrl": "/images/towns/osuna.jpg",
+        "propertyCount": 18
+      },
+      {
+        "id": "carmona",
+        "name": "Carmona",
+        "description": "One of Andalucia's oldest settlements, Carmona features impressive Roman remains, Moorish walls, and Renaissance and Baroque palaces. Perched above the Guadalquivir valley, it offers stunning views and excellent restaurants.",
+        "imageUrl": "/images/towns/carmona.jpg",
+        "propertyCount": 23
+      },
+      {
+        "id": "ecija",
+        "name": "Écija",
+        "description": "Known as the 'City of Towers' for its striking church spires, and 'the frying pan of Andalucia' for its summer heat, Écija features impressive baroque palaces and Roman remains including a well-preserved mosaic.",
+        "imageUrl": "/images/towns/ecija.jpg",
+        "propertyCount": 25
+      },
+      {
+        "id": "marchena",
+        "name": "Marchena",
+        "description": "A traditional agricultural town with an impressive historical center featuring Moorish walls, a ducal palace, and several notable churches. Marchena maintains a strongly authentic Andalusian character.",
+        "imageUrl": "/images/towns/marchena.jpg",
+        "propertyCount": 16
+      }
+    ],
+    "propertyTypes": {
+      "countryHouses": 26,
+      "townhouses": 38,
+      "villas": 21,
+      "cortijos": 18,
+      "apartments": 14
+    },
+    "averagePrice": 172000,
+    "attractions": [
+      "Sierra Norte Natural Park - Mountain scenery and traditional villages",
+      "Roman ruins of Italica - Ancient amphitheater and mosaics",
+      "Bullring of Osuna - Featured in Game of Thrones",
+      "Vía Verde de la Sierra - Former railway line perfect for cycling and hiking",
+      "Reserva Natural Complejo Endorreico - Important wetlands for birdwatching"
+    ],
+    "propertyCount": 102,
+    "latitude": 37.3886,
+    "longitude": -5.9826
+  }
+] 
