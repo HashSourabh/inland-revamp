@@ -17,7 +17,7 @@ export default function BuyersGuideLayout({
         <aside className="lg:col-span-1">
           <BuyersGuideNav />
         </aside>
-        <main className="prose prose-slate max-w-none dark:prose-invert lg:col-span-3">
+        <main className="prose prose-slate max-w-none dark:prose-invert lg:col-span-3 bg-white p-4 shadow-sm rounded-lg dark:bg-slate-800">
           {children}
         </main>
       </div>

@@ -1,0 +1,9 @@
+{
+  "/page": "app/page.js",
+  "/buyers-guide/buying-process/page": "app/buyers-guide/buying-process/page.js",
+  "/buyers-guide/property-taxes/page": "app/buyers-guide/property-taxes/page.js",
+  "/buyers-guide/buying-property/page": "app/buyers-guide/buying-property/page.js",
+  "/buyers-guide/faqs/page": "app/buyers-guide/faqs/page.js",
+  "/buyers-guide/unpaid-taxes/page": "app/buyers-guide/unpaid-taxes/page.js",
+  "/buyers-guide/mortgage/page": "app/buyers-guide/mortgage/page.js"
+}
