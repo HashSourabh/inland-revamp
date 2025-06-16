@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AdvancedSearch() {
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -63,8 +65,9 @@ export default function AdvancedSearch() {
 
         <div className="flex items-end gap-2">
           <button
-            type="submit"
+            type="button"
             className="flex-1 bg-primary-600 rounded-md py-3 px-4 text-white font-medium hover:bg-primary-700 transition-colors"
+            onClick={() => router.push('/properties')}
           >
             Search
           </button>
@@ -117,7 +120,7 @@ export default function AdvancedSearch() {
                   </button>
                 </div>
 
-                <form>
+                <form onSubmit={e => { e.preventDefault(); router.push('/properties'); }}>
                   <div className="grid gap-6 md:grid-cols-3">
                     <div>
                       <label htmlFor="advanced-province" className="block text-sm font-medium text-neutral-700 mb-1">

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Open_Sans, Playfair_Display } from 'next/font/google';
 import { MainLayout } from '@/components/layout';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
+import Navigation from '@/components/Navigation';
 
 // Font configuration
 const openSans = Open_Sans({
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${openSans.variable} ${playfairDisplay.variable}`}>
       <body className={`${openSans.className} min-h-screen`}>
+        <Navigation />
         <MainLayout>{children}</MainLayout>
         <ThemeSwitcher />
       </body>

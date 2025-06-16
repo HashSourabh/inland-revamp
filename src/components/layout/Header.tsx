@@ -86,7 +86,7 @@ export default function Header() {
               href="/contact"
               className="rounded-md bg-secondary-500 px-4 py-2 font-medium text-white shadow-md hover:bg-secondary-600 transition-colors"
             >
-              Contact Us
+              Sell With Us
             </Link>
           </div>
         </div>
