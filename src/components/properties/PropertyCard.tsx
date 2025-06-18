@@ -1,143 +1,115 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { HeartIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { Property } from '@/types/property';
 
 interface PropertyCardProps {
-  property: {
-    id: string;
-    title: string;
-    price: number;
-    currency: string;
-    shortDescription: string;
-    location: {
-      province: string;
-      town: string;
-    };
-    features: {
-      bedrooms: number;
-      bathrooms: number;
-      buildSize: number;
-      type: string;
-    };
-    images: {
-      url: string;
-      alt: string;
-      isFeatured: boolean;
-    }[];
-  };
-  featured?: boolean;
+  property: Property;
+  layout?: 'grid' | 'list';
 }
 
-export default function PropertyCard({ property, featured = false }: PropertyCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
-  
-  // Find the featured image or fallback to the first image
-  const mainImage = property.images.find(img => img.isFeatured) || property.images[0];
-  
-  // Format price with currency symbol
-  const formatPrice = (price: number, currency: string) => {
+export default function PropertyCard({ property, layout = 'grid' }: PropertyCardProps) {
+  const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency,
+      currency: 'EUR',
       maximumFractionDigits: 0,
     }).format(price);
   };
 
+  const isListView = layout === 'list';
+
   return (
-    <div 
-      className={`group overflow-hidden rounded-property bg-white transition-all duration-300 ${
-        featured 
-          ? 'shadow-hover-card' 
-          : 'shadow-property-card hover:shadow-hover-card'
-      }`}
-    >
-      <div className="relative">
-        {/* Property image */}
-        <Link href={`/properties/${property.id}`}>
-          <div className="relative aspect-[4/3] overflow-hidden">
-            <Image 
-              src={mainImage.url}
-              alt={mainImage.alt}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
-              priority={featured}
-            />
+    <Link href={`/properties/${property.id.toLowerCase()}`} className="block">
+      <article 
+        className={`group relative overflow-hidden rounded-lg border border-neutral-200 bg-white transition-all hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900 ${
+          isListView ? 'flex' : 'flex-col'
+        }`}
+      >
+        {/* Image container */}
+        <div className={`relative overflow-hidden ${
+          isListView ? 'h-[300px] w-[400px] flex-shrink-0' : 'aspect-[4/3] w-full'
+        }`}>
+          <Image
+            src={property.images[0]}
+            alt={`${property.title} in ${property.location.town}`}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          {/* Badges */}
+          <div className="absolute left-3 top-3 flex gap-2">
+            {property.isExclusive && (
+              <span className="rounded bg-primary-600 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-white">
+                Exclusive
+              </span>
+            )}
+            {property.isReduced && (
+              <span className="rounded bg-secondary-500 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-white">
+                Reduced
+              </span>
+            )}
           </div>
-        </Link>
-        
-        {/* Favorite button */}
-        <button 
-          onClick={() => setIsFavorite(!isFavorite)}
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          className="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-all hover:bg-white"
-        >
-          {isFavorite ? (
-            <HeartIconSolid className="h-5 w-5 text-secondary-500" />
-          ) : (
-            <HeartIcon className="h-5 w-5 text-neutral-600" />
-          )}
-        </button>
-        
-        {/* Price tag */}
-        <div className="absolute bottom-0 left-0 bg-primary-600 px-4 py-2 text-white">
-          <span className="font-serif text-xl font-bold">
-            {formatPrice(property.price, property.currency)}
-          </span>
-        </div>
-      </div>
-      
-      <div className="p-4">
-        {/* Property title */}
-        <Link href={`/properties/${property.id}`}>
-          <h3 className="mb-2 font-serif text-lg font-semibold text-neutral-900 group-hover:text-primary-600">
-            {property.title}
-          </h3>
-        </Link>
-        
-        {/* Location */}
-        <div className="mb-3 flex items-center text-sm text-neutral-500">
-          <MapPinIcon className="mr-1 h-4 w-4" />
-          <span>{property.location.town}, {property.location.province}</span>
-        </div>
-        
-        {/* Features */}
-        <div className="mb-4 flex justify-between border-b border-neutral-200 pb-4">
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Beds</span>
-            <span className="font-medium text-neutral-900">{property.features.bedrooms}</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Baths</span>
-            <span className="font-medium text-neutral-900">{property.features.bathrooms}</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Size</span>
-            <span className="font-medium text-neutral-900">{property.features.buildSize} m²</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Type</span>
-            <span className="font-medium text-neutral-900">{property.features.type}</span>
+          {/* Price badge */}
+          <div className="absolute bottom-3 left-3">
+            <div className="flex flex-col gap-1">
+              {property.price.original && (
+                <span className="rounded bg-black/60 px-2 py-1 text-sm line-through text-white">
+                  {formatPrice(property.price.original)}
+                </span>
+              )}
+              <span className="rounded bg-primary-600 px-2 py-1 text-sm font-semibold text-white">
+                {formatPrice(property.price.current)}
+              </span>
+            </div>
           </div>
         </div>
-        
-        {/* Description - only shown if featured */}
-        {featured && (
-          <p className="mb-4 text-sm text-neutral-600">
-            {property.shortDescription}
+
+        {/* Content */}
+        <div className={`flex flex-col ${isListView ? 'flex-1 p-6' : 'p-4'}`}>
+          <div className={isListView ? 'flex items-start justify-between' : ''}>
+            <div>
+              <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
+                {property.title} ({property.id})
+              </h3>
+              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                {property.location.town} / {property.location.province}
+              </p>
+            </div>
+          </div>
+          
+          {/* Specs */}
+          <div className={`flex items-center gap-4 text-sm text-neutral-600 dark:text-neutral-400 ${
+            isListView ? 'mt-6' : 'mt-4'
+          }`}>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold">{property.specs.beds}</span>
+              <span>Beds</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold">{property.specs.baths}</span>
+              <span>Baths</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold">{property.specs.built}</span>
+              <span>m²</span>
+            </div>
+            {property.specs.plot && (
+              <div className="flex items-center gap-1">
+                <span className="font-semibold">{property.specs.plot}</span>
+                <span>Plot</span>
+              </div>
+            )}
+          </div>
+
+          {/* Description */}
+          <p className={`text-sm text-neutral-600 dark:text-neutral-400 ${
+            isListView ? 'mt-6 line-clamp-3' : 'mt-4 line-clamp-2'
+          }`}>
+            {property.description}
           </p>
-        )}
-        
-        {/* Call to action */}
-        <Link 
-          href={`/properties/${property.id}`}
-          className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600"
-        >
-          View Details
-        </Link>
-      </div>
-    </div>
+        </div>
+      </article>
+    </Link>
   );
 } 

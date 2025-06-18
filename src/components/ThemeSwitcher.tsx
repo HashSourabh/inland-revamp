@@ -10,14 +10,34 @@ type Theme = {
 
 const themes: Theme[] = [
   {
-    name: 'Option 1',
+    name: 'Classic Blue',
     primary: '61, 77, 121',
     secondary: '246, 112, 47'
   },
   {
-    name: 'Option 2',
-    primary: '46, 48, 145',
-    secondary: '217, 185, 36'
+    name: 'Forest Green',
+    primary: '34, 97, 74',
+    secondary: '234, 179, 8'
+  },
+  {
+    name: 'Royal Purple',
+    primary: '88, 28, 135',
+    secondary: '234, 88, 12'
+  },
+  {
+    name: 'Ocean Teal',
+    primary: '15, 118, 110',
+    secondary: '249, 115, 22'
+  },
+  {
+    name: 'Burgundy',
+    primary: '127, 29, 29',
+    secondary: '252, 211, 77'
+  },
+  {
+    name: 'Slate Blue',
+    primary: '30, 58, 138',
+    secondary: '239, 68, 68'
   }
 ];
 
@@ -43,9 +63,19 @@ export default function ThemeSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg p-4">
-          <h3 className="text-sm font-medium text-gray-900 mb-3">Choose Theme</h3>
-          <div className="space-y-2">
+        <div className="absolute right-0 top-0 mt-2 w-64 bg-white rounded-lg shadow-lg p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-sm font-medium text-gray-900">Choose Theme</h3>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-400 hover:text-gray-500"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
             {themes.map((theme) => (
               <button
                 key={theme.name}
@@ -53,23 +83,23 @@ export default function ThemeSwitcher() {
                   setCurrentTheme(theme);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm ${
+                className={`flex flex-col items-center p-3 rounded-lg border-2 transition-all ${
                   currentTheme.name === theme.name
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'text-gray-700 hover:bg-gray-50'
+                    ? 'border-gray-900 shadow-md'
+                    : 'border-transparent hover:border-gray-200'
                 }`}
               >
-                <span className="capitalize">{theme.name}</span>
-                <div className="flex gap-2">
+                <div className="flex gap-2 mb-2">
                   <div
-                    className="w-4 h-4 rounded-full"
+                    className="w-6 h-6 rounded-full"
                     style={{ backgroundColor: `rgb(${theme.primary})` }}
                   />
                   <div
-                    className="w-4 h-4 rounded-full"
+                    className="w-6 h-6 rounded-full"
                     style={{ backgroundColor: `rgb(${theme.secondary})` }}
                   />
                 </div>
+                <span className="text-xs font-medium text-gray-700">{theme.name}</span>
               </button>
             ))}
           </div>

@@ -12,7 +12,14 @@ import {
   CurrencyDollarIcon,
   QuestionMarkCircleIcon,
   ExclamationTriangleIcon,
-  BanknotesIcon
+  BanknotesIcon,
+  MapPinIcon,
+  SunIcon,
+  PaperAirplaneIcon,
+  OfficeBuildingIcon,
+  NewspaperIcon,
+  LinkIcon,
+  UserGroupIcon
 } from '@heroicons/react/24/outline';
 
 const propertySearchLinks = [
@@ -37,6 +44,19 @@ const buyersGuideLinks = [
   { href: '/buyers-guide/faqs', label: 'FAQs', icon: QuestionMarkCircleIcon },
   { href: '/buyers-guide/unpaid-taxes', label: 'Unpaid Taxes', icon: ExclamationTriangleIcon },
   { href: '/buyers-guide/mortgage', label: 'Mortgage', icon: BanknotesIcon }
+];
+
+const aboutUsLinks = [
+  { href: '/about/location', label: 'Location', icon: MapPinIcon },
+  { href: '/about/weather', label: 'Weather', icon: SunIcon },
+  { href: '/about/airports', label: 'Airports', icon: PaperAirplaneIcon }
+];
+
+const contactLinks = [
+  { href: '/contact/our-offices', label: 'Our Offices', icon: BuildingOfficeIcon },
+  { href: '/contact/newsletter', label: 'Newsletter', icon: NewspaperIcon },
+  { href: '/contact/useful-links', label: 'Useful Links', icon: LinkIcon },
+  { href: '/contact/agents-private-area', label: 'Agents Private Area', icon: UserGroupIcon },
 ];
 
 export default function Navigation() {
@@ -121,17 +141,59 @@ export default function Navigation() {
         </div>
       </div>
 
-      <Link href="/blog" className="text-neutral-900 hover:text-primary-600 transition-colors">
+      <a href="https://luvinland.com" target="_blank" rel="nofollow noreferrer" className="text-neutral-900 hover:text-primary-600 transition-colors">
         Blog
-      </Link>
+      </a>
       
-      <Link href="/about" className="text-neutral-900 hover:text-primary-600 transition-colors">
-        About Us
-      </Link>
+      {/* About Us Dropdown */}
+      <div className="relative group">
+        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
+          About Us
+          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+        </button>
+        <div className="absolute top-full left-0 pt-2 opacity-0 -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
+          <div className="bg-primary-900 rounded-lg shadow-lg py-3 w-72 border border-primary-800">
+            {aboutUsLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center gap-3 px-6 py-2.5 text-sm text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
+                >
+                  <Icon className="h-5 w-5 text-secondary-400" />
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
       
-      <Link href="/contact" className="text-neutral-900 hover:text-primary-600 transition-colors">
-        Contact
-      </Link>
+      {/* Contact Us Dropdown */}
+      <div className="relative group">
+        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
+          Contact Us
+          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+        </button>
+        <div className="absolute top-full left-0 pt-2 opacity-0 -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200">
+          <div className="bg-primary-900 rounded-lg shadow-lg py-3 w-72 border border-primary-800">
+            {contactLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center gap-3 px-6 py-2.5 text-sm text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
+                >
+                  <Icon className="h-5 w-5 text-secondary-400" />
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </nav>
   );
 }

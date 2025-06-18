@@ -77,10 +77,10 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <a href="https://luvinland.com" target="_blank" rel="nofollow noreferrer" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   Blog
-                </Link>
+                </a>
               </li>
               <li>
                 <Link href="/about" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">

@@ -8,79 +8,121 @@ import AdvancedSearch from '@/components/search/AdvancedSearch';
 // Mock property data - In a real implementation this would come from an API
 const featuredProperties = [
   {
-    id: "prop-23689",
-    reference: "IAD-23689",
-    title: "Charming 3 Bedroom Cortijo with Mountain Views in Antequera",
-    shortDescription: "Traditional Andalusian cortijo with 3 bedrooms, mountain views, private pool, and beautiful gardens near Antequera. Perfectly renovated with modern amenities while maintaining authentic charm.",
-    price: 249000,
-    currency: "EUR",
-    location: {
-      province: "Malaga",
-      town: "Antequera",
-    },
-    features: {
-      type: "Cortijo",
-      bedrooms: 3,
-      bathrooms: 2,
-      buildSize: 150,
-    },
+    id: 1,
+    reference: "000PR1",
+    title: "Luxury Villa in Granada",
+    shortDescription: "Stunning 4-bedroom villa with panoramic views and private pool",
+    price: 495000,
     images: [
       {
-        url: "/images/properties/23689/main.jpg",
-        alt: "Exterior view of cortijo with mountains in the background",
-        isFeatured: true
+        url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80",
+        alt: "Luxury villa in Granada"
       }
-    ]
-  },
-  {
-    id: "prop-23128",
-    reference: "IAD-23128",
-    title: "Impressive 4 Bedroom Villa with Panoramic Views in Priego de Córdoba",
-    shortDescription: "Modern 4-bedroom villa with panoramic views, infinity pool, and luxury finishes near Priego de Córdoba. Featuring open living spaces, high-end kitchen, and beautiful outdoor areas.",
-    price: 595000,
-    currency: "EUR",
-    location: {
-      province: "Cordoba",
-      town: "Priego de Córdoba",
-    },
+    ],
     features: {
-      type: "Villa",
       bedrooms: 4,
       bathrooms: 3,
       buildSize: 280,
-    },
-    images: [
-      {
-        url: "/images/properties/23128/main.jpg",
-        alt: "Modern villa with panoramic views",
-        isFeatured: true
-      }
-    ]
+      plotSize: 1200
+    }
   },
   {
-    id: "prop-23566",
-    reference: "IAD-23566",
-    title: "Spacious 5 Bedroom Country House with Olive Grove in Martos",
-    shortDescription: "Spacious 5-bedroom country house with guest accommodation, pool, and 10,000 m² productive olive grove near Martos. Features include multiple outdoor spaces, solar power, and private well.",
-    price: 345000,
-    currency: "EUR",
-    location: {
-      province: "Jaen",
-      town: "Martos",
-    },
-    features: {
-      type: "Country House",
-      bedrooms: 5,
-      bathrooms: 3,
-      buildSize: 220,
-    },
+    id: 2,
+    reference: "000PR2",
+    title: "Modern Apartment in Malaga",
+    shortDescription: "Contemporary 2-bedroom apartment in the heart of Malaga",
+    price: 275000,
     images: [
       {
-        url: "/images/properties/23566/main.jpg",
-        alt: "Country house surrounded by olive groves",
-        isFeatured: true
+        url: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&q=80",
+        alt: "Modern apartment in Malaga"
       }
-    ]
+    ],
+    features: {
+      bedrooms: 2,
+      bathrooms: 2,
+      buildSize: 120,
+      plotSize: 0
+    }
+  },
+  {
+    id: 3,
+    reference: "000PR3",
+    title: "Traditional Cortijo in Cordoba",
+    shortDescription: "Beautifully restored 3-bedroom cortijo with olive grove",
+    price: 349000,
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1502005097973-6a7082348e28?auto=format&fit=crop&q=80",
+        alt: "Traditional cortijo in Cordoba"
+      }
+    ],
+    features: {
+      bedrooms: 3,
+      bathrooms: 2,
+      buildSize: 180,
+      plotSize: 5000
+    }
+  }
+];
+
+const exclusiveProperties = [
+  {
+    id: 4,
+    reference: "000PR4",
+    title: "Luxury Villa with Sea Views",
+    shortDescription: "Exclusive 5-bedroom villa with stunning sea views and private pool",
+    price: 895000,
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80",
+        alt: "Luxury villa with sea views"
+      }
+    ],
+    features: {
+      bedrooms: 5,
+      bathrooms: 4,
+      buildSize: 350,
+      plotSize: 1500
+    }
+  },
+  {
+    id: 5,
+    reference: "000PR5",
+    title: "Historic Palace in Granada",
+    shortDescription: "Magnificent 6-bedroom palace with original features and gardens",
+    price: 1250000,
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80",
+        alt: "Historic palace in Granada"
+      }
+    ],
+    features: {
+      bedrooms: 6,
+      bathrooms: 5,
+      buildSize: 450,
+      plotSize: 2000
+    }
+  },
+  {
+    id: 6,
+    reference: "000PR6",
+    title: "Modern Villa with Smart Home",
+    shortDescription: "State-of-the-art 4-bedroom villa with smart home technology",
+    price: 750000,
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&q=80",
+        alt: "Modern villa with smart home"
+      }
+    ],
+    features: {
+      bedrooms: 4,
+      bathrooms: 3,
+      buildSize: 300,
+      plotSize: 1000
+    }
   }
 ];
 
@@ -187,333 +229,111 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Exclusive Properties Section */}
-      <section className="py-20 bg-neutral-50 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5 pointer-events-none">
-          <div className="absolute inset-0 pattern-dots pattern-neutral-800 pattern-bg-transparent pattern-size-4 pattern-opacity-10"></div>
-        </div>
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Featured Properties Section */}
+      <section className="py-20 bg-neutral-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-heading text-4xl font-bold text-neutral-900 md:text-5xl">
-              Exclusive Properties
+              Featured Properties
             </h2>
-            <p className="mt-4 text-neutral-600 text-lg">
-              Special offers and recent price reductions on selected properties
+            <p className="mt-4 text-lg text-neutral-600">
+              Discover our handpicked selection of exceptional properties
             </p>
           </div>
-
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {/* Exclusive Property Card 1 */}
-            <div className="group relative bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-neutral-100">
-              <div className="relative aspect-[4/3]">
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
-                    Price Reduced
-                  </span>
-                </div>
-                <Image
-                  src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
-                  alt="Exclusive villa in Granada"
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Luxury Villa in Granada</h3>
-                    <p className="text-neutral-600 flex items-center mt-1">
-                      <MapPinIcon className="h-4 w-4 mr-1 text-neutral-400" />
-                      Granada Province
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <p className="text-sm text-neutral-500 line-through">€495,000</p>
-                    <p className="text-xl font-bold text-red-500">€445,000</p>
-                    <p className="text-xs text-green-600 font-medium mt-1">Save €50,000</p>
-                  </div>
-                </div>
-                <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Beds</span>
-                    <span className="font-medium text-neutral-900">4</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Baths</span>
-                    <span className="font-medium text-neutral-900">3</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Size</span>
-                    <span className="font-medium text-neutral-900">280m²</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Plot</span>
-                    <span className="font-medium text-neutral-900">1200m²</span>
-                  </div>
-                </div>
-                <Link
-                  href="/properties/exclusive-villa-granada"
-                  className="block w-full text-center bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-secondary-600 transition-colors shadow-sm"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            {/* Exclusive Property Card 2 */}
-            <div className="group relative bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-neutral-100">
-              <div className="relative aspect-[4/3]">
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
-                    Price Reduced
-                  </span>
-                </div>
-                <Image
-                  src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80"
-                  alt="Modern villa with pool"
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Modern Villa with Pool</h3>
-                    <p className="text-neutral-600 flex items-center mt-1">
-                      <MapPinIcon className="h-4 w-4 mr-1 text-neutral-400" />
-                      Malaga Province
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <p className="text-sm text-neutral-500 line-through">€750,000</p>
-                    <p className="text-xl font-bold text-red-500">€695,000</p>
-                    <p className="text-xs text-green-600 font-medium mt-1">Save €55,000</p>
-                  </div>
-                </div>
-                <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Beds</span>
-                    <span className="font-medium text-neutral-900">5</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Baths</span>
-                    <span className="font-medium text-neutral-900">4</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Size</span>
-                    <span className="font-medium text-neutral-900">320m²</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Plot</span>
-                    <span className="font-medium text-neutral-900">800m²</span>
-                  </div>
-                </div>
-                <Link
-                  href="/properties/modern-villa-malaga"
-                  className="block w-full text-center bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-secondary-600 transition-colors shadow-sm"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            {/* Traditional Cortijo Card */}
-            <div className="group relative bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-neutral-100">
-              <div className="relative aspect-[4/3]">
-                <Image
-                  src="https://images.unsplash.com/photo-1502005097973-6a7082348e28?auto=format&fit=crop&q=80"
-                  alt="Traditional cortijo"
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Traditional Cortijo</h3>
-                    <p className="text-neutral-600 flex items-center mt-1">
-                      <MapPinIcon className="h-4 w-4 mr-1 text-neutral-400" />
-                      Cordoba Province
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <p className="text-xl font-bold text-secondary-600">€349,000</p>
-                  </div>
-                </div>
-                <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Beds</span>
-                    <span className="font-medium text-neutral-900">3</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Baths</span>
-                    <span className="font-medium text-neutral-900">2</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Size</span>
-                    <span className="font-medium text-neutral-900">180m²</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm text-neutral-500">Plot</span>
-                    <span className="font-medium text-neutral-900">5000m²</span>
-                  </div>
-                </div>
-                <Link
-                  href="/properties/traditional-cortijo"
-                  className="block w-full text-center bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-secondary-600 transition-colors shadow-sm"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* View All Button - Separated from the grid */}
-          <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto max-w-xl">
-            <div className="absolute top-0 left-0 w-full h-full opacity-10">
-              <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/30 blur-3xl"></div>
-              <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white/20 blur-3xl"></div>
-            </div>
-            <div className="relative z-10 p-8 text-center">
-              <h3 className="text-2xl font-bold text-white mb-3">Looking for more exclusive offers?</h3>
-              <p className="text-white/80 mb-8">We have additional properties with special price reductions</p>
+            {featuredProperties.map((property) => (
               <Link
-                href="/properties/exclusive"
-                className="inline-block bg-white hover:bg-gray-100 text-[#1d3557] px-10 py-4 rounded-lg font-medium transition-colors shadow-md text-lg"
+                key={property.id}
+                href={`/properties/${property.reference.toLowerCase()}`}
+                className="group"
               >
-                View All Exclusive Properties
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 group-hover:shadow-xl group-hover:-translate-y-1">
+                  <div className="relative h-64">
+                    <Image
+                      src={property.images[0].url}
+                      alt={property.images[0].alt}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                      {property.title}
+                    </h3>
+                    <p className="mt-2 text-neutral-600 line-clamp-2">
+                      {property.shortDescription}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-2xl font-bold text-primary-600">
+                        €{property.price.toLocaleString()}
+                      </span>
+                      <div className="flex items-center gap-4 text-sm text-neutral-600">
+                        <span>{property.features.bedrooms} beds</span>
+                        <span>{property.features.bathrooms} baths</span>
+                        <span>{property.features.buildSize}m²</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </Link>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Properties */}
-      <section className="py-16 bg-neutral-50">
+      {/* Exclusive Properties Section */}
+      <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <h2 className="font-heading text-3xl font-bold text-neutral-900 md:text-4xl">
-                Featured Properties
-              </h2>
-              <p className="mt-4 text-neutral-600 max-w-2xl">
-                Explore our handpicked selection of stunning properties across Inland Andalucia
-              </p>
-            </div>
-            <Link
-              href="/properties"
-              className="hidden sm:flex items-center text-primary-600 font-medium hover:text-primary-700 transition-colors"
-            >
-              View all properties <ArrowRightIcon className="ml-2 h-5 w-5" />
-            </Link>
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-4xl font-bold text-neutral-900 md:text-5xl">
+              Exclusive Properties
+            </h2>
+            <p className="mt-4 text-lg text-neutral-600">
+              Our most prestigious and unique property listings
+            </p>
           </div>
-
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Property Card 1 */}
-            <div className="group overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80"
-                  alt="Beautiful villa in Cordoba"
-                  fill
-                  className="object-cover transition-transform group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="inline-block rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800">
-                    Cordoba
-                  </span>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {exclusiveProperties.map((property) => (
+              <Link
+                key={property.id}
+                href={`/properties/${property.reference.toLowerCase()}`}
+                className="group"
+              >
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 group-hover:shadow-xl group-hover:-translate-y-1">
+                  <div className="relative h-64">
+                    <Image
+                      src={property.images[0].url}
+                      alt={property.images[0].alt}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-600 text-white">
+                        Exclusive
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                      {property.title}
+                    </h3>
+                    <p className="mt-2 text-neutral-600 line-clamp-2">
+                      {property.shortDescription}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-2xl font-bold text-primary-600">
+                        €{property.price.toLocaleString()}
+                      </span>
+                      <div className="flex items-center gap-4 text-sm text-neutral-600">
+                        <span>{property.features.bedrooms} beds</span>
+                        <span>{property.features.bathrooms} baths</span>
+                        <span>{property.features.buildSize}m²</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="absolute bottom-4 right-4">
-                  <span className="inline-block rounded-full bg-secondary-500 px-3 py-1 text-sm font-medium text-white">
-                    €295,000
-                  </span>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Renovated Cortijo with Pool</h3>
-                <p className="mt-2 text-neutral-600">3 bed · 2 bath · 150m² · 5000m² plot</p>
-                <Link
-                  href="/properties/renovated-cortijo"
-                  className="mt-4 block w-full rounded-md bg-primary-600 px-4 py-2 text-center font-medium text-white hover:bg-primary-700 transition-colors"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            {/* Property Card 2 */}
-            <div className="group overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&q=80"
-                  alt="Town House in Granada"
-                  fill
-                  className="object-cover transition-transform group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="inline-block rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800">
-                    Granada
-                  </span>
-                </div>
-                <div className="absolute bottom-4 right-4">
-                  <span className="inline-block rounded-full bg-secondary-500 px-3 py-1 text-sm font-medium text-white">
-                    €175,000
-                  </span>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Town House in Historic Center</h3>
-                <p className="mt-2 text-neutral-600">2 bed · 1 bath · 90m² · Terrace</p>
-                <Link
-                  href="/properties/historic-town-house"
-                  className="mt-4 block w-full rounded-md bg-primary-600 px-4 py-2 text-center font-medium text-white hover:bg-primary-700 transition-colors"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-
-            {/* Property Card 3 */}
-            <div className="group overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1599427303058-f04cbcf4756f?auto=format&fit=crop&q=80"
-                  alt="Rural finca in Malaga"
-                  fill
-                  className="object-cover transition-transform group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="inline-block rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800">
-                    Malaga
-                  </span>
-                </div>
-                <div className="absolute bottom-4 right-4">
-                  <span className="inline-block rounded-full bg-secondary-500 px-3 py-1 text-sm font-medium text-white">
-                    €349,000
-                  </span>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Rural Finca with Olive Grove</h3>
-                <p className="mt-2 text-neutral-600">4 bed · 3 bath · 200m² · 10000m² plot</p>
-                <Link
-                  href="/properties/rural-finca"
-                  className="mt-4 block w-full rounded-md bg-primary-600 px-4 py-2 text-center font-medium text-white hover:bg-primary-700 transition-colors"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center sm:hidden">
-            <Link
-              href="/properties"
-              className="inline-block rounded-md border border-primary-600 px-6 py-3 font-medium text-primary-600 hover:bg-primary-50 transition-colors"
-            >
-              View All Properties
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

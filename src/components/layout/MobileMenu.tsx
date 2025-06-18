@@ -1,9 +1,9 @@
 "use client";
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ChevronDownIcon, MapPinIcon, SunIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -11,6 +11,8 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={setIsOpen}>
@@ -87,20 +89,51 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                         >
                           Buyer's Guide
                         </Link>
-                        <Link 
-                          href="/blog" 
+                        <a 
+                          href="https://luvinland.com" 
+                          target="_blank" 
+                          rel="nofollow noreferrer"
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
-                          onClick={() => setIsOpen(false)}
                         >
                           Blog
-                        </Link>
-                        <Link 
-                          href="/about" 
-                          className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          About Us
-                        </Link>
+                        </a>
+                        <div>
+                          <button
+                            onClick={() => setIsAboutOpen(!isAboutOpen)}
+                            className="flex w-full items-center justify-between py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
+                          >
+                            About Us
+                            <ChevronDownIcon className={`h-5 w-5 transition-transform duration-200 ${isAboutOpen ? 'rotate-180' : ''}`} />
+                          </button>
+                          {isAboutOpen && (
+                            <div className="ml-4 mt-2 space-y-2 border-l-2 border-neutral-200 pl-4">
+                              <Link
+                                href="/about/location"
+                                className="flex items-center gap-2 py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
+                                onClick={() => setIsOpen(false)}
+                              >
+                                <MapPinIcon className="h-5 w-5" />
+                                Location
+                              </Link>
+                              <Link
+                                href="/about/weather"
+                                className="flex items-center gap-2 py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
+                                onClick={() => setIsOpen(false)}
+                              >
+                                <SunIcon className="h-5 w-5" />
+                                Weather
+                              </Link>
+                              <Link
+                                href="/about/airports"
+                                className="flex items-center gap-2 py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
+                                onClick={() => setIsOpen(false)}
+                              >
+                                <PaperAirplaneIcon className="h-5 w-5" />
+                                Airports
+                              </Link>
+                            </div>
+                          )}
+                        </div>
                         <Link 
                           href="/contact" 
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
