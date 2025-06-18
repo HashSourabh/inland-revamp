@@ -7,9 +7,10 @@ import { Property } from '@/types/property';
 interface PropertyCardProps {
   property: Property;
   layout?: 'grid' | 'list';
+  featured?: boolean;
 }
 
-export default function PropertyCard({ property, layout = 'grid' }: PropertyCardProps) {
+export default function PropertyCard({ property, layout = 'grid', featured = false }: PropertyCardProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',

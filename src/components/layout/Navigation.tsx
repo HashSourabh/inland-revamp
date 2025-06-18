@@ -16,7 +16,6 @@ import {
   MapPinIcon,
   SunIcon,
   PaperAirplaneIcon,
-  OfficeBuildingIcon,
   NewspaperIcon,
   LinkIcon,
   UserGroupIcon
