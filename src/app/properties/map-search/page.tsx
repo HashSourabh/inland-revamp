@@ -12,7 +12,7 @@ const propertyAreas = [
     count: 27,
   },
   {
-    name: "Ronda",
+    name: "Ron",
     lat: 36.7423,
     lng: -5.1671,
     count: 14,
