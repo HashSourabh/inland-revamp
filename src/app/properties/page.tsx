@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { allProperties } from '@/data/properties';
 import PropertiesLayout from '@/components/properties/PropertiesLayout';
+import Loading from '@/components/shared/Loading';
 
 export const metadata: Metadata = {
   title: 'Properties for Sale in Inland Andalucia | Rural Spanish Properties',
@@ -8,5 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default function PropertiesPage() {
-  return <PropertiesLayout properties={allProperties} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <PropertiesLayout properties={allProperties} />
+    </Suspense>
+  );
 } 
