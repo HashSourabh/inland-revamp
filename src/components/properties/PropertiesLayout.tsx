@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Property } from '@/types/property';
 import PropertyCard from '@/components/properties/PropertyCard';
 import LayoutSwitcher from '@/components/properties/LayoutSwitcher';
@@ -14,10 +15,25 @@ interface PropertiesLayoutProps {
 }
 
 export default function PropertiesLayout({ properties }: PropertiesLayoutProps) {
+  const searchParams = useSearchParams();
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   const [selectedTown, setSelectedTown] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Handle URL parameters for pre-selecting filters
+  useEffect(() => {
+    if (!searchParams) return;
+    const locationParam = searchParams.get('location');
+    if (locationParam) {
+      // Find the property with matching town name
+      const property = properties.find(p => p.location.town === locationParam);
+      if (property) {
+        setSelectedProvince(property.location.province);
+        setSelectedTown(property.location.town);
+      }
+    }
+  }, [searchParams, properties]);
 
   // Filter properties by selected province and town
   const filteredProperties = properties.filter(property => {
@@ -104,6 +120,17 @@ export default function PropertiesLayout({ properties }: PropertiesLayoutProps) 
     setCurrentPage(1);
   };
 
+  // Get the filter heading text
+  const getFilterHeading = () => {
+    if (selectedTown) {
+      return `Properties in ${selectedTown}`;
+    }
+    if (selectedProvince) {
+      return `Areas in ${selectedProvince}`;
+    }
+    return 'All Properties';
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
@@ -120,7 +147,7 @@ export default function PropertiesLayout({ properties }: PropertiesLayoutProps) 
       <div className="mb-8 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
         <div className="space-y-4">
           <h2 className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-            {selectedProvince ? 'Areas in ' + selectedProvince : 'Filter by Province'}
+            {getFilterHeading()}
           </h2>
           <AreaFilter
             properties={properties}
@@ -172,44 +199,48 @@ export default function PropertiesLayout({ properties }: PropertiesLayoutProps) 
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-8 flex justify-center">
-          <nav className="flex items-center gap-2" aria-label="Pagination">
+          <nav className="flex items-center gap-1" aria-label="Pagination">
             <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="rounded-md border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
+              className="relative inline-flex items-center rounded-md px-2 py-2 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:hover:bg-white dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900"
             >
-              Previous
+              <span className="sr-only">Previous</span>
+              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
+              </svg>
             </button>
-            <div className="flex items-center gap-1">
-              {getPageNumbers().map((pageNum, index) => (
-                pageNum === 'ellipsis1' || pageNum === 'ellipsis2' ? (
-                  <div
-                    key={pageNum}
-                    className="flex h-8 w-8 items-center justify-center text-neutral-600 dark:text-neutral-400"
-                  >
-                    <EllipsisHorizontalIcon className="h-5 w-5" />
-                  </div>
-                ) : (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentPage(pageNum as number)}
-                    className={`flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-                      currentPage === pageNum
-                        ? 'bg-primary-600 text-white'
-                        : 'text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-800'
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                )
-              ))}
-            </div>
+            {getPageNumbers().map((pageNumber, index) => (
+              pageNumber === 'ellipsis1' || pageNumber === 'ellipsis2' ? (
+                <span
+                  key={`${pageNumber}-${index}`}
+                  className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300"
+                >
+                  <EllipsisHorizontalIcon className="h-5 w-5" />
+                </span>
+              ) : (
+                <button
+                  key={pageNumber}
+                  onClick={() => setCurrentPage(pageNumber as number)}
+                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                    currentPage === pageNumber
+                      ? 'z-10 bg-primary-600 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600'
+                      : 'text-neutral-900 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 focus:z-20 focus:outline-offset-0 dark:text-neutral-100 dark:ring-neutral-700 dark:hover:bg-neutral-800'
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              )
+            ))}
             <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="rounded-md border border-neutral-200 px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
+              className="relative inline-flex items-center rounded-md px-2 py-2 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:hover:bg-white dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900"
             >
-              Next
+              <span className="sr-only">Next</span>
+              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
+              </svg>
             </button>
           </nav>
         </div>

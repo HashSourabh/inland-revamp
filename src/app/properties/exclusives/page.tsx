@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { allProperties } from '@/data/properties';
 import PropertiesLayout from '@/components/properties/PropertiesLayout';
+import Loading from '@/components/shared/Loading';
 
 export const metadata: Metadata = {
   title: 'Exclusive Properties | Inland Andalucia',
@@ -9,5 +11,9 @@ export const metadata: Metadata = {
 
 export default function ExclusivesPage() {
   const exclusiveProperties = allProperties.filter(p => p.isExclusive);
-  return <PropertiesLayout properties={exclusiveProperties} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <PropertiesLayout properties={exclusiveProperties} />
+    </Suspense>
+  );
 } 
