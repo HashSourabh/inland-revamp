@@ -1,4 +1,8 @@
 import { Property } from '@/types/property';
+import { getRandomPropertyImages, propertyImages } from './propertyImages';
+
+// Property type definition
+type PropertyType = keyof typeof propertyImages;
 
 // Define the province and town structure with property counts
 const locationDistribution = {
@@ -60,7 +64,7 @@ const locationDistribution = {
 };
 
 // Property types with their probability weights
-const propertyTypes = [
+const propertyTypes: Array<{ type: PropertyType; weight: number }> = [
   { type: 'Town House', weight: 35 },
   { type: 'Villa', weight: 25 },
   { type: 'Country House', weight: 20 },
@@ -83,6 +87,9 @@ function generateProperty(id: string, town: string, province: string): Property 
   const hasOriginalPrice = Math.random() > 0.7;
   const originalPrice = hasOriginalPrice ? Math.floor(currentPrice * (1 + Math.random() * 0.3)) : undefined;
 
+  // Get random number of images (2-4) for this property
+  const imageCount = Math.floor(Math.random() * 3) + 2;
+
   return {
     id,
     title: propertyType,
@@ -101,11 +108,7 @@ function generateProperty(id: string, town: string, province: string): Property 
       plot: Math.floor(Math.random() * (10000 - 100) + 100)
     },
     description: `Beautiful ${propertyType.toLowerCase()} located in ${town}, ${province}. This property offers great potential and stunning views of the Andalucian countryside.`,
-    images: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=60',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop&q=60',
-      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&auto=format&fit=crop&q=60'
-    ].slice(0, Math.floor(Math.random() * 2) + 1),
+    images: getRandomPropertyImages(propertyType, imageCount),
     isExclusive: Math.random() > 0.8,
     isReduced: hasOriginalPrice
   };
