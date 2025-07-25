@@ -62,10 +62,10 @@ module.exports = {
         }
       },
       fontFamily: {
-        sans: ['var(--font-open-sans)', 'ui-sans-serif', 'system-ui'],
-        serif: ['var(--font-playfair-display)', 'ui-serif', 'Georgia'],
-        heading: ['var(--font-playfair-display)', 'ui-serif', 'Georgia'],
-        body: ['var(--font-open-sans)', 'ui-sans-serif', 'system-ui'],
+        sans: ['var(--font-work-sans)', 'ui-sans-serif', 'system-ui'],
+        serif: ['var(--font-dm-sans)', 'ui-serif', 'Georgia'],
+        heading: ['var(--font-dm-sans)', 'ui-serif', 'Georgia'],
+        body: ['var(--font-work-sans)', 'ui-sans-serif', 'system-ui'],
       },
       fontSize: {
         'display-1': ['3.5rem', { lineHeight: '1.2', letterSpacing: '-0.02em' }],

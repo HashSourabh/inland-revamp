@@ -84,9 +84,9 @@ export default function Header() {
           <div className="hidden md:block">
             <Link
               href="/contact"
-              className="rounded-md bg-secondary-500 px-4 py-2 font-medium text-white shadow-md hover:bg-secondary-600 transition-colors"
+              className="rounded-md bg-secondary-500 px-4 py-2 min-h-[38px] inline-flex font-medium text-white shadow-md hover:bg-primary-600 transition-colors"
             >
-              Sell With Us
+              Contact Us
             </Link>
           </div>
         </div>
