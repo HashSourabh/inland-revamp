@@ -181,7 +181,7 @@ export default function Home() {
       </div> */}
 
       {/* Hero Section with full-width background image */}
-      <section className="relative min-h-[90vh] pt-[88px]">
+      <section className="relative min-h-[90vh]">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/hero_bg.jpg"
@@ -220,7 +220,7 @@ export default function Home() {
       <section className="pt-16 bg-gradient-to-b from-white to-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-xl p-8 -mt-32 relative z-30 border border-neutral-100">
-            <h2 className="text-2xl font-bold text-black/80 mb-6">
+            <h2 className="text-2xl font-bold text-primary-600 mb-6">
               Find Your Perfect Property
             </h2>
             <AdvancedSearch />
@@ -236,7 +236,7 @@ export default function Home() {
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
-            <h2 className="font-heading text-4xl font-bold text-black/80 md:text-5xl">
+            <h2 className="font-heading text-4xl font-bold text-primary-600 md:text-5xl">
               Exclusive Properties
             </h2>
             <p className="mt-4 text-neutral-600 text-lg">
@@ -455,7 +455,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="font-heading text-3xl font-bold text-black/80 md:text-4xl">
+              <h2 className="font-heading text-3xl font-bold text-primary-600 md:text-4xl">
                 Featured Properties
               </h2>
               <p className="mt-4 text-neutral-600 max-w-2xl">

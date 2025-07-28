@@ -127,7 +127,7 @@ export default function Footer() {
               Subscribe to our newsletter for the latest property updates and market insights.
             </p>
             <form className="mt-4">
-              <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3">
+              <div className="flex flex-col space-y-3">
                 <input
                   type="email"
                   placeholder="Your email"

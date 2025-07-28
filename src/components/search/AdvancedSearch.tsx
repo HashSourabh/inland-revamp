@@ -66,7 +66,7 @@ export default function AdvancedSearch() {
         <div className="flex items-end gap-2">
           <button
             type="button"
-            className="flex-1 bg-primary-600 rounded-md py-3 px-4 text-white font-medium hover:bg-primary-700 transition-colors"
+            className="flex-1 bg-primary-600 rounded-md py-3 px-4 min-h-[50px] text-white font-medium hover:bg-secondary-500 transition-colors"
             onClick={() => router.push('/properties')}
           >
             Search
@@ -74,10 +74,10 @@ export default function AdvancedSearch() {
           <button
             type="button"
             onClick={() => setShowAdvancedSearch(true)}
-            className="flex items-center justify-center w-12 h-12 bg-neutral-100 rounded-md hover:bg-neutral-200 transition-colors"
+            className="flex items-center justify-center w-12 min-h-[50px] bg-secondary-500 rounded-md hover:bg-primary-600 transition-colors "
             aria-label="Advanced Search"
           >
-            <AdjustmentsHorizontalIcon className="h-6 w-6 text-neutral-700" />
+            <AdjustmentsHorizontalIcon className="h-6 w-6 text-white" />
           </button>
         </div>
       </div>
