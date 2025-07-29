@@ -1,29 +1,6 @@
 import React from 'react';
 import PropertyCard from './PropertyCard';
-
-interface Property {
-  id: string;
-  title: string;
-  price: number;
-  currency: string;
-  shortDescription: string;
-  location: {
-    province: string;
-    town: string;
-  };
-  features: {
-    bedrooms: number;
-    bathrooms: number;
-    buildSize: number;
-    type: string;
-  };
-  images: {
-    url: string;
-    alt: string;
-    isFeatured: boolean;
-  }[];
-  featured?: boolean;
-}
+import { Property } from '@/types/property';
 
 interface PropertyGridProps {
   properties: Property[];

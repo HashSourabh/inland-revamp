@@ -1,17 +1,27 @@
 import Image from "next/image";
-import Link from 'next/link';
-import PropertyGrid from '@/components/properties/PropertyGrid';
-import { MagnifyingGlassIcon, MapPinIcon, BuildingOfficeIcon, HomeIcon, ArrowRightIcon, StarIcon, XMarkIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
-import TestimonialsCarousel from '@/components/testimonials/TestimonialsCarousel';
-import AdvancedSearch from '@/components/search/AdvancedSearch';
+import Link from "next/link";
+import PropertyGrid from "@/components/properties/PropertyGrid";
+import {
+  MagnifyingGlassIcon,
+  MapPinIcon,
+  BuildingOfficeIcon,
+  HomeIcon,
+  ArrowRightIcon,
+  StarIcon,
+  XMarkIcon,
+  AdjustmentsHorizontalIcon,
+} from "@heroicons/react/24/outline";
+import TestimonialsCarousel from "@/components/testimonials/TestimonialsCarousel";
+import AdvancedSearch from "@/components/search/AdvancedSearch";
 
-// Mock property data - In a real implementation this would come from an API
+// Mock properties data - In a real implementation this would come from an API
 const featuredProperties = [
   {
     id: "prop-23689",
     reference: "IAD-23689",
     title: "Charming 3 Bedroom Cortijo with Mountain Views in Antequera",
-    shortDescription: "Traditional Andalusian cortijo with 3 bedrooms, mountain views, private pool, and beautiful gardens near Antequera. Perfectly renovated with modern amenities while maintaining authentic charm.",
+    shortDescription:
+      "Traditional Andalusian cortijo with 3 bedrooms, mountain views, private pool, and beautiful gardens near Antequera. Perfectly renovated with modern amenities while maintaining authentic charm.",
     price: 249000,
     currency: "EUR",
     location: {
@@ -28,15 +38,17 @@ const featuredProperties = [
       {
         url: "/images/properties/23689/main.jpg",
         alt: "Exterior view of cortijo with mountains in the background",
-        isFeatured: true
-      }
-    ]
+        isFeatured: true,
+      },
+    ],
   },
   {
     id: "prop-23128",
     reference: "IAD-23128",
-    title: "Impressive 4 Bedroom Villa with Panoramic Views in Priego de Córdoba",
-    shortDescription: "Modern 4-bedroom villa with panoramic views, infinity pool, and luxury finishes near Priego de Córdoba. Featuring open living spaces, high-end kitchen, and beautiful outdoor areas.",
+    title:
+      "Impressive 4 Bedroom Villa with Panoramic Views in Priego de Córdoba",
+    shortDescription:
+      "Modern 4-bedroom villa with panoramic views, infinity pool, and luxury finishes near Priego de Córdoba. Featuring open living spaces, high-end kitchen, and beautiful outdoor areas.",
     price: 595000,
     currency: "EUR",
     location: {
@@ -53,15 +65,16 @@ const featuredProperties = [
       {
         url: "/images/properties/23128/main.jpg",
         alt: "Modern villa with panoramic views",
-        isFeatured: true
-      }
-    ]
+        isFeatured: true,
+      },
+    ],
   },
   {
     id: "prop-23566",
     reference: "IAD-23566",
     title: "Spacious 5 Bedroom Country House with Olive Grove in Martos",
-    shortDescription: "Spacious 5-bedroom country house with guest accommodation, pool, and 10,000 m² productive olive grove near Martos. Features include multiple outdoor spaces, solar power, and private well.",
+    shortDescription:
+      "Spacious 5-bedroom country house with guest accommodation, pool, and 10,000 m² productive olive grove near Martos. Features include multiple outdoor spaces, solar power, and private well.",
     price: 345000,
     currency: "EUR",
     location: {
@@ -78,10 +91,10 @@ const featuredProperties = [
       {
         url: "/images/properties/23566/main.jpg",
         alt: "Country house surrounded by olive groves",
-        isFeatured: true
-      }
-    ]
-  }
+        isFeatured: true,
+      },
+    ],
+  },
 ];
 
 // Featured property for hero section
@@ -89,7 +102,8 @@ const heroProperty = {
   id: "prop-23450",
   reference: "IAD-23450",
   title: "Authentic 2 Bedroom Townhouse in Historic Center of Estepa",
-  shortDescription: "Traditional 2-bedroom townhouse in Estepa's historic center. Features include interior patio, original architectural elements, and modern updates. Perfect authentic Spanish home in a charming white village.",
+  shortDescription:
+    "Traditional 2-bedroom townhouse in Estepa's historic center. Features include interior patio, original architectural elements, and modern updates. Perfect authentic Spanish home in a charming white village.",
   price: 128000,
   currency: "EUR",
   location: {
@@ -106,18 +120,43 @@ const heroProperty = {
     {
       url: "/images/properties/23450/main.jpg",
       alt: "Traditional townhouse facade in Estepa",
-      isFeatured: true
-    }
-  ]
+      isFeatured: true,
+    },
+  ],
 };
 
 // Main provinces data
 const provinces = [
-  { id: "malaga", name: "Malaga", propertyCount: 96, imageUrl: "/images/provinces/malaga.jpg" },
-  { id: "cordoba", name: "Cordoba", propertyCount: 75, imageUrl: "/images/provinces/cordoba.jpg" },
-  { id: "granada", name: "Granada", propertyCount: 81, imageUrl: "/images/provinces/granada.jpg" },
-  { id: "jaen", name: "Jaen", propertyCount: 93, imageUrl: "/images/provinces/jaen.jpg" },
-  { id: "sevilla", name: "Sevilla", propertyCount: 102, imageUrl: "/images/provinces/sevilla.jpg" }
+  {
+    id: "malaga",
+    name: "Malaga",
+    propertyCount: 96,
+    imageUrl: "/images/provinces/malaga.jpg",
+  },
+  {
+    id: "cordoba",
+    name: "Cordoba",
+    propertyCount: 75,
+    imageUrl: "/images/provinces/cordoba.jpg",
+  },
+  {
+    id: "granada",
+    name: "Granada",
+    propertyCount: 81,
+    imageUrl: "/images/provinces/granada.jpg",
+  },
+  {
+    id: "jaen",
+    name: "Jaen",
+    propertyCount: 93,
+    imageUrl: "/images/provinces/jaen.jpg",
+  },
+  {
+    id: "sevilla",
+    name: "Sevilla",
+    propertyCount: 102,
+    imageUrl: "/images/provinces/sevilla.jpg",
+  },
 ];
 
 export default function Home() {
@@ -142,15 +181,15 @@ export default function Home() {
       </div> */}
 
       {/* Hero Section with full-width background image */}
-      <section className="relative min-h-[90vh] pt-[88px]">
+      <section className="relative min-h-[90vh]">
         <div className="absolute inset-0 z-0">
-        <Image
+          <Image
             src="/images/hero_bg.jpg"
             alt="Andalucian countryside landscape"
             fill
             className="object-cover brightness-75"
-          priority
-        />
+            priority
+          />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-primary))] filter brightness-50 to-transparent z-10"></div>
 
@@ -162,13 +201,13 @@ export default function Home() {
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 href="/properties"
-                className="rounded-md bg-secondary-500 px-8 py-4 font-medium text-white shadow-md hover:bg-secondary-600 transition-colors"
+                className="rounded-md bg-secondary-500 px-8 inline-flex items-center py-1 min-h-[50px] font-medium text-white shadow-md hover:bg-primary-600 transition-colors"
               >
                 View Properties
               </Link>
               <Link
                 href="/contact"
-                className="rounded-md border-2 border-white bg-transparent px-8 py-4 font-medium text-white shadow-md hover:bg-white/10 transition-colors"
+                className="rounded-md border-2 border-white bg-transparent inline-flex items-center px-8 py-1 min-h-[50px] font-medium text-white shadow-md hover:bg-primary-600 hover:border-primary-600 transition-colors"
               >
                 Contact Us
               </Link>
@@ -178,10 +217,12 @@ export default function Home() {
       </section>
 
       {/* Property Search Section - Updated background and styling */}
-      <section className="py-16 bg-gradient-to-b from-white to-neutral-50">
+      <section className="pt-16 bg-gradient-to-b from-white to-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-xl shadow-xl p-8 -mt-32 relative z-30 border border-neutral-100">
-            <h2 className="text-2xl font-bold text-neutral-900 mb-6">Find Your Perfect Property</h2>
+            <h2 className="text-2xl font-bold text-primary-600 mb-6">
+              Find Your Perfect Property
+            </h2>
             <AdvancedSearch />
           </div>
         </div>
@@ -195,7 +236,7 @@ export default function Home() {
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
-            <h2 className="font-heading text-4xl font-bold text-neutral-900 md:text-5xl">
+            <h2 className="font-heading text-4xl font-bold text-primary-600 md:text-5xl">
               Exclusive Properties
             </h2>
             <p className="mt-4 text-neutral-600 text-lg">
@@ -205,8 +246,8 @@ export default function Home() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {/* Exclusive Property Card 1 */}
-            <div className="group relative bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-neutral-100">
-              <div className="relative aspect-[4/3]">
+            <div className="group relative flex flex-col bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300  hover:shadow-xl border border-neutral-100">
+              <div className="relative aspect-[4/3] overflow-hidden">
                 <div className="absolute top-4 left-4 z-10">
                   <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
                     Price Reduced
@@ -219,19 +260,25 @@ export default function Home() {
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 flex flex-col grow">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Luxury Villa in Granada</h3>
+                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                      Luxury Villa in Granada
+                    </h3>
                     <p className="text-neutral-600 flex items-center mt-1">
                       <MapPinIcon className="h-4 w-4 mr-1 text-neutral-400" />
                       Granada Province
                     </p>
                   </div>
                   <div className="flex flex-col items-end">
-                    <p className="text-sm text-neutral-500 line-through">€495,000</p>
+                    <p className="text-sm text-neutral-500 line-through">
+                      €495,000
+                    </p>
                     <p className="text-xl font-bold text-red-500">€445,000</p>
-                    <p className="text-xs text-green-600 font-medium mt-1">Save €50,000</p>
+                    <p className="text-xs text-green-600 font-medium mt-1">
+                      Save €50,000
+                    </p>
                   </div>
                 </div>
                 <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
@@ -254,7 +301,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/properties/exclusive-villa-granada"
-                  className="block w-full text-center bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-secondary-600 transition-colors shadow-sm"
+                  className="block w-full text-center mt-auto bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors shadow-sm"
                 >
                   View Details
                 </Link>
@@ -262,8 +309,8 @@ export default function Home() {
             </div>
 
             {/* Exclusive Property Card 2 */}
-            <div className="group relative bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-neutral-100">
-              <div className="relative aspect-[4/3]">
+            <div className="group relative flex flex-col bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300  hover:shadow-xl border border-neutral-100">
+              <div className="relative aspect-[4/3] overflow-hidden">
                 <div className="absolute top-4 left-4 z-10">
                   <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
                     Price Reduced
@@ -276,19 +323,25 @@ export default function Home() {
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 flex flex-col grow">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Modern Villa with Pool</h3>
+                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                      Modern Villa with Pool
+                    </h3>
                     <p className="text-neutral-600 flex items-center mt-1">
                       <MapPinIcon className="h-4 w-4 mr-1 text-neutral-400" />
                       Malaga Province
                     </p>
                   </div>
                   <div className="flex flex-col items-end">
-                    <p className="text-sm text-neutral-500 line-through">€750,000</p>
+                    <p className="text-sm text-neutral-500 line-through">
+                      €750,000
+                    </p>
                     <p className="text-xl font-bold text-red-500">€695,000</p>
-                    <p className="text-xs text-green-600 font-medium mt-1">Save €55,000</p>
+                    <p className="text-xs text-green-600 font-medium mt-1">
+                      Save €55,000
+                    </p>
                   </div>
                 </div>
                 <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
@@ -311,7 +364,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/properties/modern-villa-malaga"
-                  className="block w-full text-center bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-secondary-600 transition-colors shadow-sm"
+                  className="block w-full text-center mt-auto bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors shadow-sm"
                 >
                   View Details
                 </Link>
@@ -319,8 +372,8 @@ export default function Home() {
             </div>
 
             {/* Traditional Cortijo Card */}
-            <div className="group relative bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-neutral-100">
-              <div className="relative aspect-[4/3]">
+            <div className="group relative flex flex-col bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300  hover:shadow-xl border border-neutral-100">
+              <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
                   src="https://images.unsplash.com/photo-1502005097973-6a7082348e28?auto=format&fit=crop&q=80"
                   alt="Traditional cortijo"
@@ -328,17 +381,21 @@ export default function Home() {
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="p-6">
+              <div className="p-6 flex flex-col grow">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Traditional Cortijo</h3>
+                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                      Traditional Cortijo
+                    </h3>
                     <p className="text-neutral-600 flex items-center mt-1">
                       <MapPinIcon className="h-4 w-4 mr-1 text-neutral-400" />
                       Cordoba Province
                     </p>
                   </div>
                   <div className="flex flex-col items-end">
-                    <p className="text-xl font-bold text-secondary-600">€349,000</p>
+                    <p className="text-xl font-bold text-secondary-600">
+                      €349,000
+                    </p>
                   </div>
                 </div>
                 <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
@@ -361,7 +418,7 @@ export default function Home() {
                 </div>
                 <Link
                   href="/properties/traditional-cortijo"
-                  className="block w-full text-center bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-secondary-600 transition-colors shadow-sm"
+                  className="block w-full text-center mt-auto bg-secondary-500 text-white py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors shadow-sm"
                 >
                   View Details
                 </Link>
@@ -370,17 +427,21 @@ export default function Home() {
           </div>
 
           {/* View All Button - Separated from the grid */}
-          <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto max-w-xl">
+          <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto">
             <div className="absolute top-0 left-0 w-full h-full opacity-10">
               <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/30 blur-3xl"></div>
               <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white/20 blur-3xl"></div>
             </div>
-            <div className="relative z-10 p-8 text-center">
-              <h3 className="text-2xl font-bold text-white mb-3">Looking for more exclusive offers?</h3>
-              <p className="text-white/80 mb-8">We have additional properties with special price reductions</p>
+            <div className="relative z-10 px-8 py-16 text-center">
+              <h3 className="text-4xl font-bold text-white mb-3">
+                Looking for more exclusive offers?
+              </h3>
+              <p className="text-white/80 mb-8">
+                We have additional properties with special price reductions
+              </p>
               <Link
                 href="/properties/exclusive"
-                className="inline-block bg-white hover:bg-gray-100 text-[#1d3557] px-10 py-4 rounded-lg font-medium transition-colors shadow-md text-lg"
+                className="inline-flex items-center bg-white hover:bg-gray-100 text-[#1d3557] px-10 py-1 min-h-[56px] hover:bg-secondary-600 hover:text-white rounded-lg font-medium transition-colors shadow-md text-lg"
               >
                 View All Exclusive Properties
               </Link>
@@ -390,15 +451,16 @@ export default function Home() {
       </section>
 
       {/* Featured Properties */}
-      <section className="py-16 bg-neutral-50">
+      <section className="pb-16 bg-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="font-heading text-3xl font-bold text-neutral-900 md:text-4xl">
+              <h2 className="font-heading text-3xl font-bold text-primary-600 md:text-4xl">
                 Featured Properties
               </h2>
               <p className="mt-4 text-neutral-600 max-w-2xl">
-                Explore our handpicked selection of stunning properties across Inland Andalucia
+                Explore our handpicked selection of stunning properties across
+                Inland Andalucia
               </p>
             </div>
             <Link
@@ -431,11 +493,15 @@ export default function Home() {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Renovated Cortijo with Pool</h3>
-                <p className="mt-2 text-neutral-600">3 bed · 2 bath · 150m² · 5000m² plot</p>
+                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                  Renovated Cortijo with Pool
+                </h3>
+                <p className="mt-2 text-neutral-600">
+                  3 bed · 2 bath · 150m² · 5000m² plot
+                </p>
                 <Link
                   href="/properties/renovated-cortijo"
-                  className="mt-4 block w-full rounded-md bg-primary-600 px-4 py-2 text-center font-medium text-white hover:bg-primary-700 transition-colors"
+                  className="mt-4 block w-full rounded-md bg-secondary-500 min-h-[48px] justify-center px-4 py-1 inline-flex items-center text-center font-medium text-white hover:bg-primary-600 transition-colors"
                 >
                   View Details
                 </Link>
@@ -463,11 +529,15 @@ export default function Home() {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Town House in Historic Center</h3>
-                <p className="mt-2 text-neutral-600">2 bed · 1 bath · 90m² · Terrace</p>
+                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                  Town House in Historic Center
+                </h3>
+                <p className="mt-2 text-neutral-600">
+                  2 bed · 1 bath · 90m² · Terrace
+                </p>
                 <Link
                   href="/properties/historic-town-house"
-                  className="mt-4 block w-full rounded-md bg-primary-600 px-4 py-2 text-center font-medium text-white hover:bg-primary-700 transition-colors"
+                  className="mt-4 inline-flex items-center justify-center w-full rounded-md bg-secondary-500 min-h-[48px] px-4 py-1 text-center font-medium text-white hover:bg-primary-600 transition-colors"
                 >
                   View Details
                 </Link>
@@ -495,11 +565,15 @@ export default function Home() {
                 </div>
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">Rural Finca with Olive Grove</h3>
-                <p className="mt-2 text-neutral-600">4 bed · 3 bath · 200m² · 10000m² plot</p>
+                <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                  Rural Finca with Olive Grove
+                </h3>
+                <p className="mt-2 text-neutral-600">
+                  4 bed · 3 bath · 200m² · 10000m² plot
+                </p>
                 <Link
                   href="/properties/rural-finca"
-                  className="mt-4 block w-full rounded-md bg-primary-600 px-4 py-2 text-center font-medium text-white hover:bg-primary-700 transition-colors"
+                  className="mt-4 inline-flex items-center justify-center w-full rounded-md bg-secondary-500 min-h-[48px] px-4 py-1 text-center font-medium text-white hover:bg-primary-600 transition-colors"
                 >
                   View Details
                 </Link>
@@ -517,7 +591,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      {/* section end */}
       {/* Sell Your House Section */}
       {/* <section className="py-16 bg-primary-900 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -859,12 +933,13 @@ export default function Home() {
             Ready to Find Your Spanish Paradise?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
-            Contact our team of local experts today to start your property journey in Inland Andalucia.
+            Contact our team of local experts today to start your property
+            journey in Inland Andalucia.
           </p>
           <div className="mt-10">
             <Link
               href="/contact"
-              className="inline-block rounded-md bg-white px-8 py-4 font-medium text-primary-800 shadow-md hover:bg-neutral-100 transition-colors"
+              className="inline-flex items-center justify-center rounded-md bg-white px-8 py-1 min-h-[50px] font-medium text-primary-800 shadow-md hover:bg-secondary-500 hover:text-white transition-colors"
             >
               Get in Touch
             </Link>
