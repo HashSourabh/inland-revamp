@@ -10,6 +10,30 @@ interface PropertyGridProps {
   loading?: boolean;
 }
 
+// Helper function to transform Property to PropertyCard format
+const transformPropertyForCard = (property: Property) => ({
+  id: property.id,
+  title: property.title,
+  price: property.price.current,
+  currency: 'EUR', // Default currency for the region
+  shortDescription: property.description,
+  location: {
+    province: property.location.province,
+    town: property.location.town,
+  },
+  features: {
+    bedrooms: property.specs.beds,
+    bathrooms: property.specs.baths,
+    buildSize: property.specs.built,
+    type: property.title,
+  },
+  images: property.images.map((url, index) => ({
+    url,
+    alt: `${property.title} - Image ${index + 1}`,
+    isFeatured: index === 0, // First image is featured
+  })),
+});
+
 export default function PropertyGrid({ 
   properties, 
   title, 
@@ -60,14 +84,14 @@ export default function PropertyGrid({
       {/* Featured property */}
       {featuredProperty && (
         <div className="mb-8">
-          <PropertyCard property={featuredProperty} featured={true} />
+          <PropertyCard property={transformPropertyForCard(featuredProperty)} featured={true} />
         </div>
       )}
       
       {/* Property grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {properties.map((property) => (
-          <PropertyCard key={property.id} property={property} />
+          <PropertyCard key={property.id} property={transformPropertyForCard(property)} />
         ))}
       </div>
       

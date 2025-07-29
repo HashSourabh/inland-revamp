@@ -8,6 +8,30 @@ import LayoutSwitcher from '@/components/properties/LayoutSwitcher';
 import AreaFilter from '@/components/properties/AreaFilter';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 
+// Helper function to transform Property to PropertyCard format
+const transformPropertyForCard = (property: Property) => ({
+  id: property.id,
+  title: property.title,
+  price: property.price.current,
+  currency: 'EUR', // Default currency for the region
+  shortDescription: property.description,
+  location: {
+    province: property.location.province,
+    town: property.location.town,
+  },
+  features: {
+    bedrooms: property.specs.beds,
+    bathrooms: property.specs.baths,
+    buildSize: property.specs.built,
+    type: property.title,
+  },
+  images: property.images.map((url, index) => ({
+    url,
+    alt: `${property.title} - Image ${index + 1}`,
+    isFeatured: index === 0, // First image is featured
+  })),
+});
+
 const PROPERTIES_PER_PAGE = 9;
 
 interface PropertiesLayoutProps {
@@ -190,8 +214,7 @@ export default function PropertiesLayout({ properties }: PropertiesLayoutProps) 
         {currentProperties.map((property) => (
           <PropertyCard 
             key={property.id} 
-            property={property} 
-            layout={layout}
+            property={transformPropertyForCard(property)} 
           />
         ))}
       </div>
