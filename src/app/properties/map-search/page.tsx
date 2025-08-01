@@ -4,6 +4,8 @@ import React, { useState, useMemo } from "react";
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from "@react-google-maps/api";
 import Image from "next/image";
 import { allProperties } from '@/data/properties';
+import { CheckIcon } from '@heroicons/react/24/outline';
+
 
 // Define area coordinates
 const areaCoordinates: Record<string, { lat: number; lng: number }> = {
@@ -65,14 +67,14 @@ const areaCoordinates: Record<string, { lat: number; lng: number }> = {
 
 // Define province colors with hex values instead of Tailwind classes
 const provinceColors: Record<string, { bg: string; hover: string; hex: string }> = {
-  'ALL': { bg: 'bg-neutral-500', hover: 'hover:bg-neutral-600', hex: '#6B7280' },
-  'Malaga': { bg: 'bg-blue-500', hover: 'hover:bg-blue-600', hex: '#3B82F6' },
-  'Cordoba': { bg: 'bg-green-500', hover: 'hover:bg-green-600', hex: '#22C55E' },
-  'Granada': { bg: 'bg-purple-500', hover: 'hover:bg-purple-600', hex: '#A855F7' },
-  'Jaen': { bg: 'bg-orange-500', hover: 'hover:bg-orange-600', hex: '#F97316' },
-  'Sevilla': { bg: 'bg-red-500', hover: 'hover:bg-red-600', hex: '#EF4444' },
-  'Cadiz': { bg: 'bg-teal-500', hover: 'hover:bg-teal-600', hex: '#14B8A6' },
-  'Almeria': { bg: 'bg-pink-500', hover: 'hover:bg-pink-600', hex: '#EC4899' }
+  'ALL': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#6B7280' },
+  'Malaga': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#3B82F6' },
+  'Cordoba': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#22C55E' },
+  'Granada': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#A855F7' },
+  'Jaen': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#F97316' },
+  'Sevilla': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#EF4444' },
+  'Cadiz': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#14B8A6' },
+  'Almeria': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#EC4899' }
 };
 
 const containerStyle = {
@@ -184,7 +186,8 @@ export default function MapSearchPage() {
     count: number;
     province: string;
   } | null>(null);
-  const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
+  const [selectedProvince, setSelectedProvince] = useState<string | null>("ALL");
+  console.log("selectedProvince--",selectedProvince);
   const [selectedTown, setSelectedTown] = useState<string | null>(null);
 
   // Calculate area statistics from actual property data
@@ -262,17 +265,17 @@ export default function MapSearchPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
-      <h1 className="mb-8 text-3xl font-bold text-neutral-900">Search Properties by Map</h1>
+      <h1 className="mb-6 font-heading text-3xl font-bold text-primary-600">Search Properties by Map</h1>
       
       {/* Province Filters */}
-      <div className="mb-8 rounded-lg border border-neutral-200 bg-white p-4">
-        <h2 className="text-sm font-medium text-neutral-700 mb-4">
+      <div className="mb-8 rounded-xl border border-neutral-200 bg-white p-4">
+        <h2 className="text-base font-semibold text-gray-700 mb-4">
           {selectedTown ? `Properties in ${selectedTown}` : 
            selectedProvince === 'ALL' ? 'All Properties' :
            selectedProvince ? `Areas in ${selectedProvince}` : 
            'Filter by Province'}
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-4 mb-6">
           {/* Province Buttons */}
           <div className="flex flex-wrap gap-2">
             {provinceStats.map(([province, count]) => {
@@ -284,15 +287,16 @@ export default function MapSearchPage() {
                     setSelectedProvince(province === selectedProvince ? null : province.toString());
                     setSelectedTown(null);
                   }}
-                  className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
-                    ${
-                      selectedProvince === province
-                        ? 'bg-primary-600 text-white'
-                        : `${colors.bg} ${colors.hover} text-white`
-                    } border border-transparent shadow-sm`}
-                >
+                  className={`flex items-center gap-2 rounded-full px-4 py-2 text-base font-medium transition-colors
+                    ${selectedProvince === province ? `bg-primary-600 ${colors.hover} text-white` : `${colors.bg} ${colors.hover} text-white` } border border-transparent shadow-sm`}
+                > 
+                  {selectedProvince === province ? (
+                    <span><CheckIcon className="h-4 w-4 text-white" /></span>
+                  ):(
+                    <></>
+                  )}
                   <span>{province}</span>
-                  <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold text-white">
+                  <span className="rounded-full bg-white/15 px-2 py-0.5 text-sm font-semibold text-white">
                     {count}
                   </span>
                 </button>
@@ -314,6 +318,11 @@ export default function MapSearchPage() {
                         : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600'
                     } border border-transparent`}
                 >
+                  {selectedTown === town.name ? (
+                    <span><CheckIcon className="h-4 w-4 text-white" /></span>
+                  ):(
+                    <></>
+                  )}
                   <span>{town.name}</span>
                   <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold
                     ${
@@ -329,73 +338,74 @@ export default function MapSearchPage() {
             </div>
           )}
         </div>
-      </div>
+      
 
-      {/* Map */}
-      <div className="rounded-xl shadow-lg overflow-hidden border border-neutral-200">
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
-          {filteredAreas.map((area) => (
-            <Marker
-              key={area.name}
-              position={{ lat: area.lat, lng: area.lng }}
-              onClick={() => setSelectedArea(area)}
-              icon={
-                {
-                  url: getIAMarkerIcon(area.province),
-                  scaledSize: new window.google.maps.Size(44, 54),
-                  anchor: new window.google.maps.Point(22, 52),
+        {/* Map */}
+        <div className="rounded-xl overflow-hidden border border-neutral-200">
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
+            {filteredAreas.map((area) => (
+              <Marker
+                key={area.name}
+                position={{ lat: area.lat, lng: area.lng }}
+                onClick={() => setSelectedArea(area)}
+                icon={
+                  {
+                    url: getIAMarkerIcon(area.province),
+                    scaledSize: new window.google.maps.Size(44, 54),
+                    anchor: new window.google.maps.Point(22, 52),
+                  }
                 }
-              }
-            />
-          ))}
-          {selectedArea && (
-            <InfoWindow
-              position={{ lat: selectedArea.lat, lng: selectedArea.lng }}
-              onCloseClick={() => setSelectedArea(null)}
-            >
-              <div className="min-w-[300px] max-w-[400px] overflow-hidden rounded-lg bg-white">
-                {/* Area Image */}
-                <div className="relative h-[160px] w-full">
-                  <Image
-                    src={areaImages[selectedArea.name] || areaImages.default}
-                    alt={`${selectedArea.name} area`}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-                
-                {/* Content */}
-                <div className="p-4">
-                  <h2 className="text-xl font-bold text-primary-900 mb-2">
-                    {selectedArea.name}
-                  </h2>
-                  
-                  <p className="text-neutral-600 mb-4">
-                    There {selectedArea.count === 1 ? 'is' : 'are'} <span className="font-semibold text-primary-700">{selectedArea.count}</span> {selectedArea.count === 1 ? 'property' : 'properties'} available in {selectedArea.name}
-                  </p>
-                  
-                  {/* Province Tag */}
-                  <div className="mb-4">
-                    <span 
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${provinceColors[selectedArea.province].bg} text-white`}
-                    >
-                      {selectedArea.province}
-                    </span>
+              />
+            ))}
+            {selectedArea && (
+              <InfoWindow
+                position={{ lat: selectedArea.lat, lng: selectedArea.lng }}
+                onCloseClick={() => setSelectedArea(null)}
+              >
+                <div className="min-w-[300px] max-w-[400px] overflow-hidden rounded-lg bg-white">
+                  {/* Area Image */}
+                  <div className="relative h-[160px] w-full">
+                    <Image
+                      src={areaImages[selectedArea.name] || areaImages.default}
+                      alt={`${selectedArea.name} area`}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
                   </div>
                   
-                  {/* View Properties Button */}
-                  <a
-                    href={`/properties?location=${encodeURIComponent(selectedArea.name)}`}
-                    className="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-                  >
-                    View Properties
-                  </a>
+                  {/* Content */}
+                  <div className="p-4">
+                    <h2 className="text-xl font-bold text-primary-900 mb-2">
+                      {selectedArea.name}
+                    </h2>
+                    
+                    <p className="text-neutral-600 mb-4">
+                      There {selectedArea.count === 1 ? 'is' : 'are'} <span className="font-semibold text-primary-700">{selectedArea.count}</span> {selectedArea.count === 1 ? 'property' : 'properties'} available in {selectedArea.name}
+                    </p>
+                    
+                    {/* Province Tag */}
+                    <div className="mb-4">
+                      <span 
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${provinceColors[selectedArea.province].bg} text-white`}
+                      >
+                        {selectedArea.province}
+                      </span>
+                    </div>
+                    
+                    {/* View Properties Button */}
+                    <a
+                      href={`/properties?location=${encodeURIComponent(selectedArea.name)}`}
+                      className="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                    >
+                      View Properties
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </InfoWindow>
-          )}
-        </GoogleMap>
+              </InfoWindow>
+            )}
+          </GoogleMap>
+        </div>
       </div>
     </div>
   );

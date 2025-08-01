@@ -18,7 +18,7 @@ export default function AdvancedSearchPage() {
         <p className="mb-8 text-neutral-600">
           At Inland Andalucia we have country, rural, inland property ranging from fincas, villas, townhouses to apartments. We specialise in the areas of Antequera, Cordoba, Granada, Jaen, Malaga and Sevilla where, with us you will find your ideal inland property. If you do not find what you are looking for please <Link href="/contact" className="text-primary-600 underline">contact us</Link>, as we probably have it.
         </p>
-        <div className="bg-primary-900 rounded-lg mb-6">
+        <div className="bg-primary-600 rounded-lg mb-6">
           <h2 className="text-lg font-medium text-white px-6 py-3">Property search (advanced)</h2>
         </div>
         <form className="bg-neutral-50 rounded-lg p-6 mb-8" onSubmit={e => { e.preventDefault(); router.push('/properties'); }}>
@@ -99,7 +99,7 @@ export default function AdvancedSearchPage() {
             <button type="submit" className="bg-primary-600 text-white font-semibold px-8 py-3 rounded-md shadow hover:bg-primary-700 transition">Search</button>
           </div>
         </form>
-        <div className="bg-primary-900 rounded-lg mb-4">
+        <div className="bg-primary-600 rounded-lg mb-4">
           <h2 className="text-lg font-medium text-white px-6 py-3">Property search by reference</h2>
         </div>
         <form className="bg-neutral-50 rounded-lg p-6 flex flex-col md:flex-row gap-4 items-center" onSubmit={e => {
@@ -114,7 +114,9 @@ export default function AdvancedSearchPage() {
       </section>
 
       {/* Right: Property Details Sidebar (Promos) */}
-      <PromoSidebar />
+      <div>
+        <PromoSidebar />
+      </div>
     </div>
   );
 } 

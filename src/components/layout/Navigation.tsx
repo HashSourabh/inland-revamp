@@ -33,7 +33,7 @@ const townGuideLinks = [
   { href: '/town-guide/granada', label: 'Granada Province', icon: BuildingOfficeIcon },
   { href: '/town-guide/jaen', label: 'Jaen Province', icon: BuildingOfficeIcon },
   { href: '/town-guide/malaga', label: 'Malaga Province', icon: BuildingOfficeIcon },
-  { href: '/town-guide/seville', label: 'Seville Province', icon: BuildingOfficeIcon }
+  { href: '/town-guide/sevilla', label: 'Seville Province', icon: BuildingOfficeIcon }
 ];
 
 const buyersGuideLinks = [

@@ -3,6 +3,7 @@ module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/sections/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
@@ -15,7 +16,7 @@ module.exports = {
           300: '#aabbd9',
           400: '#8096c5',
           500: '#5f76b0',
-          600: 'rgb(var(--color-primary))',
+          600: 'rgba(var(--color-primary))',
           700: '#3d4d79',
           800: '#354065',
           900: '#2f3854',
@@ -27,7 +28,7 @@ module.exports = {
           200: '#fcd6bb',
           300: '#fab88d',
           400: '#f79158',
-          500: 'rgb(var(--color-secondary))',
+          500: 'rgba(var(--color-secondary))',
           600: '#e6541d',
           700: '#bc3d19',
           800: '#96331b',

@@ -67,6 +67,9 @@ export default function PropertyCard({ property, featured = false }: PropertyCar
             />
           </div>
         </Link>
+        <div className="absolute top-4 left-4 z-10">
+          <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">Price Reduced</span>
+        </div>
         
         {/* Favorite button */}
         <button 
@@ -81,30 +84,34 @@ export default function PropertyCard({ property, featured = false }: PropertyCar
           )}
         </button>
         
-        {/* Price tag */}
-        <div className="absolute bottom-0 left-0 bg-primary-600 px-4 py-2 text-white">
-          <span className="font-serif text-xl font-bold">
-            {formatPrice(property.price, property.currency)}
-          </span>
-        </div>
       </div>
       
       <div className="p-4">
         {/* Property title */}
-        <Link href={`/properties/${property.id}`}>
-          <h3 className="mb-2 font-serif text-lg font-semibold text-neutral-900 group-hover:text-primary-600">
-            {property.title}
-          </h3>
-        </Link>
-        
-        {/* Location */}
-        <div className="mb-3 flex items-center text-sm text-neutral-500">
-          <MapPinIcon className="mr-1 h-4 w-4" />
-          <span>{property.location.town}, {property.location.province}</span>
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <Link href={`/properties/${property.id}`}>
+              <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+                {property.title}
+              </h3>
+            </Link>
+            {/* Location */}
+            <div className="mt-2 flex items-center text-sm text-neutral-500">
+              <MapPinIcon className="mr-1 h-4 w-4" />
+              <span>{property.location.town}, {property.location.province}</span>
+            </div>
+          </div> 
+          <div className="flex flex-col items-end">
+            <h6 className="text-sm text-neutral-500 line-through">{formatPrice(property.price, property.currency)}</h6>
+            <h4 className="text-xl font-bold text-red-500">{formatPrice(property.price, property.currency)}</h4>
+            <h6 className="text-sm text-green-600 font-medium mt-1">Save €55,000</h6>
+          </div>
         </div>
         
+        
+        
         {/* Features */}
-        <div className="mb-4 flex justify-between border-b border-neutral-200 pb-4">
+        <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
           <div className="flex flex-col items-center">
             <span className="text-sm text-neutral-500">Beds</span>
             <span className="font-medium text-neutral-900">{property.features.bedrooms}</span>

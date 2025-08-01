@@ -11,8 +11,8 @@ export default function AdvancedSearch() {
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-        <div>
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-7">
+        <div className="col-span-2">
           <label htmlFor="location" className="block text-sm font-medium text-neutral-700 mb-1">
             Location
           </label>
@@ -29,7 +29,7 @@ export default function AdvancedSearch() {
           </select>
         </div>
 
-        <div>
+        <div className="col-span-2">
           <label htmlFor="property-type" className="block text-sm font-medium text-neutral-700 mb-1">
             Property Type
           </label>
@@ -46,7 +46,7 @@ export default function AdvancedSearch() {
           </select>
         </div>
 
-        <div>
+        <div className="col-span-2">
           <label htmlFor="price-range" className="block text-sm font-medium text-neutral-700 mb-1">
             Price Range
           </label>
@@ -82,16 +82,6 @@ export default function AdvancedSearch() {
         </div>
       </div>
       
-      <div className="mt-6 text-center">
-        <button
-          type="button"
-          onClick={() => setShowAdvancedSearch(true)}
-          className="text-primary-600 hover:text-primary-700 font-medium text-sm flex items-center justify-center mx-auto"
-        >
-          Advanced Search <AdjustmentsHorizontalIcon className="ml-1 h-4 w-4" />
-        </button>
-      </div>
-
       {/* Advanced Search Modal */}
       {showAdvancedSearch && (
         <div className="fixed inset-0 z-[9999] overflow-y-auto">

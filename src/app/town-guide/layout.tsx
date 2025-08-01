@@ -11,7 +11,7 @@ export default function TownGuideLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="pt-32">
+    <div className="pb-10">
       {children}
     </div>
   )

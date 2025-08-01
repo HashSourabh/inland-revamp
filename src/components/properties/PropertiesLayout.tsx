@@ -159,48 +159,50 @@ export default function PropertiesLayout({ properties }: PropertiesLayoutProps) 
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-neutral-900 dark:text-white md:text-4xl">
+        <h1 className="font-heading text-3xl font-bold text-primary-600">
           Properties for Sale
         </h1>
-        <p className="mt-2 text-lg text-neutral-600 dark:text-neutral-400">
+        <p className="mt-2 text-neutral-600 text-xl">
           Discover our exclusive selection of properties across inland Andalucia
         </p>
       </header>
 
-      {/* Filters */}
-      <div className="mb-8 rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
-        <div className="space-y-4">
-          <h2 className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-            {getFilterHeading()}
-          </h2>
-          <AreaFilter
-            properties={properties}
-            selectedProvince={selectedProvince}
-            selectedTown={selectedTown}
-            onProvinceChange={handleProvinceChange}
-            onTownChange={handleTownChange}
-          />
+      <div className="rounded-xl border border-neutral-200 bg-white p-4 mb-6">
+        {/* Filters */}
+        <div className="mb-6 dark:border-neutral-800 dark:bg-neutral-900">
+          <div className="space-y-4">
+            <h2 className="text-base font-medium text-neutral-700 dark:text-neutral-300">
+              {getFilterHeading()}
+            </h2>
+            <AreaFilter
+              properties={properties}
+              selectedProvince={selectedProvince}
+              selectedTown={selectedTown}
+              onProvinceChange={handleProvinceChange}
+              onTownChange={handleTownChange}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Results count and layout switcher */}
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          Showing <span className="font-medium text-neutral-900 dark:text-white">{startIndex + 1}</span>
-          {' - '}
-          <span className="font-medium text-neutral-900 dark:text-white">
-            {Math.min(endIndex, totalProperties)}
-          </span>{' '}
-          of <span className="font-medium text-neutral-900 dark:text-white">{totalProperties}</span> properties
-          {selectedProvince && (
-            <> in <span className="font-medium text-neutral-900 dark:text-white">{selectedProvince}</span>
-              {selectedTown && (
-                <> - <span className="font-medium text-neutral-900 dark:text-white">{selectedTown}</span></>
-              )}
-            </>
-          )}
-        </p>
-        <LayoutSwitcher currentLayout={layout} onLayoutChange={setLayout} />
+        {/* Results count and layout switcher */}
+        <div className=" flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-base text-neutral-600 dark:text-neutral-400">
+            Showing <span className="font-medium text-neutral-900 dark:text-white">{startIndex + 1}</span>
+            {' - '}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {Math.min(endIndex, totalProperties)}
+            </span>{' '}
+            of <span className="font-medium text-neutral-900 dark:text-white">{totalProperties}</span> properties
+            {selectedProvince && (
+              <> in <span className="font-medium text-neutral-900 dark:text-white">{selectedProvince}</span>
+                {selectedTown && (
+                  <> - <span className="font-medium text-neutral-900 dark:text-white">{selectedTown}</span></>
+                )}
+              </>
+            )}
+          </p>
+          <LayoutSwitcher currentLayout={layout} onLayoutChange={setLayout} />
+        </div>
       </div>
 
       {/* Property Grid */}
