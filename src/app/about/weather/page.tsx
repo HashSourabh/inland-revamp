@@ -100,11 +100,11 @@ const provinceSVG = [
 
 export default function AboutWeatherPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="mx-auto max-w-7xl px-5  my-10 grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Left: Weather Content */}
-      <section className="md:col-span-2 bg-white rounded-xl shadow-lg p-8 border border-neutral-200">
-        <h1 className="font-script text-4xl md:text-5xl font-bold text-neutral-900 mb-4">The weather in Andalucía:</h1>
-        <p className="mb-4 text-neutral-800 text-lg">
+      <section className="md:col-span-2 bg-white rounded-xl  p-8 border border-black/10">
+        <h1 className="text-3xl font-bold text-primary-600 mb-6">The weather in Andalucía:</h1>
+        <p className="mb-4 text-neutral-600 text-base">
           Check the Weather Forecast in any region of Andalucia by clicking a province below
         </p>
         {/* Province Cards Grid */}
@@ -115,22 +115,22 @@ export default function AboutWeatherPage() {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center aspect-square rounded-xl bg-primary-200 hover:bg-primary-400 transition text-white text-xl font-bold shadow-md text-center"
-              style={{ minHeight: 80 }}
+              className="flex items-center justify-center aspect-square rounded bg-slate-100 hover:bg-primary-100 transition text-primary-900 text-sm font-medium shadow hover:shadow-md text-center"
+              style={{ minHeight: 40 }}
             >
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </a>
           ))}
         </div>
-        <p className="mb-6 text-neutral-700">Or check it on different towns of each region in Andalucia</p>
+        <p className="mb-6 text-neutral-600 text-base">Or check it on different towns of each region in Andalucia</p>
         {/* Quick Towns Section */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-10">
           {quickTowns.filter((prov) => prov.towns.length > 0).map((prov) => (
             <div key={prov.province}>
-              <h3 className="font-bold text-primary-900 mb-2 uppercase text-sm">{prov.province}</h3>
-              <ul>
+              <h3 className="font-semibold text-primary-900 mb-2 capitalize text-base">{prov.province}</h3>
+              <ul className="flex gap-4 flex-wrap">
                 {prov.towns.map((town) => (
-                  <li key={town} className="bg-neutral-100 rounded px-3 py-1 mb-1 text-neutral-800">{town}</li>
+                  <li key={town} className="bg-slate-100 hover:bg-primary-100 font-medium rounded px-4 text-sm py-1.5 mb-1 text-primary-900 shadow hover:shadow-md">{town}</li>
                 ))}
               </ul>
             </div>
@@ -140,12 +140,12 @@ export default function AboutWeatherPage() {
         <div className="space-y-8">
           {propertiesByProvince.map((prov) => (
             <div key={prov.province}>
-              <h2 className="text-2xl font-bold text-primary-900 mb-3">{prov.province}</h2>
-              <div className="flex flex-wrap gap-2">
+              <h2 className="text-base font-semibold text-primary-900 mb-2">{prov.province}</h2>
+              <div className="flex flex-wrap gap-4">
                 {prov.towns.map((town) => (
-                  <span key={town.name} className="inline-flex items-center bg-neutral-100 rounded px-3 py-1 text-primary-900 font-medium text-sm">
+                  <span key={town.name} className="inline-flex items-center bg-slate-100 hover:bg-primary-100 rounded px-3 py-1.5 text-primary-900 shadow hover:shadow-md font-medium text-sm">
                     {town.name}
-                    <span className="ml-2 bg-yellow-400 text-primary-900 rounded-full px-2 py-0.5 text-xs font-bold">{town.count}</span>
+                    <span className="ml-8 bg-secondary-500 text-white rounded-full px-1 w-[20px] inline-flex justify-center py-0.5 text-xs font-semibold">{town.count}</span>
                   </span>
                 ))}
               </div>
