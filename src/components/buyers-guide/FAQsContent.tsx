@@ -69,8 +69,8 @@ interface FAQSectionProps {
 
 function FAQSection({ title, questions }: FAQSectionProps) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
-      <h2 className="text-xl font-semibold text-secondary-500 dark:text-secondary-400 mt-0">
+    <div className="">
+      <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
         {title}
       </h2>
       <div className="mt-4 space-y-3">
@@ -131,10 +131,10 @@ export default function FAQsContent() {
   return (
     <article className="space-y-8">
       <header>
-        <h1 className="font-playfair text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">
+        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-6">
           Frequently Asked Questions
         </h1>
-        <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
+        <p className="mb-8 mt-0 text-base text-neutral-600 dark:text-slate-300">
           Find answers to the most common questions about buying property in inland Spain. If you can't
           find what you're looking for, don't hesitate to contact us.
         </p>
@@ -151,18 +151,20 @@ export default function FAQsContent() {
         <FAQSection title="Property & Location" questions={propertyQuestions} />
       </motion.section>
 
-      <div className="mt-8 rounded-lg bg-primary-50 p-6 dark:bg-blue-900/20">
-        <h2 className="font-playfair text-xl font-semibold text-slate-900 dark:text-white">
+      <div className="mt-8 flex items-center justify-between rounded-lg  bg-neutral-50 p-6 dark:border-slate-700 dark:bg-slate-800">
+        <div className='w-[60%]'>
+          <h2 className="text-2xl font-semibold text-primary-900 mt-0 mb-2 dark:text-white">
           Still Have Questions?
         </h2>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">
+        <p className="mt-0 mb-0 text-base text-neutral-600 dark:text-slate-300">
           Our team is here to help you with any questions you might have about buying property in
           inland Spain.
         </p>
-        <div className="mt-4">
+        </div>
+        <div className="flex justify-end w-[40%]">
           <a
             href="/contact"
-            className="rounded-md bg-primary-500 px-4 py-2 font-medium text-white shadow-md hover:bg-primary-600 transition-colors"
+            className="rounded-md bg-primary-600 px-8 py-2 min-h-[40px] inline-flex items-center no-underline text-base font-semibold text-white transition-colors hover:bg-primary-900 dark:bg-blue-500 dark:hover:bg-blue-600"
           >
             Contact Our Team
           </a>
