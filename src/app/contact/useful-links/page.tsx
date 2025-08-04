@@ -120,13 +120,13 @@ export default function UsefulLinksPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-5 my-10">
       {/* Hero Section */}
-      <div className="mb-12 text-center">
-        <h1 className="font-heading text-4xl font-bold text-neutral-900 md:text-5xl">
+      <div className="mb-8 bg-white rounded-xl border border-black/10 p-6">
+        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-5">
           Useful Links
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-neutral-700">
+        <p className="text-base text-neutral-600 m-0">
           Essential resources and information for living and buying property in Inland Andalucia
         </p>
       </div>
@@ -134,12 +134,12 @@ export default function UsefulLinksPage() {
       {/* Links Grid */}
       <div className="grid gap-8 md:grid-cols-2">
         {categories.map((category, index) => (
-          <div key={index} className="rounded-xl bg-white p-6 shadow-lg">
+          <div key={index} className="rounded-xl bg-white p-6 border border-black/10">
             <div className="mb-6 flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-600">
                 {category.icon}
               </div>
-              <h2 className="text-xl font-bold text-neutral-900">
+              <h2 className="text-xl font-semibold text-primary-900">
                 {category.title}
               </h2>
             </div>
@@ -148,7 +148,7 @@ export default function UsefulLinksPage() {
                 <Link
                   key={linkIndex}
                   href={link.url}
-                  className="block rounded-lg border border-neutral-200 p-4 transition-colors hover:border-primary-500 hover:bg-primary-50"
+                  className="block rounded-lg border border-black/10 p-4 transition-colors hover:border-primary-500 hover:bg-primary-50"
                 >
                   <h3 className="font-semibold text-neutral-900">
                     {link.title}

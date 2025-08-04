@@ -10,61 +10,60 @@ import {
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-5 my-10">
       {/* Contact Hero with Background */}
-      <section className="relative flex min-h-[40vh] items-center justify-center pt-32 pb-20 md:pt-40 md:pb-28">
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-primary-900 to-primary-800"></div>
-        <div className="relative z-10 text-center">
-          <h1 className="font-heading text-4xl font-bold text-white md:text-5xl lg:text-6xl">
+      <section className="relative flex p-8 mb-8 bg-white rounded-xl border border-black/10">
+        <div className="relative z-10">
+          <h1 className="font-heading text-3xl font-bold text-primary-600">
             Contact Us
           </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg text-white/90">
+          <p className="mt-6 text-base text-neutral-600">
             Get in touch with our team of experts to start your property journey in Inland Andalucia
           </p>
         </div>
       </section>
 
       {/* Quick Contact Cards */}
-      <section className="mt-0 mb-16">
-        <div className="grid gap-6 md:grid-cols-3">
+      <section className="mt-0 mb-8">
+        <div className="grid gap-8 md:grid-cols-3">
           {/* Phone */}
-          <div className="rounded-lg bg-white p-6 shadow-lg transition-transform hover:scale-105">
+          <div className="rounded-xl flex items-center flex-col flex-wrap bg-white p-8 border border-black/10 hover:border-primary-500 hover:bg-primary-50 transition-transform">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100">
               <PhoneIcon className="h-6 w-6 text-primary-600" />
             </div>
-            <h3 className="mb-2 text-xl font-bold text-neutral-900">Call Us</h3>
-            <p className="text-neutral-600">Available Mon-Sat</p>
+            <h3 className="mb-2 text-xl font-semibold text-primary-900">Call Us</h3>
+            <p className="text-neutral-600 text-sm">Available Mon-Sat</p>
             <a 
               href="tel:+34952741525" 
-              className="mt-4 block text-lg font-semibold text-primary-600 hover:text-primary-700"
+              className="mt-4 block text-base font-semibold text-primary-900"
             >
               +34 952 741 525
             </a>
           </div>
 
           {/* Email */}
-          <div className="rounded-lg bg-white p-6 shadow-lg transition-transform hover:scale-105">
+          <div className="rounded-xl flex items-center flex-col flex-wrap bg-white p-8 border border-black/10 hover:border-primary-500 hover:bg-primary-50 transition-transform">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100">
               <EnvelopeIcon className="h-6 w-6 text-primary-600" />
             </div>
-            <h3 className="mb-2 text-xl font-bold text-neutral-900">Email Us</h3>
-            <p className="text-neutral-600">We'll respond within 24h</p>
+            <h3 className="mb-2 text-xl font-semibold text-primary-900">Email Us</h3>
+            <p className="text-neutral-600 text-sm">We'll respond within 24h</p>
             <a 
               href="mailto:info@inlandandalucia.com" 
-              className="mt-4 block text-lg font-semibold text-primary-600 hover:text-primary-700"
+              className="mt-4 block text-base font-semibold text-primary-900"
             >
               info@inlandandalucia.com
             </a>
           </div>
 
           {/* Visit Us */}
-          <div className="rounded-lg bg-white p-6 shadow-lg transition-transform hover:scale-105">
+          <div className="rounded-xl flex items-center flex-col flex-wrap bg-white p-8 border border-black/10 hover:border-primary-500 hover:bg-primary-50 transition-transform">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100">
               <MapPinIcon className="h-6 w-6 text-primary-600" />
             </div>
-            <h3 className="mb-2 text-xl font-bold text-neutral-900">Visit Us</h3>
-            <p className="text-neutral-600">Our Main Office</p>
-            <address className="mt-4 not-italic text-lg font-semibold text-primary-600">
+            <h3 className="mb-2 text-xl font-semibold text-primary-900">Visit Us</h3>
+            <p className="text-neutral-600 text-sm">Our Main Office</p>
+            <address className="mt-4 not-italic text-base text-center font-semibold text-primary-900">
               Calle Andalucia 12,<br />
               29550 Ardales
             </address>
@@ -73,13 +72,13 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Information and Form */}
-      <section className="mb-16 grid gap-12 rounded-2xl bg-white p-8 shadow-lg md:grid-cols-2">
+      <section className="mb-8 grid gap-12 rounded-xl bg-white p-8 border border-black/10  md:grid-cols-2">
         {/* Contact Information */}
         <div>
-          <h2 className="font-heading text-2xl font-bold text-neutral-900 md:text-3xl">
+          <h2 className="font-heading text-2xl font-semibold text-primary-900">
             Get In Touch
           </h2>
-          <p className="mt-4 text-neutral-700">
+          <p className="mt-4 text-neutral-600">
             Our team is here to help you find your dream property in Inland Andalucia. 
             Contact us today for personalized assistance.
           </p>
@@ -87,12 +86,12 @@ export default function ContactPage() {
           <div className="mt-8 space-y-6">
             {/* Office Details */}
             <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <BuildingOfficeIcon className="h-6 w-6 text-primary-600" />
+              <div className="flex-shrink-0 w-10 h-10 bg-primary-100 items-center justify-center inline-flex rounded-full">
+                <BuildingOfficeIcon className="h-5 w-5 text-primary-600" />
               </div>
               <div>
-                <h3 className="font-medium text-neutral-900">Main Office</h3>
-                <p className="mt-1 text-neutral-700">
+                <h3 className="font-semibold text-lg text-primary-900">Main Office</h3>
+                <p className="mt-1 text-neutral-600 text-sm">
                   Calle Andalucia 12<br />
                   29550 Ardales<br />
                   Málaga, Spain
@@ -102,12 +101,12 @@ export default function ContactPage() {
 
             {/* Office Hours */}
             <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <ClockIcon className="h-6 w-6 text-primary-600" />
+              <div className="flex-shrink-0 w-10 h-10 bg-primary-100 items-center justify-center inline-flex rounded-full">
+                <ClockIcon className="h-5 w-5 text-primary-600" />
               </div>
               <div>
-                <h3 className="font-medium text-neutral-900">Office Hours</h3>
-                <div className="mt-1 space-y-1 text-neutral-700">
+                <h3 className="font-semibold text-lg text-primary-900">Office Hours</h3>
+                <div className="mt-1 space-y-1 text-neutral-600 text-sm">
                   <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
                   <p>Saturday: 10:00 AM - 2:00 PM</p>
                   <p>Sunday: Closed</p>
@@ -117,12 +116,12 @@ export default function ContactPage() {
 
             {/* Languages */}
             <div className="flex items-start space-x-4">
-              <div className="flex-shrink-0">
-                <GlobeAltIcon className="h-6 w-6 text-primary-600" />
+              <div className="flex-shrink-0 w-10 h-10 bg-primary-100 items-center justify-center inline-flex rounded-full">
+                <GlobeAltIcon className="h-5 w-5 text-primary-600" />
               </div>
               <div>
-                <h3 className="font-medium text-neutral-900">We Speak</h3>
-                <p className="mt-1 text-neutral-700">
+                <h3 className="font-semibold text-lg text-primary-900">We Speak</h3>
+                <p className="mt-1 text-neutral-600 text-sm">
                   English, Spanish, French, German
                 </p>
               </div>
@@ -132,60 +131,60 @@ export default function ContactPage() {
 
         {/* Contact Form */}
         <div className="rounded-xl bg-neutral-50 p-6">
-          <h2 className="font-heading text-2xl font-bold text-neutral-900">
+          <h2 className="font-heading text-2xl font-semibold text-primary-900">
             Send Us a Message
           </h2>
           <form className="mt-6 space-y-6">
             {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-neutral-700">
+              <label htmlFor="name" className="block text-sm font-medium text-neutral-900">
                 Full Name *
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
-                className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                className="mt-1 block w-full rounded-md border border-black/10 focus:border-primary-500/70 focus:ring-0"
                 required
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
+              <label htmlFor="email" className="block text-sm font-medium text-neutral-900">
                 Email *
               </label>
               <input
                 type="email"
                 id="email"
                 name="email"
-                className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                className="mt-1 block w-full rounded-md border border-black/10 focus:border-primary-500/70 focus:ring-0"
                 required
               />
             </div>
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-neutral-700">
+              <label htmlFor="phone" className="block text-sm font-medium text-neutral-900">
                 Phone Number
               </label>
               <input
                 type="tel"
                 id="phone"
                 name="phone"
-                className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                className="mt-1 block w-full rounded-md border-black/10 focus:border-primary-500/70 focus:ring-0"
               />
             </div>
 
             {/* Subject */}
             <div>
-              <label htmlFor="subject" className="block text-sm font-medium text-neutral-700">
+              <label htmlFor="subject" className="block text-sm font-medium text-neutral-900">
                 Subject *
               </label>
               <select
                 id="subject"
                 name="subject"
-                className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                className="mt-1 block w-full rounded-md border-black/10 focus:border-primary-500/70 focus:ring-0"
                 required
               >
                 <option value="">Please select</option>
@@ -199,14 +198,14 @@ export default function ContactPage() {
 
             {/* Message */}
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-neutral-700">
+              <label htmlFor="message" className="block text-sm font-medium text-neutral-900">
                 Message *
               </label>
               <textarea
                 id="message"
                 name="message"
                 rows={4}
-                className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                className="mt-1 block w-full rounded-md border border-black/10 focus:border-primary-500/70 focus:ring-0"
                 required
               ></textarea>
             </div>
@@ -215,7 +214,7 @@ export default function ContactPage() {
             <div>
               <button
                 type="submit"
-                className="w-full rounded-md bg-primary-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                className="w-full rounded-md bg-primary-600 px-6 py-3 text-base font-medium text-white  hover:bg-primary-900 focus:outline-none focus:ring-0"
               >
                 Send Message
               </button>
@@ -225,8 +224,8 @@ export default function ContactPage() {
       </section>
 
       {/* Map Section */}
-      <section className="mb-16">
-        <h2 className="mb-6 font-heading text-2xl font-bold text-neutral-900 md:text-3xl">
+      <section className="p-8 bg-white rounded-xl border border-black/10">
+        <h2 className="mb-6 font-heading text-2xl font-semibold text-primary-900">
           Find Us
         </h2>
         <div className="overflow-hidden rounded-xl">

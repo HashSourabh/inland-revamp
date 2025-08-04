@@ -44,19 +44,19 @@ const offices = [
 
 export default function OurOfficesPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="mx-auto max-w-7xl px-5  my-10 grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Left: Offices Content */}
-      <section className="md:col-span-2 bg-white rounded-xl shadow-lg p-8 border border-neutral-200">
-        <h1 className="font-script text-4xl md:text-5xl font-bold text-neutral-900 mb-4">Our offices</h1>
-        <p className="mb-6 text-neutral-800 text-lg">
+      <section className="md:col-span-2 bg-white rounded-xl  p-8 border border-black/10">
+        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-6">Our offices</h1>
+        <p className="mb-8 text-neutral-600 text-base">
           Please feel free to drop by one of our offices in Alcala la Real, Mollina, Axarquia, Martos should you be in the area looking for an inland property we cover most of Inland Andalucia. However in order to best serve you, we ask that you contact us in advance so we can give you the individual attention you deserve while searching your inland property in Andalucia.{' '}
-          <Link href="/contact" className="text-primary-600 underline">Click here to go to our contact form</Link>
+          <Link href="/contact" className="text-primary-600">Click here to go to our contact form</Link>
         </p>
-        <div className="space-y-10">
+        <div className="space-y-8">
           {offices.map((office, idx) => (
-            <div key={office.name} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start bg-neutral-50 rounded-lg p-6 shadow-sm">
+            <div key={office.name} className=" gap-6 items-start bg-neutral-50 rounded-lg p-6">
               {/* Office Main Image */}
-              <div className="md:col-span-1 flex flex-col gap-2">
+              {/*<div className="md:col-span-1 flex flex-col gap-2">
                 <Image
                   src={office.images[0]}
                   alt={office.name}
@@ -64,18 +64,18 @@ export default function OurOfficesPage() {
                   height={120}
                   className="rounded-lg object-cover border border-neutral-200"
                 />
-              </div>
+              </div>*/}
               {/* Office Info and Gallery */}
-              <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-1">
-                  <h2 className="text-xl font-bold text-primary-900 mb-1">{office.name}</h2>
-                  <p className="text-neutral-800 text-sm mb-1">{office.address[0]}</p>
-                  <p className="text-neutral-800 text-sm mb-1">Tel: {office.phone}</p>
+              <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="">
+                  <h2 className="text-lg font-semibold text-primary-900 mb-1">{office.name}</h2>
+                  <p className="text-neutral-600 text-sm mb-1">{office.address[0]}</p>
+                  <p className="text-neutral-600 text-sm mb-1">Tel: {office.phone}</p>
                   {office.mobile && <p className="text-neutral-800 text-sm mb-1">Mob Tel: {office.mobile}</p>}
                   <a href={`mailto:${office.email}`} className="text-primary-700 font-medium hover:underline text-sm">{office.email}</a>
                 </div>
                 {/* Gallery */}
-                <div className="md:col-span-2 flex gap-4">
+                <div className=" flex gap-4">
                   {office.images.slice(1).map((img, i) => (
                     <Image
                       key={img}
