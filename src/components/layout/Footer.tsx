@@ -59,25 +59,19 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/town-guide" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="/town-guide/cordoba" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   Town Guide
                 </Link>
               </li>
               <li>
-                <Link href="/provinces" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
-                  <ArrowRightIcon className="mr-2 h-4 w-4" />
-                  Provinces
-                </Link>
-              </li>
-              <li>
-                <Link href="/buyers-guide" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="/buyers-guide/buying-property" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   Buyer's Guide
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="https://luvinland.com" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   Blog
                 </Link>

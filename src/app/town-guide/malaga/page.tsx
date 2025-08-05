@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
 
 export default function MalagaPage() {
   return (
@@ -143,31 +144,7 @@ export default function MalagaPage() {
           </div>
         </div>
         <div>
-          <div className="flex flex-col bg-white rounded-xl border border-black/10 p-3 sticky top-[120px] mb-6">
-            <div className="p-2.5 border-b border-black/10 mb-4">
-                <h2 className="text-2xl font-semibold text-primary-900">Related Links</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 p-2.5">
-                <Link href="/buyers-guide/buying-property" className="text-primary-600 hover:text-primary-800">
-                Buying a Property
-                </Link>
-                <Link href="/buyers-guide/buying-process" className="text-primary-600 hover:text-primary-800">
-                Buying Process
-                </Link>
-                <Link href="/buyers-guide/property-taxes" className="text-primary-600 hover:text-primary-800">
-                Property Taxes
-                </Link>
-                <Link href="/buyers-guide/faqs" className="text-primary-600 hover:text-primary-800">
-                FAQs
-                </Link>
-                <Link href="/buyers-guide/unpaid-taxes" className="text-primary-600 hover:text-primary-800">
-                Unpaid Taxes
-                </Link>
-                <Link href="/buyers-guide/mortgage" className="text-primary-600 hover:text-primary-800">
-                Mortgage
-                </Link>
-            </div>
-          </div>
+          <TownGuideNav/>
         </div>
       </div>
     </div>

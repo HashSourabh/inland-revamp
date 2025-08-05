@@ -10,7 +10,7 @@ export default function BuyingPropertyPage() {
   return (
     <article className="space-y-8">
       <header>
-        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-6">
+        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-3">
           Buying a Property in Spain
         </h1>
         <p className="mb-8 mt-0 text-base text-neutral-600 dark:text-slate-300">
