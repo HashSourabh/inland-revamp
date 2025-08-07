@@ -213,12 +213,16 @@ export default function PropertiesLayout({ properties }: PropertiesLayoutProps) 
             : 'grid-cols-1'
         }`}
       >
-        {currentProperties.map((property) => (
-          <PropertyCard 
-            key={property.id} 
-            property={transformPropertyForCard(property)} 
-          />
-        ))}
+        
+            {currentProperties.map((property) => (
+              <PropertyCard 
+                card={layout === 'grid' ? '' : 'list'} 
+                key={property.id} 
+                property={transformPropertyForCard(property)} 
+              />
+            ))}
+        
+        
       </div>
 
       {/* Pagination */}

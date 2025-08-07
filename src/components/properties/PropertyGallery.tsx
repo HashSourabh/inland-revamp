@@ -33,9 +33,9 @@ interface PropertyGalleryProps {
   location?: string;
   beds?: number;
   baths?: number;
-  views?: string;
-  built?: string;
-  plot?: string;
+  views?: number;
+  built?: number;
+  plot?: number;
   features?: string[];
   description?: string;
 }
@@ -49,9 +49,9 @@ export default function PropertyGallery({
   location = '',
   beds = 0,
   baths = 0,
-  views = '',
-  built = '',
-  plot = '',
+  views = 0,
+  built = 0,
+  plot = 0,
   features = [],
   description = ''
 }: PropertyGalleryProps) {
@@ -105,63 +105,12 @@ export default function PropertyGallery({
 
   return (
     <div className="relative w-full">
-      {/* Property Header */}
-      <div className="mb-6 rounded-lg bg-primary-700 p-4 text-white">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <TagIcon className="h-6 w-6" />
-            <h1 className="text-2xl font-semibold">{title}</h1>
-            {propertyRef && <span className="text-lg">({propertyRef})</span>}
-          </div>
-          <div className="flex items-center gap-4">
-            {originalPrice && originalPrice > 0 && (
-              <span className="text-2xl font-bold text-red-500 line-through">
-                {formatPrice(originalPrice)}
-              </span>
-            )}
-            {price > 0 && (
-              <span className="text-3xl font-bold">
-                {formatPrice(price)}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Action Buttons */}
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <Link 
-          href="/properties"
-          className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          Back
-        </Link>
-        <button className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700">
-          <PrinterIcon className="h-4 w-4" />
-          Print Preview
-        </button>
-        <button className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700">
-          <EnvelopeIcon className="h-4 w-4" />
-          E-mail
-        </button>
-        <button className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700">
-          <UserGroupIcon className="h-4 w-4" />
-          Contact us
-        </button>
-        <button className="inline-flex items-center gap-2 rounded-md bg-yellow-400 px-4 py-2 text-sm font-medium text-neutral-900 transition-colors hover:bg-yellow-500">
-          <PlayIcon className="h-4 w-4" />
-          Watch video
-        </button>
-        <button className="inline-flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700">
-          <CalendarIcon className="h-4 w-4" />
-          Reserve For Viewing
-        </button>
-      </div>
+      
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Left Column - Property Images and Details */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-12">
           {/* Main Image */}
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-800">
             <Image
@@ -225,45 +174,45 @@ export default function PropertyGallery({
           <div className="mt-8 space-y-6">
             {/* Key Features Grid */}
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
+              <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
                 <HomeModernIcon className="h-5 w-5 text-primary-600" />
                 <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">Beds</p>
+                  <p className="bg-white text-sm text-neutral-600 dark:text-neutral-400">Beds</p>
                   <p className="font-semibold">{beds}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
+              <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
                 <BeakerIcon className="h-5 w-5 text-primary-600" />
                 <div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">Baths</p>
                   <p className="font-semibold">{baths}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
+              <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
                 <EyeIcon className="h-5 w-5 text-primary-600" />
                 <div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">Views</p>
                   <p className="font-semibold">{views}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
+              <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
                 <BuildingOfficeIcon className="h-5 w-5 text-primary-600" />
                 <div>
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">Built</p>
                   <p className="font-semibold">{built}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
+              <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
                 <MapIcon className="h-5 w-5 text-primary-600" />
                 <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">Plot</p>
+                  <p className="bg-white text-sm text-neutral-600 dark:text-neutral-400">Plot</p>
                   <p className="font-semibold">{plot}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
+              <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
                 <MapPinIcon className="h-5 w-5 text-primary-600" />
                 <div>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400">Location</p>
+                  <p className="bg-white text-sm text-neutral-600 dark:text-neutral-400">Location</p>
                   <p className="font-semibold">{location}</p>
                 </div>
               </div>
@@ -272,7 +221,7 @@ export default function PropertyGallery({
             {/* Features */}
             {features.length > 0 && (
               <div>
-                <h2 className="mb-4 text-xl font-semibold">Features:</h2>
+                <h2 className="mb-4 text-xl font-semibold">Features</h2>
                 <div className="flex flex-wrap gap-2">
                   {features.map((feature, index) => (
                     <span 
@@ -289,7 +238,7 @@ export default function PropertyGallery({
             {/* Description */}
             {description && (
               <div>
-                <h2 className="mb-4 text-xl font-semibold">Description:</h2>
+                <h2 className="mb-4 text-xl font-semibold">Description</h2>
                 <p className="text-neutral-700 dark:text-neutral-300">
                   {description}
                 </p>
@@ -298,7 +247,7 @@ export default function PropertyGallery({
 
             {/* Google Map */}
             <div>
-              <h2 className="mb-4 text-xl font-semibold">Location:</h2>
+              <h2 className="mb-4 text-xl font-semibold">Location</h2>
               <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12614.440973994461!2d-4.598844!3d37.559482!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDMzJzM0LjEiTiA0wrAzNSc1NS44Ilc!5e0!3m2!1sen!2ses!4v1620000000000!5m2!1sen!2ses"
@@ -314,8 +263,6 @@ export default function PropertyGallery({
           </div>
         </div>
 
-        {/* Right Column - Promotional Sections */}
-        <PromoSidebar />
       </div>
 
       {/* Add custom scrollbar styles */}

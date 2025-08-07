@@ -27,10 +27,11 @@ interface PropertyCardProps {
       isFeatured: boolean;
     }[];
   };
+  card?: string;
   featured?: boolean;
 }
 
-export default function PropertyCard({ property, featured = false }: PropertyCardProps) {
+export default function PropertyCard({ property, card, featured = false }: PropertyCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
   
   // Find the featured image or fallback to the first image
@@ -51,9 +52,18 @@ export default function PropertyCard({ property, featured = false }: PropertyCar
         featured 
           ? 'shadow-hover-card' 
           : 'shadow-property-card hover:shadow-hover-card'
+      } 
+      ${
+        card === 'list' 
+          ? 'grid grid-cols-9' 
+          : ''
       }`}
     >
-      <div className="relative">
+      <div className={`relative ${
+        card === 'list' 
+          ? 'col-span-2' 
+          : ''
+      }`}>
         {/* Property image */}
         <Link href={`/properties/${property.id}`}>
           <div className="relative aspect-[4/3] overflow-hidden">
@@ -86,9 +96,17 @@ export default function PropertyCard({ property, featured = false }: PropertyCar
         
       </div>
       
-      <div className="p-4">
+      <div className={`p-4 ${
+        card === 'list' 
+          ? 'col-span-7 flex flex-col' 
+          : ''
+      }`}>
         {/* Property title */}
-        <div className="flex justify-between items-start mb-4">
+        <div className={`flex justify-between items-start mb-4 ${
+        card === 'list' 
+          ? 'flex-auto' 
+          : ''
+      }`}>
           <div>
             <Link href={`/properties/${property.id}`}>
               <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
@@ -109,41 +127,56 @@ export default function PropertyCard({ property, featured = false }: PropertyCar
         </div>
         
         
-        
+        {/* Description - only shown if featured */}
+        <div className="border-t border-neutral-100">
+          {featured && (
+            <p className="mb-4 text-sm text-neutral-600">
+              {property.shortDescription}
+            </p>
+          )}
+        </div>
+
         {/* Features */}
-        <div className="flex justify-between border-t border-neutral-100 pt-4 mb-4">
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Beds</span>
-            <span className="font-medium text-neutral-900">{property.features.bedrooms}</span>
+        <div className={`flex ${
+              card === 'list' 
+                ? 'items-center' 
+                : ''
+            }`}>
+          <div className="flex-auto">
+            <div className={`flex  pt-4  ${
+              card === 'list' 
+                ? 'justify-start gap-10' 
+                : 'justify-between'
+            }`}>
+              <div className="flex flex-col items-center">
+                <span className="text-sm text-neutral-500">Beds</span>
+                <span className="font-medium text-neutral-900">{property.features.bedrooms}</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-sm text-neutral-500">Baths</span>
+                <span className="font-medium text-neutral-900">{property.features.bathrooms}</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-sm text-neutral-500">Size</span>
+                <span className="font-medium text-neutral-900">{property.features.buildSize} m²</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-sm text-neutral-500">Type</span>
+                <span className="font-medium text-neutral-900">{property.features.type}</span>
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Baths</span>
-            <span className="font-medium text-neutral-900">{property.features.bathrooms}</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Size</span>
-            <span className="font-medium text-neutral-900">{property.features.buildSize} m²</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="text-sm text-neutral-500">Type</span>
-            <span className="font-medium text-neutral-900">{property.features.type}</span>
+          
+          {/* Call to action */}
+          <div className="flex-initial">
+            <Link 
+              href={`/properties/${property.id}`}
+              className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600"
+            >
+              View Details
+          </Link>
           </div>
         </div>
-        
-        {/* Description - only shown if featured */}
-        {featured && (
-          <p className="mb-4 text-sm text-neutral-600">
-            {property.shortDescription}
-          </p>
-        )}
-        
-        {/* Call to action */}
-        <Link 
-          href={`/properties/${property.id}`}
-          className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600"
-        >
-          View Details
-        </Link>
       </div>
     </div>
   );
