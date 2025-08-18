@@ -38,8 +38,8 @@ const townGuideLinks = [
 
 const buyersGuideLinks = [
   { href: '/buyers-guide/buying-property', label: 'Buying a Property', icon: DocumentTextIcon },
-  { href: '/buyers-guide/process', label: 'Buying Process', icon: DocumentTextIcon },
-  { href: '/buyers-guide/taxes', label: 'Property Taxes', icon: CurrencyDollarIcon },
+  { href: '/buyers-guide/buying-process', label: 'Buying Process', icon: DocumentTextIcon },
+  { href: '/buyers-guide/property-taxes', label: 'Property Taxes', icon: CurrencyDollarIcon },
   { href: '/buyers-guide/faqs', label: 'FAQs', icon: QuestionMarkCircleIcon },
   { href: '/buyers-guide/unpaid-taxes', label: 'Unpaid Taxes', icon: ExclamationTriangleIcon },
   { href: '/buyers-guide/mortgage', label: 'Mortgage', icon: BanknotesIcon }

@@ -4,6 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { HomeIcon, StarIcon } from "@heroicons/react/24/outline";
 import PromoSidebar from "@/components/PromoSidebar";
+import Mollina from "../../../assets/images/office/mollina.jpg";
+import Mollina2 from "../../../assets/images/office/mollina1.jpg";
+import Mollina3 from "../../../assets/images/office/mollina-office1.jpg";
+import Alcala from "../../../assets/images/office/Alcala1.jpg";
+import Alcala2 from "../../../assets/images/office/alcala-office-1.jpg";
+import Alcala3 from "../../../assets/images/office/alcala-office.jpg";
+import Martos from "../../../assets/images/office/Martos.png";
+import Martos2 from "../../../assets/images/office/Martos_1.jpeg";
+import Martos3 from "../../../assets/images/office/Martos_2.jpeg";
 
 const offices = [
   {
@@ -12,10 +21,10 @@ const offices = [
     phone: "+34 952 741 525",
     mobile: "+34 600 370 543",
     email: "info@inlandandalucia.com",
+    image: Mollina,
     images: [
-      "/images/mollina-exterior.jpg",
-      "/images/mollina-interior-1.jpg",
-      "/images/mollina-interior-2.jpg",
+      Mollina3,
+      Mollina2,
     ],
   },
   {
@@ -23,10 +32,10 @@ const offices = [
     address: ["Calle Abad Moya 4 bajo, 23680 Alcalá la Real (Jaén)"],
     phone: "+34 953 587 040",
     email: "info@inlandandalucia.com",
+    image: Alcala,
     images: [
-      "/images/alcala-exterior.jpg",
-      "/images/alcala-interior-1.jpg",
-      "/images/alcala-interior-2.jpg",
+      Alcala2,
+      Alcala3,
     ],
   },
   {
@@ -34,10 +43,10 @@ const offices = [
     address: ["Calle Lope de Vega, 6, 23600 Martos (Jaén)"],
     phone: "+34 953 704 319",
     email: "info@inlandandalucia.com",
+    image: Martos,
     images: [
-      "/images/martos-exterior.jpg",
-      "/images/martos-interior-1.jpg",
-      "/images/martos-interior-2.jpg",
+      Martos2,
+      Martos3,
     ],
   },
 ];
@@ -54,7 +63,7 @@ export default function OurOfficesPage() {
         </p>
         <div className="space-y-8">
           {offices.map((office, idx) => (
-            <div key={office.name} className=" gap-6 items-start bg-neutral-50 rounded-lg p-6">
+            <div key={office.name} className=" gap-6 items-start bg-neutral-50 rounded-lg p-4">
               {/* Office Main Image */}
               {/*<div className="md:col-span-1 flex flex-col gap-2">
                 <Image
@@ -66,8 +75,18 @@ export default function OurOfficesPage() {
                 />
               </div>*/}
               {/* Office Info and Gallery */}
-              <div className=" grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="">
+              <div className=" grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div className=" flex gap-4">
+                    <Image
+                      src={office.image}
+                      alt={`${office.name}`}
+                      width={160}
+                      height={100}
+                      className="rounded-lg object-cover border border-neutral-200"
+                    />
+                 
+                </div>
+                <div className="col-span-2">
                   <h2 className="text-lg font-semibold text-primary-900 mb-1">{office.name}</h2>
                   <p className="text-neutral-600 text-sm mb-1">{office.address[0]}</p>
                   <p className="text-neutral-600 text-sm mb-1">Tel: {office.phone}</p>
@@ -75,18 +94,18 @@ export default function OurOfficesPage() {
                   <a href={`mailto:${office.email}`} className="text-primary-700 font-medium hover:underline text-sm">{office.email}</a>
                 </div>
                 {/* Gallery */}
-                <div className=" flex gap-4">
-                  {office.images.slice(1).map((img, i) => (
-                    <Image
-                      key={img}
-                      src={img}
-                      alt={`${office.name} photo ${i + 2}`}
-                      width={160}
-                      height={100}
-                      className="rounded-lg object-cover border border-neutral-200"
-                    />
+                  {office.images.map((img, i) => (
+                    <div className="flex">
+                        <Image
+                          key={img}
+                          src={img}
+                          alt={`${office.name} photo ${i + 2}`}
+                          width={160}
+                          height={100}
+                          className="rounded-lg object-cover border border-neutral-200"
+                        />
+                    </div>
                   ))}
-                </div>
               </div>
             </div>
           ))}
