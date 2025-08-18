@@ -95,9 +95,9 @@ export default function OurOfficesPage() {
                 </div>
                 {/* Gallery */}
                   {office.images.map((img, i) => (
-                    <div className="flex">
+                    <div className="flex" key={i}>
                         <Image
-                          key={img}
+                          
                           src={img}
                           alt={`${office.name} photo ${i + 2}`}
                           width={160}
