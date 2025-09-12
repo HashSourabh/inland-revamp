@@ -1,609 +1,526 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
-import PropertyGrid from "@/components/properties/PropertyGrid";
 import PropertyCard from "@/components/properties/PropertyCard";
 import {
   MagnifyingGlassIcon,
-  MapPinIcon,
-  BuildingOfficeIcon,
-  HomeIcon,
   ArrowRightIcon,
-  StarIcon,
-  XMarkIcon,
-  AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import TestimonialsCarousel from "@/components/testimonials/TestimonialsCarousel";
 import AdvancedSearch from "@/components/search/AdvancedSearch";
 import Hero from "@/sections/Hero";
+import { Property } from "@/types/property";
+import { useKeenSlider } from "keen-slider/react";
 
-// Mock properties data - In a real implementation this would come from an API
-const featuredProperties = [
-  {
-    id: "prop-23689",
-    reference: "IAD-23689",
-    title: "Town House (TH4890 )",
-    shortDescription:
-      "Traditional Andalusian cortijo with 3 bedrooms, mountain views, private pool, and beautiful gardens near Antequera. Perfectly renovated with modern amenities while maintaining authentic charm.",
-    price: 249000,
-    currency: "EUR",
-    location: {
-      province: "Malaga",
-      town: "Antequera",
-    },
-    features: {
-      type: "Cortijo",
-      bedrooms: 3,
-      bathrooms: 2,
-      buildSize: 150,
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80",
-        alt: "Exterior view of cortijo with mountains in the background",
-        isFeatured: true,
-      },
-    ],
-  },
-  {
-    id: "prop-23128",
-    reference: "IAD-23128",
-    title: "Town House (TH4241 ) ",
-    shortDescription:
-      "Modern 4-bedroom villa with panoramic views, infinity pool, and luxury finishes near Priego de Córdoba. Featuring open living spaces, high-end kitchen, and beautiful outdoor areas.",
-    price: 595000,
-    currency: "EUR",
-    location: {
-      province: "Cordoba",
-      town: "Priego de Córdoba",
-    },
-    features: {
-      type: "Villa",
-      bedrooms: 4,
-      bathrooms: 3,
-      buildSize: 280,
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80",
-        alt: "Modern villa with panoramic views",
-        isFeatured: true,
-      },
-    ],
-  },
-  {
-    id: "prop-23566",
-    reference: "IAD-23566",
-    title: "Town House  (TH5027 )",
-    shortDescription:
-      "Spacious 5-bedroom country house with guest accommodation, pool, and 10,000 m² productive olive grove near Martos. Features include multiple outdoor spaces, solar power, and private well.",
-    price: 345000,
-    currency: "EUR",
-    location: {
-      province: "Jaen",
-      town: "Martos",
-    },
-    features: {
-      type: "Country House",
-      bedrooms: 5,
-      bathrooms: 3,
-      buildSize: 220,
-    },
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80",
-        alt: "Country house surrounded by olive groves",
-        isFeatured: true,
-      },
-    ],
-  },
-];
+// API base
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1/';
 
-// Featured property for hero section
-const heroProperty = {
-  id: "prop-23450",
-  reference: "IAD-23450",
-  title: "Plot (PL276 ) ",
-  shortDescription:
-    "Traditional 2-bedroom townhouse in Estepa's historic center. Features include interior patio, original architectural elements, and modern updates. Perfect authentic Spanish home in a charming white village.",
-  price: 128000,
-  currency: "EUR",
-  location: {
-    province: "Sevilla",
-    town: "Estepa",
+// --- TYPES ---
+interface DatabaseProperty {
+  Property_ID: number;
+  Property_Ref: string | string[];
+  Property_Address: string;
+  Public_Price: number;
+  Bedrooms: number;
+  Bathrooms: number;
+  Property_Type_ID: number;
+  Area_ID: number;
+  SubArea_ID: number;
+  GPS_Latitude?: number;
+  GPS_Longitude?: number;
+  Property_Notes?: string;
+  Display: number;
+  Build_Size?: number;
+  Plot_Size?: number;
+  Year_Built?: number;
+  Featured?: boolean;
+  Exclusive?: boolean;
+  Original_Price?: number;
+  Num_Photos?: number;
+  SQM_Built?: number;
+}
+
+interface RegionCount {
+  regionId: number;
+  region: string;
+  count: number;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  total?: number;
+  page?: number;
+  pageSize?: number;
+}
+
+interface PropertyType {
+  id: number;
+  name: string;
+  code: string;
+}
+
+// --- API SERVICE ---
+const propertyService = {
+  async getFeaturedProperties(page = 1, pageSize = 9): Promise<DatabaseProperty[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/properties/featured?page=${page}&pageSize=${pageSize}`);
+      const data: ApiResponse<DatabaseProperty[]> = await res.json();
+      return data.success ? data.data : [];
+    } catch (err) {
+      console.error("Error fetching featured properties:", err);
+      return [];
+    }
   },
-  features: {
-    type: "Townhouse",
-    bedrooms: 2,
-    bathrooms: 1,
-    buildSize: 85,
+
+  async getExclusiveProperties(): Promise<DatabaseProperty[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/properties?pageSize=3&includeHidden=false`);
+      const data: ApiResponse<DatabaseProperty[]> = await res.json();
+      return data.success ? data.data : [];
+    } catch (err) {
+      console.error("Error fetching exclusive properties:", err);
+      return [];
+    }
   },
-  images: [
-    {
-      url: "/images/properties/23450/main.jpg",
-      alt: "Traditional townhouse facade in Estepa",
-      isFeatured: true,
-    },
-  ],
+
+  async getRegionCounts(): Promise<RegionCount[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/properties/regions/counts`);
+      const data: ApiResponse<{ regions: RegionCount[] }> = await res.json();
+      return data.success ? data.data.regions : [];
+    } catch (err) {
+      console.error("Error fetching region counts:", err);
+      return [];
+    }
+  },
+
+  async searchByReference(ref: string): Promise<DatabaseProperty | null> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/properties?ref=${encodeURIComponent(ref)}`);
+      const data: ApiResponse<DatabaseProperty> = await res.json();
+      return data.success ? data.data : null;
+    } catch (err) {
+      console.error("Error searching property:", err);
+      return null;
+    }
+  },
+
+  async getPropertyTypes(): Promise<PropertyType[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/properties/types`);
+      const data: ApiResponse<PropertyType[]> = await res.json();
+      return data.success ? data.data : [];
+    } catch (err) {
+      console.error("Error fetching property types:", err);
+      return [];
+    }
+  }
 };
 
-// Main provinces data
-const provinces = [
-  {
-    id: "malaga",
-    name: "Malaga",
-    propertyCount: 96,
-    imageUrl: "/images/provinces/malaga.jpg",
-  },
-  {
-    id: "cordoba",
-    name: "Cordoba",
-    propertyCount: 75,
-    imageUrl: "/images/provinces/cordoba.jpg",
-  },
-  {
-    id: "granada",
-    name: "Granada",
-    propertyCount: 81,
-    imageUrl: "/images/provinces/granada.jpg",
-  },
-  {
-    id: "jaen",
-    name: "Jaen",
-    propertyCount: 93,
-    imageUrl: "/images/provinces/jaen.jpg",
-  },
-  {
-    id: "sevilla",
-    name: "Sevilla",
-    propertyCount: 102,
-    imageUrl: "/images/provinces/sevilla.jpg",
-  },
-];
+// --- PROPERTY CARD TRANSFORM ---
+interface PropertyForCard {
+  id: string;
+  title: string;
+  price: number;
+  originalPrice?: number;
+  currency: string;
+  shortDescription: string;
+  location: {
+    province: string;
+    town: string;
+  };
+  features: {
+    bedrooms: number;
+    bathrooms: number;
+    buildSize: number;
+    type: string;
+  };
+  images: {
+    url: string;
+    alt: string;
+    isFeatured: boolean;
+  }[];
+  isReduced?: boolean;
+  savingsAmount?: number;
+}
 
+const transformPropertyForCard = (
+  db: DatabaseProperty,
+  typesMap: Record<number, string>
+): PropertyForCard => {
+  const isReduced = Boolean(db.Original_Price && db.Original_Price > db.Public_Price);
+  const savingsAmount = isReduced ? db.Original_Price! - db.Public_Price : 0;
+
+  const refArray = Array.isArray(db.Property_Ref) ? db.Property_Ref : [db.Property_Ref];
+  const uniqueRef = Array.from(new Set(refArray));
+  const propertyRef = uniqueRef[0];
+
+  const propertyType = typesMap[db.Property_Type_ID] || "Property";
+
+  // Generate image URLs dynamically based on Num_Photos
+  const imageCount = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
+  const images = Array.from({ length: imageCount }, (_, i) => ({
+    url: `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_${i + 1}.jpg`,
+    alt: `${propertyType} (${propertyRef}) image ${i + 1}`,
+    isFeatured: i === 0, // first image is featured
+  }));
+
+  return {
+    id: db.Property_ID.toString(),
+    title: `${propertyType} (${propertyRef})`,
+    price: db.Public_Price,
+    originalPrice: db.Original_Price,
+    currency: 'EUR',
+    shortDescription: db.Property_Notes || '',
+    location: {
+      town: db.Property_Address?.split(',')[0]?.trim() || 'Unknown',
+      province: db.Property_Address?.split(',')[1]?.trim() || 'Andalucia',
+    },
+    features: {
+      bedrooms: db.Bedrooms || 0,
+      bathrooms: db.Bathrooms || 0,
+      buildSize: db.SQM_Built || db.Build_Size || 0,
+      type: propertyType,
+    },
+    images,
+    isReduced,
+    savingsAmount,
+  };
+};
+
+// --- LOADING COMPONENTS ---
+const PropertyCardSkeleton = () => (
+  <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+    <div className="h-48 bg-gray-200"></div>
+    <div className="p-4 space-y-3">
+      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+      <div className="flex justify-between">
+        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+      </div>
+    </div>
+  </div>
+);
+
+const SectionLoader = ({ title, subtitle }: { title: string; subtitle?: string }) => (
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 className="text-3xl font-bold text-primary-600">{title}</h2>
+        {subtitle && (
+          <p className="mt-2 text-neutral-600 max-w-2xl">{subtitle}</p>
+        )}
+      </div>
+    </div>
+    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-12">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <PropertyCardSkeleton key={`skeleton-${i}`} />
+      ))}
+    </div>
+  </div>
+);
+
+// --- COMPONENT ---
 export default function Home() {
+  const [featuredProperties, setFeaturedProperties] = useState<PropertyForCard[]>([]);
+  const [exclusiveProperties, setExclusiveProperties] = useState<PropertyForCard[]>([]);
+  const [regionCounts, setRegionCounts] = useState<RegionCount[]>([]);
+  
+  // Separate loading states for each section
+  const [featuredLoading, setFeaturedLoading] = useState(true);
+  const [exclusiveLoading, setExclusiveLoading] = useState(true);
+  const [regionsLoading, setRegionsLoading] = useState(true);
+  const [typesLoading, setTypesLoading] = useState(true);
+  
+  const [searchRef, setSearchRef] = useState('');
+  const [searching, setSearching] = useState(false);
+  const [featuredPage, setFeaturedPage] = useState(1);
+  const [propertyTypesMap, setPropertyTypesMap] = useState<Record<number, string>>({});
+
+  function Autoplay(slider: any) {
+    let timeout: ReturnType<typeof setTimeout>
+    let mouseOver = false
+  
+    function clearNextTimeout() {
+      clearTimeout(timeout)
+    }
+  
+    function nextTimeout() {
+      clearTimeout(timeout)
+      if (mouseOver) return
+      timeout = setTimeout(() => {
+        slider.next()
+      }, 2000) // autoplay every 2s
+    }
+  
+    slider.on("created", () => {
+      slider.container.addEventListener("mouseover", () => {
+        mouseOver = true
+        clearNextTimeout()
+      })
+      slider.container.addEventListener("mouseout", () => {
+        mouseOver = false
+        nextTimeout()
+      })
+      nextTimeout()
+    })
+    slider.on("dragStarted", clearNextTimeout)
+    slider.on("animationEnded", nextTimeout)
+    slider.on("updated", nextTimeout)
+  }
+
+  const [sliderRef] = useKeenSlider<HTMLDivElement>(
+    {
+      loop: true,
+      slides: {
+        perView: 3,
+        spacing: 16,
+      },
+      breakpoints: {
+        "(max-width: 1024px)": { slides: { perView: 2, spacing: 12 } },
+        "(max-width: 640px)": { slides: { perView: 1, spacing: 8 } },
+      },
+    },
+    [Autoplay]
+  )
+
+  // Load property types first
+  useEffect(() => {
+    const loadPropertyTypes = async () => {
+      try {
+        const typesList = await propertyService.getPropertyTypes();
+        const typesMap: Record<number, string> = {};
+        typesList.forEach((t) => {
+          typesMap[t.id] = t.name;
+        });
+        setPropertyTypesMap(typesMap);
+      } catch (err) {
+        console.error("Error loading property types:", err);
+      } finally {
+        setTypesLoading(false);
+      }
+    };
+
+    loadPropertyTypes();
+  }, []);
+
+  // Load featured properties
+  useEffect(() => {
+    const loadFeaturedProperties = async () => {
+      if (typesLoading) return; // Wait for types to load first
+      
+      try {
+        setFeaturedLoading(true);
+        const featuredDb = await propertyService.getFeaturedProperties(featuredPage);
+        setFeaturedProperties(featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
+      } catch (err) {
+        console.error("Error loading featured properties:", err);
+      } finally {
+        setFeaturedLoading(false);
+      }
+    };
+
+    loadFeaturedProperties();
+  }, [featuredPage, propertyTypesMap, typesLoading]);
+
+  // Load exclusive properties
+  useEffect(() => {
+    const loadExclusiveProperties = async () => {
+      if (typesLoading) return; // Wait for types to load first
+      
+      try {
+        setExclusiveLoading(true);
+        const exclusiveDb = await propertyService.getExclusiveProperties();
+        setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
+      } catch (err) {
+        console.error("Error loading exclusive properties:", err);
+      } finally {
+        setExclusiveLoading(false);
+      }
+    };
+
+    loadExclusiveProperties();
+  }, [propertyTypesMap, typesLoading]);
+
+  // Load regions
+  useEffect(() => {
+    const loadRegions = async () => {
+      try {
+        setRegionsLoading(true);
+        const regionsDb = await propertyService.getRegionCounts();
+        setRegionCounts(regionsDb);
+      } catch (err) {
+        console.error("Error loading regions:", err);
+      } finally {
+        setRegionsLoading(false);
+      }
+    };
+
+    loadRegions();
+  }, []);
+
+  // --- QUICK SEARCH ---
+  const handleQuickSearch = async () => {
+    if (!searchRef.trim()) return;
+    setSearching(true);
+
+    const property = await propertyService.searchByReference(searchRef.trim());
+    setSearching(false);
+
+    if (property) {
+      window.location.href = `/properties/${property.Property_ID}`;
+    } else {
+      alert("Property not found. Check the reference.");
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleQuickSearch();
+    }
+  };
+
   return (
     <div>
-      {/* Quick Search Section - Floating on top */}
-      {/* <div className="fixed top-[120px] right-8 z-40 w-80">
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-neutral-200/50">
-          <h3 className="text-xl font-semibold text-neutral-900 mb-4">Quick Search</h3>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Property Reference (e.g. IAD-12345)"
-              className="w-full rounded-lg border-neutral-300 pl-10 pr-4 py-3 focus:border-primary-500 focus:ring-primary-500 bg-white shadow-sm"
-            />
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
-          </div>
-          <button className="mt-3 w-full bg-primary-600 text-white rounded-lg py-3 font-medium hover:bg-primary-700 transition-colors shadow-sm">
-            Search
-          </button>
-        </div>
-      </div> */}
+      {/* Hero Section - Always visible */}
       <Hero />
-      
 
-      {/* Property Search Section - Updated background and styling */}
+      {/* Advanced Search - Always visible */}
       <section className="pt-16 bg-gradient-to-b from-white to-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-xl shadow-xl p-8 pt-6  -mt-32 relative z-30 border border-neutral-100">
+          <div className="bg-white rounded-xl shadow-xl p-8 pt-6 -mt-32 relative z-30 border border-neutral-100">
             <AdvancedSearch />
           </div>
         </div>
       </section>
 
-      {/* Exclusive Properties Section */}
-      <section className="py-20 bg-neutral-50 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5 pointer-events-none">
-          <div className="absolute inset-0 pattern-dots pattern-neutral-800 pattern-bg-transparent pattern-size-4 pattern-opacity-10"></div>
-        </div>
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-4xl font-bold text-primary-600 md:text-5xl">
-              Exclusive Properties
-            </h2>
-            <p className="mt-4 text-neutral-600 text-lg">
-              Special offers and recent price reductions on selected properties
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {/* Exclusive Property Card 1 */}
-            <PropertyCard property={featuredProperties[0]}/>
-            <PropertyCard property={featuredProperties[1]}/>
-            <PropertyCard property={featuredProperties[2]}/>
-          </div>
-
-          {/* View All Button - Separated from the grid */}
-          <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto">
-            <div className="absolute top-0 left-0 w-full h-full opacity-10">
-              <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/30 blur-3xl"></div>
-              <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white/20 blur-3xl"></div>
-            </div>
-            <div className="relative z-10 px-8 py-16 text-center">
-              <h3 className="text-4xl font-bold text-white mb-3">
-                Looking for more exclusive offers?
-              </h3>
-              <p className="text-white/80 mb-8">
-                We have additional properties with special price reductions
-              </p>
-              <Link
-                href="/properties/exclusive"
-                className="inline-flex items-center bg-white hover:bg-gray-100 text-[#1d3557] px-10 py-1 min-h-[56px] hover:bg-secondary-600 hover:text-white rounded-lg font-medium transition-colors shadow-md text-lg"
-              >
-                View All Exclusive Properties
-              </Link>
+      {/* Exclusive Properties */}
+      <section className="py-20 bg-neutral-50">
+        {exclusiveLoading ? (
+          <SectionLoader 
+            title="Exclusive Properties" 
+            subtitle="Loading our handpicked exclusive properties..."
+          />
+        ) : (
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-4xl font-bold text-primary-600 mb-8">Exclusive Properties</h2>
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {exclusiveProperties.map((p) => (
+                <PropertyCard key={p.id} property={p} />
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Featured Properties */}
       <section className="pb-16 bg-neutral-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-end mb-12">
-            <div>
-              <h2 className="font-heading text-3xl font-bold text-primary-600 md:text-4xl">
-                Featured Properties
-              </h2>
-              <p className="mt-4 text-neutral-600 max-w-2xl">
-                Explore our handpicked selection of stunning properties across
-                Inland Andalucia
-              </p>
+        {featuredLoading ? (
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-primary-600">Featured Properties</h2>
+                <p className="mt-2 text-neutral-600 max-w-2xl">
+                  Loading our featured selection...
+                </p>
+              </div>
             </div>
-            <Link
-              href="/properties"
-              className="hidden sm:flex items-center text-primary-600 font-medium hover:text-primary-700 transition-colors"
-            >
-              View all properties <ArrowRightIcon className="ml-2 h-5 w-5" />
-            </Link>
+            
+            {/* Skeleton carousel */}
+            <div className="mt-12 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <PropertyCardSkeleton key={`featured-skeleton-${i}`} />
+              ))}
+            </div>
           </div>
+        ) : (
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            {/* Header with title and link */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-primary-600">Featured Properties</h2>
+                <p className="mt-2 text-neutral-600 max-w-2xl">
+                  Explore our handpicked selection of stunning properties across Inland Andalucia
+                </p>
+              </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <PropertyCard property={featuredProperties[0]}/>
-            <PropertyCard property={featuredProperties[1]}/>
-            <PropertyCard property={featuredProperties[2]}/>
-          </div>
+              {/* Desktop link */}
+              <div className="hidden sm:block mt-4 sm:mt-0">
+                <Link
+                  href="/properties"
+                  className="inline-flex items-center text-primary-600 font-medium hover:underline"
+                >
+                  View all properties →
+                </Link>
+              </div>
+            </div>
 
-          <div className="mt-12 text-center sm:hidden">
-            <Link
-              href="/properties"
-              className="inline-block rounded-md border border-primary-600 px-6 py-3 font-medium text-primary-600 hover:bg-primary-50 transition-colors"
-            >
-              View All Properties
-            </Link>
+            {/* Mobile button */}
+            <div className="mt-6 sm:hidden">
+              <Link
+                href="/properties"
+                className="inline-block w-full rounded-md border border-primary-600 px-6 py-3 text-center font-medium text-primary-600 hover:bg-primary-50 transition-colors"
+              >
+                View All Properties
+              </Link>
+            </div>
+
+            {/* Carousel */}
+            {featuredProperties.length > 0 && (
+              <div ref={sliderRef} className="keen-slider flex py-[20px] overflow-hidden mt-12">
+                {featuredProperties.slice(0, 9).map((p) => (
+                  <div key={p.id} className="keen-slider__slide">
+                    <PropertyCard property={p} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </section>
-      {/* section end */}
-      {/* Sell Your House Section */}
-      {/* <section className="py-16 bg-primary-900 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="font-heading text-3xl font-bold md:text-4xl">
-                Looking to Sell Your Property?
-              </h2>
-              <p className="mt-6 text-lg text-white/90">
-                With over 20 years of experience in the Inland Andalucia real estate market,
-                we offer professional valuation and marketing services to help you sell your property.
-              </p>
-              <ul className="mt-8 space-y-4">
-                <li className="flex items-center">
-                  <StarIcon className="h-5 w-5 text-secondary-400 mr-3" />
-                  <span>Professional property valuation</span>
-                </li>
-                <li className="flex items-center">
-                  <StarIcon className="h-5 w-5 text-secondary-400 mr-3" />
-                  <span>International marketing exposure</span>
-          </li>
-                <li className="flex items-center">
-                  <StarIcon className="h-5 w-5 text-secondary-400 mr-3" />
-                  <span>Dedicated sales team</span>
-          </li>
-              </ul>
-              <div className="mt-8">
-                <Link
-                  href="/sell-your-property"
-                  className="inline-block bg-white text-primary-900 px-8 py-4 rounded-md font-semibold hover:bg-neutral-100 transition-colors"
-                >
-                  List Your Property
-                </Link>
-              </div>
-            </div>
-            <div className="relative">
-              <Image
-                src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80"
-                alt="Sell your property"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-xl"
-              />
-            </div>
-          </div>
-        </div>
-      </section> */}
 
-      {/* Franchise Opportunities Section */}
-      {/* <section className="py-16 bg-neutral-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="relative">
-            <Image
-                src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&q=80"
-                alt="Franchise opportunities"
-                width={600}
-                height={400}
-                className="rounded-lg shadow-xl"
-              />
-            </div>
-            <div>
-              <h2 className="font-heading text-3xl font-bold text-neutral-900 md:text-4xl">
-                Franchise Opportunities
-              </h2>
-              <p className="mt-6 text-lg text-neutral-700">
-                Join the leading real estate network in Inland Andalucia. We offer exclusive
-                territories and comprehensive support to help you build a successful business.
-              </p>
-              <ul className="mt-8 space-y-4">
-                <li className="flex items-center">
-                  <StarIcon className="h-5 w-5 text-primary-600 mr-3" />
-                  <span>Exclusive territory rights</span>
-                </li>
-                <li className="flex items-center">
-                  <StarIcon className="h-5 w-5 text-primary-600 mr-3" />
-                  <span>Comprehensive training and support</span>
-                </li>
-                <li className="flex items-center">
-                  <StarIcon className="h-5 w-5 text-primary-600 mr-3" />
-                  <span>Proven business model</span>
-                </li>
-              </ul>
-              <div className="mt-8">
-                <Link
-                  href="/franchise"
-                  className="inline-block bg-primary-600 text-white px-8 py-4 rounded-md font-semibold hover:bg-primary-700 transition-colors"
-                >
-                  Learn More
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Trust Section - "You're in Safe Hands" */}
-      {/* <section className="py-16 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-3xl font-bold text-neutral-900 md:text-4xl">
-              You're in Safe Hands
-            </h2>
-            <p className="mt-4 text-neutral-600">
-              Trusted by hundreds of buyers and sellers in Inland Andalucia
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-3">
-            <div className="text-center p-6">
-              <div className="inline-block p-4 bg-primary-50 rounded-full mb-4">
-                <StarIcon className="h-8 w-8 text-primary-600" />
-              </div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-2">20+ Years Experience</h3>
-              <p className="text-neutral-600">
-                Decades of experience in the Inland Andalucia property market
-              </p>
-            </div>
-
-            <div className="text-center p-6">
-              <div className="inline-block p-4 bg-primary-50 rounded-full mb-4">
-                <StarIcon className="h-8 w-8 text-primary-600" />
-              </div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-2">1000+ Properties Sold</h3>
-              <p className="text-neutral-600">
-                Successfully helping buyers find their dream homes
-              </p>
-            </div>
-
-            <div className="text-center p-6">
-              <div className="inline-block p-4 bg-primary-50 rounded-full mb-4">
-                <StarIcon className="h-8 w-8 text-primary-600" />
-              </div>
-              <h3 className="text-xl font-bold text-neutral-900 mb-2">5-Star Service</h3>
-              <p className="text-neutral-600">
-                Consistently rated 5 stars by our satisfied clients
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/testimonials"
-              className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
-            >
-              Read Client Testimonials <ArrowRightIcon className="ml-2 h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Provinces Section with large cards */}
-      {/* <section className="py-16 bg-neutral-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-3xl font-bold text-neutral-900 text-center md:text-4xl mb-4">
-            Explore Inland Andalucia
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-neutral-600 text-center mb-12">
-            Discover the unique charm of each province in southern Spain's inland region
-          </p>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
-            <Link href="/provinces/cordoba" className="group relative overflow-hidden rounded-xl shadow-md h-80 transition-transform hover:-translate-y-1">
-              <Image
-                src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&q=80"
-                alt="Cordoba Province"
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-2xl font-bold text-white">Cordoba</h3>
-              </div>
-            </Link>
-
-            <Link href="/provinces/granada" className="group relative overflow-hidden rounded-xl shadow-md h-80 transition-transform hover:-translate-y-1">
-              <Image
-                src="https://images.unsplash.com/photo-1534423839368-1796a4dd1845?auto=format&fit=crop&q=80"
-                alt="Granada Province"
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-2xl font-bold text-white">Granada</h3>
-              </div>
-            </Link>
-
-            <Link href="/provinces/jaen" className="group relative overflow-hidden rounded-xl shadow-md h-80 transition-transform hover:-translate-y-1">
-              <Image
-                src="https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&q=80"
-                alt="Jaen Province"
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-2xl font-bold text-white">Jaen</h3>
-              </div>
-            </Link>
-
-            <Link href="/provinces/malaga" className="group relative overflow-hidden rounded-xl shadow-md h-80 transition-transform hover:-translate-y-1">
-              <Image
-                src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&q=80"
-                alt="Malaga Province"
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-2xl font-bold text-white">Malaga</h3>
-              </div>
-            </Link>
-
-            <Link href="/provinces/sevilla" className="group relative overflow-hidden rounded-xl shadow-md h-80 transition-transform hover:-translate-y-1">
-          <Image
-                src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
-                alt="Sevilla Province"
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900/80 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h3 className="text-2xl font-bold text-white">Sevilla</h3>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Lifestyle Section */}
-      {/* <section className="py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="inline-block text-sm font-semibold text-primary-600 uppercase tracking-wider mb-2">Experience Andalucia</span>
-              <h2 className="font-heading text-3xl font-bold text-neutral-900 md:text-4xl">
-                Embrace the Authentic Spanish Lifestyle
-              </h2>
-              <p className="mt-6 text-lg text-neutral-700">
-                Owning a property in inland Andalucia is more than just having a home - it's about embracing a relaxed way of life surrounded by breathtaking landscapes, rich culture, and warm local communities.
-              </p>
-              <div className="mt-8 space-y-4">
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-primary-100 rounded-full p-1">
-                    <svg className="h-5 w-5 text-primary-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="ml-3 text-neutral-700">300+ days of sunshine per year</p>
+      {/* Regions */}
+      <section className="py-16 bg-white">
+        {regionsLoading ? (
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-neutral-900 mb-8">Properties by Region</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={`region-skeleton-${i}`} className="bg-neutral-50 rounded-lg p-6 animate-pulse">
+                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                  <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
                 </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-primary-100 rounded-full p-1">
-                    <svg className="h-5 w-5 text-primary-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="ml-3 text-neutral-700">Rich local gastronomy and wine culture</p>
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-primary-100 rounded-full p-1">
-                    <svg className="h-5 w-5 text-primary-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="ml-3 text-neutral-700">Vibrant local festivals and traditions</p>
-                </div>
-                <div className="flex items-start">
-                  <div className="flex-shrink-0 bg-primary-100 rounded-full p-1">
-                    <svg className="h-5 w-5 text-primary-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <p className="ml-3 text-neutral-700">Excellent healthcare and infrastructure</p>
-                </div>
-              </div>
-              <div className="mt-8">
-                <Link
-                  href="/about"
-                  className="inline-flex items-center font-medium text-primary-600 hover:text-primary-700 transition-colors"
-                >
-                  Learn more about life in Andalucia <ArrowRightIcon className="ml-2 h-5 w-5" />
-                </Link>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-xl">
-                <Image
-                  src="https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&q=80"
-                  alt="Andalucian countryside lifestyle"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-6 -left-6 w-2/3 overflow-hidden rounded-xl shadow-xl border-4 border-white">
-                <div className="relative aspect-video">
-          <Image
-                    src="https://images.unsplash.com/photo-1559598467-f8b76c8155d0?auto=format&fit=crop&q=80"
-                    alt="Spanish village life"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section> */}
-
-      {/* Testimonials Section */}
-      {/* <section className="py-16 bg-primary-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="font-heading text-3xl font-bold text-neutral-900 md:text-4xl">
-              What Our Clients Say
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-neutral-600">
-              Hear from homeowners who found their perfect Spanish property with Inland Andalucia
-            </p>
+        ) : regionCounts.length > 0 ? (
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-neutral-900 mb-8">Properties by Region</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {regionCounts.map((r) => (
+                <div key={r.regionId} className="bg-neutral-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
+                  <h3 className="text-xl font-semibold mb-2">{r.region}</h3>
+                  <p className="text-3xl font-bold text-primary-600 mb-2">{r.count}</p>
+                  <p>Available Properties</p>
+                  <Link
+                    href={`/properties?regionId=${r.regionId}`}
+                    className="mt-4 inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
+                  >
+                    View Properties <ArrowRightIcon className="ml-1 h-4 w-4" />
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
+        ) : null}
+      </section>
 
-          <TestimonialsCarousel />
-        </div>
-      </section> */}
-
-      {/* CTA Section with background image */}
+      {/* CTA Section - Always visible */}
       <section className="relative py-20">
         <div className="absolute inset-0 z-0">
           <Image
@@ -613,14 +530,12 @@ export default function Home() {
             className="object-cover brightness-50"
           />
         </div>
-
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-4xl font-bold text-white md:text-5xl">
             Ready to Find Your Spanish Paradise?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
-            Contact our team of local experts today to start your property
-            journey in Inland Andalucia.
+            Contact our team of local experts today to start your property journey in Inland Andalucia.
           </p>
           <div className="mt-10">
             <Link

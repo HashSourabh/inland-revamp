@@ -9,6 +9,7 @@ interface PropertyCardProps {
     id: string;
     title: string;
     price: number;
+    originalPrice?: number;
     currency: string;
     shortDescription: string;
     location: {
@@ -26,50 +27,50 @@ interface PropertyCardProps {
       alt: string;
       isFeatured: boolean;
     }[];
+    isReduced?: boolean;
+    savingsAmount?: number;
   };
-  card?: string;
+  card?: 'list' | 'grid';
   featured?: boolean;
 }
 
-export default function PropertyCard({ property, card, featured = false }: PropertyCardProps) {
+export default function PropertyCard({ property, card = 'grid', featured = false }: PropertyCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
-  
+
   // Find the featured image or fallback to the first image
   const mainImage = property.images.find(img => img.isFeatured) || property.images[0];
-  
+
   // Format price with currency symbol
-  const formatPrice = (price: number, currency: string) => {
+  const formatPrice = (price: number, currency?: string) => {
+    const validCurrency = currency || 'USD';
+
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency,
+      currency: validCurrency,
       maximumFractionDigits: 0,
     }).format(price);
   };
 
+  const handleFavoriteClick = () => {
+    setIsFavorite(!isFavorite);
+  };
+
   return (
-    <div 
+    <div
       className={`group overflow-hidden rounded-property bg-white transition-all duration-300 ${
-        featured 
-          ? 'shadow-hover-card' 
+        featured
+          ? 'shadow-hover-card'
           : 'shadow-property-card hover:shadow-hover-card'
       } 
-      ${
-        card === 'list' 
-          ? 'grid grid-cols-9' 
-          : ''
-      }`}
+      ${card === 'list' ? 'grid grid-cols-9' : ''}`}
     >
-      <div className={`relative ${
-        card === 'list' 
-          ? 'col-span-2' 
-          : ''
-      }`}>
+      <div className={`relative ${card === 'list' ? 'col-span-2' : ''}`}>
         {/* Property image */}
         <Link href={`/properties/${property.id}`}>
           <div className="relative aspect-[4/3] overflow-hidden">
-            <Image 
-              src={mainImage.url}
-              alt={mainImage.alt}
+            <Image
+              src={mainImage?.url || '/placeholder-property.jpg'}
+              alt={mainImage?.alt || 'Property Image'}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -77,15 +78,22 @@ export default function PropertyCard({ property, card, featured = false }: Prope
             />
           </div>
         </Link>
-        <div className="absolute top-4 left-4 z-10">
-          <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">Price Reduced</span>
-        </div>
-        
+
+        {/* Price reduction badge */}
+        {property.isReduced && (
+          <div className="absolute top-4 left-4 z-10">
+            <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
+              Price Reduced
+            </span>
+          </div>
+        )}
+
         {/* Favorite button */}
-        <button 
-          onClick={() => setIsFavorite(!isFavorite)}
+        <button
+          onClick={handleFavoriteClick}
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           className="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-all hover:bg-white"
+          type="button"
         >
           {isFavorite ? (
             <HeartIconSolid className="h-5 w-5 text-secondary-500" />
@@ -93,20 +101,11 @@ export default function PropertyCard({ property, card, featured = false }: Prope
             <HeartIcon className="h-5 w-5 text-neutral-600" />
           )}
         </button>
-        
       </div>
-      
-      <div className={`p-4 ${
-        card === 'list' 
-          ? 'col-span-7 flex flex-col' 
-          : ''
-      }`}>
+
+      <div className={`p-4 ${card === 'list' ? 'col-span-7 flex flex-col' : ''}`}>
         {/* Property title */}
-        <div className={`flex justify-between items-start mb-4 ${
-        card === 'list' 
-          ? 'flex-auto' 
-          : ''
-      }`}>
+        <div className={`flex justify-between items-start mb-4 ${card === 'list' ? 'flex-auto' : ''}`}>
           <div>
             <Link href={`/properties/${property.id}`}>
               <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
@@ -118,36 +117,37 @@ export default function PropertyCard({ property, card, featured = false }: Prope
               <MapPinIcon className="mr-1 h-4 w-4" />
               <span>{property.location.town}, {property.location.province}</span>
             </div>
-          </div> 
+          </div>
           <div className="flex flex-col items-end">
-            <h6 className="text-sm text-neutral-500 line-through">{formatPrice(property.price, property.currency)}</h6>
-            <h4 className="text-xl font-bold text-red-500">{formatPrice(property.price, property.currency)}</h4>
-            <h6 className="text-sm text-green-600 font-medium mt-1">Save €55,000</h6>
+            {property.originalPrice && property.isReduced && (
+              <h6 className="text-sm text-neutral-500 line-through">
+                {formatPrice(property.originalPrice, property.currency)}
+              </h6>
+            )}
+            <h4 className={`text-xl font-bold ${property.isReduced ? 'text-red-500' : 'text-neutral-900'}`}>
+              {formatPrice(property.price, property.currency)}
+            </h4>
+            {property.isReduced && property.savingsAmount && (
+              <h6 className="text-sm text-green-600 font-medium mt-1">
+                Save {formatPrice(property.savingsAmount, property.currency)}
+              </h6>
+            )}
           </div>
         </div>
-        
-        
+
         {/* Description - only shown if featured */}
-        <div className="border-t border-neutral-100">
-          {featured && (
-            <p className="mb-4 text-sm text-neutral-600">
+        {featured && property.shortDescription && (
+          <div className="border-t border-neutral-100">
+            <p className="mb-4 text-sm text-neutral-600 mt-4">
               {property.shortDescription}
             </p>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Features */}
-        <div className={`flex ${
-              card === 'list' 
-                ? 'items-center' 
-                : ''
-            }`}>
+        <div className={`flex flex-col justify-start ${card === 'list' ? 'items-center' : ''}`}>
           <div className="flex-auto">
-            <div className={`flex  pt-4  ${
-              card === 'list' 
-                ? 'justify-start gap-10' 
-                : 'justify-between'
-            }`}>
+            <div className={`flex pt-4 ${card === 'list' ? 'justify-start gap-10' : 'justify-between'}`}>
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">Beds</span>
                 <span className="font-medium text-neutral-900">{property.features.bedrooms}</span>
@@ -158,7 +158,9 @@ export default function PropertyCard({ property, card, featured = false }: Prope
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">Size</span>
-                <span className="font-medium text-neutral-900">{property.features.buildSize} m²</span>
+                <span className="font-medium text-neutral-900">
+                  {property.features.buildSize > 0 ? `${property.features.buildSize} m²` : 'N/A'}
+                </span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">Type</span>
@@ -166,18 +168,18 @@ export default function PropertyCard({ property, card, featured = false }: Prope
               </div>
             </div>
           </div>
-          
+
           {/* Call to action */}
-          <div className="flex-initial">
-            <Link 
+          <div className="flex-initial mt-4">
+            <Link
               href={`/properties/${property.id}`}
               className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600"
             >
               View Details
-          </Link>
+            </Link>
           </div>
         </div>
       </div>
     </div>
   );
-} 
+}
