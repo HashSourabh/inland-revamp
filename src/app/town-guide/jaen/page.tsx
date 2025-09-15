@@ -1,6 +1,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
+import Jaen from '@/assets/images/jaen/catedral-jaen.jpg';
+import Jaen1 from '@/assets/images/jaen/jaen1.jpg';
+import Jaen2 from '@/assets/images/jaen/jaen2.jpg';
+import Jaen3 from '@/assets/images/jaen/jaen3.png';
+import Jaen4 from '@/assets/images/jaen/natural-park.jpg';
+import Jaen5 from '@/assets/images/jaen/ubeda-plaza-vazquez.jpg';
+
 
 export default function JaenPage() {
   return (
@@ -8,7 +15,7 @@ export default function JaenPage() {
       {/* Hero Section */}
       <div className="max-w-none">
         <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden bg-black">
-            <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
+            <Image src={Jaen} alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
             <div className="absolute top-0 left-0 w-full h-full flex items-center">
                 <div className="mx-auto max-w-5xl px-5 text-center">
                     <h1 className="font-heading text-5xl font-bold text-white mb-2">Jaén</h1>
@@ -61,7 +68,7 @@ export default function JaenPage() {
                   </div>
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
                     <Image
-                      src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                      src={Jaen1}
                       alt="Granada City View"
                       fill
                       className="object-cover"
@@ -73,7 +80,7 @@ export default function JaenPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
                     <Image
-                      src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                      src={Jaen2}
                       alt="Granada City View"
                       fill
                       className="object-cover"
@@ -93,7 +100,7 @@ export default function JaenPage() {
                   </div>
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
                     <Image
-                      src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                      src={Jaen5}
                       alt="Granada City View"
                       fill
                       className="object-cover"
@@ -105,7 +112,7 @@ export default function JaenPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
                     <Image
-                      src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                      src={Jaen4}
                       alt="Granada City View"
                       fill
                       className="object-cover"
@@ -125,7 +132,7 @@ export default function JaenPage() {
                   </div>
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
                     <Image
-                      src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                      src={Jaen3}
                       alt="Granada City View"
                       fill
                       className="object-cover"

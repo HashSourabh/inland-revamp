@@ -1,13 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
+import Granada from '@/assets/images/granada/granada.jpg';
+import Granada1 from '@/assets/images/granada/granada1.jpg';
+import Granada2 from '@/assets/images/granada/granada2.jpg';
+import Granada4 from '@/assets/images/granada/granada4.jpg';
+import Granada5 from '@/assets/images/granada/sierra-nevada-espagne.webp';
 
 export default function GranadaPage() {
   return (
     <div className="">
       <div className="max-w-none">
         <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden bg-black">
-            <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
+            <Image src={Granada} alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
             <div className="absolute top-0 left-0 w-full h-full flex items-center">
                 <div className="mx-auto max-w-5xl px-5 text-center">
                     <h1 className="font-heading text-5xl font-bold text-white mb-2">Granada</h1>
@@ -80,7 +85,7 @@ export default function GranadaPage() {
               </div>
               <div className="relative h-[300px] rounded-lg overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                  src={Granada1}
                   alt="Granada City View"
                   fill
                   className="object-cover"
@@ -93,7 +98,7 @@ export default function GranadaPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
               <div className="relative h-[300px] rounded-lg overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                  src={Granada2}
                   alt="Sierra Nevada Mountains"
                   fill
                   className="object-cover"
@@ -125,7 +130,7 @@ export default function GranadaPage() {
               </div>
               <div className="relative h-[300px] rounded-lg overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                  src={Granada4}
                   alt="Albaicin District"
                   fill
                   className="object-cover"
@@ -138,7 +143,7 @@ export default function GranadaPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
               <div className="relative h-[300px] rounded-lg overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                  src={Granada5}
                   alt="Outdoor Activities in Granada"
                   fill
                   className="object-cover"

@@ -1,13 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
+import Sevilla from '@/assets/images/sevilla/vista-sevilla.jpg';
+import Sevilla1 from '@/assets/images/sevilla/sevilla1.jpg';
+import Sevilla2 from '@/assets/images/sevilla/sevilla2.jpg'; 
+import Sevilla3 from '@/assets/images/sevilla/sevilla3.jpg'; 
+import Sevilla4 from '@/assets/images/sevilla/sevilla4.jpg'; 
+import Sevilla5 from '@/assets/images/sevilla/garbanzos-scaled.jpg'; 
 
 export default function SevillaPage() {
   return (
     <div className="">
       {/* Hero Section */}
       <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden bg-black">
-          <Image src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80" alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
+          <Image src={Sevilla} alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
           <div className="absolute top-0 left-0 w-full h-full flex items-center">
               <div className="mx-auto max-w-5xl px-5 text-center">
                   <h1 className="font-heading text-5xl font-bold text-white mb-2">Sevilla</h1>
@@ -68,30 +74,30 @@ export default function SevillaPage() {
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <div>
-              <h2 className="text-3xl font-semibold text-primary-900 mb-4">About Málaga</h2>
+              <h2 className="text-3xl font-semibold text-primary-900 mb-4">About Sevilla</h2>
               <p className="text-base text-neutral-700">Sevilla province is a treasure trove of history, culture, and natural beauty. While famous for its capital city with 
               iconic landmarks like the Giralda and Plaza de España, the inland areas offer a different, more authentic experience.</p>
               <p className="text-base text-neutral-700">The province features picturesque white towns, rolling olive groves, and historical sites from various civilizations 
               that have called this region home, from the Romans and Moors to Renaissance and Baroque influences.</p>
             </div>
-            <div className="relative h-[300px] rounded-lg overflow-hidden">
+            <div className="relative h-[300px] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                src={Sevilla1}
                 alt="Granada City View"
-                fill
-                className="object-cover"
+                
+                className="rounded-lg object-cover w-full"
               />
             </div>
           </div>
         </section>
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-            <div className="relative h-[300px] rounded-lg overflow-hidden">
+            <div className="relative h-[300px] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                src={Sevilla2}
                 alt="Granada City View"
-                fill
-                className="object-cover"
+                
+                className="rounded-lg object-cover w-full"
               />
             </div>
             <div>
@@ -108,24 +114,24 @@ export default function SevillaPage() {
               <p className="text-base text-neutral-700">The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations, 
                 to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves.</p>
             </div>
-            <div className="relative h-[300px] rounded-lg overflow-hidden">
+            <div className="relative h-[300px] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                src={Sevilla3}
                 alt="Granada City View"
-                fill
-                className="object-cover"
+                
+                className="rounded-lg object-cover w-full"
               />
             </div>
           </div>
         </section>
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-            <div className="relative h-[300px] rounded-lg overflow-hidden">
+            <div className="relative h-[300px] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                src={Sevilla5}
                 alt="Granada City View"
-                fill
-                className="object-cover"
+                
+                className="rounded-lg object-cover w-full"
               />
             </div>
             <div>
@@ -142,12 +148,12 @@ export default function SevillaPage() {
               <p className="text-base text-neutral-700">Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate 
                 Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals.</p>
             </div>
-            <div className="relative h-[300px] rounded-lg overflow-hidden">
+            <div className="relative h-[300px] overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                src={Sevilla4}
                 alt="Granada City View"
-                fill
-                className="object-cover"
+                
+                className="rounded-lg object-cover w-full"
               />
             </div>
           </div>
