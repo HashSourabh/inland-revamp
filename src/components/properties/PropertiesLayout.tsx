@@ -117,6 +117,10 @@ export default function PropertiesLayout({
 
   const [regionCounts, setRegionCounts] = useState<{ regionId: number; regionName: string; count: number }[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
+  const [selectedArea, setSelectedArea] = useState<number | null>(null);
+  
+  // ✅ Add total properties count from API
+  const [totalPropertiesCount, setTotalPropertiesCount] = useState<number>(0);
 
   const [areas, setAreas] = useState<{ areaId: number; areaName: string; propertyCount: number }[]>([]);
 
@@ -159,20 +163,26 @@ export default function PropertiesLayout({
             count: r.count,
           }));
           setRegionCounts(formatted);
-          setTotalProperties(data.data?.total?.properties || 0);
+          
+          // ✅ Set the total count from API
+          const totalCount = data.data?.total?.properties || 0;
+          setTotalPropertiesCount(totalCount);
+          setTotalProperties(totalCount);
         } else {
           setRegionCounts([]);
+          setTotalPropertiesCount(0);
         }
       } catch (err) {
         console.error("Error loading region counts:", err);
         setRegionCounts([]);
+        setTotalPropertiesCount(0);
       }
     };
 
     fetchRegionCounts();
   }, [API_BASE_URL]);
 
-
+  // Fetch areas when a region is selected
   useEffect(() => {
     if (!selectedRegion) {
       setAreas([]);
@@ -184,7 +194,7 @@ export default function PropertiesLayout({
         const res = await fetch(`${API_BASE_URL}/properties/regions/${selectedRegion}/areas`);
         if (!res.ok) throw new Error("Failed to fetch areas");
         const data = await res.json();
-        setAreas(data.areas || []);
+        setAreas(data.data.areas || []);
       } catch (err) {
         console.error("Error loading areas:", err);
         setAreas([]);
@@ -194,6 +204,7 @@ export default function PropertiesLayout({
     fetchAreas();
   }, [selectedRegion, API_BASE_URL]);
 
+  // Main properties fetch effect
   useEffect(() => {
     const fetchProperties = async () => {
       const isPageChange = currentPage > 1 && !initialLoad && properties.length > 0;
@@ -208,7 +219,8 @@ export default function PropertiesLayout({
           limit: String(PROPERTIES_PER_PAGE),
           ...(selectedProvince ? { province: selectedProvince } : {}),
           ...(selectedTown ? { town: selectedTown } : {}),
-          ...(selectedRegion ? { regionId: String(selectedRegion) } : {}), // ✅ added
+          ...(selectedRegion ? { regionId: String(selectedRegion) } : {}),
+          ...(selectedArea ? { areaId: String(selectedArea) } : {}),
         });
 
         const res = await fetch(`${API_BASE_URL}/properties?${query.toString()}`);
@@ -246,7 +258,7 @@ export default function PropertiesLayout({
     };
 
     fetchProperties();
-  }, [currentPage, selectedProvince, selectedTown, selectedRegion, API_BASE_URL]);
+  }, [currentPage, selectedProvince, selectedTown, selectedRegion, selectedArea, API_BASE_URL]);
 
   const handlePageChange = (page: number) => {
     if (page !== currentPage && page >= 1 && page <= displayedTotalPages) {
@@ -257,11 +269,16 @@ export default function PropertiesLayout({
   const handleRegionChange = (regionId: number | null) => {
     setSelectedRegion(regionId);
     setSelectedTown(null);
+    setSelectedArea(null); // Reset area when region changes
+  };
+
+  const handleAreaChange = (areaId: number | null) => {
+    setSelectedArea(areaId);
   };
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProvince, selectedTown, selectedRegion]);
+  }, [selectedProvince, selectedTown, selectedRegion, selectedArea]);
 
   if (initialLoad && initialProperties.length === 0) {
     return (
@@ -325,6 +342,25 @@ export default function PropertiesLayout({
     displayedTotal,
   );
 
+  // Get display title for filter header
+  const getFilterTitle = () => {
+    if (selectedArea && areas.length > 0) {
+      const area = areas.find(a => a.areaId === selectedArea);
+      const region = regionCounts.find(r => r.regionId === selectedRegion);
+      return `Properties in ${area?.areaName}, ${region?.regionName}`;
+    }
+    if (selectedTown) {
+      return `Properties in ${selectedTown}`;
+    }
+    if (selectedRegion && regionCounts.find(r => r.regionId === selectedRegion)) {
+      return `Properties in ${regionCounts.find(r => r.regionId === selectedRegion)?.regionName}`;
+    }
+    if (selectedProvince) {
+      return `Areas in ${selectedProvince}`;
+    }
+    return 'All Properties';
+  };
+
   const getPageNumbers = () => {
     const pageNumbers: (number | string)[] = [];
     const maxVisiblePages = 7;
@@ -380,27 +416,22 @@ export default function PropertiesLayout({
               <div className="mb-6 dark:border-neutral-800 dark:bg-neutral-900">
                 <div className="space-y-4">
                   <h2 className="text-base font-medium text-neutral-700 dark:text-neutral-300">
-                    {selectedTown
-                      ? `Properties in ${selectedTown}`
-                      : selectedProvince
-                        ? `Areas in ${selectedProvince}`
-                        : 'All Properties'}
+                    {getFilterTitle()}
                   </h2>
                   <AreaFilter
                     properties={displayedProperties}
                     selectedProvince={selectedProvince}
                     selectedTown={selectedTown}
                     selectedRegion={selectedRegion}
-                    regions={[
-                      { regionId: 0, regionName: "All", count: displayedTotal }, // 👈 always show All
-                      ...regionCounts,
-                    ]}
+                    selectedArea={selectedArea}
+                    regions={regionCounts}
+                    areas={areas}
                     onProvinceChange={setSelectedProvince}
                     onTownChange={setSelectedTown}
                     onRegionChange={handleRegionChange}
-                    allCount={displayedTotal}
+                    onAreaChange={handleAreaChange}
+                    allCount={totalPropertiesCount}
                   />
-
                 </div>
               </div>
 

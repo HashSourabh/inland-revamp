@@ -228,13 +228,13 @@ export default function Home() {
   const [featuredProperties, setFeaturedProperties] = useState<PropertyForCard[]>([]);
   const [exclusiveProperties, setExclusiveProperties] = useState<PropertyForCard[]>([]);
   const [regionCounts, setRegionCounts] = useState<RegionCount[]>([]);
-  
+
   // Separate loading states for each section
   const [featuredLoading, setFeaturedLoading] = useState(true);
   const [exclusiveLoading, setExclusiveLoading] = useState(true);
   const [regionsLoading, setRegionsLoading] = useState(true);
   const [typesLoading, setTypesLoading] = useState(true);
-  
+
   const [searchRef, setSearchRef] = useState('');
   const [searching, setSearching] = useState(false);
   const [featuredPage, setFeaturedPage] = useState(1);
@@ -243,11 +243,11 @@ export default function Home() {
   function Autoplay(slider: any) {
     let timeout: ReturnType<typeof setTimeout>
     let mouseOver = false
-  
+
     function clearNextTimeout() {
       clearTimeout(timeout)
     }
-  
+
     function nextTimeout() {
       clearTimeout(timeout)
       if (mouseOver) return
@@ -255,7 +255,7 @@ export default function Home() {
         slider.next()
       }, 2000) // autoplay every 2s
     }
-  
+
     slider.on("created", () => {
       slider.container.addEventListener("mouseover", () => {
         mouseOver = true
@@ -311,7 +311,7 @@ export default function Home() {
   useEffect(() => {
     const loadFeaturedProperties = async () => {
       if (typesLoading) return; // Wait for types to load first
-      
+
       try {
         setFeaturedLoading(true);
         const featuredDb = await propertyService.getFeaturedProperties(featuredPage);
@@ -330,7 +330,7 @@ export default function Home() {
   useEffect(() => {
     const loadExclusiveProperties = async () => {
       if (typesLoading) return; // Wait for types to load first
-      
+
       try {
         setExclusiveLoading(true);
         const exclusiveDb = await propertyService.getExclusiveProperties();
@@ -398,7 +398,7 @@ export default function Home() {
       </section>
 
       {/* Exclusive Properties */}
-      <section className="py-20 bg-neutral-50">
+      {/* <section className="py-20 bg-neutral-50">
         {exclusiveLoading ? (
           <SectionLoader 
             title="Exclusive Properties" 
@@ -414,7 +414,59 @@ export default function Home() {
             </div>
           </div>
         )}
+      </section> */}
+      <section className="py-20 bg-neutral-50 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+          <div className="absolute inset-0 pattern-dots pattern-neutral-800 pattern-bg-transparent pattern-size-4 pattern-opacity-10"></div>
+        </div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-4xl font-bold text-primary-600 md:text-5xl">
+              Exclusive Properties
+            </h2>
+            <p className="mt-4 text-neutral-600 text-lg">
+              Special offers and recent price reductions on selected properties
+            </p>
+          </div>
+
+          {exclusiveProperties.length > 0 ? (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {exclusiveProperties.slice(0, 3).map((property) => (
+                <PropertyCard key={property.id} property={property} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-neutral-500">No exclusive properties available at the moment.</p>
+            </div>
+          )}
+
+          {/* View All Button */}
+          <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto">
+            <div className="absolute top-0 left-0 w-full h-full opacity-10">
+              <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/30 blur-3xl"></div>
+              <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white/20 blur-3xl"></div>
+            </div>
+            <div className="relative z-10 px-8 py-16 text-center">
+              <h3 className="text-4xl font-bold text-white mb-3">
+                Looking for more exclusive offers?
+              </h3>
+              <p className="text-white/80 mb-8">
+                We have additional properties with special price reductions
+              </p>
+              <Link
+                href="/properties?exclusive=true"
+                className="inline-flex items-center bg-white hover:bg-gray-100 text-[#1d3557] px-10 py-1 min-h-[56px] hover:bg-secondary-600 hover:text-white rounded-lg font-medium transition-colors shadow-md text-lg"
+              >
+                View All Exclusive Properties
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
+
+
 
       {/* Featured Properties */}
       <section className="pb-16 bg-neutral-50">
@@ -428,7 +480,7 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            
+
             {/* Skeleton carousel */}
             <div className="mt-12 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 3 }).map((_, i) => (
