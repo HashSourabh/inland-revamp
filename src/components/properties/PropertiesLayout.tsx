@@ -122,7 +122,7 @@ export default function PropertiesLayout({
   // ✅ Add total properties count from API
   const [totalPropertiesCount, setTotalPropertiesCount] = useState<number>(0);
 
-  const [areas, setAreas] = useState<{ areaId: number; areaName: string; propertyCount: number }[]>([]);
+  const [areas, setAreas] = useState<{ areaId: number; areaName: string; count: number }[]>([]);
 
   const [properties, setProperties] = useState<Property[]>(initialProperties);
   const [totalProperties, setTotalProperties] = useState<number>(initialTotal);
