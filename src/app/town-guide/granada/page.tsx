@@ -2,9 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
 import Granada from '@/assets/images/granada/granada.jpg';
-import Granada1 from '@/assets/images/granada/granada1.jpg';
-import Granada2 from '@/assets/images/granada/granada2.jpg';
-import Granada4 from '@/assets/images/granada/granada4.jpg';
+import Granada1 from '@/assets/images/granada/about.jpg';
+import Granada2 from '@/assets/images/granada/Natural.jpg';
+import Granada4 from '@/assets/images/granada/culture-heritage.jpg';
 import Granada5 from '@/assets/images/granada/sierra-nevada-espagne.webp';
 
 export default function GranadaPage() {

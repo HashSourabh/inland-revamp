@@ -2,9 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
 import Cordoba from '@/assets/images/cordoba/vistas-cordoba.jpg';
-import Cordoba1 from '@/assets/images/cordoba/cordoba1.jpg';
-import Cordoba2 from '@/assets/images/cordoba/cordoba2.jpg';
-import Cordoba3 from '@/assets/images/cordoba/cordoba3.jpg';
+import Cordoba1 from '@/assets/images/cordoba/about.jpg';
+import Cordoba2 from '@/assets/images/cordoba/culture-heritage.jpg';
+import Cordoba3 from '@/assets/images/cordoba/geography.jpg';
 import Cordoba4 from '@/assets/images/cordoba/salmorejo.jpg';
 import Cordoba5 from '@/assets/images/cordoba/lunes-Santo.jpg';
 export default function CordobaPage() {

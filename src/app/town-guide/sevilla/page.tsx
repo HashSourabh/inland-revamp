@@ -2,10 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
 import Sevilla from '@/assets/images/sevilla/vista-sevilla.jpg';
-import Sevilla1 from '@/assets/images/sevilla/sevilla1.jpg';
-import Sevilla2 from '@/assets/images/sevilla/sevilla2.jpg'; 
-import Sevilla3 from '@/assets/images/sevilla/sevilla3.jpg'; 
-import Sevilla4 from '@/assets/images/sevilla/sevilla4.jpg'; 
+import Sevilla1 from '@/assets/images/sevilla/about.jpg';
+import Sevilla2 from '@/assets/images/sevilla/historic-towns.jpg'; 
+import Sevilla3 from '@/assets/images/sevilla/natural.jpg'; 
+import Sevilla4 from '@/assets/images/sevilla/festivals.jpg'; 
 import Sevilla5 from '@/assets/images/sevilla/garbanzos-scaled.jpg'; 
 
 export default function SevillaPage() {

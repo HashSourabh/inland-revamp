@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
 import Malaga from '@/assets/images/malaga/malaga.jpg';
 import Malaga1 from '@/assets/images/malaga/malaga1.jpg';
-import Malaga2 from '@/assets/images/malaga/malaga2.jpg';
-import Malaga3 from '@/assets/images/malaga/malaga3.jpg';
-import Malaga4 from '@/assets/images/malaga/malaga4.jpg';
-import Malaga5 from '@/assets/images/malaga/malaga5.jpg';
+import Malaga2 from '@/assets/images/malaga/natural.jpg';
+import Malaga3 from '@/assets/images/malaga/cultural.jpg';
+import Malaga4 from '@/assets/images/malaga/local-cuisine.jpg';
+import Malaga5 from '@/assets/images/malaga/festivals.jpg';
 
 export default function MalagaPage() {
   return (
