@@ -39,7 +39,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
     const fetchProperty = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:4000/api/v1/properties/${propertyId}`);
+        const res = await fetch(`https://inlandandalucia.onrender.com/api/v1/properties/${propertyId}`);
         const data = await res.json();
 
         if (data.success && data.data) {

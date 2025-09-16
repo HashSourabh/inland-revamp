@@ -16,7 +16,7 @@ export default function AdvancedSearchPage() {
   });
 
   const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+    process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
 
   const [propertyTypes, setPropertyTypes] = React.useState<
     { id: number; name: string; code: string }[]
@@ -83,6 +83,32 @@ export default function AdvancedSearchPage() {
     );
     router.push(`/properties?${params.toString()}`);
   };
+  // Inside your AdvancedSearchPage component
+
+  const handleReferenceSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const ref = refInput.current?.value.trim();
+    if (!ref) return;
+
+    try {
+      const res = await fetch(
+        `${API_BASE_URL}/properties?ref=${encodeURIComponent(ref)}`
+      );
+      if (!res.ok) throw new Error(`Failed: ${res.status}`);
+      const data = await res.json();
+
+      if (data?.success && data.data) {
+        const property = data.data; // assuming data.data is the property object
+        router.push(`/properties/${property.Property_ID}`);
+      } else {
+        alert("Property not found. Please check the reference.");
+      }
+    } catch (err) {
+      console.error("Error searching property by reference:", err);
+      alert("Error fetching property. Try again later.");
+    }
+  };
+
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -266,15 +292,9 @@ export default function AdvancedSearchPage() {
         </div>
         <form
           className="bg-neutral-50 rounded-lg p-6 flex flex-col md:flex-row gap-4 items-center"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const ref = refInput.current?.value.trim();
-            if (ref) router.push(`/properties/${ref.toLowerCase()}`);
-          }}
+          onSubmit={handleReferenceSearch}
         >
-          <label className="font-medium text-neutral-800">
-            Reference number
-          </label>
+          <label className="font-medium text-neutral-800">Reference number</label>
           <input
             ref={refInput}
             type="text"
@@ -288,6 +308,7 @@ export default function AdvancedSearchPage() {
             Search
           </button>
         </form>
+
       </section>
 
       {/* Right: Sidebar */}
