@@ -6,7 +6,7 @@ import Cordoba1 from '@/assets/images/cordoba/about.jpg';
 import Cordoba2 from '@/assets/images/cordoba/culture-heritage.jpg';
 import Cordoba3 from '@/assets/images/cordoba/geography.jpg';
 import Cordoba4 from '@/assets/images/cordoba/salmorejo.jpg';
-import Cordoba5 from '@/assets/images/cordoba/lunes-Santo.jpg';
+import Cordoba5 from '@/assets/images/cordoba/lunes-Santo-fixed.jpg';
 export default function CordobaPage() {
 return (
 <div className="">
