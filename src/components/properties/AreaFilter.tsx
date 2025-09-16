@@ -75,12 +75,6 @@ export default function AreaFilter({
     }
     return '';
   }, [selectedRegion, regions]);
-  console.log(selectedRegion, 'selectedRegion')
-  console.log(currentRegionName, 'currentRegionName')
-  console.log(selectedProvince, 'selectedProvince')
-  console.log(selectedArea, 'selectedArea')
-  console.log(selectedTown, 'selectedTown')
-  console.log(areas, 'areasareasareasareasareasareas')
 
   return (
     <div className="space-y-4">

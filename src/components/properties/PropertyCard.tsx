@@ -57,11 +57,10 @@ export default function PropertyCard({ property, card = 'grid', featured = false
 
   return (
     <div
-      className={`group overflow-hidden rounded-property bg-white transition-all duration-300 ${
-        featured
+      className={`group overflow-hidden rounded-property bg-white transition-all duration-300 ${featured
           ? 'shadow-hover-card'
           : 'shadow-property-card hover:shadow-hover-card'
-      } 
+        } 
       ${card === 'list' ? 'grid grid-cols-9' : ''}`}
     >
       <div className={`relative ${card === 'list' ? 'col-span-2' : ''}`}>
@@ -80,13 +79,16 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         </Link>
 
         {/* Price reduction badge */}
-        {property.isReduced && (
-          <div className="absolute top-4 left-4 z-10">
-            <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
-              Price Reduced
-            </span>
-          </div>
-        )}
+        {property.isReduced &&
+          property.originalPrice &&
+          property.originalPrice > 0 &&
+          property.price > 0 && (
+            <div className="absolute top-4 left-4 z-10">
+              <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
+                Price Reduced
+              </span>
+            </div>
+          )}
 
         {/* Favorite button */}
         <button

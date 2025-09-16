@@ -118,7 +118,7 @@ export default function PropertiesLayout({
   const [regionCounts, setRegionCounts] = useState<{ regionId: number; regionName: string; count: number }[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [selectedArea, setSelectedArea] = useState<number | null>(null);
-  
+
   // ✅ Add total properties count from API
   const [totalPropertiesCount, setTotalPropertiesCount] = useState<number>(0);
 
@@ -131,6 +131,13 @@ export default function PropertiesLayout({
   const [pageLoading, setPageLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [firstLoadFromParams, setFirstLoadFromParams] = useState(true);
+  const [selectedPropertyType, setSelectedPropertyType] = useState<string | null>(null);
+  const [minBeds, setMinBeds] = useState<string | null>(null);
+  const [minBaths, setMinBaths] = useState<string | null>(null);
+  const [priceFrom, setPriceFrom] = useState<string | null>(null);
+  const [priceTo, setPriceTo] = useState<string | null>(null);
 
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
@@ -149,6 +156,31 @@ export default function PropertiesLayout({
     }
   }, [searchParams]);
 
+
+  useEffect(() => {
+    if (!searchParams) return;
+
+    const regionIdParam = searchParams.get('regionId');
+    const areaIdParam = searchParams.get('areaId');
+    const provinceParam = searchParams.get('province');
+    const townParam = searchParams.get('town');
+    const propertyTypeParam = searchParams.get('propertyType');
+    const minBedsParam = searchParams.get('minBeds');
+    const minBathsParam = searchParams.get('minBaths');
+    const priceFromParam = searchParams.get('priceFrom');
+    const priceToParam = searchParams.get('priceTo');
+
+    setSelectedRegion(regionIdParam ? Number(regionIdParam) : null);
+    setSelectedArea(areaIdParam ? Number(areaIdParam) : null);
+    setSelectedProvince(provinceParam || null);
+    setSelectedTown(townParam || null);
+    setSelectedPropertyType(propertyTypeParam || null);
+    setMinBeds(minBedsParam || null);
+    setMinBaths(minBathsParam || null);
+    setPriceFrom(priceFromParam || null);
+    setPriceTo(priceToParam || null);
+  }, [searchParams]);
+
   useEffect(() => {
     const fetchRegionCounts = async () => {
       try {
@@ -163,7 +195,7 @@ export default function PropertiesLayout({
             count: r.count,
           }));
           setRegionCounts(formatted);
-          
+
           // ✅ Set the total count from API
           const totalCount = data.data?.total?.properties || 0;
           setTotalPropertiesCount(totalCount);
@@ -207,38 +239,64 @@ export default function PropertiesLayout({
   // Main properties fetch effect
   useEffect(() => {
     const fetchProperties = async () => {
-      const isPageChange = currentPage > 1 && !initialLoad && properties.length > 0;
+      setError(null);
+      const isPageChange = currentPage > 1;
+
       if (isPageChange) setPageLoading(true);
       else setLoading(true);
 
-      setError(null);
-
       try {
-        const query = new URLSearchParams({
-          page: String(currentPage),
-          limit: String(PROPERTIES_PER_PAGE),
-          ...(selectedProvince ? { province: selectedProvince } : {}),
-          ...(selectedTown ? { town: selectedTown } : {}),
-          ...(selectedRegion ? { regionId: String(selectedRegion) } : {}),
-          ...(selectedArea ? { areaId: String(selectedArea) } : {}),
-        });
+        // Determine if advanced search filters exist
+        const hasAdvancedFilter =
+          selectedPropertyType || minBeds || minBaths || priceFrom || priceTo;
 
-        const res = await fetch(`${API_BASE_URL}/properties?${query.toString()}`);
-        if (!res.ok) throw new Error(`Failed to fetch properties: ${res.status}`);
+        let data;
+        if (hasAdvancedFilter) {
+          // POST advanced search
+          const body = {
+            page: currentPage,
+            limit: PROPERTIES_PER_PAGE,
+            province: selectedProvince,
+            town: selectedTown,
+            regionId: selectedRegion,
+            areaId: selectedArea,
+            propertyType: selectedPropertyType,
+            minBeds,
+            minBaths,
+            priceFrom,
+            priceTo,
+          };
 
-        const data = await res.json();
+          const res = await fetch(`${API_BASE_URL}/properties/search/advanced`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
 
-        if (data && data.success) {
-          const propertiesData = Array.isArray(data.data) ? data.data : [];
-          const totalData = data.pagination?.total ?? data.total ?? propertiesData.length;
-          const totalPagesData =
-            data.pagination?.totalPages ??
-            data.totalPages ??
-            Math.ceil(totalData / PROPERTIES_PER_PAGE);
+          if (!res.ok) throw new Error('Failed to fetch advanced search properties');
+          data = await res.json();
+        } else {
+          // GET normal listing
+          const query = new URLSearchParams({
+            page: String(currentPage),
+            limit: String(PROPERTIES_PER_PAGE),
+            ...(selectedProvince ? { province: selectedProvince } : {}),
+            ...(selectedTown ? { town: selectedTown } : {}),
+            ...(selectedRegion ? { regionId: String(selectedRegion) } : {}),
+            ...(selectedArea ? { areaId: String(selectedArea) } : {}),
+          });
 
-          setProperties(propertiesData);
-          setTotalProperties(totalData);
-          setTotalPages(totalPagesData);
+          const res = await fetch(`${API_BASE_URL}/properties?${query.toString()}`);
+          if (!res.ok) throw new Error('Failed to fetch properties');
+          data = await res.json();
+        }
+
+        if (data.success) {
+          setProperties(data.data || []);
+          const total = data.pagination?.total ?? data.total ?? (data.data?.length || 0);
+          const pages = data.pagination?.totalPages ?? data.totalPages ?? Math.ceil(total / PROPERTIES_PER_PAGE);
+          setTotalProperties(total);
+          setTotalPages(pages);
         } else {
           setProperties([]);
           setTotalProperties(0);
@@ -252,14 +310,23 @@ export default function PropertiesLayout({
       } finally {
         setLoading(false);
         setPageLoading(false);
-        setInitialLoad(false);
-        if (isPageChange) window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
     fetchProperties();
-  }, [currentPage, selectedProvince, selectedTown, selectedRegion, selectedArea, API_BASE_URL]);
-
+  }, [
+    currentPage,
+    selectedProvince,
+    selectedTown,
+    selectedRegion,
+    selectedArea,
+    selectedPropertyType,
+    minBeds,
+    minBaths,
+    priceFrom,
+    priceTo,
+    API_BASE_URL,
+  ]);
   const handlePageChange = (page: number) => {
     if (page !== currentPage && page >= 1 && page <= displayedTotalPages) {
       setCurrentPage(page);
@@ -268,17 +335,44 @@ export default function PropertiesLayout({
 
   const handleRegionChange = (regionId: number | null) => {
     setSelectedRegion(regionId);
+    setSelectedArea(null);
+
+    // Clear advanced search filters so only area filter is used
+    setSelectedPropertyType(null);
+    setMinBeds(null);
+    setMinBaths(null);
+    setPriceFrom(null);
+    setPriceTo(null);
+
+    // Optionally clear province/town if you want strict region filtering
+    setSelectedProvince(null);
     setSelectedTown(null);
-    setSelectedArea(null); // Reset area when region changes
   };
 
   const handleAreaChange = (areaId: number | null) => {
     setSelectedArea(areaId);
+
+    // Clear advanced search filters
+    setSelectedPropertyType(null);
+    setMinBeds(null);
+    setMinBaths(null);
+    setPriceFrom(null);
+    setPriceTo(null);
+
+    // Optionally clear province/town
+    setSelectedProvince(null);
+    setSelectedTown(null);
   };
+
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProvince, selectedTown, selectedRegion, selectedArea]);
+  }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, priceFrom, priceTo]);
+  useEffect(() => {
+    if (initialLoad) {
+      setInitialLoad(false);
+    }
+  }, [initialLoad]);
 
   if (initialLoad && initialProperties.length === 0) {
     return (

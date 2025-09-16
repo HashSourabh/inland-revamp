@@ -14,7 +14,7 @@ import { Property } from "@/types/property";
 import { useKeenSlider } from "keen-slider/react";
 
 // API base
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1/';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 
 // --- TYPES ---
 interface DatabaseProperty {
