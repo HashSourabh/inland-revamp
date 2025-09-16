@@ -1,12 +1,18 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
+import Cordoba from '@/assets/images/cordoba/vistas-cordoba.jpg';
+import Cordoba1 from '@/assets/images/cordoba/about.jpg';
+import Cordoba2 from '@/assets/images/cordoba/culture-heritage.jpg';
+import Cordoba3 from '@/assets/images/cordoba/geography.jpg';
+import Cordoba4 from '@/assets/images/cordoba/salmorejo.jpg';
+import Cordoba5 from '@/assets/images/cordoba/lunes-Santo.jpg';
 export default function CordobaPage() {
 return (
 <div className="">
     <div className="max-w-none">
         <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden bg-black">
-            <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
+            <Image src={Cordoba} alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
             <div className="absolute top-0 left-0 w-full h-full flex items-center">
                 <div className="mx-auto max-w-5xl px-5 text-center">
                     <h1 className="font-heading text-5xl font-bold text-white mb-2">Cordoba</h1>
@@ -63,14 +69,14 @@ return (
                                 </p>
                             </div>
                             <div className="relative h-[300px] rounded-lg overflow-hidden">
-                                <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Jewish Quarter" fill className="object-cover" />
+                                <Image src={Cordoba1} alt="Cordoba Jewish Quarter" fill className="object-cover" />
                             </div>
                         </div>
                     </section>
                     <section>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                             <div className="relative h-[300px] rounded-lg overflow-hidden">
-                                <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Alcazar" fill className="object-cover" />
+                                <Image src={Cordoba2} alt="Cordoba Alcazar" fill className="object-cover" />
                             </div>
                             <div>
                                 <h2 className="text-3xl font-semibold text-primary-900 mb-4">Culture & Heritage</h2>
@@ -92,14 +98,14 @@ return (
                                 </p>
                             </div>
                             <div className="relative h-[300px] rounded-lg overflow-hidden">
-                                <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Countryside" fill className="object-cover" />
+                                <Image src={Cordoba3} alt="Cordoba Countryside" fill className="object-cover" />
                             </div>
                         </div>
                     </section>
                     <section>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                             <div className="relative h-[300px] rounded-lg overflow-hidden">
-                                <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Cuisine" fill className="object-cover" />
+                                <Image src={Cordoba4} alt="Cordoba Cuisine" fill className="object-cover" />
                             </div>
                             <div>
                                 <h2 className="text-3xl font-semibold text-primary-900 mb-4">Local Cuisine</h2>
@@ -127,7 +133,7 @@ return (
                                 </p>
                             </div>
                             <div className="relative h-[300px] rounded-lg overflow-hidden">
-                                <Image src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80" alt="Cordoba Festivals" fill className="object-cover" />
+                                <Image src={Cordoba5} alt="Cordoba Festivals" fill className="object-cover" />
                             </div>
                         </div>
                     </section>

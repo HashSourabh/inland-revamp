@@ -1,13 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
+import Malaga from '@/assets/images/malaga/malaga.jpg';
+import Malaga1 from '@/assets/images/malaga/malaga1.jpg';
+import Malaga2 from '@/assets/images/malaga/natural.jpg';
+import Malaga3 from '@/assets/images/malaga/cultural.jpg';
+import Malaga4 from '@/assets/images/malaga/local-cuisine.jpg';
+import Malaga5 from '@/assets/images/malaga/festivals.jpg';
 
 export default function MalagaPage() {
   return (
     <div>
       {/* Hero Section */}
       <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden bg-black">
-          <Image src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80" alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
+          <Image src={Malaga} alt="Cordoba Mezquita" fill className="object-cover mt-0 opacity-45" priority />
           <div className="absolute top-0 left-0 w-full h-full flex items-center">
               <div className="mx-auto max-w-5xl px-5 text-center">
                   <h1 className="font-heading text-5xl font-bold text-white mb-2">Málaga</h1>
@@ -67,24 +73,24 @@ export default function MalagaPage() {
                   <p className="text-base text-neutral-700">Málaga Province is located in the southern part of Andalucia, along the Mediterranean coast. It's known for its beautiful beaches, stunning mountain ranges, and rich cultural heritage.</p>
                   <p className="text-base text-neutral-700">The province offers a perfect blend of coastal and inland living, with the Sierra de las Nieves Natural Park and the famous El Torcal de Antequera providing spectacular natural landscapes.</p>
                 </div>
-                <div className="relative h-[300px] rounded-lg overflow-hidden">
+                <div className="relative h-[300px] overflow-hidden">
                   <Image
-                    src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                    src={Malaga1}
                     alt="Granada City View"
-                    fill
-                    className="object-cover"
+                    
+                    className="rounded-lg   object-cover"
                   />
                 </div>
               </div>
             </section>
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <div className="relative h-[300px] rounded-lg overflow-hidden">
+                <div className="relative h-[300px] overflow-hidden">
                   <Image
-                    src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                    src={Malaga2}
                     alt="Granada City View"
-                    fill
-                    className="object-cover"
+                    
+                    className="rounded-lg object-cover w-full"
                   />
                 </div>
                 <div>
@@ -99,12 +105,12 @@ export default function MalagaPage() {
                   <h2 className="text-3xl font-semibold text-primary-900 mb-4">Cultural Heritage</h2>
                   <p className="text-base text-neutral-700">Málaga's cultural heritage spans thousands of years. The city of Málaga features the impressive Alcazaba fortress and Roman Theatre. Antequera is known for its dolmens, prehistoric burial mounds that are UNESCO World Heritage sites.</p>
                 </div>
-                <div className="relative h-[300px] rounded-lg overflow-hidden">
+                <div className="relative h-[300px] overflow-hidden">
                   <Image
-                    src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                    src={Malaga3}
                     alt="Granada City View"
-                    fill
-                    className="object-cover"
+                    
+                    className="rounded-lg object-cover w-full"
                   />
                 </div>
               </div>
@@ -113,10 +119,10 @@ export default function MalagaPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="relative h-[300px] rounded-lg overflow-hidden">
                   <Image
-                    src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                    src={Malaga4}
                     alt="Granada City View"
-                    fill
-                    className="object-cover"
+                    
+                    className="rounded-lg object-cover w-full"
                   />
                 </div>
                 <div>
@@ -131,12 +137,12 @@ export default function MalagaPage() {
                   <h2 className="text-3xl font-semibold text-primary-900 mb-4">Festivals & Events</h2>
                   <p className="text-base text-neutral-700">The province hosts numerous festivals throughout the year. The Málaga Film Festival attracts international attention, while the Feria de Málaga in August is one of the biggest celebrations in Andalucia.</p>
                 </div>
-                <div className="relative h-[300px] rounded-lg overflow-hidden">
+                <div className="relative h-[300px] overflow-hidden">
                   <Image
-                    src="https://images.unsplash.com/photo-1558370781-d6196949e317?auto=format&fit=crop&q=80"
+                    src={Malaga5}
                     alt="Granada City View"
-                    fill
-                    className="object-cover"
+
+                    className="rounded-lg object-cover w-full "
                   />
                 </div>
               </div>
