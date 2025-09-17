@@ -23,9 +23,11 @@ interface Property {
   price: { current: number; original?: number };
   location: { town: string; province: string };
   description: string;
-  viewed:number
+  viewed: number
   features: { bedrooms: number; bathrooms: number; buildSize: number; plotSize: number; type: string };
   images: { url: string; alt: string; isFeatured: boolean }[];
+  lat?: number;
+  lng?: number;
 }
 
 export default function PropertyDetails({ params }: PropertyDetailsProps) {
@@ -45,12 +47,14 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
         if (data.success && data.data) {
           const db = data.data;
 
+
           // Safely parse town/province from address
           const addressParts = db.Property_Address?.split(",") || [];
           const location = {
             town: addressParts[0]?.trim() || "Unknown",
             province: addressParts[1]?.trim() || "Andalucia",
           };
+          console.log("API property data:", db.GPS_Latitude, db.GPS_Longitude);
 
           // Generate images based on Num_Photos
           const numPhotos = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
@@ -75,6 +79,9 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               type: "Property",
             },
             images,
+            lat: db.GPS_Latitude,
+            lng: db.GPS_Longitude,
+
           });
         } else {
           setProperty(null);
@@ -166,6 +173,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               plot={property.features.plotSize}
               views={property.viewed}
               features={["Some feature", "Another feature"]} // optional string[]
+              lat={property.lat}   // ✅ must pass
+              lng={property.lng}
             />
           </div>
 

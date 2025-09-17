@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Property } from '@/types/property';
 import PropertyCard from '@/components/properties/PropertyCard';
@@ -118,8 +118,9 @@ export default function PropertiesLayout({
   const [regionCounts, setRegionCounts] = useState<{ regionId: number; regionName: string; count: number }[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [selectedArea, setSelectedArea] = useState<number | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
 
-  // ✅ Add total properties count from API
+  // Total properties count from API (for sidebar/info)
   const [totalPropertiesCount, setTotalPropertiesCount] = useState<number>(0);
 
   const [areas, setAreas] = useState<{ areaId: number; areaName: string; count: number }[]>([]);
@@ -139,27 +140,17 @@ export default function PropertiesLayout({
   const [priceFrom, setPriceFrom] = useState<string | null>(null);
   const [priceTo, setPriceTo] = useState<string | null>(null);
 
+  // Ref to prevent race conditions
+  const fetchPropertiesRef = useRef(0);
+
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
 
-  useEffect(() => {
-    if (!searchParams) return;
-    const locationParam = searchParams.get('location');
-    if (locationParam) {
-      const property = properties.find(
-        (p) => p.location?.town === locationParam,
-      );
-      if (property) {
-        setSelectedProvince(property.location?.province ?? null);
-        setSelectedTown(property.location?.town ?? null);
-      }
-    }
-  }, [searchParams]);
-
-
+  // Consolidated useEffect for search parameters
   useEffect(() => {
     if (!searchParams) return;
 
+    // Extract all parameters at once
     const regionIdParam = searchParams.get('regionId');
     const areaIdParam = searchParams.get('areaId');
     const provinceParam = searchParams.get('province');
@@ -169,7 +160,9 @@ export default function PropertiesLayout({
     const minBathsParam = searchParams.get('minBaths');
     const priceFromParam = searchParams.get('priceFrom');
     const priceToParam = searchParams.get('priceTo');
+    const locationParam = searchParams.get('location');
 
+    // Set all states in a batch
     setSelectedRegion(regionIdParam ? Number(regionIdParam) : null);
     setSelectedArea(areaIdParam ? Number(areaIdParam) : null);
     setSelectedProvince(provinceParam || null);
@@ -179,8 +172,23 @@ export default function PropertiesLayout({
     setMinBaths(minBathsParam || null);
     setPriceFrom(priceFromParam || null);
     setPriceTo(priceToParam || null);
+
+    // Handle location parameter
+    if (locationParam && !provinceParam && !townParam) {
+      const property = properties.find(
+        (p) => p.location?.town === locationParam,
+      );
+      if (property) {
+        setSelectedProvince(property.location?.province ?? null);
+        setSelectedTown(property.location?.town ?? null);
+      }
+    }
+
+    // Reset to page 1 when filters change
+    setCurrentPage(1);
   }, [searchParams]);
 
+  // Fetch region counts (only for sidebar - don't override filtered results)
   useEffect(() => {
     const fetchRegionCounts = async () => {
       try {
@@ -196,10 +204,10 @@ export default function PropertiesLayout({
           }));
           setRegionCounts(formatted);
 
-          // ✅ Set the total count from API
+          // Only set the total count for the sidebar/filters
+          // Don't override the filtered results count
           const totalCount = data.data?.total?.properties || 0;
           setTotalPropertiesCount(totalCount);
-          setTotalProperties(totalCount);
         } else {
           setRegionCounts([]);
           setTotalPropertiesCount(0);
@@ -236,80 +244,85 @@ export default function PropertiesLayout({
     fetchAreas();
   }, [selectedRegion, API_BASE_URL]);
 
-  // Main properties fetch effect
+  // Main properties fetch effect with race condition prevention
   useEffect(() => {
     const fetchProperties = async () => {
-      setError(null);
-      const isPageChange = currentPage > 1;
+      // Increment fetch counter
+      const currentFetch = ++fetchPropertiesRef.current;
 
-      if (isPageChange) setPageLoading(true);
-      else setLoading(true);
+      setError(null);
+      setLoading(true);
 
       try {
-        // Determine if advanced search filters exist
-        const hasAdvancedFilter =
-          selectedPropertyType || minBeds || minBaths || priceFrom || priceTo;
+        console.log("🔄 Fetching with params:", {
+          currentPage,
+          selectedRegion,
+          selectedArea,
+          selectedPropertyType,
+          fetchId: currentFetch
+        });
 
-        let data;
-        if (hasAdvancedFilter) {
-          // POST advanced search
-          const body = {
-            page: currentPage,
-            limit: PROPERTIES_PER_PAGE,
-            province: selectedProvince,
-            town: selectedTown,
-            regionId: selectedRegion,
-            areaId: selectedArea,
-            propertyType: selectedPropertyType,
-            minBeds,
-            minBaths,
-            priceFrom,
-            priceTo,
-          };
+        const queryParams = {
+          page: String(currentPage),
+          limit: String(PROPERTIES_PER_PAGE),
+          ...(selectedProvince ? { province: selectedProvince } : {}),
+          ...(selectedTown ? { town: selectedTown } : {}),
+          ...(selectedRegion ? { regionId: String(selectedRegion) } : {}),
+          ...(selectedArea ? { areaId: String(selectedArea) } : {}),
+          ...(selectedPropertyType ? { propertyType: selectedPropertyType } : {}),
+          ...(minBeds ? { minBeds } : {}),
+          ...(minBaths ? { minBaths } : {}),
+          ...(priceFrom ? { priceFrom } : {}),
+          ...(priceTo ? { priceTo } : {}),
+        };
 
-          const res = await fetch(`${API_BASE_URL}/properties/search/advanced`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-          });
+        const query = new URLSearchParams(queryParams);
+        const url = `${API_BASE_URL}/properties?${query.toString()}`;
 
-          if (!res.ok) throw new Error('Failed to fetch advanced search properties');
-          data = await res.json();
-        } else {
-          // GET normal listing
-          const query = new URLSearchParams({
-            page: String(currentPage),
-            limit: String(PROPERTIES_PER_PAGE),
-            ...(selectedProvince ? { province: selectedProvince } : {}),
-            ...(selectedTown ? { town: selectedTown } : {}),
-            ...(selectedRegion ? { regionId: String(selectedRegion) } : {}),
-            ...(selectedArea ? { areaId: String(selectedArea) } : {}),
-          });
+        console.log("🌐 API URL:", url);
 
-          const res = await fetch(`${API_BASE_URL}/properties?${query.toString()}`);
-          if (!res.ok) throw new Error('Failed to fetch properties');
-          data = await res.json();
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+
+        const data = await res.json();
+
+        // Check if this is still the latest fetch
+        if (currentFetch !== fetchPropertiesRef.current) {
+          console.log("🚫 Ignoring outdated fetch response", currentFetch);
+          return;
         }
 
+        console.log("📦 API Response:", data, "FetchID:", currentFetch);
+
         if (data.success) {
-          setProperties(data.data || []);
+          const newProperties = data.data ? [...data.data] : [];
           const total = data.pagination?.total ?? data.total ?? (data.data?.length || 0);
           const pages = data.pagination?.totalPages ?? data.totalPages ?? Math.ceil(total / PROPERTIES_PER_PAGE);
-          setTotalProperties(total);
+
+          console.log("✅ Setting properties:", { count: newProperties.length, total, pages, fetchId: currentFetch });
+
+          setProperties(newProperties);
+          setTotalProperties(total); // This should be the filtered count
           setTotalPages(pages);
         } else {
+          console.log("❌ API returned success=false");
           setProperties([]);
           setTotalProperties(0);
           setTotalPages(1);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load properties');
-        setProperties([]);
-        setTotalProperties(0);
-        setTotalPages(1);
+        console.error("❌ Fetch error:", err);
+        if (currentFetch === fetchPropertiesRef.current) {
+          setError(err instanceof Error ? err.message : 'Failed to load properties');
+          setProperties([]);
+          setTotalProperties(0);
+          setTotalPages(1);
+        }
       } finally {
-        setLoading(false);
-        setPageLoading(false);
+        if (currentFetch === fetchPropertiesRef.current) {
+          setLoading(false);
+          setPageLoading(false);
+        }
       }
     };
 
@@ -327,6 +340,7 @@ export default function PropertiesLayout({
     priceTo,
     API_BASE_URL,
   ]);
+
   const handlePageChange = (page: number) => {
     if (page !== currentPage && page >= 1 && page <= displayedTotalPages) {
       setCurrentPage(page);
@@ -364,10 +378,10 @@ export default function PropertiesLayout({
     setSelectedTown(null);
   };
 
-
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, priceFrom, priceTo]);
+
   useEffect(() => {
     if (initialLoad) {
       setInitialLoad(false);
@@ -392,9 +406,9 @@ export default function PropertiesLayout({
     );
   }
 
-  const displayedProperties = properties.length > 0 ? properties : initialProperties;
-  const displayedTotal = totalProperties > 0 ? totalProperties : initialTotal;
-  const displayedTotalPages = totalPages > 0 ? totalPages : initialTotalPages;
+  const displayedProperties = properties;
+  const displayedTotal = totalProperties;
+  const displayedTotalPages = totalPages;
 
   if (displayedProperties.length === 0 && error) {
     return (
@@ -484,6 +498,11 @@ export default function PropertiesLayout({
     }
 
     return pageNumbers;
+  };
+
+  // Create a unique key for forcing re-renders
+  const getComponentKey = () => {
+    return `${selectedRegion}-${selectedArea}-${selectedPropertyType}-${minBeds}-${minBaths}-${priceFrom}-${priceTo}-${currentPage}`;
   };
 
   return (

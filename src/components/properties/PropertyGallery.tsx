@@ -24,6 +24,8 @@ interface PropertyGalleryProps {
   plot?: number;
   features?: string[];
   description?: string;
+  lat?: number;
+  lng?: number;
 }
 
 export default function PropertyGallery({
@@ -37,6 +39,7 @@ export default function PropertyGallery({
   plot = 0,
   features = [],
   description = ''
+  , lat, lng
 }: PropertyGalleryProps) {
   const [mainImage, setMainImage] = useState(images[0]?.url || '');
   const [isScrollable, setIsScrollable] = useState(false);
@@ -58,6 +61,7 @@ export default function PropertyGallery({
       setIsScrollable(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth);
     }
   };
+  console.log('coordinates', lat, lng);
 
   useEffect(() => {
     checkScrollable();
@@ -86,8 +90,8 @@ export default function PropertyGallery({
               key={index}
               onClick={() => setMainImage(image.url)}
               className={`relative flex-shrink-0 overflow-hidden rounded-lg transition-all ${mainImage === image.url
-                  ? 'ring-2 ring-primary-600 ring-offset-2'
-                  : 'ring-1 ring-neutral-200 hover:ring-primary-400 dark:ring-neutral-700'
+                ? 'ring-2 ring-primary-600 ring-offset-2'
+                : 'ring-1 ring-neutral-200 hover:ring-primary-400 dark:ring-neutral-700'
                 }`}
             >
               <div className="relative aspect-[4/3] w-20 sm:w-24">
@@ -189,7 +193,7 @@ export default function PropertyGallery({
         )}
 
         {/* Google Map */}
-        <div>
+        {/* <div>
           <h2 className="mb-4 text-xl font-semibold">Location</h2>
           <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
             <iframe
@@ -202,7 +206,26 @@ export default function PropertyGallery({
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
           </div>
-        </div>
+        </div> */}
+        {/* Google Map */}
+        {/* Google Map */}
+       
+          <div>
+            <h2 className="mb-4 text-xl font-semibold">Location</h2>
+            <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+              <iframe
+                src={`https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+
+
       </div>
       <style jsx global>{`
         .no-scrollbar {
