@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import PropertyGallery from '@/components/properties/PropertyGallery';
 import PromoSidebar from '@/components/PromoSidebar';
@@ -23,7 +24,7 @@ interface Property {
   price: { current: number; original?: number };
   location: { town: string; province: string };
   description: string;
-  viewed: number
+  viewed: number;
   features: { bedrooms: number; bathrooms: number; buildSize: number; plotSize: number; type: string };
   images: { url: string; alt: string; isFeatured: boolean }[];
   lat?: number;
@@ -31,6 +32,8 @@ interface Property {
 }
 
 export default function PropertyDetails({ params }: PropertyDetailsProps) {
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
+
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [isView, setIsView] = useState(false);
@@ -41,23 +44,21 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
     const fetchProperty = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`https://inlandandalucia.onrender.com/api/v1/properties/${propertyId}`);
+        const res = await fetch(`${API_BASE_URL}/properties/${propertyId}`);
         const data = await res.json();
 
         if (data.success && data.data) {
           const db = data.data;
 
-
-          // Safely parse town/province from address
           const addressParts = db.Property_Address?.split(",") || [];
           const location = {
             town: addressParts[0]?.trim() || "Unknown",
             province: addressParts[1]?.trim() || "Andalucia",
           };
-          console.log("API property data:", db.GPS_Latitude, db.GPS_Longitude);
 
-          // Generate images based on Num_Photos
           const numPhotos = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
+
+          // **Optimize images**: featured image first, lazy-load the rest
           const images = Array.from({ length: numPhotos }, (_, i) => ({
             url: `https://www.inlandandalucia.com/images/photos/properties/${db.Property_Ref}/${db.Property_Ref}_${i + 1}.jpg`,
             alt: `${db.Property_Ref} image ${i + 1}`,
@@ -75,13 +76,12 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               bedrooms: db.Bedrooms || 0,
               bathrooms: db.Bathrooms || 0,
               buildSize: db.SQM_Built || 0,
-              plotSize: db.SQM_Plot || 0, // <-- add this
+              plotSize: db.SQM_Plot || 0,
               type: "Property",
             },
             images,
             lat: db.GPS_Latitude,
             lng: db.GPS_Longitude,
-
           });
         } else {
           setProperty(null);
@@ -96,6 +96,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
     fetchProperty();
   }, [propertyId]);
+
   const PageOverlayDetailsLoader = () => (
     <div className="fixed inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center space-y-4">
@@ -105,9 +106,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
     </div>
   );
 
-  if (loading)
-    return (<PageOverlayDetailsLoader />
-    );
+  if (loading) return <PageOverlayDetailsLoader />;
 
   if (!property)
     return (
@@ -172,8 +171,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               built={property.features.buildSize}
               plot={property.features.plotSize}
               views={property.viewed}
-              features={["Some feature", "Another feature"]} // optional string[]
-              lat={property.lat}   // ✅ must pass
+              features={["Some feature", "Another feature"]}
+              lat={property.lat}
               lng={property.lng}
             />
           </div>

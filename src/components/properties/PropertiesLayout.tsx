@@ -137,8 +137,8 @@ export default function PropertiesLayout({
   const [selectedPropertyType, setSelectedPropertyType] = useState<string | null>(null);
   const [minBeds, setMinBeds] = useState<string | null>(null);
   const [minBaths, setMinBaths] = useState<string | null>(null);
-  const [priceFrom, setPriceFrom] = useState<string | null>(null);
-  const [priceTo, setPriceTo] = useState<string | null>(null);
+  const [minPrice, setminPrice] = useState<string | null>(null);
+  const [maxPrice, setmaxPrice] = useState<string | null>(null);
 
   // Ref to prevent race conditions
   const fetchPropertiesRef = useRef(0);
@@ -158,8 +158,8 @@ export default function PropertiesLayout({
     const propertyTypeParam = searchParams.get('propertyType');
     const minBedsParam = searchParams.get('minBeds');
     const minBathsParam = searchParams.get('minBaths');
-    const priceFromParam = searchParams.get('priceFrom');
-    const priceToParam = searchParams.get('priceTo');
+    const minPriceParam = searchParams.get('minPrice');
+    const maxPriceParam = searchParams.get('maxPrice');
     const locationParam = searchParams.get('location');
 
     // Set all states in a batch
@@ -170,8 +170,8 @@ export default function PropertiesLayout({
     setSelectedPropertyType(propertyTypeParam || null);
     setMinBeds(minBedsParam || null);
     setMinBaths(minBathsParam || null);
-    setPriceFrom(priceFromParam || null);
-    setPriceTo(priceToParam || null);
+    setminPrice(minPriceParam || null);
+    setmaxPrice(maxPriceParam || null);
 
     // Handle location parameter
     if (locationParam && !provinceParam && !townParam) {
@@ -272,8 +272,8 @@ export default function PropertiesLayout({
           ...(selectedPropertyType ? { propertyType: selectedPropertyType } : {}),
           ...(minBeds ? { minBeds } : {}),
           ...(minBaths ? { minBaths } : {}),
-          ...(priceFrom ? { priceFrom } : {}),
-          ...(priceTo ? { priceTo } : {}),
+          ...(minPrice ? { minPrice } : {}),
+          ...(maxPrice ? { maxPrice } : {}),
         };
 
         const query = new URLSearchParams(queryParams);
@@ -336,8 +336,8 @@ export default function PropertiesLayout({
     selectedPropertyType,
     minBeds,
     minBaths,
-    priceFrom,
-    priceTo,
+    minPrice,
+    maxPrice,
     API_BASE_URL,
   ]);
 
@@ -355,8 +355,8 @@ export default function PropertiesLayout({
     setSelectedPropertyType(null);
     setMinBeds(null);
     setMinBaths(null);
-    setPriceFrom(null);
-    setPriceTo(null);
+    setminPrice(null);
+    setmaxPrice(null);
 
     // Optionally clear province/town if you want strict region filtering
     setSelectedProvince(null);
@@ -370,8 +370,8 @@ export default function PropertiesLayout({
     setSelectedPropertyType(null);
     setMinBeds(null);
     setMinBaths(null);
-    setPriceFrom(null);
-    setPriceTo(null);
+    setminPrice(null);
+    setmaxPrice(null);
 
     // Optionally clear province/town
     setSelectedProvince(null);
@@ -380,7 +380,7 @@ export default function PropertiesLayout({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, priceFrom, priceTo]);
+  }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
 
   useEffect(() => {
     if (initialLoad) {
@@ -409,46 +409,6 @@ export default function PropertiesLayout({
   const displayedProperties = properties;
   const displayedTotal = totalProperties;
   const displayedTotalPages = totalPages;
-
-  if (displayedProperties.length === 0 && error) {
-    return (
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <header className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-primary-600">
-            Properties for Sale
-          </h1>
-        </header>
-        <div className="text-center py-12">
-          <p className="text-red-600 mb-4">Error loading properties: {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (displayedProperties.length === 0 && !loading) {
-    return (
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <header className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-primary-600">
-            Properties for Sale
-          </h1>
-          <p className="mt-2 text-neutral-600 text-xl">No properties found</p>
-        </header>
-      </div>
-    );
-  }
-
-  const startIndex = displayedProperties.length > 0 ? (currentPage - 1) * PROPERTIES_PER_PAGE + 1 : 0;
-  const endIndex = Math.min(
-    (currentPage - 1) * PROPERTIES_PER_PAGE + displayedProperties.length,
-    displayedTotal,
-  );
 
   // Get display title for filter header
   const getFilterTitle = () => {
@@ -500,11 +460,6 @@ export default function PropertiesLayout({
     return pageNumbers;
   };
 
-  // Create a unique key for forcing re-renders
-  const getComponentKey = () => {
-    return `${selectedRegion}-${selectedArea}-${selectedPropertyType}-${minBeds}-${minBaths}-${priceFrom}-${priceTo}-${currentPage}`;
-  };
-
   return (
     <>
       {/* Page overlay loader */}
@@ -521,58 +476,80 @@ export default function PropertiesLayout({
           </p>
         </header>
 
-        {/* Only show filters and content if we have properties */}
+        {/* Filters - Always visible */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-4 mb-6">
+          <div className="mb-6 dark:border-neutral-800 dark:bg-neutral-900">
+            <div className="space-y-4">
+              <h2 className="text-base font-medium text-neutral-700 dark:text-neutral-300">
+                {getFilterTitle()}
+              </h2>
+              <AreaFilter
+                properties={displayedProperties}
+                selectedProvince={selectedProvince}
+                selectedTown={selectedTown}
+                selectedRegion={selectedRegion}
+                selectedArea={selectedArea}
+                regions={regionCounts}
+                areas={areas}
+                onProvinceChange={setSelectedProvince}
+                onTownChange={setSelectedTown}
+                onRegionChange={handleRegionChange}
+                onAreaChange={handleAreaChange}
+                allCount={totalPropertiesCount}
+              />
+            </div>
+          </div>
+
+          {/* Results count + layout switcher - Only show when there are properties */}
+          {displayedProperties.length > 0 && (
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2">
+                <p className="text-base text-neutral-600 dark:text-neutral-400">
+                  Showing{' '}
+                  <span className="font-medium text-neutral-900 dark:text-white">
+                    {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
+                  </span>{' '}
+                  -{' '}
+                  <span className="font-medium text-neutral-900 dark:text-white">
+                    {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
+                  </span>{' '}
+                  of{' '}
+                  <span className="font-medium text-neutral-900 dark:text-white">
+                    {displayedTotal}
+                  </span>{' '}
+                  properties
+                </p>
+                {(loading || pageLoading) && <LoadingSpinner />}
+              </div>
+              <LayoutSwitcher currentLayout={layout} onLayoutChange={setLayout} />
+            </div>
+          )}
+        </div>
+
+        {/* Error state */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">Error loading properties: {error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700"
+            >
+              Retry
+            </button>
+          </div>
+        )}
+
+        {/* No properties found */}
+        {displayedProperties.length === 0 && !loading && !error && (
+          <div className="text-center py-12">
+            <p className="text-neutral-600 text-lg">No properties found for the selected filters</p>
+            <p className="text-neutral-500 mt-2">Try adjusting your search criteria</p>
+          </div>
+        )}
+
+        {/* Property Grid - Only show when there are properties */}
         {displayedProperties.length > 0 && (
           <>
-            {/* Filters */}
-            <div className="rounded-xl border border-neutral-200 bg-white p-4 mb-6">
-              <div className="mb-6 dark:border-neutral-800 dark:bg-neutral-900">
-                <div className="space-y-4">
-                  <h2 className="text-base font-medium text-neutral-700 dark:text-neutral-300">
-                    {getFilterTitle()}
-                  </h2>
-                  <AreaFilter
-                    properties={displayedProperties}
-                    selectedProvince={selectedProvince}
-                    selectedTown={selectedTown}
-                    selectedRegion={selectedRegion}
-                    selectedArea={selectedArea}
-                    regions={regionCounts}
-                    areas={areas}
-                    onProvinceChange={setSelectedProvince}
-                    onTownChange={setSelectedTown}
-                    onRegionChange={handleRegionChange}
-                    onAreaChange={handleAreaChange}
-                    allCount={totalPropertiesCount}
-                  />
-                </div>
-              </div>
-
-              {/* Results count + layout switcher */}
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-2">
-                  <p className="text-base text-neutral-600 dark:text-neutral-400">
-                    Showing{' '}
-                    <span className="font-medium text-neutral-900 dark:text-white">
-                      {startIndex}
-                    </span>{' '}
-                    -{' '}
-                    <span className="font-medium text-neutral-900 dark:text-white">
-                      {endIndex}
-                    </span>{' '}
-                    of{' '}
-                    <span className="font-medium text-neutral-900 dark:text-white">
-                      {displayedTotal}
-                    </span>{' '}
-                    properties
-                  </p>
-                  {(loading || pageLoading) && <LoadingSpinner />}
-                </div>
-                <LayoutSwitcher currentLayout={layout} onLayoutChange={setLayout} />
-              </div>
-            </div>
-
-            {/* Property Grid with opacity transition during loading */}
             <div
               className={`grid gap-6 transition-opacity duration-200 ${pageLoading ? 'opacity-50' : 'opacity-100'
                 } ${layout === 'grid'

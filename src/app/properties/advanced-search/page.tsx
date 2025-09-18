@@ -11,7 +11,7 @@ export default function AdvancedSearchPage() {
     propertyType: "",
     minBeds: "",
     minBaths: "",
-    priceFrom: "",
+    minPrice: "",
     priceTo: "",
   });
 
@@ -233,9 +233,9 @@ export default function AdvancedSearchPage() {
                 Price from:
               </label>
               <select
-                value={filters.priceFrom}
+                value={filters.minPrice}
                 onChange={(e) =>
-                  setFilters({ ...filters, priceFrom: e.target.value })
+                  setFilters({ ...filters, minPrice: e.target.value })
                 }
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
