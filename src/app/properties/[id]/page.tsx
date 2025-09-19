@@ -229,7 +229,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
         description=""
       >
         {property.videoUrl ? (
-          <div className="aspect-video w-full">
+          <div className="w-full h-[250px] max-w-5xl mx-auto">
             <iframe
               src={`https://www.youtube.com/embed/${property.videoUrl}?rel=0&wmode=transparent&autoplay=0&iv_load_policy=3`}
               title="Property Video"
@@ -238,6 +238,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               className="w-full h-full rounded"
             />
           </div>
+
         ) : (
           <p>No video available for this property.</p>
         )}
