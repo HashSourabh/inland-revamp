@@ -33,7 +33,7 @@ const menuItems: MenuItem[] = [
       { label: 'Our Offices', href: '/contact/our-offices' },
       { label: 'Newsletter', href: '/contact/newsletter' },
       { label: 'Useful Links', href: '/contact/useful-links' },
-      { label: 'Agents Private Area', href: '/contact/agents-private-area' }
+      { label: 'Agents Private Area', href: 'https://inlandandalucia.com/agentlogin.aspx' } // ✅ fixed
     ]
   }
 ];
@@ -45,8 +45,29 @@ export default function Navigation() {
   const isActive = (href: string) => pathname === href;
   const isActiveParent = (item: MenuItem) => {
     if (pathname === item.href) return true;
-    if (item.submenu?.some(sub => pathname === sub.href)) return true;
+    if (item.submenu?.some((sub) => pathname === sub.href)) return true;
     return false;
+  };
+
+  const renderLink = (href: string, label: string, className: string) => {
+    const isExternal = href.startsWith('http');
+    if (isExternal) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={className}
+        >
+          {label}
+        </a>
+      );
+    }
+    return (
+      <Link href={href} className={className}>
+        {label}
+      </Link>
+    );
   };
 
   return (
@@ -75,36 +96,39 @@ export default function Navigation() {
                       ? 'border-primary-500 text-neutral-900'
                       : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700'
                   }`}
-                  onClick={() => item.submenu && setOpenDropdown(openDropdown === item.label ? null : item.label)}
+                  onClick={() =>
+                    item.submenu &&
+                    setOpenDropdown(openDropdown === item.label ? null : item.label)
+                  }
                 >
                   {item.label}
                   {item.submenu && (
-                    <ChevronDownIcon className={`ml-1 h-4 w-4 transition-transform duration-200 ${
-                      openDropdown === item.label ? 'rotate-180' : ''
-                    }`} />
+                    <ChevronDownIcon
+                      className={`ml-1 h-4 w-4 transition-transform duration-200 ${
+                        openDropdown === item.label ? 'rotate-180' : ''
+                      }`}
+                    />
                   )}
                 </button>
 
                 {/* Dropdown Menu */}
                 {item.submenu && openDropdown === item.label && (
-                  <div 
+                  <div
                     className="absolute left-0 z-50 mt-1 min-w-[200px] rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5"
                     onMouseEnter={() => setOpenDropdown(item.label)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
-                    {item.submenu.map((subItem) => (
-                      <Link
-                        key={subItem.href}
-                        href={subItem.href}
-                        className={`block px-4 py-2 text-sm transition-colors duration-150 ${
+                    {item.submenu.map((subItem) =>
+                      renderLink(
+                        subItem.href,
+                        subItem.label,
+                        `block px-4 py-2 text-sm transition-colors duration-150 ${
                           isActive(subItem.href)
                             ? 'bg-primary-50 text-primary-600'
                             : 'text-neutral-700 hover:bg-neutral-50 hover:text-primary-600'
-                        }`}
-                      >
-                        {subItem.label}
-                      </Link>
-                    ))}
+                        }`
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -126,11 +150,7 @@ export default function Navigation() {
                 strokeWidth="1.5"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
@@ -144,7 +164,9 @@ export default function Navigation() {
             {menuItems.map((item) => (
               <div key={item.label}>
                 <button
-                  onClick={() => setOpenDropdown(openDropdown === item.label ? 'mobile' : item.label)}
+                  onClick={() =>
+                    setOpenDropdown(openDropdown === item.label ? 'mobile' : item.label)
+                  }
                   className={`flex w-full items-center justify-between border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
                     isActiveParent(item)
                       ? 'border-primary-500 bg-primary-50 text-primary-700'
@@ -153,27 +175,26 @@ export default function Navigation() {
                 >
                   {item.label}
                   {item.submenu && (
-                    <ChevronDownIcon className={`h-5 w-5 transition-transform duration-200 ${
-                      openDropdown === item.label ? 'rotate-180' : ''
-                    }`} />
+                    <ChevronDownIcon
+                      className={`h-5 w-5 transition-transform duration-200 ${
+                        openDropdown === item.label ? 'rotate-180' : ''
+                      }`}
+                    />
                   )}
                 </button>
                 {item.submenu && openDropdown === item.label && (
                   <div className="bg-neutral-50 py-2">
-                    {item.submenu.map((subItem) => (
-                      <Link
-                        key={subItem.href}
-                        href={subItem.href}
-                        className={`block py-2 pl-8 pr-4 text-sm ${
+                    {item.submenu.map((subItem) =>
+                      renderLink(
+                        subItem.href,
+                        subItem.label,
+                        `block py-2 pl-8 pr-4 text-sm ${
                           isActive(subItem.href)
                             ? 'text-primary-700'
                             : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700'
-                        }`}
-                        onClick={() => setOpenDropdown('mobile')}
-                      >
-                        {subItem.label}
-                      </Link>
-                    ))}
+                        }`
+                      )
+                    )}
                   </div>
                 )}
               </div>
@@ -183,4 +204,4 @@ export default function Navigation() {
       )}
     </nav>
   );
-} 
+}

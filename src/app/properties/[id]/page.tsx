@@ -29,12 +29,15 @@ interface Property {
   images: { url: string; alt: string; isFeatured: boolean }[];
   lat?: number;
   lng?: number;
+  videoUrl: string;
 }
 
 export default function PropertyDetails({ params }: PropertyDetailsProps) {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
 
   const [property, setProperty] = useState<Property | null>(null);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [isView, setIsView] = useState(false);
 
@@ -82,6 +85,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             images,
             lat: db.GPS_Latitude,
             lng: db.GPS_Longitude,
+            videoUrl: db.Video_URL || null,
           });
         } else {
           setProperty(null);
@@ -114,6 +118,16 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
         <p className="text-neutral-600">Property not found</p>
       </div>
     );
+  function getEmbedUrl(url: string) {
+    if (url.includes("youtube.com/watch")) {
+      return url.replace("watch?v=", "embed/");
+    }
+    if (url.includes("youtu.be")) {
+      const id = url.split("youtu.be/")[1];
+      return `https://www.youtube.com/embed/${id}`;
+    }
+    return url;
+  }
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(price);
@@ -143,18 +157,34 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <button className="rounded-md bg-primary-600 px-4 py-2 text-sm text-white" onClick={() => setIsView(true)}>Reserve For Viewing</button>
-            <button className="inline-flex items-center gap-2 rounded-md bg-yellow-400 px-4 py-2 text-sm text-neutral-900">
-              <PlayIcon className="h-4 w-4" /> Watch Video
-            </button>
-            <button className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700">
+            {property.videoUrl && (
+              <button
+                className="inline-flex items-center gap-2 rounded-md bg-yellow-400 px-4 py-2 text-sm text-neutral-900"
+                onClick={() => setIsVideoOpen(true)}
+              >
+                <PlayIcon className="h-4 w-4" /> Watch Video
+              </button>
+            )}
+            <Link
+              href={`/properties/${property.id}/print`}
+              className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
+            >
               <PrinterIcon className="h-4 w-4" /> Print Preview
-            </button>
-            <button className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700">
+            </Link>
+            <button
+              onClick={() => window.location.href = 'mailto:someone@example.com'}
+              className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
+            >
               <EnvelopeIcon className="h-4 w-4" /> E-mail
             </button>
-            <button className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700">
+
+            <Link
+              href={`/contact`}
+              className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
+            >
               <UserGroupIcon className="h-4 w-4" /> Contact us
-            </button>
+            </Link>
+
           </div>
         </div>
 
@@ -191,6 +221,28 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           <button className="w-full bg-primary-600 text-white px-4 py-2 rounded">Reserve</button>
         </div>
       </Popup>
+      {/* Video Popup */}
+      <Popup
+        isOpen={isVideoOpen}
+        onClose={() => setIsVideoOpen(false)}
+        title=""
+        description=""
+      >
+        {property.videoUrl ? (
+          <div className="aspect-video w-full">
+            <iframe
+              src={`https://www.youtube.com/embed/${property.videoUrl}?rel=0&wmode=transparent&autoplay=0&iv_load_policy=3`}
+              title="Property Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full rounded"
+            />
+          </div>
+        ) : (
+          <p>No video available for this property.</p>
+        )}
+      </Popup>
+
     </div>
   );
 }

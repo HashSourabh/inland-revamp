@@ -12,64 +12,65 @@ import Cordoba2 from '@/assets/images/cordoba/culture-heritage.jpg'
 import Cordoba3 from '@/assets/images/cordoba/geography.jpg'
 import Cordoba4 from '@/assets/images/cordoba/salmorejo.jpg'
 import Cordoba5 from '@/assets/images/cordoba/lunes-Santo-fixed.jpg'
+import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
 
 
 export default function CordobaPage() {
-  const [regionName, setRegionName] = useState<string>('');
+  const [regionName, setRegionName] = useState<string>('')
+  const [regionId, setRegionId] = useState<number | null>(null)
+  const [areas, setAreas] = useState<Area[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // ✅ Extract region name from URL
   useEffect(() => {
-    const params = window.location.pathname;
-    const name = params.split('/').filter(Boolean).pop() || '';
-    setRegionName(name);
-  }, []);
-  // fallback to empty string if undefined
+    const params = window.location.pathname
+    const name = params.split('/').filter(Boolean).pop() || ''
+    setRegionName(name)
+  }, [])
 
-  const [areas, setAreas] = useState<Area[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [regionId, setRegionId] = useState<number | null>(null);
-
+  // ✅ Fetch regions and areas
   useEffect(() => {
     async function loadRegionAndAreas() {
       try {
-        setLoading(true);
-        setError(null);
+        setLoading(true)
+        setError(null)
 
-        const regions = await fetchRegions();
-        console.log(regions, 'regions---');
+        const regions = await fetchRegions()
         const matchingRegion = regions.find(
           region => region.region.toLowerCase() === regionName.toLowerCase()
-        );
+        )
 
         if (!matchingRegion) {
-          throw new Error(`Region "${regionName}" not found`);
+          throw new Error(`Region "${regionName}" not found`)
         }
+        console.log(matchingRegion, 'region id is this ')
 
-        setRegionId(matchingRegion.regionId);
+        // ✅ set regionId directly
+        setRegionId(matchingRegion.regionId)
 
-        const { areas: fetchedAreas } = await fetchAreas(matchingRegion.regionId);
-        setAreas(fetchedAreas);
-
+        const { areas: fetchedAreas } = await fetchAreas(matchingRegion.regionId)
+        setAreas(fetchedAreas)
       } catch (err) {
-        console.error('Error loading region data:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load data');
+        console.error('Error loading region data:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load data')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
 
     if (regionName) {
-      loadRegionAndAreas();
+      loadRegionAndAreas()
     }
-  }, [regionName]);
+  }, [regionName])
 
-  const formatRegionName = (name: string) => {
-    return name
+  const formatRegionName = (name: string) =>
+    name
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
+      .join(' ')
 
-  const displayRegionName = formatRegionName(regionName);
+  const displayRegionName = formatRegionName(regionName)
 
   return (
     <div className="">
@@ -99,45 +100,34 @@ export default function CordobaPage() {
             </p>
 
             {/* Areas Grid */}
-            <div className="mb-12">
-              {loading && (
-                <div className="text-center py-8">
-                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-900"></div>
-                  <p className="mt-2 text-neutral-600">Loading areas...</p>
-                </div>
-              )}
+            {loading ? (
+              <div className="flex justify-center items-center py-10">
+                <PageOverlayLoader /> {/* or a smaller loader if you want */}
+              </div>
+            ) : error ? (
+              <p className="text-red-600">{error}</p>
+            ) : areas.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {areas.map((area) => (
+                  <Link
+                    key={area.areaId}
+                    href={`/properties?regionId=${regionId}&areaId=${area.areaId}`}
+                    className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-primary-900 font-medium">{area.areaName}</span>
+                      <span className="text-secondary-600">
+                        {area.count} {area.count === 1 ? 'property' : 'properties'}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No areas found.</p>
+            )}
 
-              {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                  <p className="text-red-600">Error: {error}</p>
-                </div>
-              )}
 
-              {!loading && !error && areas.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {areas.map((area) => (
-                    <Link
-                      key={area.areaId}
-                      href={`/properties?location=${encodeURIComponent(area.areaName)}`}
-                      className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-primary-900 font-medium">{area.areaName}</span>
-                        <span className="text-secondary-600">
-                          {area.count} {area.count === 1 ? 'property' : 'properties'}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-
-              {!loading && !error && areas.length === 0 && (
-                <div className="text-center py-8 text-neutral-600">
-                  <p>No areas found for {displayRegionName}</p>
-                </div>
-              )}
-            </div>
 
             {/* Content Sections */}
             <div className="space-y-6">

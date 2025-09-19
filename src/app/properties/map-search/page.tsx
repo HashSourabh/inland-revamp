@@ -5,7 +5,8 @@ import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from "@react-google-map
 import Image from "next/image";
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { fetchRegions, fetchAreas } from '@/utils/api';
-import { provinceColors, areaImages, getIAMarkerIcon } from '@/utils/mapUtils';
+import { getRegionColors, getAreaColors } from '@/utils/colorUtils';
+import { areaImages, getIAMarkerIcon } from '@/utils/mapUtils';
 
 const containerStyle = {
   width: "100%",
@@ -170,39 +171,61 @@ export default function MapSearchPage() {
       {/* Region Filters */}
       <div className="mb-8 rounded-xl border border-neutral-200 bg-white p-4">
         <div className="flex flex-wrap gap-2 mb-4">
-          {regionStats.map(({ name, count }) => (
-            <button
-              key={name}
-              onClick={() => handleRegionSelect(name)}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-base font-medium transition-colors
-                ${selectedRegion === name ? "bg-primary-600 text-white" : "bg-gray-500 text-white hover:bg-gray-600"}`}
-            >
-              {selectedRegion === name && <CheckIcon className="h-4 w-4 text-white" />}
-              <span>{name}</span>
-              <span className="rounded-full bg-white/15 px-2 py-0.5 text-sm font-semibold text-white">{count}</span>
-            </button>
-          ))}
+          {regionStats.map(({ name, count }) => {
+            const colors = getRegionColors(name);
+            const isActive = selectedRegion === name;
+
+            return (
+              <button
+                key={name}
+                onClick={() => handleRegionSelect(name)}
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-base font-medium transition-colors
+                  ${isActive 
+                    ? "bg-primary-600 text-white border-primary-700" 
+                    : `text-white ${colors.hover}`
+                  } border border-transparent shadow-sm`}
+                style={isActive ? {} : { backgroundColor: colors.hex }}
+              >
+                {isActive && <CheckIcon className="h-4 w-4 text-white" />}
+                <span>{name}</span>
+                <span className="rounded-full bg-white/15 px-2 py-0.5 text-sm font-semibold text-white">
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Town List */}
         {selectedRegion && selectedRegion !== "ALL" && townStats.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
-            {townStats.map(town => (
-              <button
-                key={town.name}
-                onClick={() => handleTownSelect(town.name)}
-                className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium transition-colors
-                  ${selectedTown === town.name ? "bg-secondary-500 text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}`}
-              >
-                {selectedTown === town.name && <CheckIcon className="h-4 w-4 text-white" />}
-                <span>{town.name}</span>
-                <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold
-                  ${selectedTown === town.name ? "bg-white/20 text-white" : "bg-white/60 text-neutral-600"}`}
+            {townStats.map(town => {
+              const colors = getAreaColors(selectedRegion);
+              const isActive = selectedTown === town.name;
+
+              return (
+                <button
+                  key={town.name}
+                  onClick={() => handleTownSelect(town.name)}
+                  className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium transition-colors
+                    ${isActive 
+                      ? "bg-primary-500 text-white border-primary-600" 
+                      : `text-gray-700 ${colors.hover}`
+                    } border border-transparent shadow-sm`}
+                  style={isActive ? {} : { backgroundColor: colors.hex }}
                 >
-                  {town.count}
-                </span>
-              </button>
-            ))}
+                  {isActive && <CheckIcon className="h-4 w-4 text-white" />}
+                  <span>{town.name}</span>
+                  <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold
+                    ${isActive 
+                      ? "bg-white/20 text-white" 
+                      : "bg-white/60 text-neutral-600"
+                    }`}>
+                    {town.count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -243,7 +266,10 @@ export default function MapSearchPage() {
                       There {selectedArea.count === 1 ? 'is' : 'are'} <span className="font-semibold text-primary-700">{selectedArea.count}</span> {selectedArea.count === 1 ? 'property' : 'properties'} available
                     </p>
                     <div className="mb-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${provinceColors[selectedArea.regionName || 'ALL']?.bg || 'bg-gray-500'} text-white`}>
+                      <span 
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
+                        style={{ backgroundColor: getRegionColors(selectedArea.regionName || 'default').hex }}
+                      >
                         {selectedArea.regionName || 'Unknown'}
                       </span>
                     </div>
@@ -253,7 +279,6 @@ export default function MapSearchPage() {
                     >
                       View Properties
                     </a>
-
                   </div>
                 </div>
               </InfoWindow>

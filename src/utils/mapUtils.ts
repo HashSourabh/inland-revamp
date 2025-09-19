@@ -139,6 +139,20 @@ export const areaCoordinates: Record<string, { lat: number; lng: number }> = {
     'Huelva': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#84CC16' },
     'Almeria': { bg: 'bg-neutral-500', hover: 'hover:bg-primary-600', hex: '#EC4899' },
   };
+  // Area color mapping (lighter shades for towns within each province)
+export const areaColors: Record<string, { bg: string; hover: string; hex: string }> = {
+  'Malaga':   { bg: 'bg-blue-100', hover: 'hover:bg-blue-200', hex: '#BFDBFE' },
+  'Cordoba':  { bg: 'bg-green-100', hover: 'hover:bg-green-200', hex: '#BBF7D0' },
+  'Granada':  { bg: 'bg-red-100', hover: 'hover:bg-red-200', hex: '#FECACA' },
+  'Sevilla':  { bg: 'bg-amber-100', hover: 'hover:bg-amber-200', hex: '#FDE68A' },
+  'Jaen':     { bg: 'bg-purple-100', hover: 'hover:bg-purple-200', hex: '#E9D5FF' },
+  'Cadiz':    { bg: 'bg-cyan-100', hover: 'hover:bg-cyan-200', hex: '#CFFAFE' },
+  'Huelva':   { bg: 'bg-lime-100', hover: 'hover:bg-lime-200', hex: '#ECFCCB' },
+  'Almeria':  { bg: 'bg-pink-100', hover: 'hover:bg-pink-200', hex: '#FBCFE8' },
+  'ALL':      { bg: 'bg-neutral-200', hover: 'hover:bg-neutral-300', hex: '#E5E7EB' },
+  'default':  { bg: 'bg-gray-300', hover: 'hover:bg-gray-400', hex: '#D1D5DB' }
+};
+
   
   // Area images
   export const areaImages: Record<string, string> = {
