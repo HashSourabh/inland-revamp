@@ -229,7 +229,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
         description=""
       >
         {property.videoUrl ? (
-          <div className="w-full h-[250px] max-w-5xl mx-auto">
+          <div className="w-full h-[400px] max-w-5xl mx-auto">
             <iframe
               src={`https://www.youtube.com/embed/${property.videoUrl}?rel=0&wmode=transparent&autoplay=0&iv_load_policy=3`}
               title="Property Video"
