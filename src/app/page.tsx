@@ -12,6 +12,7 @@ import AdvancedSearch from "@/components/search/AdvancedSearch";
 import Hero from "@/sections/Hero";
 import { Property } from "@/types/property";
 import { useKeenSlider } from "keen-slider/react";
+import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
 
 // API base
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
@@ -430,7 +431,9 @@ export default function Home() {
             </p>
           </div>
 
-          {exclusiveProperties.length > 0 ? (
+          {exclusiveLoading ? (
+            <PageOverlayLoader />
+          ) : exclusiveProperties.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {exclusiveProperties.slice(0, 3).map((property) => (
                 <PropertyCard key={property.id} property={property} />
@@ -441,6 +444,8 @@ export default function Home() {
               <p className="text-neutral-500">No exclusive properties available at the moment.</p>
             </div>
           )}
+
+
 
           {/* View All Button */}
           <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto">
