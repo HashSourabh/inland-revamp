@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
 import PropertyCard from "@/components/properties/PropertyCard";
 import {
   MagnifyingGlassIcon,
@@ -226,6 +227,7 @@ const SectionLoader = ({ title, subtitle }: { title: string; subtitle?: string }
 
 // --- COMPONENT ---
 export default function Home() {
+  const t = useTranslations('home');
   const [featuredProperties, setFeaturedProperties] = useState<PropertyForCard[]>([]);
   const [exclusiveProperties, setExclusiveProperties] = useState<PropertyForCard[]>([]);
   const [regionCounts, setRegionCounts] = useState<RegionCount[]>([]);
@@ -424,10 +426,10 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-12">
             <h2 className="font-heading text-4xl font-bold text-primary-600 md:text-5xl">
-              Exclusive Properties
+              {t('exclusive.title')}
             </h2>
             <p className="mt-4 text-neutral-600 text-lg">
-              Special offers and recent price reductions on selected properties
+              {t('exclusive.subtitle')}
             </p>
           </div>
 
@@ -441,7 +443,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-neutral-500">No exclusive properties available at the moment.</p>
+              <p className="text-neutral-500">{t('exclusive.none')}</p>
             </div>
           )}
 
@@ -455,16 +457,16 @@ export default function Home() {
             </div>
             <div className="relative z-10 px-8 py-16 text-center">
               <h3 className="text-4xl font-bold text-white mb-3">
-                Looking for more exclusive offers?
+                {t('exclusive.moreTitle')}
               </h3>
               <p className="text-white/80 mb-8">
-                We have additional properties with special price reductions
+                {t('exclusive.moreSubtitle')}
               </p>
               <Link
                 href="/properties?exclusive=true"
                 className="inline-flex items-center bg-white hover:bg-gray-100 text-[#1d3557] px-10 py-1 min-h-[56px] hover:bg-secondary-600 hover:text-white rounded-lg font-medium transition-colors shadow-md text-lg"
               >
-                View All Exclusive Properties
+                {t('exclusive.viewAllExclusive')}
               </Link>
             </div>
           </div>
@@ -479,9 +481,9 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-primary-600">Featured Properties</h2>
+                <h2 className="text-3xl font-bold text-primary-600">{t('featured.title')}</h2>
                 <p className="mt-2 text-neutral-600 max-w-2xl">
-                  Loading our featured selection...
+                  {t('featured.loading')}
                 </p>
               </div>
             </div>
@@ -498,9 +500,9 @@ export default function Home() {
             {/* Header with title and link */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-primary-600">Featured Properties</h2>
+                <h2 className="text-3xl font-bold text-primary-600">{t('featured.title')}</h2>
                 <p className="mt-2 text-neutral-600 max-w-2xl">
-                  Explore our handpicked selection of stunning properties across Inland Andalucia
+                  {t('featured.subtitle')}
                 </p>
               </div>
 
@@ -510,7 +512,7 @@ export default function Home() {
                   href="/properties"
                   className="inline-flex items-center text-primary-600 font-medium hover:underline"
                 >
-                  View all properties →
+                  {t('featured.viewAllLink')}
                 </Link>
               </div>
             </div>
@@ -521,7 +523,7 @@ export default function Home() {
                 href="/properties"
                 className="inline-block w-full rounded-md border border-primary-600 px-6 py-3 text-center font-medium text-primary-600 hover:bg-primary-50 transition-colors"
               >
-                View All Properties
+                {t('featured.viewAllButton')}
               </Link>
             </div>
 
@@ -589,17 +591,17 @@ export default function Home() {
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-heading text-4xl font-bold text-white md:text-5xl">
-            Ready to Find Your Spanish Paradise?
+            {t('cta.title')}
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
-            Contact our team of local experts today to start your property journey in Inland Andalucia.
+            {t('cta.subtitle')}
           </p>
           <div className="mt-10">
             <Link
               href="/contact"
               className="inline-flex items-center justify-center rounded-md bg-white px-8 py-1 min-h-[50px] font-medium text-primary-800 shadow-md hover:bg-secondary-500 hover:text-white transition-colors"
             >
-              Get in Touch
+              {t('cta.button')}
             </Link>
           </div>
         </div>

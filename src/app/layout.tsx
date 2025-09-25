@@ -1,8 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Open_Sans, Playfair_Display,Work_Sans,DM_Sans  } from 'next/font/google';
-import { MainLayout } from '@/components/layout';
-import ThemeSwitcher from '@/components/ThemeSwitcher';
 
 // Font configuration
 const openSans = Open_Sans({
@@ -34,6 +32,8 @@ export const metadata: Metadata = {
   description: 'Discover authentic Spanish countryside living with our exclusive selection of properties across Andalucia. Find your dream home in inland Spain.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,9 +42,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${workSans.variable} ${playfairDisplay.variable}`}>
       <body className={`${workSans.className} min-h-screen`}>
-        <MainLayout>{children}</MainLayout>
-        <ThemeSwitcher />
+        {children}
       </body>
     </html>
   );
 }
+
+
+

@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "properties": "Immobilien",
+    "townGuide": "Stadtführer",
+    "buyersGuide": "Käuferleitfaden",
+    "about": "Über Uns",
+    "contact": "Kontakt",
+    "links": {
+      "advancedSearch": "Erweiterte Suche",
+      "searchByMap": "Suche auf Karte",
+      "exclusives": "Exklusiv",
+      "viewingTrip": "Besichtigungsreise",
+      "cordoba": "Provinz Córdoba",
+      "granada": "Provinz Granada",
+      "jaen": "Provinz Jaén",
+      "malaga": "Provinz Málaga",
+      "seville": "Provinz Sevilla",
+      "buyingProperty": "Immobilienkauf",
+      "buyingProcess": "Kaufprozess",
+      "propertyTaxes": "Immobiliensteuern",
+      "faqs": "FAQs",
+      "unpaidTaxes": "Offene Steuern",
+      "mortgage": "Hypothek",
+      "location": "Lage",
+      "weather": "Wetter",
+      "airports": "Flughäfen",
+      "ourOffices": "Unsere Büros",
+      "newsletter": "Newsletter",
+      "usefulLinks": "Nützliche Links",
+      "agentsPrivateArea": "Privatbereich für Makler",
+      "blog": "Blog"
+    }
+  }
+}
+
+

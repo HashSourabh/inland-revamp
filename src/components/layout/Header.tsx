@@ -3,13 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PhoneIcon, EnvelopeIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { PhoneIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 import MobileMenu from './MobileMenu';
 import Navigation from './Navigation';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const tCta = useTranslations('cta');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,12 +39,7 @@ export default function Header() {
             </a>
           </div>
           <div className="flex items-center space-x-3">
-            <button className="flex items-center text-sm text-white hover:text-primary-200 transition-colors">
-              <GlobeAltIcon className="mr-1 h-4 w-4" />
-              <span>English</span>
-            </button>
-            <span className="text-primary-300">|</span>
-            <button className="text-sm text-white hover:text-primary-200 transition-colors">Español</button>
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
@@ -83,10 +81,10 @@ export default function Header() {
           {/* CTA Button */}
           <div className="hidden md:block">
             <Link
-              href="/contact"
+              href="/sell-with-us"
               className="rounded-md bg-secondary-500 px-4 py-2 min-h-[38px] inline-flex font-medium text-white shadow-md hover:bg-primary-600 transition-colors"
             >
-             Sell With Us
+             {tCta('sellWithUs')}
             </Link>
           </div>
         </div>

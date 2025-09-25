@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "home": "Home",
+    "properties": "Property Search",
+    "townGuide": "Town Guide",
+    "buyersGuide": "Buyer's Guide",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "links": {
+      "advancedSearch": "Advanced Search",
+      "searchByMap": "Search by Google Map",
+      "exclusives": "Exclusives",
+      "viewingTrip": "Viewing Trip",
+      "cordoba": "Cordoba Province",
+      "granada": "Granada Province",
+      "jaen": "Jaen Province",
+      "malaga": "Malaga Province",
+      "seville": "Seville Province",
+      "buyingProperty": "Buying a Property",
+      "buyingProcess": "Buying Process",
+      "propertyTaxes": "Property Taxes",
+      "faqs": "FAQs",
+      "unpaidTaxes": "Unpaid Taxes",
+      "mortgage": "Mortgage",
+      "location": "Location",
+      "weather": "Weather",
+      "airports": "Airports",
+      "ourOffices": "Our Offices",
+      "newsletter": "Newsletter",
+      "usefulLinks": "Useful Links",
+      "agentsPrivateArea": "Agents Private Area",
+      "blog": "Blog"
+    }
+  }
+}
+
+

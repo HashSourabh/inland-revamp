@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { BuyersGuideNav } from '@/components/buyers-guide/BuyersGuideNav';
 
 export const metadata: Metadata = {
   title: 'Spanish Property Taxes Guide | Inland Andalucia',
@@ -8,7 +9,10 @@ export const metadata: Metadata = {
 
 export default function PropertyTaxesPage() {
   return (
-    <article className="space-y-8">
+    <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
+      {/* Left: Main Content */}
+      <section className="md:col-span-3 bg-white rounded-xl p-8 border border-black/10">
+        <article className="space-y-8">
       <header>
         <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb3">
           Property Taxes in Spain
@@ -127,6 +131,11 @@ export default function PropertyTaxesPage() {
           </a>
         </div>
       </div>
-    </article>
+        </article>
+      </section>
+      <div>
+        <BuyersGuideNav />
+      </div>
+    </div>
   );
 } 

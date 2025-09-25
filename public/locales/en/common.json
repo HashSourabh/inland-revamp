@@ -1,0 +1,288 @@
+{
+  "navigation": {
+    "home": "Home",
+    "properties": "Properties",
+    "about": "About",
+    "buyersGuide": "Buyer's Guide",
+    "townGuide": "Town Guide",
+    "contact": "Contact"
+  },
+  "cta": {
+    "sellWithUs": "Sell With Us"
+  },
+  "home": {
+    "exclusive": {
+      "title": "Exclusive Properties",
+      "subtitle": "Special offers and recent price reductions on selected properties",
+      "none": "No exclusive properties available at the moment.",
+      "moreTitle": "Looking for more exclusive offers?",
+      "moreSubtitle": "We have additional properties with special price reductions",
+      "viewAllExclusive": "View All Exclusive Properties"
+    },
+    "featured": {
+      "title": "Featured Properties",
+      "loading": "Loading our featured selection...",
+      "subtitle": "Explore our handpicked selection of stunning properties across Inland Andalucia",
+      "viewAllLink": "View all properties →",
+      "viewAllButton": "View All Properties"
+    },
+    "cta": {
+      "title": "Ready to Find Your Spanish Paradise?",
+      "subtitle": "Contact our team of local experts today to start your property journey in Inland Andalucia.",
+      "button": "Get in Touch"
+    },
+    "filters": {
+      "region": "Regions",
+      "property_type": "Property Type",
+      "price_range": "Price Range",
+      "search": "Search",
+      "advance_search": "Advanced Search",
+      "min_bed": "Min. Bedrooms",
+      "min_bathrooms": "Min. Bathrooms",
+      "min_price": "Min. Price",
+      "max_price": "Max. Price",
+      "button": "Search Properties"
+    }
+  },
+  "hero": {
+    "title": "Discover Authentic Spanish Countryside Living",
+    "subtitle": "Find your dream home in inland Andalucia with our exclusive selection of rural properties",
+    "searchButton": "Search Properties",
+    "learnMore": "Learn More"
+  },
+  "properties": {
+    "title": "Featured Properties",
+    "viewAll": "View All Properties",
+    "price": "Price",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "area": "Area",
+    "location": "Location",
+    "viewDetails": "View Details",
+    "contactAgent": "Contact Agent",
+    "loading_properties": "Loading Properties...",
+    "properties_for_sale": "Properties for Sale",
+    "sub_text": "Discover our exclusive selection of properties across inland Andalucia",
+    "details": {
+      "reserve_viewing": "Reserve For Viewing",
+      "watch_video": "Watch Video",
+      "print_preview": "Print Preview",
+      "email": "Email",
+      "contact_us": "Contact Us",
+      "description": "Description"
+    }
+  },
+  "banner": {
+    "title": "Find Your Dream Home in Inland Andalucia",
+    "button": "View Properties",
+    "contact_us": "Contact Us"
+  },
+  "about": {
+    "title": "About Inland Andalucia",
+    "description": "We specialize in helping you find the perfect rural property in the beautiful countryside of Andalucia, Spain."
+  },
+  "promo": {
+    "exclusive": {
+      "title": "Exclusive Properties",
+      "short_description": "CLICK here for latest listings with more fantastic price reductions"
+    },
+    "sell_your_house": {
+      "title": "Franchise",
+      "short_description": "Are you looking to sell your house?"
+    },
+    "franchise": {
+      "title": "Franchise",
+      "short_description": "Start your journey as a franchise owner with a trusted brand. Low risk, high support, and unlimited growth potential."
+    },
+    "safe_hands": {
+      "title": "You're in Safe Hands",
+      "short_description": "Trusted by thousands, we prioritize your safety and satisfaction at every step."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "send": "Send Message",
+    "address": "Address",
+    "phoneNumber": "Phone Number"
+  },
+  "advance_search": {
+    "title": "Andalucía Property",
+    "text": "At Inland Andalucia we have country, rural, inland property ranging from fincas, villas, townhouses to apartments. We specialise in the areas of Antequera, Cordoba, Granada, Jaen, Malaga and Sevilla where, with us you will find your ideal inland property. If you do not find what you are looking for please contact us, as we probably have it.",
+    "search_ref": "Property search by reference",
+    "search_advance": "Property search (advanced)",
+    "g_map": "Search Properties by Map",
+    "search": "Search"
+  },
+  "viewing_trip": {
+    "title": "Viewing Trip",
+    "description": "Our personalised service on your property inspection visit includes...",
+    "points": {
+      "point_1": "Prior to arriving, work with our professional team selecting a portfolio of properties to view. This will include having your specific questions answered by email and or telephone.",
+      "point_2": "Our team will take you out and about to view your selected properties and surrounding areas.",
+      "point_3": "We will provide you with a comprehensive buying guide. When you have found the perfect property we will assist you with the full process during and after your purchase. We are not just a real estate agency, we are your one stop shopping agency.",
+      "point_4": "Speak to your property Specialist with regards to places you can stay while here, they can send you details of local B&B´s and hotels and you can then choose which is the right one for you."
+    }
+  },
+  "town-guide": {
+    "description": "Inland Andalucia is collaborating with LuvInland.com to give you the best level of Information about Andalucia and its LIFESTYLE. For Each town we have properties for sale, click on the town name to get all the information you need. Luvinland will return you to us to view the properties for sale in the town selected.",
+    "cordoba": {
+      "title": "Cordoba",
+      "section1": {
+        "heading": "About Cordoba",
+        "text": "The \"Jewish Quarter\" or old town, with its small plazas, patios full of colourful flowers and typical bars where tapas are enjoyed, is full of amazing architecture. The Mezquita (or mosque) attracts thousands of visitors each year who flock to admire the magnificent workmanship - it took two centuries to complete and is an amazing jungle of columns, recesses and arches with a church at its centre. Outside the mosque are the beautiful gardens, \"the Patio de los Naranjos\" and the \"Calleja de la Flores\"."
+      },
+      "section2": {
+        "heading": "Culture & Heritage",
+        "text": "Across the river from the Mezquita is the Alcázar (or fortress) which was built by the Christians in 1328 as a defence against the Muslims. It offers a lovely respite from the summer heat as you wander through the tree shaded gardens and courtyards."
+      },
+      "section3": {
+        "heading": "Geography & Agriculture",
+        "text": "As the city is divided, so is the province: The Sierra Morena in the north with its rugged pine and oak covered hills with a few steep villages set into them. The Campiña in the south which are the farmlands covered in wheat, vine and olive trees. The area is famous for its dry white wines, similar to sherry, which are produced from the Pedro Ximenez grape and olive oil, which is the other main produce from the region."
+      },
+      "section4": {
+        "heading": "Local Cuisine",
+        "text": "This is why olive oil is an important ingredient of many typical dishes, Gazpacho and Salmorejo are cold soups made mainly of mashed vegetables and olive oil and are delicious and refreshing in the heat of the summer. Jamon, which is cured ham, Salchichon, a typical sausage, Caña de Lomo and Morcilla, black pudding are also widely enjoyed in the province. Some typical desserts are Alfajores, made of almonds and honey and Pestiños, which is fried in oil and then covered with honey."
+      },
+      "section5": {
+        "heading": "Festivals & Events",
+        "text": "Cordoba enjoys its fiestas and festivals the same as every other town in Spain, and Semana Santa, or Easter week is one of the most important. There are no fewer than 32 processions in total with beautifully decorated and ornate pictures and figures of Saints accompanied by the Nazarenos (men dressed in typical gowns with hoods that cover all the face except the eyes). These processions pass through the town followed by crowds of people. In May there are three festivals; from 5th to 12th there is the Festival of the \"Patios Cordobeses\", a contest for the most beautifully decorated courtyard; the Cruces de Mayo is when the whole town is decorated with crosses and thousands of flowers; the last week in May is when everyone lets their hair down at the Feria de Cordoba - flamenco music and dance are enjoyed and the whole town revels in the festivities."
+      }
+    },
+    "granada": {
+      "title": "Granada",
+      "section1": {
+        "heading": "About Granada",
+        "text": "GRANADA Province is situated in the eastern part of the autonomous region of Andalucia, is bordered by the provinces of Málaga, Córdoba, Jaén, Albacete, Murcia, Almería and stretches down to the Mediterranean sea. It's total area is 12,635km2 and contains 168 municipalities."
+      },
+      "section2": {
+        "heading": "Natural Beauty",
+        "text": "Granada province boasts the tallest mountain in continental Spain, Mulhacén, at 3,481 metres as well as the Sierra Nevada mountain range (the most southerly ski resort in Europe). During the winter months, tourists flock to the Sierra Nevada for the skiing and mountain climbing, but Granada city is popular the year round for its Moorish architecture and the famous Alhambra, with its palaces and gardens. Not forgetting the cave dwellings dotted about the Sacromonte hill to the north of the city which was once the home of Granada's large gypsy community."
+      },
+      "section3": {
+        "heading": "Cultural Heritage",
+        "text": "The hill facing the Alhambra is called the Albaicin and if you wind your way up through the narrow streets, past all the whitewashed houses, you will reach the highest point with amazing views of the Alhambra and the many differing landscapes of Granada province."
+      },
+      "section4": {
+        "heading": "Outdoor Activities",
+        "text": "The province offers numerous opportunities for outdoor activities. The Rio Genil is famous for its trout fishing, and the Sierra Nevada provides excellent hiking and climbing opportunities. The Alpujarras region is particularly popular for walking holidays, with its network of ancient paths connecting the white villages."
+      }
+    },
+    "jaen": {
+      "title": "Jaen",
+      "section1": {
+        "heading": "About Jaen",
+        "text": "Jaén province is known as the world's capital of olive oil, with endless olive groves covering its rolling hills and valleys. This beautiful inland region is home to Renaissance cities, medieval castles, and natural parks.The province offers an authentic Spanish lifestyle away from the coastal tourist areas, with a rich cultural heritage and stunning natural landscapes such as the Sierra de Cazorla, Segura y Las Villas Natural Park."
+      },
+      "section2": {
+        "heading": "Olive Oil Heritage",
+        "text": "Jaén produces more olive oil than any other region in the world. The vast sea of olive trees covering the landscape is not just economically important but also shapes the culture and gastronomy of the area."
+      },
+      "section3": {
+        "heading": "Renaissance Heritage",
+        "text": "The twin cities of Úbeda and Baeza are UNESCO World Heritage sites, known for their remarkable Renaissance architecture. These historic centers showcase palaces, churches, and plazas built during Spain's Golden Age."
+      },
+      "section4": {
+        "heading": "Natural Parks",
+        "text": "The Sierra de Cazorla, Segura y Las Villas Natural Park is Spain's largest protected area, offering breathtaking mountain scenery, dense forests, rivers, and diverse wildlife including deer and wild boar."
+      },
+      "section5": {
+        "heading": "Gastronomy",
+        "text": "Jaén's cuisine is centered around olive oil, with traditional dishes like pipirrana (vegetable salad), andrajos (stew with flat noodles), and ochíos (aniseed bread) offering authentic flavors of inland Andalucia."
+      }
+    },
+    "malaga": {
+      "title": "Malaga",
+      "section1": {
+        "heading": "About Malaga",
+        "text": "Málaga Province is located in the southern part of Andalucia, along the Mediterranean coast. It's known for its beautiful beaches, stunning mountain ranges, and rich cultural heritage.<br />The province offers a perfect blend of coastal and inland living, with the Sierra de las Nieves Natural Park and the famous El Torcal de Antequera providing spectacular natural landscapes."
+      },
+      "section2": {
+        "heading": "Natural Beauty",
+        "text": "The province boasts diverse natural landscapes, from the dramatic limestone formations of El Torcal de Antequera to the pristine beaches of the Costa del Sol. The Sierra de las Nieves Natural Park is a UNESCO Biosphere Reserve."
+      },
+      "section3": {
+        "heading": "Cultural Heritage",
+        "text": "Málaga's cultural heritage spans thousands of years. The city of Málaga features the impressive Alcazaba fortress and Roman Theatre. Antequera is known for its dolmens, prehistoric burial mounds that are UNESCO World Heritage sites.."
+      },
+      "section4": {
+        "heading": "Local Cuisine",
+        "text": "Málaga's cuisine reflects its coastal and inland influences. Fresh seafood, particularly fried fish (pescaíto frito), is a local specialty. The province is also known for its sweet wines, particularly Málaga wine."
+      },
+      "section5": {
+        "heading": "Festivals & Events",
+        "text": "The province hosts numerous festivals throughout the year. The Málaga Film Festival attracts international attention, while the Feria de Málaga in August is one of the biggest celebrations in Andalucia."
+      }
+    },
+    "sevilla": {
+      "title": "Sevilla",
+      "section1": {
+        "heading": "About Sevilla",
+        "text": "Sevilla province is a treasure trove of history, culture, and natural beauty. While famous for its capital city with iconic landmarks like the Giralda and Plaza de España, the inland areas offer a different, more authentic experience.<br />The province features picturesque white towns, rolling olive groves, and historical sites from various civilizations that have called this region home, from the Romans and Moors to Renaissance and Baroque influences."
+      },
+      "section2": {
+        "heading": "Historic Towns",
+        "text": "Inland Sevilla is home to charming historic towns like Osuna, Écija, Carmona, and Marchena, each with unique architecture and rich heritage. Osuna's Renaissance palaces and Écija's Baroque church towers have earned it the nickname \"City of Towers.\""
+      },
+      "section3": {
+        "heading": "Natural Landscapes",
+        "text": "The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations, to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves."
+      },
+      "section4": {
+        "heading": "Culinary Traditions",
+        "text": "Sevillian cuisine is a delight for food lovers, featuring specialties like gazpacho, spinach with chickpeas, and Iberian ham. The inland areas are particularly renowned for olive oils, artisanal cheeses, and traditional sweets."
+      },
+      "section5": {
+        "heading": "Festivals & Traditions",
+        "text": "Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals."
+      }
+    }
+  },
+  "footer": {
+    "about_title": "Inland Andalucia",
+    "about_text": "Specialists in inland properties across Andalucia, Spain. Offering personalized service to buyers and sellers since 2001.",
+    "quick_links_title": "Quick Links",
+    "quick_links": {
+      "properties": "Properties",
+      "town_guide": "Town Guide",
+      "buyers_guide": "Buyer's Guide",
+      "blog": "Blog",
+      "about_us": "About Us",
+      "contact": "Contact"
+    },
+    "contact_title": "Contact Us",
+    "contact_address": "Calle Andalucia 12, 29550 Ardales, Málaga, Spain",
+    "contact_phone": "+34 952 741 525",
+    "contact_email": "info@inlandandalucia.com",
+    "newsletter_title": "Newsletter",
+    "newsletter_text": "Subscribe to our newsletter for the latest property updates and market insights.",
+    "newsletter_placeholder": "Your email",
+    "newsletter_subscribe": "Subscribe",
+    "copyright": "© 2024 Inland Andalucía. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "back": "Back",
+    "continue": "Continue",
+    "submit": "Submit",
+    "reset": "Reset"
+  }
+}

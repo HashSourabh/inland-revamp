@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "properties": "Propriétés",
+    "townGuide": "Guide des Villes",
+    "buyersGuide": "Guide de l'Acheteur",
+    "about": "À Propos",
+    "contact": "Contact",
+    "links": {
+      "advancedSearch": "Recherche Avancée",
+      "searchByMap": "Recherche par Carte",
+      "exclusives": "Exclusivités",
+      "viewingTrip": "Voyage de Visite",
+      "cordoba": "Province de Cordoue",
+      "granada": "Province de Grenade",
+      "jaen": "Province de Jaén",
+      "malaga": "Province de Malaga",
+      "seville": "Province de Séville",
+      "buyingProperty": "Acheter une Propriété",
+      "buyingProcess": "Processus d'Achat",
+      "propertyTaxes": "Taxes Foncières",
+      "faqs": "FAQ",
+      "unpaidTaxes": "Taxes Impayées",
+      "mortgage": "Hypothèque",
+      "location": "Localisation",
+      "weather": "Météo",
+      "airports": "Aéroports",
+      "ourOffices": "Nos Bureaux",
+      "newsletter": "Newsletter",
+      "usefulLinks": "Liens Utiles",
+      "agentsPrivateArea": "Espace Privé des Agents",
+      "blog": "Blog"
+    }
+  }
+}
+
+

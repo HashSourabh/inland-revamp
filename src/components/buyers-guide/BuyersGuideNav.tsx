@@ -15,6 +15,9 @@ const navItems = [
 
 export function BuyersGuideNav() {
   const pathname = usePathname();
+  
+  // Remove locale prefix from pathname for comparison
+  const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '') || '/';
 
   return (
     <nav className="sticky top-[120px] rounded-xl border border-black/10 bg-white mb-6 p-3 shadow-sm dark:border-slate-700 dark:bg-slate-800">
@@ -25,7 +28,7 @@ export function BuyersGuideNav() {
       </div>
       <ul className="space-y-1">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive = pathWithoutLocale === item.href;
           return (
             <li key={item.href}>
               <Link

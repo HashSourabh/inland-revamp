@@ -7,6 +7,7 @@ import PropertyCard from '@/components/properties/PropertyCard';
 import LayoutSwitcher from '@/components/properties/LayoutSwitcher';
 import AreaFilter from '@/components/properties/AreaFilter';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
+import { useTranslations } from 'next-intl';
 
 const transformPropertyForCard = (property: any) => {
   const propertyType =
@@ -42,7 +43,7 @@ const transformPropertyForCard = (property: any) => {
     price: property.price ?? property.Public_Price ?? 0,
     originalPrice: property.originalPrice ?? property.Original_Price ?? null,
     currency: "EUR",
-    shortDescription: property.description || property.Property_Notes || "",
+    shortDescription: property.short_description || property.Property_Notes || "",
     location: {
       province: property.Region_Name || property.province || (addressParts.length > 1 ? addressParts[addressParts.length - 1] : ''),
       town: property.Area_Name || property.town || addressParts[0] || '',
@@ -109,6 +110,7 @@ export default function PropertiesLayout({
   total: initialTotal = 0,
   totalPages: initialTotalPages = 1,
 }: PropertiesLayoutProps) {
+  const t = useTranslations('properties');
   const searchParams = useSearchParams();
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
@@ -393,7 +395,7 @@ export default function PropertiesLayout({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <header className="mb-8">
           <h1 className="font-heading text-3xl font-bold text-primary-600">
-            Properties for Sale
+            {t('properties_for_sale')}
           </h1>
           <p className="mt-2 text-neutral-600 text-xl">Loading properties...</p>
         </header>
@@ -469,10 +471,10 @@ export default function PropertiesLayout({
         {/* Header */}
         <header className="mb-8">
           <h1 className="font-heading text-3xl font-bold text-primary-600">
-            Properties for Sale
+             {t('properties_for_sale')}
           </h1>
           <p className="mt-2 text-neutral-600 text-xl">
-            Discover our exclusive selection of properties across inland Andalucia
+          {t('sub_text')}
           </p>
         </header>
 

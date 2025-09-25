@@ -10,8 +10,10 @@ import Granada2 from '@/assets/images/granada/Natural.jpg'
 import Granada4 from '@/assets/images/granada/culture-heritage.jpg'
 import Granada5 from '@/assets/images/granada/sierra-nevada-espagne.webp'
 import PageOverlayLoader from '@/components/loader/PageOverlayLoader'
+import { useTranslations } from 'next-intl'
 
 export default function GranadaPage() {
+  const t=useTranslations('town-guide')
   const [regionName, setRegionName] = useState<string>('')
   const [regionId, setRegionId] = useState<number | null>(null)
   const [areas, setAreas] = useState<Area[]>([])
@@ -76,16 +78,14 @@ export default function GranadaPage() {
           <Image src={Granada} alt={`${displayRegionName} Mezquita`} fill className="object-cover mt-0 opacity-45" priority />
           <div className="absolute top-0 left-0 w-full h-full flex items-center">
             <div className="mx-auto max-w-5xl px-5 text-center">
-              <h1 className="font-heading text-5xl font-bold text-white mb-2"> {displayRegionName}</h1>
+              <h1 className="font-heading text-5xl font-bold text-white mb-2">  {t('granada.title')}</h1>
             </div>
           </div>
         </div>
         <div className="mx-auto max-w-7xl px-5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
           <div className="col-span-3">
             <p className="text-base mb-8 text-neutral-700">
-              Inland Andalucia is collaborating with LuvInland.com to give you the best level of Information about Andalucia and its LIFESTYLE.
-              For Each town we have properties for sale, click on the town name to get all the information you need.
-              Luvinland will return you to us to view the properties for sale in the town selected.
+               {t('description')}
             </p>
             {loading ? (
               <div className="flex justify-center items-center py-10">
@@ -120,11 +120,9 @@ export default function GranadaPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">About {displayRegionName}</h2>
+                    <h2 className="text-3xl font-semibold text-primary-900 mb-4"> {t('granada.section1.heading')}</h2>
                     <p className="text-base text-neutral-700">
-                      GRANADA Province is situated in the eastern part of the autonomous region of Andalucia, is bordered by the provinces of Málaga,
-                      Córdoba, Jaén, Albacete, Murcia, Almería and stretches down to the Mediterranean sea. It's total area is 12,635km2 and contains
-                      168 municipalities.
+                      {t('granada.section1.text')}
                     </p>
                   </div>
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
@@ -150,13 +148,9 @@ export default function GranadaPage() {
                   </div>
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">Natural Beauty</h2>
+                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('granada.section2.heading')}</h2>
                     <p className="text-base text-neutral-700">
-                      Granada province boasts the tallest mountain in continental Spain, Mulhacén, at 3,481 metres as well as the Sierra Nevada mountain
-                      range (the most southerly ski resort in Europe). During the winter months, tourists flock to the Sierra Nevada for the skiing and
-                      mountain climbing, but Granada city is popular the year round for its Moorish architecture and the famous Alhambra, with its palaces
-                      and gardens. Not forgetting the cave dwellings dotted about the Sacromonte hill to the north of the city which was once the home of
-                      Granada's large gypsy community.
+                     {t('granada.section2.text')}
                     </p>
                   </div>
                 </div>
@@ -166,10 +160,9 @@ export default function GranadaPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">Cultural Heritage</h2>
+                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('granada.section3.heading')}</h2>
                     <p className="text-base text-neutral-700">
-                      The hill facing the Alhambra is called the Albaicin and if you wind your way up through the narrow streets, past all the whitewashed
-                      houses, you will reach the highest point with amazing views of the Alhambra and the many differing landscapes of Granada province.
+                      {t('granada.section3.text')}
                     </p>
                   </div>
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
@@ -195,11 +188,9 @@ export default function GranadaPage() {
                   </div>
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">Outdoor Activities</h2>
+                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('granada.section4.heading')}</h2>
                     <p className="text-base text-neutral-700">
-                      The province offers numerous opportunities for outdoor activities. The Rio Genil is famous for its trout fishing, and the Sierra Nevada
-                      provides excellent hiking and climbing opportunities. The Alpujarras region is particularly popular for walking holidays, with its
-                      network of ancient paths connecting the white villages.
+                      {t('granada.section4.text')}
                     </p>
                   </div>
                 </div>

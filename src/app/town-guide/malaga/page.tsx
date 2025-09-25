@@ -11,8 +11,10 @@ import Malaga5 from '@/assets/images/malaga/festivals.jpg';
 import { useEffect, useState } from 'react';
 import { Area, fetchAreas, fetchRegions } from '@/utils/api';
 import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
+import { useTranslations } from 'next-intl';
 
 export default function MalagaPage() {
+  const t=useTranslations('town-guide')
   const [regionName, setRegionName] = useState<string>('')
   const [regionId, setRegionId] = useState<number | null>(null)
   const [areas, setAreas] = useState<Area[]>([])
@@ -75,7 +77,7 @@ export default function MalagaPage() {
         <Image src={Malaga} alt={`${displayRegionName} Mezquita`} fill className="object-cover mt-0 opacity-45" priority />
         <div className="absolute top-0 left-0 w-full h-full flex items-center">
           <div className="mx-auto max-w-5xl px-5 text-center">
-            <h1 className="font-heading text-5xl font-bold text-white mb-2">{displayRegionName}</h1>
+            <h1 className="font-heading text-5xl font-bold text-white mb-2">{t('malaga.title')}</h1>
           </div>
         </div>
       </div>
@@ -84,9 +86,7 @@ export default function MalagaPage() {
       <div className="mx-auto max-w-7xl px-5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
         <div className="col-span-3">
           <p className="text-base mb-8 text-neutral-700">
-            Inland Andalucia is collaborating with LuvInland.com to give you the best level of Information about Andalucia and its LIFESTYLE.
-            For Each town we have properties for sale, click on the town name to get all the information you need.
-            Luvinland will return you to us to view the properties for sale in the town selected.
+            {t('description')}
           </p>
           {/* Towns Grid */}
           {loading ? (
@@ -122,9 +122,8 @@ export default function MalagaPage() {
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">About {displayRegionName}</h2>
-                  <p className="text-base text-neutral-700">Málaga Province is located in the southern part of Andalucia, along the Mediterranean coast. It's known for its beautiful beaches, stunning mountain ranges, and rich cultural heritage.</p>
-                  <p className="text-base text-neutral-700">The province offers a perfect blend of coastal and inland living, with the Sierra de las Nieves Natural Park and the famous El Torcal de Antequera providing spectacular natural landscapes.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('malaga.section1.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('malaga.section1.text')}.</p>
                 </div>
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
@@ -147,16 +146,16 @@ export default function MalagaPage() {
                   />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Natural Beauty</h2>
-                  <p className="text-base text-neutral-700">The province boasts diverse natural landscapes, from the dramatic limestone formations of El Torcal de Antequera to the pristine beaches of the Costa del Sol. The Sierra de las Nieves Natural Park is a UNESCO Biosphere Reserve.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('malaga.section2.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('malaga.section2.text')}</p>
                 </div>
               </div>
             </section>
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Cultural Heritage</h2>
-                  <p className="text-base text-neutral-700">Málaga's cultural heritage spans thousands of years. The city of Málaga features the impressive Alcazaba fortress and Roman Theatre. Antequera is known for its dolmens, prehistoric burial mounds that are UNESCO World Heritage sites.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('malaga.section3.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('malaga.section3.text')}</p>
                 </div>
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
@@ -178,16 +177,16 @@ export default function MalagaPage() {
                   />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Local Cuisine</h2>
-                  <p className="text-base text-neutral-700">Málaga's cuisine reflects its coastal and inland influences. Fresh seafood, particularly fried fish (pescaíto frito), is a local specialty. The province is also known for its sweet wines, particularly Málaga wine.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('malaga.section4.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('malaga.section4.text')}</p>
                 </div>
               </div>
             </section>
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Festivals & Events</h2>
-                  <p className="text-base text-neutral-700">The province hosts numerous festivals throughout the year. The Málaga Film Festival attracts international attention, while the Feria de Málaga in August is one of the biggest celebrations in Andalucia.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('malaga.section5.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('malaga.section5.text')}</p>
                 </div>
                 <div className="relative h-[300px] overflow-hidden">
                   <Image

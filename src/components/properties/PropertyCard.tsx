@@ -36,6 +36,7 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property, card = 'grid', featured = false }: PropertyCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  console.log(property, card)
 
   // Find the featured image or fallback to the first image
   const mainImage = property.images.find(img => img.isFeatured) || property.images[0];
@@ -58,8 +59,8 @@ export default function PropertyCard({ property, card = 'grid', featured = false
   return (
     <div
       className={`group overflow-hidden rounded-property bg-white transition-all duration-300 ${featured
-          ? 'shadow-hover-card'
-          : 'shadow-property-card hover:shadow-hover-card'
+        ? 'shadow-hover-card'
+        : 'shadow-property-card hover:shadow-hover-card'
         } 
       ${card === 'list' ? 'grid grid-cols-9' : ''}`}
     >
@@ -136,6 +137,15 @@ export default function PropertyCard({ property, card = 'grid', featured = false
             )}
           </div>
         </div>
+        {/* {card === 'list' && property.shortDescription && (
+          <div className="border-t inline-flex gap-3 border-neutral-100 mt-4 pt-4">
+            <h3 className="text-lg font-semibold text-neutral-800 mb-2">Description</h3>
+            <p className="text-sm text-neutral-600">
+              {property.shortDescription}
+            </p>
+          </div>
+        )} */}
+
 
         {/* Description - only shown if featured */}
         {featured && property.shortDescription && (

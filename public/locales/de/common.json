@@ -1,0 +1,288 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "properties": "Immobilien",
+    "about": "Über uns",
+    "buyersGuide": "Käuferleitfaden",
+    "townGuide": "Stadtführer",
+    "contact": "Kontakt"
+  },
+  "cta": {
+    "sellWithUs": "Verkaufen Sie mit uns"
+  },
+  "home": {
+    "exclusive": {
+      "title": "Exklusive Immobilien",
+      "subtitle": "Sonderangebote und kürzliche Preissenkungen bei ausgewählten Immobilien",
+      "none": "Zurzeit sind keine exklusiven Immobilien verfügbar.",
+      "moreTitle": "Suchen Sie nach weiteren exklusiven Angeboten?",
+      "moreSubtitle": "Wir haben weitere Immobilien mit speziellen Preisnachlässen",
+      "viewAllExclusive": "Alle exklusiven Immobilien ansehen"
+    },
+    "featured": {
+      "title": "Empfohlene Immobilien",
+      "loading": "Unsere Auswahl wird geladen...",
+      "subtitle": "Entdecken Sie unsere Auswahl an Immobilien in Andalusien",
+      "viewAllLink": "Alle Immobilien anzeigen →",
+      "viewAllButton": "Alle Immobilien anzeigen"
+    },
+    "cta": {
+      "title": "Bereit, Ihr spanisches Paradies zu finden?",
+      "subtitle": "Kontaktieren Sie unser Team lokaler Experten, um Ihre Immobilienreise in Andalusien zu beginnen.",
+      "button": "Kontakt aufnehmen"
+    },
+    "filters": {
+      "region": "Regio's",
+      "property_type": "Soort woning",
+      "price_range": "Prijsklasse",
+      "search": "Zoeken",
+      "advance_search": "Uitgebreid zoeken",
+      "min_bed": "Min. slaapkamers",
+      "min_bathrooms": "Min. badkamers",
+      "min_price": "Minimumprijs",
+      "max_price": "Maximumprijs",
+      "button": "Zoek woningen"
+    }
+  },
+  "hero": {
+    "title": "Entdecken Sie das Authentische Spanische Landleben",
+    "subtitle": "Finden Sie Ihr Traumhaus im Inland von Andalusien mit unserer exklusiven Auswahl ländlicher Immobilien",
+    "searchButton": "Immobilien Suchen",
+    "learnMore": "Mehr Erfahren"
+  },
+  "advance_search": {
+    "title": "Immobilien in Andalusien",
+    "text": "Bei Inland Andalucia bieten wir ländliche und Inland-Immobilien an, von Fincas, Villen und Stadthäusern bis hin zu Apartments. Wir sind spezialisiert auf die Regionen Antequera, Córdoba, Granada, Jaén, Málaga und Sevilla, wo Sie mit uns Ihre ideale Inland-Immobilie finden werden. Wenn Sie nicht finden, was Sie suchen, kontaktieren Sie uns bitte – wir haben es wahrscheinlich.",
+    "search_ref": "Immobiliensuche nach Referenz",
+    "search_advance": "Immobiliensuche (erweitert)",
+    "g_map": "Immobilien auf der Karte suchen",
+    "search": "Zoekopdracht"
+  },
+  "properties": {
+    "title": "Ausgewählte Immobilien",
+    "viewAll": "Alle Immobilien Anzeigen",
+    "price": "Preis",
+    "bedrooms": "Schlafzimmer",
+    "bathrooms": "Badezimmer",
+    "area": "Fläche",
+    "location": "Standort",
+    "viewDetails": "Details Anzeigen",
+    "contactAgent": "Makler Kontaktieren",
+    "loading_properties": "Eigenschappen laden...",
+    "properties_for_sale": "Vastgoed te koop",
+    "sub_text": "Ontdek onze exclusieve selectie van eigendommen in het binnenland van Andalusië",
+    "details": {
+      "reserve_viewing": "Bezichtiging reserveren",
+      "watch_video": "Bekijk video",
+      "print_preview": "Afdrukvoorbeeld",
+      "email": "E-mail",
+      "contact_us": "Neem contact met ons op",
+      "description": "Beschrijving"
+    }
+  },
+  "promo": {
+    "exclusive": {
+      "title": "Exklusive Immobilien",
+      "short_description": "KLICKEN Sie hier für die neuesten Angebote mit noch mehr fantastischen Preisnachlässen"
+    },
+    "sell_your_house": {
+      "title": "Franchise",
+      "short_description": "Möchten Sie Ihr Haus verkaufen?"
+    },
+    "franchise": {
+      "title": "Franchise",
+      "short_description": "Starten Sie Ihre Reise als Franchise-Nehmer mit einer vertrauenswürdigen Marke. Geringes Risiko, starke Unterstützung und unbegrenztes Wachstumspotenzial."
+    },
+    "safe_hands": {
+      "title": "Sie Sind in Guten Händen",
+      "short_description": "Von Tausenden vertraut, legen wir bei jedem Schritt Wert auf Ihre Sicherheit und Zufriedenheit."
+    }
+  },
+  "banner": {
+    "title": "Trouvez la maison de vos rêves en Andalousie intérieure",
+    "button": "Afficher les propriétés",
+    "contact_us": "Contactez-nous"
+  },
+  "about": {
+    "title": "Über Inland Andalucía",
+    "description": "Wir spezialisieren uns darauf, Ihnen zu helfen, die perfekte ländliche Immobilie in der wunderschönen Landschaft von Andalusien, Spanien, zu finden."
+  },
+  "contact": {
+    "title": "Kontaktieren Sie uns",
+    "name": "Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "message": "Nachricht",
+    "send": "Nachricht Senden",
+    "address": "Adresse",
+    "phoneNumber": "Telefonnummer"
+  },
+  "viewing_trip": {
+    "title": "Reis bekijken",
+    "description": "Onze gepersonaliseerde service tijdens uw vastgoedinspectiebezoek omvat...",
+    "points": {
+      "point_1": "Werk vóór uw aankomst samen met ons professionele team om een portfolio van te bezichtigen woningen te selecteren. Dit omvat het beantwoorden van uw specifieke vragen per e-mail en/of telefoon.",
+      "point_2": "Ons team neemt u mee om uw geselecteerde woningen en de omliggende gebieden te bekijken.",
+      "point_3": "We bieden u een uitgebreide aankoopgids. Wanneer u de perfecte woning hebt gevonden, helpen wij u met het volledige proces tijdens en na uw aankoop. Wij zijn niet zomaar een makelaarskantoor, wij zijn uw alles-in-één bureau.",
+      "point_4": "Praat met uw Vastgoedspecialist over plaatsen waar u kunt verblijven tijdens uw bezoek; zij kunnen details van lokale B&B’s en hotels sturen, zodat u kunt kiezen wat het beste bij u past."
+    }
+  },
+  "town-guide": {
+    "description": "Inland Andalucia werkt samen met LuvInland.com om u de beste informatie te bieden over Andalusië en haar LEVENSSTIJL. Voor elke plaats die we te koop aanbieden, klikt u op de plaatsnaam voor alle informatie die u nodig heeft. LuvInland stuurt u terug naar ons om de te koop aangeboden woningen in de geselecteerde plaats te bekijken.",
+    "cordoba": {
+      "title": "Córdoba",
+      "section1": {
+        "heading": "Over Cordoba",
+        "text": "De \"Joodse wijk\" of oude stad, met zijn kleine pleintjes, patio's vol kleurrijke bloemen en typische bars waar tapas worden genuttigd, staat vol met verbluffende architectuur. De Mezquita (of moskee) trekt jaarlijks duizenden bezoekers die massaal het magnifieke vakmanschap komen bewonderen - de bouw ervan duurde twee eeuwen en is een indrukwekkende jungle van zuilen, nissen en bogen met een kerk in het midden. Buiten de moskee liggen de prachtige tuinen, de \"Patio de los Naranjos\" en de \"Calleja de la Flores\"."
+      },
+      "section2": {
+        "heading": "Cultuur & Erfgoed",
+        "text": "Aan de overkant van de rivier, tegenover de Mezquita, ligt het Alcazar (of fort), dat in 1328 door de christenen werd gebouwd als verdediging tegen de moslims. Het biedt een heerlijke afwisseling van de zomerhitte terwijl u door de schaduwrijke tuinen en binnenplaatsen dwaalt."
+      },
+      "section3": {
+        "heading": "Aardrijkskunde & Landbouw",
+        "text": "Net zoals de stad verdeeld is, zo is ook de provincie verdeeld: de Sierra Morena in het noorden met zijn ruige heuvels bedekt met pijnbomen en eiken, met daartussen een paar steile dorpjes. De Campiña in het zuiden, de landbouwgronden vol tarwe, wijnranken en olijfbomen, is een gebied dat beroemd is om zijn droge witte wijnen, vergelijkbaar met sherry, die worden geproduceerd van de Pedro Ximenez-druif en olijfolie, het andere belangrijke product uit de regio."
+      },
+      "section4": {
+        "heading": "Lokale keuken",
+        "text": "Daarom is olijfolie een belangrijk ingrediënt in veel typische gerechten. Gazpacho en Salmorejo zijn koude soepen, voornamelijk gemaakt van gepureerde groenten en olijfolie, en zijn heerlijk en verfrissend in de zomerhitte. Jamon (gerookte ham), Salchichon (een typische worst), Caña de Lomo en Morcilla (bloedworst) worden ook veel gegeten in de provincie. Enkele typische desserts zijn Alfajores (gemaakt van amandelen en honing) en Pestiños (gebakken in olie en vervolgens bedekt met honing)."
+      },
+      "section5": {
+        "heading": "Festivals & Evenementen",
+        "text": "Córdoba viert haar feesten en festivals net als elke andere stad in Spanje, en Semana Santa, oftewel de Paasweek, is een van de belangrijkste. Er zijn maar liefst 32 processies met prachtig versierde en sierlijke afbeeldingen en figuren van heiligen, begeleid door de Nazarenos (mannen gekleed in typische gewaden met capuchons die het hele gezicht bedekken behalve de ogen). Deze processies trekken door de stad, gevolgd door menigten mensen. In mei zijn er drie festivals: van 5 tot en met 12 mei is er het Festival van de \"Patios Cordobeses\", een wedstrijd voor de mooist versierde binnenplaats; de Cruces de Mayo is wanneer de hele stad versierd is met kruizen en duizenden bloemen; de laatste week van mei is wanneer iedereen zich uitleeft op de Feria de Cordoba - flamencomuziek en -dans worden genoten en de hele stad geniet van de festiviteiten."
+      }
+    },
+     "granada": {
+      "title": "Grenada",
+      "section1": {
+        "heading": "Over Grenada",
+        "text": "De provincie Grenada ligt in het oostelijke deel van de autonome regio Andalusië, begrensd door de provincies Malaga, Córdoba, Jaén, Albacete, Murcia en Almería en strekt zich uit tot aan de Middellandse Zee. Het omvat 168 gemeenten."
+      },
+      "section2": {
+        "heading": "Natuurlijke schoonheid",
+        "text": "De provincie Granada herbergt de hoogste berg van continentaal Spanje, Mulhacén, met 3481 meter, en ook het Sierra Nevada-gebergte (het meest zuidelijke skigebied van Europa). In de wintermaanden trekken toeristen massaal naar de Sierra Nevada om te skiën en bergbeklimmen, maar de stad Granada is het hele jaar door populair vanwege de Moorse architectuur en het beroemde Alhambra met zijn paleizen en tuinen. En vergeet de grotwoningen niet die verspreid liggen over de Sacromonte-heuvel ten noorden van de stad, ooit de thuisbasis van de grote zigeunergemeenschap van Granada."
+      },
+      "section3": {
+        "heading": "Cultureel Erfgoed",
+        "text": "De heuvel tegenover het Alhambra heet Albaicin. Als u door de smalle straatjes omhoog loopt, langs alle witgekalkte huizen, bereikt u het hoogste punt met een prachtig uitzicht over het Alhambra en de vele verschillende landschappen van de provincie Granada."
+      },
+      "section4": {
+        "heading": "Buitenactiviteiten",
+        "text": "De provincie biedt talloze mogelijkheden voor buitenactiviteiten. De Rio Genil staat bekend om zijn forelvisserij en de Sierra Nevada biedt uitstekende wandel- en klimmogelijkheden. De Alpujarras is bijzonder populair voor wandelvakanties, met zijn netwerk van eeuwenoude paden die de witte dorpjes met elkaar verbinden."
+      }
+    },
+    "jaen": {
+      "title": "Jaen",
+      "section1": {
+        "heading": "Over Jaen",
+        "text": "De provincie Jaén staat bekend als de wereldhoofdstad van de olijfolie, met eindeloze olijfgaarden die de glooiende heuvels en valleien bedekken. Deze prachtige regio in het binnenland herbergt renaissancesteden, middeleeuwse kastelen en natuurparken. De provincie biedt een authentieke Spaanse levensstijl, ver weg van de toeristische kustgebieden, met een rijk cultureel erfgoed en adembenemende natuurlandschappen zoals het natuurpark Sierra de Cazorla, Segura y Las Villas."
+      },
+      "section2": {
+        "heading": "Olijfolie-erfgoed",
+        "text": "Jaén produceert meer olijfolie dan welke andere regio ter wereld dan ook. De uitgestrekte zee van olijfbomen die het landschap bedekt, is niet alleen economisch van belang, maar vormt ook de cultuur en gastronomie van de regio."
+      },
+      "section3": {
+        "heading": "Renaissance-erfgoed",
+        "text": "De tweelingsteden Úbeda en Baeza staan ​​op de Werelderfgoedlijst van UNESCO en staan ​​bekend om hun opmerkelijke renaissancearchitectuur. Deze historische centra herbergen paleizen, kerken en pleinen die tijdens de Gouden Eeuw van Spanje zijn gebouwd."
+      },
+      "section4": {
+        "heading": "Natuurparken",
+        "text": "Het natuurpark Sierra de Cazorla, Segura y Las Villas is het grootste beschermde natuurgebied van Spanje. Het biedt adembenemende berglandschappen, dichte bossen, rivieren en een gevarieerde fauna, waaronder herten en wilde zwijnen."
+      },
+      "section5": {
+        "heading": "Gastronomie",
+        "text": "De keuken van Jaén draait om olijfolie, met traditionele gerechten als pipirrana (groentesalade), andrajos (stoofpot met platte noedels) en ochíos (anijsbrood) die de authentieke smaken van het binnenland van Andalusië weerspiegelen."
+      }
+    },
+      "malaga": {
+      "title": "Malaga",
+      "section1": {
+        "heading": "Over Málaga",
+        "text": "De provincie Málaga ligt in het zuiden van Andalusië, aan de Middellandse Zee. De provincie staat bekend om zijn prachtige stranden, indrukwekkende bergketens en rijke culturele erfgoed.<br />De provincie biedt een perfecte mix van kust- en binnenlandleven, met het natuurpark Sierra de las Nieves en de beroemde El Torcal de Antequera die spectaculaire natuurlandschappen bieden."
+      },
+      "section2": {
+        "heading": "Natuurlijke schoonheid",
+        "text": "De provincie biedt een gevarieerd natuurlandschap, van de indrukwekkende kalksteenformaties van El Torcal de Antequera tot de ongerepte stranden van de Costa del Sol. Het natuurpark Sierra de las Nieves is een UNESCO-biosfeerreservaat."
+      },
+      "section3": {
+        "heading": "Cultureel Erfgoed",
+        "text": "Het culturele erfgoed van Málaga beslaat duizenden jaren. De stad Málaga beschikt over het indrukwekkende fort Alcazaba en het Romeinse theater. Antequera staat bekend om zijn dolmens, prehistorische grafheuvels die op de UNESCO-werelderfgoedlijst staan."
+      },
+      "section4": {
+        "heading": "Lokale keuken",
+        "text": "De keuken van Málaga weerspiegelt de invloeden van de kust en het binnenland. Verse zeevruchten, met name gefrituurde vis (pescaíto frito), zijn een lokale specialiteit. De provincie staat ook bekend om zijn zoete wijnen, met name de Málaga-wijn."
+      },
+      "section5": {
+        "heading": "Festivals & Evenementen",
+        "text": "De provincie organiseert het hele jaar door talloze festivals. Het filmfestival van Malaga trekt internationale aandacht, terwijl de Feria de Málaga in augustus een van de grootste festiviteiten in Andalusië is."
+      }
+    },
+    "sevilla": {
+      "title": "Sevilla",
+      "section1": {
+        "heading": "Over Sevilla",
+        "text": "De provincie Sevilla is een schatkamer vol geschiedenis, cultuur en natuurschoon. Hoewel de stad beroemd is om haar hoofdstad met iconische bezienswaardigheden zoals de Giralda en Plaza de España, bieden de gebieden in het binnenland een andere, meer authentieke ervaring.<br />De provincie biedt pittoreske witte stadjes, glooiende olijfgaarden en historische locaties van verschillende beschavingen die deze regio hun thuis hebben genoemd, van de Romeinen en Moren tot invloeden uit de Renaissance en Barok."
+      },
+      "section2": {
+        "heading": "Historische steden",
+        "text": "In het binnenland van Sevilla liggen charmante historische steden zoals Osuna, Écija, Carmona en Marchena, elk met een unieke architectuur en een rijk erfgoed. De renaissancepaleizen van Osuna en de barokke kerktorens van Écija hebben de stad de bijnaam \"Stad van de Torens\" opgeleverd."
+      },
+      "section3": {
+        "heading": "Natuurlijke landschappen",
+        "text": "The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations, to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves."
+      },
+      "section4": {
+        "heading": "Culinary Traditions",
+        "text": "Sevillian cuisine is a delight for food lovers, featuring specialties like gazpacho, spinach with chickpeas, and Iberian ham. The inland areas are particularly renowned for olive oils, artisanal cheeses, and traditional sweets."
+      },
+      "section5": {
+        "heading": "Festivals & Traditions",
+        "text": "Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals."
+      }
+    }
+  },
+  "footer": {
+    "about_title": "Inland Andalucia",
+    "about_text": "Spezialisten für Immobilien im Landesinneren von Andalusien, Spanien. Wir bieten seit 2001 einen persönlichen Service für Käufer und Verkäufer.",
+    "quick_links_title": "Schnellzugriff",
+    "quick_links": {
+      "properties": "Immobilien",
+      "town_guide": "Stadtführer",
+      "buyers_guide": "Käuferleitfaden",
+      "blog": "Blog",
+      "about_us": "Über Uns",
+      "contact": "Kontakt"
+    },
+    "contact_title": "Kontaktieren Sie uns",
+    "contact_address": "Calle Andalucia 12, 29550 Ardales, Málaga, Spanien",
+    "contact_phone": "+34 952 741 525",
+    "contact_email": "info@inlandandalucia.com",
+    "newsletter_title": "Newsletter",
+    "newsletter_text": "Abonnieren Sie unseren Newsletter, um die neuesten Immobilien-Updates und Marktanalysen zu erhalten.",
+    "newsletter_placeholder": "Ihre E-Mail",
+    "newsletter_subscribe": "Abonnieren",
+    "copyright": "© 2024 Inland Andalucía. Alle Rechte vorbehalten.",
+    "privacy": "Datenschutzrichtlinie",
+    "terms": "Nutzungsbedingungen"
+  },
+  "common": {
+    "loading": "Wird geladen...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "view": "Anzeigen",
+    "close": "Schließen",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "back": "Zurück",
+    "continue": "Fortfahren",
+    "submit": "Absenden",
+    "reset": "Zurücksetzen"
+  }
+}

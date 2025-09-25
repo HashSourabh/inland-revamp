@@ -12,6 +12,7 @@ import {
   MapIcon,
   MapPinIcon,
 } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface PropertyGalleryProps {
   images: { url: string; alt: string; isFeatured: boolean }[];
@@ -41,6 +42,7 @@ export default function PropertyGallery({
   description = ''
   , lat, lng
 }: PropertyGalleryProps) {
+  const t = useTranslations('properties')
   const [mainImage, setMainImage] = useState(images[0]?.url || '');
   const [isScrollable, setIsScrollable] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -185,7 +187,7 @@ export default function PropertyGallery({
         {/* Description */}
         {description && (
           <div>
-            <h2 className="mb-4 text-xl font-semibold">Description</h2>
+            <h2 className="mb-4 text-xl font-semibold">{t('details.description')}</h2>
             <p className="text-neutral-700 dark:text-neutral-300">
               {description}
             </p>
@@ -209,21 +211,21 @@ export default function PropertyGallery({
         </div> */}
         {/* Google Map */}
         {/* Google Map */}
-       
-          <div>
-            <h2 className="mb-4 text-xl font-semibold">Location</h2>
-            <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
-              <iframe
-                src={`https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
+
+        <div>
+          <h2 className="mb-4 text-xl font-semibold">Location</h2>
+          <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+            <iframe
+              src={`https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
+        </div>
 
 
       </div>

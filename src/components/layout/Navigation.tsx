@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import {
   MagnifyingGlassIcon,
@@ -21,9 +22,9 @@ import {
   UserGroupIcon
 } from '@heroicons/react/24/outline';
 
-interface NavLink {
+interface NavLinkConfig {
   href: string;
-  label: string;
+  labelKey: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
@@ -31,47 +32,48 @@ interface NavigationProps {
   isRtl?: boolean;
 }
 
-const propertySearchLinks: NavLink[] = [
-  { href: '/properties/advanced-search', label: 'Advanced Search', icon: MagnifyingGlassIcon },
-  { href: '/properties/map-search', label: 'Search by Google Map', icon: MapIcon },
-  { href: '/properties/exclusives', label: 'Exclusives', icon: StarIcon },
-  { href: '/properties/viewing-trip', label: 'Viewing Trip', icon: CalendarDaysIcon }
+const propertySearchLinks: NavLinkConfig[] = [
+  { href: '/properties/advanced-search', labelKey: 'links.advancedSearch', icon: MagnifyingGlassIcon },
+  { href: '/properties/map-search', labelKey: 'links.searchByMap', icon: MapIcon },
+  { href: '/properties/exclusives', labelKey: 'links.exclusives', icon: StarIcon },
+  { href: '/properties/viewing-trip', labelKey: 'links.viewingTrip', icon: CalendarDaysIcon }
 ];
 
-const townGuideLinks: NavLink[] = [
-  { href: '/town-guide/cordoba', label: 'Cordoba Province', icon: BuildingOfficeIcon },
-  { href: '/town-guide/granada', label: 'Granada Province', icon: BuildingOfficeIcon },
-  { href: '/town-guide/jaen', label: 'Jaen Province', icon: BuildingOfficeIcon },
-  { href: '/town-guide/malaga', label: 'Malaga Province', icon: BuildingOfficeIcon },
-  { href: '/town-guide/sevilla', label: 'Seville Province', icon: BuildingOfficeIcon }
+const townGuideLinks: NavLinkConfig[] = [
+  { href: '/town-guide/cordoba', labelKey: 'links.cordoba', icon: BuildingOfficeIcon },
+  { href: '/town-guide/granada', labelKey: 'links.granada', icon: BuildingOfficeIcon },
+  { href: '/town-guide/jaen', labelKey: 'links.jaen', icon: BuildingOfficeIcon },
+  { href: '/town-guide/malaga', labelKey: 'links.malaga', icon: BuildingOfficeIcon },
+  { href: '/town-guide/sevilla', labelKey: 'links.seville', icon: BuildingOfficeIcon }
 ];
 
-const buyersGuideLinks: NavLink[] = [
-  { href: '/buyers-guide/buying-property', label: 'Buying a Property', icon: DocumentTextIcon },
-  { href: '/buyers-guide/buying-process', label: 'Buying Process', icon: DocumentTextIcon },
-  { href: '/buyers-guide/property-taxes', label: 'Property Taxes', icon: CurrencyDollarIcon },
-  { href: '/buyers-guide/faqs', label: 'FAQs', icon: QuestionMarkCircleIcon },
-  { href: '/buyers-guide/unpaid-taxes', label: 'Unpaid Taxes', icon: ExclamationTriangleIcon },
-  { href: '/buyers-guide/mortgage', label: 'Mortgage', icon: BanknotesIcon }
+const buyersGuideLinks: NavLinkConfig[] = [
+  { href: '/buyers-guide/buying-property', labelKey: 'links.buyingProperty', icon: DocumentTextIcon },
+  { href: '/buyers-guide/buying-process', labelKey: 'links.buyingProcess', icon: DocumentTextIcon },
+  { href: '/buyers-guide/property-taxes', labelKey: 'links.propertyTaxes', icon: CurrencyDollarIcon },
+  { href: '/buyers-guide/faqs', labelKey: 'links.faqs', icon: QuestionMarkCircleIcon },
+  { href: '/buyers-guide/unpaid-taxes', labelKey: 'links.unpaidTaxes', icon: ExclamationTriangleIcon },
+  { href: '/buyers-guide/mortgage', labelKey: 'links.mortgage', icon: BanknotesIcon }
 ];
 
-const aboutUsLinks: NavLink[] = [
-  { href: '/about/location', label: 'Location', icon: MapPinIcon },
-  { href: '/about/weather', label: 'Weather', icon: SunIcon },
-  { href: '/about/airports', label: 'Airports', icon: PaperAirplaneIcon }
+const aboutUsLinks: NavLinkConfig[] = [
+  { href: '/about/location', labelKey: 'links.location', icon: MapPinIcon },
+  { href: '/about/weather', labelKey: 'links.weather', icon: SunIcon },
+  { href: '/about/airports', labelKey: 'links.airports', icon: PaperAirplaneIcon }
 ];
 
-const contactLinks: NavLink[] = [
-  { href: '/contact/our-offices', label: 'Our Offices', icon: BuildingOfficeIcon },
-  { href: '/contact/newsletter', label: 'Newsletter', icon: NewspaperIcon },
-  { href: '/contact/useful-links', label: 'Useful Links', icon: LinkIcon },
-  { href: 'https://inlandandalucia.com/agentlogin.aspx', label: 'Agents Private Area', icon: UserGroupIcon }
+const contactLinks: NavLinkConfig[] = [
+  { href: '/contact/our-offices', labelKey: 'links.ourOffices', icon: BuildingOfficeIcon },
+  { href: '/contact/newsletter', labelKey: 'links.newsletter', icon: NewspaperIcon },
+  { href: '/contact/useful-links', labelKey: 'links.usefulLinks', icon: LinkIcon },
+  { href: 'https://inlandandalucia.com/agentlogin.aspx', labelKey: 'links.agentsPrivateArea', icon: UserGroupIcon }
 ];
 
 export default function Navigation({ isRtl = false }: NavigationProps) {
   const dropdownPositionClass = isRtl ? 'right-0 left-auto' : 'left-0';
+  const t = useTranslations('navigation');
 
-  const renderDropdown = (links: NavLink[]) =>
+  const renderDropdown = (links: NavLinkConfig[]) =>
     links.map((link) => {
       const Icon = link.icon;
       const isExternal = link.href.startsWith('http');
@@ -86,7 +88,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
             className="flex items-center gap-3 px-6 py-2.5 text-sm text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
           >
             <Icon className="h-5 w-5 text-secondary-400" />
-            {link.label}
+            {t(link.labelKey)}
           </a>
         );
       }
@@ -98,7 +100,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
           className="flex items-center gap-3 px-6 py-2.5 text-sm text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
         >
           <Icon className="h-5 w-5 text-secondary-400" />
-          {link.label}
+          {t(link.labelKey)}
         </Link>
       );
     });
@@ -106,13 +108,13 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
   return (
     <nav className={`hidden md:flex items-center gap-8 ${isRtl ? 'flex-row-reverse' : ''}`}>
       <Link href="/" className="text-neutral-900 hover:text-primary-600 transition-colors">
-        Home
+        {t('home')}
       </Link>
 
       {/* Property Search Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
-          Property Search
+          {t('properties')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
         <div
@@ -127,7 +129,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
       {/* Town Guide Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
-          Town Guide
+          {t('townGuide')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
         <div
@@ -142,7 +144,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
       {/* Buyer's Guide Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
-          Buyer's Guide
+          {t('buyersGuide')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
         <div
@@ -160,13 +162,13 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
         rel="nofollow noreferrer"
         className="text-neutral-900 hover:text-primary-600 transition-colors"
       >
-        Blog
+        {t('links.blog')}
       </a>
 
       {/* About Us Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
-          About Us
+          {t('about')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
         <div
@@ -181,7 +183,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
       {/* Contact Us Dropdown */}
       <div className="relative group">
         <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
-          Contact Us
+          {t('contact')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
         <div

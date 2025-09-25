@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "properties": "Propiedades",
+    "townGuide": "Guía de Ciudades",
+    "buyersGuide": "Guía del Comprador",
+    "about": "Sobre Nosotros",
+    "contact": "Contacto",
+    "links": {
+      "advancedSearch": "Búsqueda Avanzada",
+      "searchByMap": "Buscar por Mapa",
+      "exclusives": "Exclusivas",
+      "viewingTrip": "Viaje de Visita",
+      "cordoba": "Provincia de Córdoba",
+      "granada": "Provincia de Granada",
+      "jaen": "Provincia de Jaén",
+      "malaga": "Provincia de Málaga",
+      "seville": "Provincia de Sevilla",
+      "buyingProperty": "Comprar una Propiedad",
+      "buyingProcess": "Proceso de Compra",
+      "propertyTaxes": "Impuestos de Propiedad",
+      "faqs": "Preguntas Frecuentes",
+      "unpaidTaxes": "Impuestos Impagos",
+      "mortgage": "Hipoteca",
+      "location": "Ubicación",
+      "weather": "Clima",
+      "airports": "Aeropuertos",
+      "ourOffices": "Nuestras Oficinas",
+      "newsletter": "Boletín",
+      "usefulLinks": "Enlaces Útiles",
+      "agentsPrivateArea": "Área Privada de Agentes",
+      "blog": "Blog"
+    }
+  }
+}
+
+

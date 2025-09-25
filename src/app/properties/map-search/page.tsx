@@ -7,6 +7,9 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { fetchRegions, fetchAreas } from '@/utils/api';
 import { getRegionColors, getAreaColors } from '@/utils/colorUtils';
 import { areaImages, getIAMarkerIcon } from '@/utils/mapUtils';
+import PromoSidebar from "@/components/PromoSidebar";
+import PageOverlayLoader from "@/components/loader/PageOverlayLoader";
+import { useTranslations } from "next-intl";
 
 const containerStyle = {
   width: "100%",
@@ -39,6 +42,7 @@ interface AreaWithCoordinates extends Area {
 }
 
 export default function MapSearchPage() {
+    const t = useTranslations('advance_search');
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyA5h3ZfC3rhIC2ow1VlVC_J6sprxC1Rbns",
   });
@@ -160,13 +164,13 @@ export default function MapSearchPage() {
     setSelectedArea(area);
   };
 
-  if (!isLoaded) return <div className="text-center py-20">Loading map...</div>;
+  if (!isLoaded) return <div className="text-center py-20"><PageOverlayLoader/></div>;
   if (loading) return <div className="text-center py-20">Loading regions and areas...</div>;
   if (error) return <div className="text-center py-20 text-red-600">Error: {error}</div>;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
-      <h1 className="mb-6 font-heading text-3xl font-bold text-primary-600">Search Properties by Map</h1>
+      <h1 className="mb-6 font-heading text-3xl font-bold text-primary-600">{t('g_map')}</h1>
 
       {/* Region Filters */}
       <div className="mb-8 rounded-xl border border-neutral-200 bg-white p-4">
@@ -180,8 +184,8 @@ export default function MapSearchPage() {
                 key={name}
                 onClick={() => handleRegionSelect(name)}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 text-base font-medium transition-colors
-                  ${isActive 
-                    ? "bg-primary-600 text-white border-primary-700" 
+                  ${isActive
+                    ? "bg-primary-600 text-white border-primary-700"
                     : `text-white ${colors.hover}`
                   } border border-transparent shadow-sm`}
                 style={isActive ? {} : { backgroundColor: colors.hex }}
@@ -208,8 +212,8 @@ export default function MapSearchPage() {
                   key={town.name}
                   onClick={() => handleTownSelect(town.name)}
                   className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium transition-colors
-                    ${isActive 
-                      ? "bg-primary-500 text-white border-primary-600" 
+                    ${isActive
+                      ? "bg-primary-500 text-white border-primary-600"
                       : `text-gray-700 ${colors.hover}`
                     } border border-transparent shadow-sm`}
                   style={isActive ? {} : { backgroundColor: colors.hex }}
@@ -217,8 +221,8 @@ export default function MapSearchPage() {
                   {isActive && <CheckIcon className="h-4 w-4 text-white" />}
                   <span>{town.name}</span>
                   <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold
-                    ${isActive 
-                      ? "bg-white/20 text-white" 
+                    ${isActive
+                      ? "bg-white/20 text-white"
                       : "bg-white/60 text-neutral-600"
                     }`}>
                     {town.count}
@@ -266,7 +270,7 @@ export default function MapSearchPage() {
                       There {selectedArea.count === 1 ? 'is' : 'are'} <span className="font-semibold text-primary-700">{selectedArea.count}</span> {selectedArea.count === 1 ? 'property' : 'properties'} available
                     </p>
                     <div className="mb-4">
-                      <span 
+                      <span
                         className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
                         style={{ backgroundColor: getRegionColors(selectedArea.regionName || 'default').hex }}
                       >
@@ -286,6 +290,9 @@ export default function MapSearchPage() {
           </GoogleMap>
         </div>
       </div>
+      {/* <div>
+        <PromoSidebar />
+      </div> */}
     </div>
   );
 }

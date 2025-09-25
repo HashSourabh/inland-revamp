@@ -13,6 +13,8 @@ import {
   UserGroupIcon,
   PlayIcon,
 } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
+import Cookies from 'js-cookie';
 
 interface PropertyDetailsProps {
   params: { id: string };
@@ -30,9 +32,11 @@ interface Property {
   lat?: number;
   lng?: number;
   videoUrl: string;
+  short_description: string;
 }
 
 export default function PropertyDetails({ params }: PropertyDetailsProps) {
+  const t = useTranslations('properties')
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
 
   const [property, setProperty] = useState<Property | null>(null);
@@ -47,7 +51,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
     const fetchProperty = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_BASE_URL}/properties/${propertyId}`);
+        const langId = Cookies.get('LanguageId') || '1';
+        const res = await fetch(`${API_BASE_URL}/properties/${propertyId}?languageId=${langId}`);
         const data = await res.json();
 
         if (data.success && data.data) {
@@ -73,7 +78,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             title: `Property (${db.Property_Ref})`,
             price: { current: db.Public_Price, original: db.Original_Price },
             location,
-            description: db.Property_Notes || "",
+            description: db.description || "",
             viewed: db.Viewed || 0,
             features: {
               bedrooms: db.Bedrooms || 0,
@@ -86,6 +91,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             lat: db.GPS_Latitude,
             lng: db.GPS_Longitude,
             videoUrl: db.Video_URL || null,
+            short_description: db.short_description || null
           });
         } else {
           setProperty(null);
@@ -156,33 +162,33 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <button className="rounded-md bg-primary-600 px-4 py-2 text-sm text-white" onClick={() => setIsView(true)}>Reserve For Viewing</button>
+            <button className="rounded-md bg-primary-600 px-4 py-2 text-sm text-white" onClick={() => setIsView(true)}>{t('details.reserve_viewing')}</button>
             {property.videoUrl && (
               <button
                 className="inline-flex items-center gap-2 rounded-md bg-yellow-400 px-4 py-2 text-sm text-neutral-900"
                 onClick={() => setIsVideoOpen(true)}
               >
-                <PlayIcon className="h-4 w-4" /> Watch Video
+                <PlayIcon className="h-4 w-4" /> {t('details.watch_video')}
               </button>
             )}
             <Link
               href={`/properties/${property.id}/print`}
               className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
             >
-              <PrinterIcon className="h-4 w-4" /> Print Preview
+              <PrinterIcon className="h-4 w-4" /> {t('details.print_preview')}
             </Link>
             <button
               onClick={() => window.location.href = 'mailto:someone@example.com'}
               className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
             >
-              <EnvelopeIcon className="h-4 w-4" /> E-mail
+              <EnvelopeIcon className="h-4 w-4" /> {t('details.email')}
             </button>
 
             <Link
               href={`/contact`}
               className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
             >
-              <UserGroupIcon className="h-4 w-4" /> Contact us
+              <UserGroupIcon className="h-4 w-4" /> {t('details.contact_us')}
             </Link>
 
           </div>

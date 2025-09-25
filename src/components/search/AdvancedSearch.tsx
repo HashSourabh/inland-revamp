@@ -5,6 +5,7 @@ import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outlin
 import { useRouter } from 'next/navigation';
 import { fetchPropertyTypes, fetchRegions } from '@/utils/api';
 import { Region } from '@/utils/api';
+import { useTranslations } from 'next-intl';
 
 interface PropertyType {
   id: number;
@@ -25,6 +26,7 @@ interface Filters {
 }
 
 export default function AdvancedSearch() {
+  const t = useTranslations('home');
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   const [regions, setRegions] = useState<Region[]>([]);
   const [propertyTypes, setPropertyTypes] = useState<PropertyType[]>([]);
@@ -107,7 +109,7 @@ export default function AdvancedSearch() {
         {/* Regions */}
         <div className="col-span-2">
           <label htmlFor="regionId" className="block text-sm font-medium text-neutral-700 mb-1">
-            Regions
+            {t('filters.region')}
           </label>
           <select
             id="regionId"
@@ -127,7 +129,7 @@ export default function AdvancedSearch() {
         {/* Property Type */}
         <div className="col-span-2">
           <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
-            Property Type
+            {t('filters.property_type')}
           </label>
           <select
             id="propertyType"
@@ -147,7 +149,7 @@ export default function AdvancedSearch() {
         {/* Price Range */}
         <div className="col-span-2">
           <label htmlFor="priceRange" className="block text-sm font-medium text-neutral-700 mb-1">
-            Price Range
+            {t('filters.price_range')}
           </label>
           <select
             id="priceRange"
@@ -197,7 +199,7 @@ export default function AdvancedSearch() {
                 Searching...
               </span>
             ) : (
-              "Search"
+              t('filters.search')
             )}
           </button>
 
@@ -224,7 +226,7 @@ export default function AdvancedSearch() {
               <div className="bg-white p-6 sm:p-8">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl font-bold text-neutral-900" id="modal-headline">
-                    Advanced Search
+                    {t('filters.advance_search')}
                   </h3>
                   <button
                     type="button"
@@ -246,7 +248,7 @@ export default function AdvancedSearch() {
                     {/* Province / Region */}
                     <div>
                       <label htmlFor="regionId" className="block text-sm font-medium text-neutral-700 mb-1">
-                        Province
+                        {t('filters.region')}
                       </label>
                       <select
                         id="regionId"
@@ -266,7 +268,7 @@ export default function AdvancedSearch() {
                     {/* Property Types */}
                     <div>
                       <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
-                        Property Type
+                      {t('filters.property_type')}
                       </label>
                       <select
                         id="propertyType"
@@ -285,7 +287,7 @@ export default function AdvancedSearch() {
                     {/* Min Beds */}
                     <div>
                       <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
-                        Min. Bedrooms
+                        {t('filters.min_bed')}
                       </label>
                       <select
                         id="minBeds"
@@ -304,7 +306,7 @@ export default function AdvancedSearch() {
                     {/* Min Baths */}
                     <div>
                       <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
-                        Min. Bathrooms
+                        {t('filters.min_bathrooms')}
                       </label>
                       <select
                         id="minBaths"
@@ -323,7 +325,7 @@ export default function AdvancedSearch() {
                     {/* Example: Min Price */}
                     <div>
                       <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
-                        Min. Price
+                        {t('filters.min_price')}
                       </label>
                       <select
                         id="minPrice"
@@ -341,7 +343,7 @@ export default function AdvancedSearch() {
                     {/* Example: Max Price */}
                     <div>
                       <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
-                        Max. Price
+                      {t('filters.max_price')}
                       </label>
                       <select
                         id="maxPrice"
@@ -367,7 +369,7 @@ export default function AdvancedSearch() {
                       }}
                       className="w-full bg-primary-600 text-white py-4 rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-md disabled:opacity-50"
                     >
-                      {loading ? "Searching..." : "Search Properties"}
+                      {loading ? "Searching..." : t('filters.button')}
                     </button>
                   </div>
                 </form>

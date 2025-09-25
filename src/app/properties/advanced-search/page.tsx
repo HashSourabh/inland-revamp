@@ -4,8 +4,10 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PromoSidebar from "@/components/PromoSidebar";
+import { useTranslations } from "next-intl"; 
 
 export default function AdvancedSearchPage() {
+  const t = useTranslations('advance_search');
   const [filters, setFilters] = React.useState({
     regionId: "",
     propertyType: "",
@@ -115,14 +117,10 @@ export default function AdvancedSearchPage() {
       {/* Left: Advanced Search Form */}
       <section className="md:col-span-2 bg-white rounded-xl  p-8 border border-black/10 ">
         <h1 className="font-heading text-3xl font-bold text-primary-600 mb-6">
-          Andalucía Property
+          {t('title')}
         </h1>
         <p className="mb-8 text-neutral-600">
-          At Inland Andalucia we have country, rural, inland property ranging
-          from fincas, villas, townhouses to apartments. We specialise in the
-          areas of Antequera, Cordoba, Granada, Jaen, Malaga and Sevilla where,
-          with us you will find your ideal inland property. If you do not find
-          what you are looking for please{" "}
+          {t('text')}{" "}
           <Link
             href="/contact"
             className="text-primary-600 underline"
@@ -134,7 +132,7 @@ export default function AdvancedSearchPage() {
 
         <div className="bg-primary-600 rounded-lg mb-6">
           <h2 className="text-lg font-medium text-white px-6 py-3">
-            Property search (advanced)
+           {t('search_advance')}
           </h2>
         </div>
 
@@ -287,7 +285,7 @@ export default function AdvancedSearchPage() {
         {/* Search by reference */}
         <div className="bg-primary-600 rounded-lg mb-4">
           <h2 className="text-lg font-medium text-white px-6 py-3">
-            Property search by reference
+             {t('search_ref')}
           </h2>
         </div>
         <form

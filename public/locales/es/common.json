@@ -1,0 +1,288 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "properties": "Propiedades",
+    "about": "Acerca de",
+    "buyersGuide": "Guía del Comprador",
+    "townGuide": "Guía de Pueblos",
+    "contact": "Contacto"
+  },
+  "cta": {
+    "sellWithUs": "Vende con Nosotros"
+  },
+  "home": {
+    "exclusive": {
+      "title": "Propiedades Exclusivas",
+      "subtitle": "Ofertas especiales y recientes bajadas de precio en propiedades seleccionadas",
+      "none": "No hay propiedades exclusivas disponibles en este momento.",
+      "moreTitle": "¿Buscas más ofertas exclusivas?",
+      "moreSubtitle": "Tenemos más propiedades con reducciones especiales de precio",
+      "viewAllExclusive": "Ver Todas las Propiedades Exclusivas"
+    },
+    "featured": {
+      "title": "Propiedades Destacadas",
+      "loading": "Cargando nuestra selección destacada...",
+      "subtitle": "Explora nuestra selección de propiedades en el interior de Andalucía",
+      "viewAllLink": "Ver todas las propiedades →",
+      "viewAllButton": "Ver Todas las Propiedades"
+    },
+    "cta": {
+      "title": "¿Listo para encontrar tu paraíso en España?",
+      "subtitle": "Contacta con nuestro equipo de expertos locales para empezar tu camino hacia la propiedad en el interior de Andalucía.",
+      "button": "Contactar"
+    },
+    "filters": {
+      "region": "Regiones",
+      "property_type": "Tipo de propiedad",
+      "price_range": "Rango de precios",
+      "search": "Buscar",
+      "advance_search": "Búsqueda avanzada",
+      "min_bed": "Dormitorios mín.",
+      "min_bathrooms": "Baños mín.",
+      "min_price": "Precio mínimo",
+      "max_price": "Precio máximo",
+      "button": "Buscar propiedades"
+    }
+  },
+  "hero": {
+    "title": "Descubre la Auténtica Vida Rural Española",
+    "subtitle": "Encuentra tu hogar ideal en el interior de Andalucía con nuestra selección exclusiva de propiedades rurales",
+    "searchButton": "Buscar Propiedades",
+    "learnMore": "Saber Más"
+  },
+  "banner": {
+    "title": "Encuentra la casa de tus sueños en el interior de Andalucía",
+    "button": "Ver propiedades",
+    "contact_us": "Contacta con nosotros"
+  },
+  "properties": {
+    "title": "Propiedades Destacadas",
+    "viewAll": "Ver Todas las Propiedades",
+    "price": "Precio",
+    "bedrooms": "Dormitorios",
+    "bathrooms": "Baños",
+    "area": "Área",
+    "location": "Ubicación",
+    "viewDetails": "Ver Detalles",
+    "contactAgent": "Contactar Agente",
+    "loading_properties": "propiedades de carga",
+    "properties_for_sale": "Propiedades en Venta",
+    "sub_text": "Descubra nuestra exclusiva selección de propiedades en el interior de Andalucía",
+    "details": {
+      "reserve_viewing": "Reservar una visita",
+      "watch_video": "Ver video",
+      "print_preview": "Vista previa de impresión",
+      "email": "Correo electrónico",
+      "contact_us": "Contáctenos",
+      "description": "Descripción"
+    }
+  },
+  "about": {
+    "title": "Acerca de Inland Andalucía",
+    "description": "Nos especializamos en ayudarte a encontrar la propiedad rural perfecta en la hermosa campiña de Andalucía, España."
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "message": "Mensaje",
+    "send": "Enviar Mensaje",
+    "address": "Dirección",
+    "phoneNumber": "Número de Teléfono"
+  },
+  "promo": {
+    "exclusive": {
+      "title": "Propiedades Exclusivas",
+      "short_description": "HAZ CLIC aquí para ver las últimas ofertas con más reducciones de precio fantásticas"
+    },
+    "sell_your_house": {
+      "title": "Franquicia",
+      "short_description": "¿Está buscando vender su casa?"
+    },
+    "franchise": {
+      "title": "Franquicia",
+      "short_description": "Comience su camino como franquiciado con una marca de confianza. Bajo riesgo, gran apoyo y un potencial de crecimiento ilimitado."
+    },
+    "safe_hands": {
+      "title": "Estás en Buenas Manos",
+      "short_description": "Con la confianza de miles, priorizamos su seguridad y satisfacción en cada paso."
+    }
+  },
+  "advance_search": {
+    "title": "Propiedad en Andalucía",
+    "text": "En Inland Andalucía tenemos propiedades rurales e interiores que van desde fincas, villas y casas adosadas hasta apartamentos. Nos especializamos en las zonas de Antequera, Córdoba, Granada, Jaén, Málaga y Sevilla, donde con nosotros encontrará su propiedad ideal en el interior. Si no encuentra lo que busca, por favor contáctenos, probablemente la tengamos.",
+    "search_ref": "Búsqueda de propiedad por referencia",
+    "search_advance": "Búsqueda de propiedad (avanzada)",
+    "g_map": "Buscar propiedades por mapa",
+    "search": "Buscar"
+  },
+  "viewing_trip": {
+    "title": "Viaje de Visita",
+    "description": "Nuestro servicio personalizado en su visita de inspección de propiedades incluye...",
+    "points": {
+      "point_1": "Antes de llegar, trabaje con nuestro equipo profesional seleccionando un portafolio de propiedades para ver. Esto incluirá tener sus preguntas específicas respondidas por correo electrónico y/o teléfono.",
+      "point_2": "Nuestro equipo lo llevará a recorrer sus propiedades seleccionadas y las áreas circundantes.",
+      "point_3": "Le proporcionaremos una guía completa de compra. Cuando encuentre la propiedad perfecta, le ayudaremos con todo el proceso durante y después de su compra. No somos solo una agencia inmobiliaria, somos su agencia integral.",
+      "point_4": "Hable con su Especialista en Propiedades sobre los lugares donde puede alojarse mientras esté aquí; pueden enviarle detalles de B&Bs y hoteles locales y usted podrá elegir cuál es el adecuado para usted."
+    }
+  },
+  "town-guide": {
+    "description": "Inland Andalucia colabora con LuvInland.com para ofrecerte la mejor información sobre Andalucía y su estilo de vida. Para cada localidad que tengamos en venta, haz clic en el nombre de la localidad para obtener toda la información que necesitas. LuvInland te enviará de vuelta a la página para que veas las propiedades en venta en la localidad seleccionada.",
+    "cordoba": {
+      "title": "Córdoba",
+      "section1": {
+        "heading": "Sobre Córdoba",
+        "text": "El barrio judío o casco antiguo, con sus pequeñas plazas, patios llenos de flores de colores y bares típicos donde se disfruta de tapas, está repleto de una arquitectura asombrosa. La Mezquita atrae a miles de visitantes cada año que acuden a admirar su magnífica obra: tardó dos siglos en completarse y es una asombrosa jungla de columnas, nichos y arcos con una iglesia en el centro. En el exterior de la mezquita se encuentran los hermosos jardines, el Patio de los Naranjos y la Calleja de las Flores."
+      },
+      "section2": {
+        "heading": "Cultura y Patrimonio",
+        "text": "Al otro lado del río, frente a la Mezquita, se encuentra el Alcázar, construido por los cristianos en 1328 como defensa contra los musulmanes. Ofrece un agradable respiro del calor del verano mientras paseas por sus arbolados jardines y patios."
+      },
+      "section3": {
+        "heading": "Geografía y agricultura",
+        "text": "Así como la ciudad está dividida, también lo está la provincia: Sierra Morena al norte, con sus escarpadas colinas cubiertas de pinos y robles, y algunos pueblos empinados enclavados en ellas. La Campiña al sur, con sus tierras de cultivo cubiertas de trigo, vid y olivos. La zona es famosa por sus vinos blancos secos, similares al jerez, elaborados con la uva Pedro Ximénez, y por el aceite de oliva, otro de los principales productos de la región."
+      },
+      "section4": {
+        "heading": "Cocina local",
+        "text": "Por eso, el aceite de oliva es un ingrediente importante en muchos platos típicos. El gazpacho y el salmorejo son sopas frías hechas principalmente de puré de verduras y aceite de oliva, deliciosas y refrescantes para el calor del verano. El jamón curado, el salchichón, la caña de lomo y la morcilla también son muy populares en la provincia. Algunos postres típicos son los alfajores, hechos con almendras y miel, y los pestiños, fritos en aceite y cubiertos con miel."
+      },
+      "section5": {
+        "heading": "Festivales y eventos",
+        "text": "Córdoba disfruta de sus fiestas y festivales como cualquier otra ciudad de España, y la Semana Santa es una de las más importantes. Hay nada menos que 32 procesiones en total con imágenes y figuras de santos bellamente decoradas y ornamentadas, acompañadas por los Nazarenos (hombres vestidos con túnicas típicas con capuchas que cubren todo el rostro excepto los ojos). Estas procesiones recorren la ciudad seguidas por multitudes. En mayo hay tres festivales: del 5 al 12 se celebra el Festival de los Patios Cordobeses, un concurso para el patio mejor decorado; las Cruces de Mayo, cuando toda la ciudad se engalana con cruces y miles de flores; y la última semana de mayo es cuando todos se desfogan en la Feria de Córdoba: se disfruta de la música y el baile flamenco y toda la ciudad se deleita con las festividades."
+      }
+    },
+     "granada": {
+      "title": "Granada",
+      "section1": {
+        "heading": "Sobre Granada",
+        "text": "La provincia de Granada se encuentra en la parte oriental de la Comunidad Autónoma de Andalucía, limita con las provincias de Málaga, Córdoba, Jaén, Albacete, Murcia y Almería, y se extiende hasta el mar Mediterráneo. Comprende 168 municipios."
+      },
+      "section2": {
+        "heading": "Belleza Natural",
+        "text": "La provincia de Granada presume de poseer el monte más alto de la España continental, el Mulhacén, con 3.481 metros, así como Sierra Nevada (la estación de esquí más meridional de Europa). Durante los meses de invierno, los turistas acuden en masa a Sierra Nevada para esquiar y escalar montañas, pero la ciudad de Granada es popular durante todo el año por su arquitectura árabe y la famosa Alhambra, con sus palacios y jardines. Sin olvidar las casas cueva que salpican el cerro del Sacromonte, al norte de la ciudad, que antaño albergaba a la numerosa comunidad gitana granadina."
+      },
+      "section3": {
+        "heading": "Herencia cultural",
+        "text": "La colina frente a la Alhambra se llama Albaicín y si subes por las estrechas calles, pasando por todas las casas encaladas, llegarás al punto más alto con impresionantes vistas de la Alhambra y de los diferentes paisajes de la provincia de Granada."
+      },
+      "section4": {
+        "heading": "Actividades al aire libre",
+        "text": "La provincia ofrece numerosas oportunidades para actividades al aire libre. El Río Genil es famoso por la pesca de trucha, y Sierra Nevada ofrece excelentes oportunidades para practicar senderismo y escalada. La región de las Alpujarras es especialmente popular para las vacaciones de senderismo, con su red de antiguos senderos que conectan los pueblos blancos."
+      }
+    },
+    "jaen": {
+      "title": "Jaén",
+      "section1": {
+        "heading": "Sobre Jaén",
+        "text": "La provincia de Jaén es conocida como la capital mundial del aceite de oliva, con inmensos olivares que cubren sus ondulantes colinas y valles. Esta hermosa región del interior alberga ciudades renacentistas, castillos medievales y parques naturales. La provincia ofrece un auténtico estilo de vida español, lejos de las zonas turísticas costeras, con un rico patrimonio cultural y paisajes naturales impresionantes como el Parque Natural de la Sierra de Cazorla, Segura y Las Villas."
+      },
+      "section2": {
+        "heading": "Patrimonio del Aceite de Oliva",
+        "text": "Jaén produce más aceite de oliva que cualquier otra región del mundo. El vasto mar de olivos que cubre el paisaje no solo tiene importancia económica, sino que también define la cultura y la gastronomía de la zona."
+      },
+      "section3": {
+        "heading": "Patrimonio renacentista",
+        "text": "Las ciudades gemelas de Úbeda y Baeza son Patrimonio de la Humanidad por la UNESCO, conocidas por su notable arquitectura renacentista. Estos centros históricos albergan palacios, iglesias y plazas construidas durante el Siglo de Oro español."
+      },
+      "section4": {
+        "heading": "Parques Naturales",
+        "text": "El Parque Natural Sierra de Cazorla, Segura y Las Villas es el espacio protegido más grande de España y ofrece impresionantes paisajes montañosos, densos bosques, ríos y una fauna diversa, incluidos ciervos y jabalíes."
+      },
+      "section5": {
+        "heading": "Gastronomía",
+        "text": "La cocina de Jaén se centra en el aceite de oliva, con platos tradicionales como la pipirrana (ensalada de verduras), los andrajos (guiso con fideos planos) y los ochíos (pan anisado) que ofrecen auténticos sabores del interior de Andalucía."
+      }
+    },
+      "malaga": {
+      "title": "málaga",
+      "section1": {
+        "heading": "Sobre Málaga",
+        "text": "La provincia de Málaga se encuentra al sur de Andalucía, a lo largo de la costa mediterránea. Es conocida por sus hermosas playas, impresionantes sierras y un rico patrimonio cultural.<br />La provincia ofrece una combinación perfecta de vida costera e interior, con el Parque Natural de la Sierra de las Nieves y el famoso Torcal de Antequera, que ofrecen espectaculares paisajes naturales."
+      },
+      "section2": {
+        "heading": "Belleza Natural",
+        "text": "La provincia cuenta con diversos paisajes naturales, desde las espectaculares formaciones calizas de El Torcal de Antequera hasta las playas vírgenes de la Costa del Sol. El Parque Natural Sierra de las Nieves es Reserva de la Biosfera de la UNESCO."
+      },
+      "section3": {
+        "heading": "Herencia cultural",
+        "text": "El patrimonio cultural de Málaga se remonta a miles de años. La ciudad de Málaga alberga la impresionante Alcazaba y el Teatro Romano. Antequera es conocida por sus dólmenes, túmulos prehistóricos declarados Patrimonio de la Humanidad por la UNESCO."
+      },
+      "section4": {
+        "heading": "Cocina Local",
+        "text": "La gastronomía malagueña refleja sus influencias costeras y del interior. El marisco fresco, en particular el pescado frito, es una especialidad local. La provincia también es conocida por sus vinos dulces, en particular el vino malagueño."
+      },
+      "section5": {
+        "heading": "Festivales y eventos",
+        "text": "La provincia acoge numerosos festivales a lo largo del año. El Festival de Cine de Málaga atrae la atención internacional, mientras que la Feria de Málaga, en agosto, es una de las celebraciones más importantes de Andalucía."
+      }
+    },
+    "sevilla": {
+      "title": "Sevilla",
+      "section1": {
+        "heading": "About Sevilla",
+        "text": "Sevilla province is a treasure trove of history, culture, and natural beauty. While famous for its capital city with iconic landmarks like the Giralda and Plaza de España, the inland areas offer a different, more authentic experience.<br />The province features picturesque white towns, rolling olive groves, and historical sites from various civilizations that have called this region home, from the Romans and Moors to Renaissance and Baroque influences."
+      },
+      "section2": {
+        "heading": "Historic Towns",
+        "text": "Inland Sevilla is home to charming historic towns like Osuna, Écija, Carmona, and Marchena, each with unique architecture and rich heritage. Osuna's Renaissance palaces and Écija's Baroque church towers have earned it the nickname \"City of Towers.\""
+      },
+      "section3": {
+        "heading": "Natural Landscapes",
+        "text": "The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations, to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves."
+      },
+      "section4": {
+        "heading": "Culinary Traditions",
+        "text": "Sevillian cuisine is a delight for food lovers, featuring specialties like gazpacho, spinach with chickpeas, and Iberian ham. The inland areas are particularly renowned for olive oils, artisanal cheeses, and traditional sweets."
+      },
+      "section5": {
+        "heading": "Festivals & Traditions",
+        "text": "Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals."
+      }
+    }
+  },
+  "footer": {
+    "about_title": "Inland Andalucia",
+    "about_text": "Especialistas en propiedades del interior de Andalucía, España. Ofreciendo un servicio personalizado a compradores y vendedores desde 2001.",
+    "quick_links_title": "Enlaces Rápidos",
+    "quick_links": {
+      "properties": "Propiedades",
+      "town_guide": "Guía de Pueblos",
+      "buyers_guide": "Guía del Comprador",
+      "blog": "Blog",
+      "about_us": "Sobre Nosotros",
+      "contact": "Contacto"
+    },
+    "contact_title": "Contáctenos",
+    "contact_address": "Calle Andalucia 12, 29550 Ardales, Málaga, España",
+    "contact_phone": "+34 952 741 525",
+    "contact_email": "info@inlandandalucia.com",
+    "newsletter_title": "Boletín",
+    "newsletter_text": "Suscríbete a nuestro boletín para recibir las últimas actualizaciones de propiedades y análisis del mercado.",
+    "newsletter_placeholder": "Tu correo electrónico",
+    "newsletter_subscribe": "Suscribirse",
+    "copyright": "© 2024 Inland Andalucía. Todos los derechos reservados.",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos y Condiciones"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "view": "Ver",
+    "close": "Cerrar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "back": "Atrás",
+    "continue": "Continuar",
+    "submit": "Enviar",
+    "reset": "Restablecer"
+  }
+}
