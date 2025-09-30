@@ -182,10 +182,10 @@ export default function MalagaPage() {
                 </div>
               </div>
             </section>
-            <section>
+            <section>      
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('malaga.section5.heading')}</h2>
+                  <h2 className="tesxt-3xl font-semibold text-primary-900 mb-4">{t('malaga.section5.heading')}</h2>
                   <p className="text-base text-neutral-700">{t('malaga.section5.text')}</p>
                 </div>
                 <div className="relative h-[300px] overflow-hidden">
