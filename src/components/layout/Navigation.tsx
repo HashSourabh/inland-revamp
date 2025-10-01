@@ -106,14 +106,14 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
     });
 
   return (
-    <nav className={`hidden md:flex items-center gap-8 ${isRtl ? 'flex-row-reverse' : ''}`}>
-      <Link href="/" className="text-neutral-900 hover:text-primary-600 transition-colors">
+    <nav className={`hidden md:flex items-center gap-5 ${isRtl ? 'flex-row-reverse' : ''}`}>
+      {/* <Link href="/" className="text-neutral-900 hover:text-primary-600 transition-colors">
         {t('home')}
-      </Link>
+      </Link> */}
 
       {/* Property Search Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
+        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
           {t('properties')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
@@ -128,7 +128,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
 
       {/* Town Guide Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
+        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
           {t('townGuide')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
@@ -143,7 +143,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
 
       {/* Buyer's Guide Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
+        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
           {t('buyersGuide')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
@@ -167,7 +167,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
 
       {/* About Us Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
+        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
           {t('about')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
@@ -182,7 +182,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
 
       {/* Contact Us Dropdown */}
       <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors">
+        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
           {t('contact')}
           <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
         </button>
