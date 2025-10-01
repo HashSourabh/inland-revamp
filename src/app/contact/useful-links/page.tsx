@@ -1,13 +1,16 @@
-import React from 'react';
-import { 
-  HomeIcon, 
-  BuildingOfficeIcon, 
+"use client";
+
+import React from "react";
+import {
+  HomeIcon,
+  BuildingOfficeIcon,
   GlobeAltIcon,
   AcademicCapIcon,
   TruckIcon,
   HeartIcon
-} from '@heroicons/react/24/outline';
-import Link from 'next/link';
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface LinkCategory {
   title: string;
@@ -20,100 +23,102 @@ interface LinkCategory {
 }
 
 export default function UsefulLinksPage() {
+  const t = useTranslations("contact-us.useful-links");
+
   const categories: LinkCategory[] = [
     {
-      title: 'Property & Legal',
+      title: t("categories.property-legal.title"),
       icon: <HomeIcon className="h-6 w-6" />,
       links: [
         {
-          title: 'Spanish Land Registry',
-          url: 'https://www.registradores.org',
-          description: 'Official property registration information'
+          title: t("categories.property-legal.links.0.title"),
+          url: t("categories.property-legal.links.0.url"),
+          description: t("categories.property-legal.links.0.description"),
         },
         {
-          title: 'Spanish Notary Council',
-          url: 'https://www.notariado.org',
-          description: 'Information about the Spanish notary system'
+          title: t("categories.property-legal.links.1.title"),
+          url: t("categories.property-legal.links.1.url"),
+          description: t("categories.property-legal.links.1.description"),
         }
       ]
     },
     {
-      title: 'Government & Administration',
+      title: t("categories.government-administration.title"),
       icon: <BuildingOfficeIcon className="h-6 w-6" />,
       links: [
         {
-          title: 'Junta de Andalucía',
-          url: 'https://www.juntadeandalucia.es',
-          description: 'Regional government of Andalusia'
+          title: t("categories.government-administration.links.0.title"),
+          url: t("categories.government-administration.links.0.url"),
+          description: t("categories.government-administration.links.0.description"),
         },
         {
-          title: 'Spanish Tax Agency',
-          url: 'https://www.agenciatributaria.es',
-          description: 'Tax information and procedures'
+          title: t("categories.government-administration.links.1.title"),
+          url: t("categories.government-administration.links.1.url"),
+          description: t("categories.government-administration.links.1.description"),
         }
       ]
     },
     {
-      title: 'Tourism & Culture',
+      title: t("categories.tourism-culture.title"),
       icon: <GlobeAltIcon className="h-6 w-6" />,
       links: [
         {
-          title: 'Andalucia Tourism',
-          url: 'https://www.andalucia.org',
-          description: 'Official tourism portal of Andalusia'
+          title: t("categories.tourism-culture.links.0.title"),
+          url: t("categories.tourism-culture.links.0.url"),
+          description: t("categories.tourism-culture.links.0.description"),
         },
         {
-          title: 'Spanish Tourism',
-          url: 'https://www.spain.info',
-          description: 'Official tourism website of Spain'
+          title: t("categories.tourism-culture.links.1.title"),
+          url: t("categories.tourism-culture.links.1.url"),
+          description: t("categories.tourism-culture.links.1.description"),
         }
       ]
     },
     {
-      title: 'Education',
+      title: t("categories.education.title"),
       icon: <AcademicCapIcon className="h-6 w-6" />,
       links: [
         {
-          title: 'Spanish Language Schools',
-          url: '#',
-          description: 'Learn Spanish in Andalucia'
+          title: t("categories.education.links.0.title"),
+          url: t("categories.education.links.0.url"),
+          description: t("categories.education.links.0.description"),
         },
         {
-          title: 'International Schools',
-          url: '#',
-          description: 'Education options for expatriates'
+          title: t("categories.education.links.1.title"),
+          url: t("categories.education.links.1.url"),
+          description: t("categories.education.links.1.description"),
         }
       ]
     },
     {
-      title: 'Moving & Relocation',
+      title: t("categories.moving-relocation.title"),
       icon: <TruckIcon className="h-6 w-6" />,
       links: [
         {
-          title: 'Removal Companies',
-          url: '#',
-          description: 'International moving services'
+          title: t("categories.moving-relocation.links.0.title"),
+          url: t("categories.moving-relocation.links.0.url"),
+          description: t("categories.moving-relocation.links.0.description"),
         },
         {
-          title: 'NIE Number Information',
-          url: '#',
-          description: 'Guide to obtaining your NIE'
+          title: t("categories.moving-relocation.links.1.title"),
+          url: t("categories.moving-relocation.links.1.url"),
+          description: t("categories.moving-relocation.links.1.description"),
         }
       ]
     },
     {
-      title: 'Healthcare',
+      title: t("categories.healthcare.title"),
       icon: <HeartIcon className="h-6 w-6" />,
       links: [
         {
-          title: 'Spanish Healthcare System',
-          url: '#',
-          description: 'Information about healthcare in Spain'
+          title: t("categories.healthcare.links.0.title"),
+          url: t("categories.healthcare.links.0.url"),
+          description: t("categories.healthcare.links.0.description"),
         },
         {
-          title: 'Private Medical Insurance',
-          url: '#',
-          description: 'Healthcare options for residents'
+          title: t("categories.healthcare.links.1.title"),
+          url: t("categories.healthcare.links.1.url"),
+          description: t("categories.healthcare.links.1.description"),
         }
       ]
     }
@@ -124,10 +129,10 @@ export default function UsefulLinksPage() {
       {/* Hero Section */}
       <div className="mb-8 bg-white rounded-xl border border-black/10 p-6">
         <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-5">
-          Useful Links
+          {t("header.title")}
         </h1>
         <p className="text-base text-neutral-600 m-0">
-          Essential resources and information for living and buying property in Inland Andalucia
+          {t("header.description")}
         </p>
       </div>
 
@@ -164,4 +169,4 @@ export default function UsefulLinksPage() {
       </div>
     </div>
   );
-} 
+}

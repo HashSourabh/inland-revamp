@@ -88,7 +88,7 @@ export default function CordobaPage() {
           <div className="absolute top-0 left-0 w-full h-full flex items-center">
             <div className="mx-auto max-w-5xl px-5 text-center">
               <h1 className="font-heading text-5xl font-bold text-white mb-2">
-                 {t('granada.title')}
+                 {t('cordoba.title')}
               </h1>
             </div>
           </div>

@@ -1,3 +1,4 @@
+import '../../app/globals.css'
 import type { Metadata } from 'next';
 import { Open_Sans, Playfair_Display, Work_Sans, DM_Sans } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';

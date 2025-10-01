@@ -196,7 +196,7 @@
         "text": "Cordoue, comme toute autre ville d'Espagne, célèbre ses fêtes et festivals, et la Semaine Sainte, ou Semaine Sainte, est l'une des plus importantes. On y dénombre pas moins de 32 processions au total, agrémentées de tableaux et de figures de saints magnifiquement décorés et ornés, accompagnés des Nazarenos (hommes vêtus de robes typiques à capuches qui couvrent tout le visage sauf les yeux). Ces processions traversent la ville, suivies par une foule nombreuse. En mai, trois festivals ont lieu : du 5 au 12, la Fête des « Patios Cordobeses », un concours de la cour la plus joliment décorée ; les Cruces de Mayo, où toute la ville est décorée de croix et de milliers de fleurs ; la dernière semaine de mai, la Feria de Cordoue, où musique et danse flamenco sont au rendez-vous et où toute la ville se délecte des festivités."
       }
     },
-     "granada": {
+    "granada": {
       "title": "Grenade",
       "section1": {
         "heading": "À propos de Grenade",
@@ -238,7 +238,7 @@
         "text": "La cuisine de Jaén est centrée sur l'huile d'olive, avec des plats traditionnels comme la pipirrana (salade de légumes), les andrajos (ragoût de nouilles plates) et les ochíos (pain anisé) offrant des saveurs authentiques de l'Andalousie intérieure."
       }
     },
-      "malaga": {
+    "malaga": {
       "title": "Málaga",
       "section1": {
         "heading": "À propos de Málaga",
@@ -262,26 +262,716 @@
       }
     },
     "sevilla": {
-      "title": "Sevilla",
+      "title": "Séville",
       "section1": {
-        "heading": "About Sevilla",
-        "text": "Sevilla province is a treasure trove of history, culture, and natural beauty. While famous for its capital city with iconic landmarks like the Giralda and Plaza de España, the inland areas offer a different, more authentic experience.<br />The province features picturesque white towns, rolling olive groves, and historical sites from various civilizations that have called this region home, from the Romans and Moors to Renaissance and Baroque influences."
+        "heading": "À propos de Séville",
+        "text": "La province de Séville est un véritable trésor d’histoire, de culture et de beauté naturelle. Bien qu’elle soit célèbre pour sa capitale et ses monuments emblématiques comme la Giralda et la Plaza de España, les zones intérieures offrent une expérience différente et plus authentique.<br />La province se distingue par ses villages blancs pittoresques, ses oliveraies vallonnées et ses sites historiques issus des nombreuses civilisations qui ont habité cette région, des Romains et des Maures aux influences Renaissance et Baroque."
       },
       "section2": {
-        "heading": "Historic Towns",
-        "text": "Inland Sevilla is home to charming historic towns like Osuna, Écija, Carmona, and Marchena, each with unique architecture and rich heritage. Osuna's Renaissance palaces and Écija's Baroque church towers have earned it the nickname \"City of Towers.\""
+        "heading": "Villes Historiques",
+        "text": "L’intérieur de Séville abrite de charmantes villes historiques telles qu’Osuna, Écija, Carmona et Marchena, chacune avec une architecture unique et un riche patrimoine. Les palais de la Renaissance d’Osuna et les clochers baroques d’Écija lui ont valu le surnom de « Ville des Tours »."
       },
       "section3": {
-        "heading": "Natural Landscapes",
-        "text": "The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations, to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves."
+        "heading": "Paysages Naturels",
+        "text": "La province offre une grande diversité de paysages naturels, du Parc Naturel de la Sierra Norte avec ses forêts denses et formations granitiques, à la fertile vallée du Guadalquivir avec ses champs infinis de tournesols, de blé et d’oliveraies."
       },
       "section4": {
-        "heading": "Culinary Traditions",
-        "text": "Sevillian cuisine is a delight for food lovers, featuring specialties like gazpacho, spinach with chickpeas, and Iberian ham. The inland areas are particularly renowned for olive oils, artisanal cheeses, and traditional sweets."
+        "heading": "Traditions Culinaires",
+        "text": "La cuisine sévillane est un vrai régal pour les gourmets, avec des spécialités telles que le gazpacho, les épinards aux pois chiches et le jambon ibérique. Les zones de l’intérieur sont particulièrement réputées pour leurs huiles d’olive, leurs fromages artisanaux et leurs douceurs traditionnelles."
       },
       "section5": {
-        "heading": "Festivals & Traditions",
-        "text": "Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals."
+        "heading": "Festivals et Traditions",
+        "text": "L’intérieur de Séville s’anime lors de ses festivals traditionnels. Chaque ville possède sa propre fête unique, allant des processions spectaculaires de la Semaine Sainte aux ferias estivales animées, aux spectacles de flamenco et aux festivals agricoles de récolte."
+      }
+    }
+  },
+  "buyers-guide": {
+    "title": "Le Processus d’Achat d’un Bien Immobilier en Espagne",
+    "description": "Un guide complet pour acheter une propriété en Espagne, de la première visite à la remise des clés. Comprendre chaque étape permet d’assurer un achat en toute sérénité.",
+    "steps": [
+      {
+        "heading": "Étape 1 : Visite et Sélection de la Propriété",
+        "items": [
+          "Planifiez des visites de biens correspondant à vos critères",
+          "Prenez des notes détaillées et des photos pendant les visites",
+          "Posez des questions sur l’historique et l’état du bien",
+          "Renseignez-vous sur le quartier et les commodités locales",
+          "Envisagez une deuxième visite si vous êtes intéressé"
+        ]
+      },
+      {
+        "heading": "Étape 2 : Faire une Offre",
+        "items": [
+          "Soumettez votre offre via votre agent immobilier",
+          "Négociez le prix et les conditions",
+          "Convenez des équipements et meubles inclus",
+          "Discutez du calendrier et des éventuelles conditions"
+        ]
+      },
+      {
+        "heading": "Étape 3 : Processus Juridique et Administratif",
+        "items": [
+          "Désignez un représentant légal",
+          "Obtenez le NIE (numéro d’identité d’étranger)",
+          "Ouvrez un compte bancaire en Espagne",
+          "Effectuez les vérifications et recherches sur le bien",
+          "Relisez et signez le contrat de réservation"
+        ]
+      },
+      {
+        "heading": "Documentation Importante",
+        "intro": "Documents essentiels nécessaires durant le processus :",
+        "items": [
+          "NIE (Numéro d’identité d’étranger)",
+          "Passeport ou carte d’identité",
+          "Justificatif de fonds",
+          "Procuration (si absent lors de la signature)"
+        ]
+      },
+      {
+        "heading": "Étape 4 : Finalisation de l’Achat",
+        "items": [
+          "Signez le contrat d’achat (Escritura)",
+          "Payez le solde restant et les taxes",
+          "Enregistrez le bien à votre nom",
+          "Recevez les clés et la documentation",
+          "Souscrivez aux contrats de services et d’électricité"
+        ]
+      },
+      {
+        "heading": "Support Après l’Achat",
+        "intro": "Notre service ne s’arrête pas à l’achat. Nous vous aidons à :",
+        "items": [
+          "Mettre en place les services et abonnements",
+          "Vous mettre en relation avec des entrepreneurs locaux si nécessaire",
+          "Fournir des informations sur la région",
+          "Un accompagnement et des conseils continus"
+        ]
+      }
+    ],
+    "cta": {
+      "heading": "Besoin de Plus d’Informations ?",
+      "text": "Contactez notre équipe pour des conseils détaillés sur le processus d’achat ou pour organiser une visite.",
+      "buttons": {
+        "contact": "Contactez-nous",
+        "properties": "Voir les Propriétés"
+      }
+    }
+  },
+  "buying-property": {
+    "title": "Acheter une Propriété en Espagne",
+    "description": "Votre guide complet pour l'achat de biens immobiliers dans l'intérieur de l'Espagne. Découvrez les différents types de propriétés, les points clés à considérer et comment faire le bon choix selon vos besoins.",
+    "types-of-properties": [
+      {
+        "name": "Cortijos",
+        "description": "Fermes espagnoles traditionnelles, souvent avec terrain et dépendances"
+      },
+      {
+        "name": "Maisons de Village",
+        "description": "Propriétés au cœur des villages traditionnels espagnols"
+      },
+      {
+        "name": "Villas",
+        "description": "Maisons individuelles modernes ou traditionnelles, souvent avec jardins et piscines"
+      },
+      {
+        "name": "Propriétés Rurales",
+        "description": "Maisons rurales avec terrain et belles vues"
+      },
+      {
+        "name": "Projets de Rénovation",
+        "description": "Propriétés nécessitant des travaux mais offrant un grand potentiel"
+      }
+    ],
+    "key-considerations": [
+      "Emplacement et accessibilité",
+      "État de la propriété et besoins potentiels de rénovation",
+      "Statut juridique et documentation",
+      "Commodités et services locaux",
+      "Potentiel de revente futur"
+    ],
+    "important-note": "Travaillez toujours avec un agent réputé qui peut vérifier le statut légal des propriétés et vous guider tout au long du processus d'achat. Chez Inland Andalucia, nous garantissons que toutes nos propriétés sont légalement conformes et disposent des documents appropriés.",
+    "our-services": [
+      "Large connaissance et expertise locale",
+      "Vérification de la propriété et contrôles juridiques",
+      "Support multilingue tout au long du processus",
+      "Accès à des professionnels locaux de confiance",
+      "Assistance et conseils après-vente"
+    ],
+    "cta": {
+      "heading": "Prêt à commencer votre recherche de propriété?",
+      "text": "Parcourez notre vaste collection de propriétés dans l'intérieur.",
+      "buttons": {
+        "properties": "Voir les Propriétés"
+      }
+    }
+  },
+  "property-taxes": {
+    "title": "Impôts sur la Propriété en Espagne",
+    "description": "Comprendre les implications fiscales de l'achat et de la possession d'un bien immobilier en Espagne est crucial pour prendre des décisions éclairées. Voici un aperçu complet de tous les impôts impliqués.",
+    "purchase-taxes": {
+      "heading": "Taxes d'Achat",
+      "transfer-tax": {
+        "heading": "Droits de Transfert (ITP)",
+        "intro": "Lors de l'achat d'un bien immobilier d'occasion, vous devrez payer les droits de transfert de propriété (ITP) :",
+        "items": [
+          "8% pour les propriétés jusqu'à 400 000 €",
+          "9% pour les propriétés entre 400 000 € et 700 000 €",
+          "10% pour les propriétés supérieures à 700 000 €"
+        ]
+      },
+      "vat-stamp-duty": {
+        "heading": "TVA (IVA) et Droits d'Enregistrement",
+        "intro": "Pour les biens neufs, au lieu de l'ITP, vous devrez payer :",
+        "items": [
+          "10% de TVA (IVA)",
+          "1,5% de Droits d'Enregistrement (AJD)"
+        ]
+      }
+    },
+    "important-note": {
+      "heading": "Note Importante",
+      "text": "Les taux d'imposition peuvent varier selon les régions en Espagne et peuvent évoluer avec le temps. Consultez toujours un professionnel juridique pour obtenir les taux et réglementations les plus récents."
+    },
+    "annual-taxes": {
+      "heading": "Taxes Annuelles sur la Propriété",
+      "ibi": {
+        "heading": "IBI (Taxe Foncière)",
+        "intro": "La principale taxe annuelle sur la propriété en Espagne, basée sur la valeur cadastrale de votre bien :",
+        "items": [
+          "Payée annuellement à la mairie locale",
+          "Les taux varient selon la municipalité",
+          "Généralement entre 0,4 % et 1,1 % de la valeur cadastrale"
+        ]
+      },
+      "basura": {
+        "heading": "Basura (Collecte des Déchets)",
+        "intro": "Frais annuels pour les services de collecte des déchets :",
+        "items": [
+          "Varie selon l'emplacement et la taille du bien",
+          "Généralement payé annuellement"
+        ]
+      }
+    },
+    "non-resident-taxes": {
+      "heading": "Taxes pour Non-Résidents",
+      "intro": "Si vous êtes propriétaire non résident, vous devrez :",
+      "items": [
+        "Déposer une déclaration annuelle de revenus",
+        "Payer l'impôt sur les revenus locatifs (le cas échéant)",
+        "Soumettre le formulaire 210 pour l'impôt sur le revenu imputé"
+      ]
+    },
+    "capital-gains-tax": {
+      "heading": "Impôt sur les Plus-Values",
+      "intro": "Lors de la vente de votre propriété, vous devrez prendre en compte :",
+      "items": [
+        "19-23% d'impôt sur les gains réalisés (pour les non-résidents)",
+        "Possibles exonérations pour les résidences principales",
+        "Déductions pour améliorations et frais d'achat"
+      ]
+    },
+    "cta": {
+      "heading": "Besoin de Conseils Fiscaux ?",
+      "text": "Notre équipe peut vous mettre en relation avec des conseillers fiscaux expérimentés spécialisés dans la fiscalité des biens immobiliers en Espagne.",
+      "button": "Contactez Notre Équipe"
+    }
+  },
+  "faq-content": {
+    "title": "Questions Fréquemment Posées",
+    "description": "Trouvez des réponses aux questions les plus courantes sur l’achat d’une propriété dans l’intérieur de l’Espagne. Si vous ne trouvez pas ce que vous cherchez, n’hésitez pas à nous contacter.",
+    "sections": {
+      "general": {
+        "title": "Questions Générales",
+        "questions": [
+          {
+            "q": "Dois-je être résident pour acheter une propriété en Espagne ?",
+            "a": "Non, vous n’avez pas besoin d’être résident. Les non-résidents peuvent librement acheter une propriété en Espagne, mais vous aurez besoin d’un NIE (Numéro d’Identification d’Étranger) pour finaliser l’achat."
+          },
+          {
+            "q": "Quels coûts supplémentaires dois-je prévoir lors de l’achat ?",
+            "a": "Prévoyez environ 10 à 12 % du prix d’achat pour les coûts supplémentaires, y compris : droits de mutation (6-10 %), frais de notaire, honoraires d’avocat et frais d’enregistrement."
+          },
+          {
+            "q": "Combien de temps dure le processus d’achat ?",
+            "a": "Le processus d’achat typique prend 2 à 3 mois, de l’acceptation de l’offre jusqu’à la finalisation. Cela peut varier en fonction de facteurs tels que l’obtention d’un prêt hypothécaire et les vérifications légales."
+          }
+        ]
+      },
+      "legal": {
+        "title": "Aspects Légaux et Documentation",
+        "questions": [
+          {
+            "q": "Qu’est-ce qu’un NIE et comment l’obtenir ?",
+            "a": "Un NIE (Numéro d’Identification d’Étranger) est un numéro d’identification fiscale pour les étrangers. Vous pouvez l’obtenir auprès du consulat espagnol de votre pays ou dans un commissariat en Espagne. Nous pouvons vous aider dans ce processus."
+          },
+          {
+            "q": "Ai-je besoin d’un compte bancaire espagnol ?",
+            "a": "Oui, un compte bancaire en Espagne est nécessaire pour payer les services publics et les impôts locaux. Il est également requis si vous contractez un prêt hypothécaire espagnol."
+          },
+          {
+            "q": "Est-il nécessaire de faire un testament en Espagne ?",
+            "a": "Bien que non obligatoire, il est fortement recommandé de rédiger un testament espagnol pour votre propriété afin d’assurer une succession fluide et d’éviter des complications liées aux lois internationales de succession."
+          }
+        ]
+      },
+      "property": {
+        "title": "Propriété et Emplacement",
+        "questions": [
+          {
+            "q": "Quelle est la différence entre les propriétés urbaines et rurales ?",
+            "a": "Les propriétés urbaines se trouvent dans les limites de la ville avec accès aux services principaux. Les propriétés rurales peuvent avoir plus de terrain, mais elles peuvent être soumises à des restrictions de construction et à un accès limité aux services publics."
+          },
+          {
+            "q": "Puis-je rénover ou agrandir ma propriété ?",
+            "a": "Oui, mais vous aurez besoin des permis appropriés de la mairie locale. Les réglementations varient entre les zones urbaines et rurales, et certaines propriétés peuvent avoir des restrictions."
+          },
+          {
+            "q": "Quels coûts récurrents dois-je prévoir ?",
+            "a": "Les coûts réguliers incluent l’IBI (impôt municipal), les frais de communauté le cas échéant, les services publics, l’assurance et l’impôt sur le revenu des non-résidents si vous n’êtes pas résident."
+          }
+        ]
+      }
+    },
+    "cta": {
+      "heading": "Vous Avez Encore des Questions ?",
+      "text": "Notre équipe est là pour vous aider avec toutes vos questions concernant l’achat d’une propriété dans l’intérieur de l’Espagne.",
+      "button": "Contactez Notre Équipe"
+    }
+  },
+  "unpaid-taxes": {
+    "metadata": {
+      "title": "Comprendre les Impôts Impayés sur les Propriétés en Espagne | Inland Andalucia",
+      "description": "Découvrez les implications des impôts impayés lors de l'achat d'une propriété en Espagne, comment vérifier les dettes fiscales et vous protéger lors de l'achat."
+    },
+    "header": {
+      "title": "Comprendre les Impôts Impayés",
+      "description": "Lors de l'achat d'une propriété en Espagne, il est essentiel de comprendre les implications de tout impôt impayé lié à la propriété. Voici ce que vous devez savoir pour vous protéger."
+    },
+    "warning": {
+      "title": "Avertissement Important",
+      "text": "En Espagne, les impôts impayés associés à une propriété deviennent la responsabilité du nouveau propriétaire. Il est donc essentiel d’effectuer les vérifications nécessaires avant de finaliser tout achat."
+    },
+    "types": {
+      "title": "Types de Dettes Fiscales à Vérifier",
+      "items": [
+        {
+          "label": "IBI (Impôt Foncière)",
+          "text": "Impôt annuel payé à la mairie locale"
+        },
+        {
+          "label": "Frais de Communauté",
+          "text": "Pour les propriétés situées dans une communauté ou une urbanisation"
+        },
+        {
+          "label": "Plusvalía",
+          "text": "Impôt sur l’augmentation de la valeur du terrain"
+        },
+        {
+          "label": "Impôt sur la Fortune",
+          "text": "Pour les propriétés de grande valeur"
+        },
+        {
+          "label": "Impôt sur le Revenu",
+          "text": "Si la propriété a été louée"
+        }
+      ]
+    },
+    "checks": {
+      "title": "Comment Vérifier les Impôts Impayés",
+      "intro": "Plusieurs vérifications doivent être effectuées avant d'acheter une propriété :",
+      "steps": [
+        "Demander un certificat à la mairie indiquant les paiements IBI en attente",
+        "Si applicable, obtenir la confirmation de l'administrateur de la communauté que toutes les charges sont à jour",
+        "Vérifier auprès du Registre Foncier les dettes ou charges enregistrées",
+        "Vérifier auprès du service des impôts qu'il n'y a pas d'obligations fiscales en cours"
+      ]
+    },
+    "protection": {
+      "title": "Se Protéger",
+      "cards": [
+        {
+          "title": "Représentation Légale",
+          "text": "Faites toujours appel à un avocat qualifié qui peut effectuer une vérification approfondie et confirmer qu'il n'y a pas de dettes avant de procéder à l'achat."
+        },
+        {
+          "title": "Documentation",
+          "text": "Assurez-vous que tous les certificats et documents de liquidation sont obtenus et vérifiés avant de signer le contrat final d'achat."
+        }
+      ]
+    },
+    "commitment": {
+      "title": "Notre Engagement",
+      "intro": "Chez Inland Andalucia, nous nous assurons que :",
+      "points": [
+        "Toutes les propriétés listées aient été vérifiées pour les dettes en cours",
+        "La documentation nécessaire soit disponible pour examen",
+        "Nos partenaires juridiques puissent effectuer des vérifications supplémentaires si nécessaire",
+        "Vous soyez protégé tout au long du processus d'achat"
+      ]
+    },
+    "cta": {
+      "title": "Besoin d’une Assistance Professionnelle ?",
+      "text": "Notre équipe peut vous aider à vérifier la situation fiscale d'une propriété et à vous mettre en contact avec des experts juridiques de confiance.",
+      "buttons": {
+        "contact": "Contactez-nous",
+        "process": "Processus d’Achat"
+      }
+    }
+  },
+  "mortgage-guide": {
+    "metadata": {
+      "title": "Guide des Hypothèques en Espagne | Inland Andalucia",
+      "description": "Guide complet pour obtenir un prêt hypothécaire en Espagne. Découvrez les options de prêt, les exigences, les coûts et comment postuler en tant qu'acheteur étranger."
+    },
+    "header": {
+      "title": "Guide des Hypothèques en Espagne",
+      "description": "Comprendre les hypothèques en Espagne est crucial lors de l'achat d'une propriété. Voici tout ce que vous devez savoir pour financer votre achat."
+    },
+    "sections": {
+      "options": {
+        "title": "Options de Prêt Hypothécaire en Espagne",
+        "resident": {
+          "title": "Hypothèques pour Résidents",
+          "point1": "Financement jusqu'à 80 % pour les résidences principales",
+          "point2": "Meilleurs taux d'intérêt",
+          "point3": "Délais de remboursement plus longs disponibles",
+          "point4": "Conditions plus flexibles"
+        },
+        "nonResident": {
+          "title": "Hypothèques pour Non-Résidents",
+          "point1": "Financement généralement jusqu'à 70 %",
+          "point2": "Taux d'intérêt légèrement plus élevés",
+          "point3": "Délais de remboursement plus courts",
+          "point4": "Documentation supplémentaire requise"
+        }
+      },
+      "requirements": {
+        "title": "Exigences pour les Acheteurs Non-Résidents",
+        "intro": "Pour demander un prêt hypothécaire en Espagne en tant que non-résident, vous aurez besoin de :",
+        "point1": "NIE (Numéro d'Identité Étranger)",
+        "point2": "Justificatif de revenus (généralement les 3 à 6 derniers bulletins de salaire)",
+        "point3": "Déclarations fiscales de votre pays d'origine",
+        "point4": "Relevés bancaires (généralement les 3 à 6 derniers mois)",
+        "point5": "Preuve d'emploi ou de propriété d'entreprise",
+        "point6": "Documents relatifs à l'historique de crédit",
+        "point7": "Liste des actifs et passifs actuels"
+      },
+      "costs": {
+        "title": "Coûts Associés",
+        "intro": "Lors de la souscription d'un prêt hypothécaire, prévoyez ces coûts supplémentaires :",
+        "point1": "Frais d'évaluation de la propriété (€300-€600)",
+        "point2": "Frais de dossier de prêt hypothécaire (1-2 % du montant du prêt)",
+        "point3": "Frais notariaux pour l'acte de prêt",
+        "point4": "Assurance habitation (exigée par le prêteur)",
+        "point5": "Assurance vie (peut être requise)"
+      },
+      "types": {
+        "title": "Types d'Hypothèques en Espagne",
+        "fixed": {
+          "title": "Hypothèques à Taux Fixe",
+          "description": "Le taux d'intérêt reste le même pendant toute la durée. Offre une sécurité des paiements mensuels mais commence généralement avec un taux plus élevé."
+        },
+        "variable": {
+          "title": "Hypothèques à Taux Variable",
+          "description": "Le taux d'intérêt varie selon l'Euribor. Commence généralement plus bas mais les paiements peuvent changer avec le temps. Le type le plus courant en Espagne."
+        }
+      },
+      "process": {
+        "title": "Le Processus de Demande",
+        "step1": "Consultation initiale et évaluation des options",
+        "step2": "Rassembler et soumettre la documentation requise",
+        "step3": "Évaluation de la propriété",
+        "step4": "Évaluation et décision de la banque",
+        "step5": "Offre de prêt et acceptation",
+        "step6": "Signature chez le notaire"
+      }
+    },
+    "cta": {
+      "title": "Prêt à Explorer Vos Options de Prêt ?",
+      "description": "Notre équipe peut vous mettre en relation avec des conseillers hypothécaires espagnols de confiance spécialisés dans les prêts pour non-résidents.",
+      "buttons": {
+        "advice": "Obtenir des Conseils Hypothécaires",
+        "properties": "Voir les Propriétés"
+      }
+    }
+  },
+  "about-us": {
+    "location": {
+      "header": {
+        "title": "La localisation de l'Andalousie"
+      },
+      "content": {
+        "paragraph1": "La région autonome d'Andalousie se situe dans le sud de l'Espagne et ses côtes sont baignées à la fois par la mer Méditerranée et l'océan Atlantique.",
+        "paragraph2": "Elle borde l'Estrémadure et la Castille-La Manche au nord, Murcie et la mer Méditerranée à l'est, la Méditerranée et l'Atlantique au sud, et le Portugal à l'ouest. Le paysage de la région se distingue par sa grande diversité. Certaines zones sont montagneuses tandis que d'autres sont des plaines. Il existe trois structures géographiques distinctes : la Sierra Morena au nord, le fleuve Guadalquivir et la dépression Bétique dans la partie centrale, et les chaînes de montagnes Bétiques au sud.",
+        "paragraph3": "Les deux zones montagneuses les plus remarquables sont la sous-Bétique, comprenant le massif de La Sagra culminant à 2 383 mètres, et la chaîne pénibétique. La Sierra Nevada est également remarquable et abrite le Mulhacén, le plus haut sommet de la péninsule Ibérique avec 3 481 mètres. Vient ensuite le pic Veleta à 3 392 mètres. Les rivières andalouses se jetant dans la Méditerranée sont relativement courtes et peu abondantes, notamment l'Almanzora, l'Almería, l'Adra, le Guadalfeo, le Guadalhorce et le Guadiaro. Les rivières se jetant dans l'Atlantique sont plus grandes et plus abondantes. La rivière la plus importante est le Guadalquivir et ses affluents : Guadalimar, Guadiana Menor et Genil. Les rivières Guadiana, Odiel et Tinto se jettent également dans l'Atlantique.",
+        "paragraph4": "Le littoral andalou est parsemé de baies et d'anses, certaines plus escarpées à l'approche des chaînes Bétiques. Les particularités géographiques les plus notables le long de la côte incluent : le sommet rocheux de Farallon, le point Polacra, le cap de Gata, le golfe d'Almería, le point de Las Entinas, la baie d'Adra, la baie de Sacratif, la baie de Malaga et le point de Calaburras. Europa Point forme le promontoire de Gibraltar. Ici commence la côte espagnole du détroit de Gibraltar jusqu’au cap Trafalgar. Dans le détroit, les parties les plus remarquables du paysage sont formées par la baie d'Algeciras ainsi que par les points marocains et de Tarifa."
+      },
+      "images": {
+        "map": "Carte de l'Andalousie"
+      }
+    },
+    "weather": {
+      "title": "Le climat en Andalousie",
+      "text1": "Consultez les prévisions météo dans n'importe quelle région d'Andalousie en cliquant sur une province ci-dessous",
+      "text2": "Ou consultez-la dans différentes villes de chaque région d'Andalousie"
+    },
+    "airports": {
+      "header": {
+        "title": "Les aéroports en Andalousie"
+      },
+      "intro": "L'Andalousie est desservie par plusieurs aéroports majeurs, ce qui facilite l'accès depuis toute l'Europe et au-delà. Vous trouverez ci-dessous des guides des principaux aéroports de la région ainsi que des liens vers les compagnies aériennes populaires opérant des vols vers et depuis l'Andalousie.",
+      "airports": {
+        "malaga": {
+          "name": "Guide de l'aéroport de Malaga",
+          "description": "Informations sur les vols, la location de voitures, les transferts, les services et les installations à l'aéroport de Malaga.",
+          "button": "Visiter le site"
+        },
+        "granada": {
+          "name": "Guide de l'aéroport de Grenade",
+          "description": "Informations sur les vols, la location de voitures, les transferts, les services et les installations à l'aéroport de Grenade.",
+          "button": "Visiter le site"
+        },
+        "sevilla": {
+          "name": "Guide de l'aéroport de Séville",
+          "description": "Informations sur les vols, la location de voitures, les transferts, les services et les installations à l'aéroport de Séville.",
+          "button": "Visiter le site"
+        }
+      },
+      "airlines": {
+        "title": "Compagnies aériennes",
+        "list": [
+          "Iberia",
+          "Easyjet",
+          "Thomsonfly",
+          "Flybe",
+          "British Airways",
+          "Ryanair",
+          "Monarch",
+          "Clickair"
+        ]
+      },
+      "footerNote": "Suivez l'état des vols et plus sur flightstats.com"
+    }
+  },
+  "contact-us": {
+    "our-offices": {
+      "header": {
+        "title": "Nos bureaux"
+      },
+      "intro": "N'hésitez pas à visiter l'un de nos bureaux à Alcalá la Real, Mollina, Axarquía ou Martos si vous êtes dans la région à la recherche d'une propriété intérieure, car nous couvrons la majeure partie de l'intérieur de l'Andalousie. Cependant, afin de mieux vous servir, nous vous demandons de nous contacter à l'avance pour que nous puissions vous offrir l'attention individuelle que vous méritez lors de votre recherche de propriété en Andalousie. Cliquez ici pour accéder à notre formulaire de contact",
+      "contactLink": "/contact",
+      "offices": {
+        "mollina": {
+          "name": "Bureau de Mollina",
+          "address": [
+            "Calle Sol 8, 29532 Mollina (Málaga)"
+          ],
+          "phone": "+34 952 741 525",
+          "mobile": "+34 600 370 543",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Mollina",
+            "Mollina3",
+            "Mollina2"
+          ]
+        },
+        "alcala": {
+          "name": "Bureau d'Alcalá",
+          "address": [
+            "Calle Abad Moya 4 bajo, 23680 Alcalá la Real (Jaén)"
+          ],
+          "phone": "+34 953 587 040",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Alcala",
+            "Alcala2",
+            "Alcala3"
+          ]
+        },
+        "martos": {
+          "name": "Bureau de Martos",
+          "address": [
+            "Calle Lope de Vega, 6, 23600 Martos (Jaén)"
+          ],
+          "phone": "+34 953 704 319",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Martos",
+            "Martos2",
+            "Martos3"
+          ]
+        }
+      }
+    },
+    "newsletter": {
+      "header": {
+        "title": "Abonnez-vous à notre Newsletter Gratuite"
+      },
+      "intro": {
+        "paragraph1": "Notre newsletter mensuelle gratuite propose des actualités locales, les propriétés du mois, des informations sur les villes et leurs fêtes, et bien sûr, nos promotions immobilières.",
+        "paragraph2": "Si vous souhaitez vous inscrire, remplissez simplement votre nom et votre adresse e-mail puis cliquez sur le bouton 'S'inscrire'. C'est très simple !"
+      },
+      "form": {
+        "title": "Abonnez-vous à notre Newsletter Gratuite",
+        "fields": {
+          "name": {
+            "label": "Nom :"
+          },
+          "email": {
+            "label": "E-mail :"
+          },
+          "unsubscribe": {
+            "label": "Me désabonner de ce service"
+          },
+          "captcha": {
+            "label": "Captcha",
+            "question": "9 + 1 ="
+          }
+        },
+        "button": {
+          "subscribe": "S'abonner"
+        }
+      }
+    },
+    "useful-links": {
+      "header": {
+        "title": "Liens Utiles",
+        "description": "Ressources et informations essentielles pour vivre et acheter une propriété en Andalousie intérieure"
+      },
+      "categories": {
+        "property-legal": {
+          "title": "Propriété et Légal",
+          "links": [
+            {
+              "title": "Registre Foncier Espagnol",
+              "url": "https://www.registradores.org",
+              "description": "Informations officielles sur l’enregistrement des biens"
+            },
+            {
+              "title": "Conseil Général du Notariat",
+              "url": "https://www.notariado.org",
+              "description": "Informations sur le système notarial espagnol"
+            }
+          ]
+        },
+        "government-administration": {
+          "title": "Gouvernement et Administration",
+          "links": [
+            {
+              "title": "Junta d’Andalousie",
+              "url": "https://www.juntadeandalucia.es",
+              "description": "Gouvernement régional d’Andalousie"
+            },
+            {
+              "title": "Agence Fiscale Espagnole",
+              "url": "https://www.agenciatributaria.es",
+              "description": "Informations et procédures fiscales"
+            }
+          ]
+        },
+        "tourism-culture": {
+          "title": "Tourisme et Culture",
+          "links": [
+            {
+              "title": "Tourisme d’Andalousie",
+              "url": "https://www.andalucia.org",
+              "description": "Portail officiel du tourisme andalou"
+            },
+            {
+              "title": "Tourisme d’Espagne",
+              "url": "https://www.spain.info",
+              "description": "Site officiel du tourisme espagnol"
+            }
+          ]
+        },
+        "education": {
+          "title": "Éducation",
+          "links": [
+            {
+              "title": "Écoles de Langue Espagnole",
+              "url": "#",
+              "description": "Apprenez l’espagnol en Andalousie"
+            },
+            {
+              "title": "Écoles Internationales",
+              "url": "#",
+              "description": "Options éducatives pour expatriés"
+            }
+          ]
+        },
+        "moving-relocation": {
+          "title": "Déménagement et Relocalisation",
+          "links": [
+            {
+              "title": "Sociétés de Déménagement",
+              "url": "#",
+              "description": "Services de déménagement international"
+            },
+            {
+              "title": "Informations sur le NIE",
+              "url": "#",
+              "description": "Guide pour obtenir votre NIE"
+            }
+          ]
+        },
+        "healthcare": {
+          "title": "Santé",
+          "links": [
+            {
+              "title": "Système de Santé Espagnol",
+              "url": "#",
+              "description": "Informations sur la santé en Espagne"
+            },
+            {
+              "title": "Assurance Médicale Privée",
+              "url": "#",
+              "description": "Options de soins pour les résidents"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "sell-with-us": {
+    "header": {
+      "title": "Confiez-nous la vente de votre propriété"
+    },
+    "intro": {
+      "paragraph1": "Nous sommes la plus grande et la plus fiable agence immobilière d’Andalousie. Établis depuis plus de 20 ans, nous avons vendu des milliers de propriétés dans toute l’Andalousie intérieure.",
+      "paragraph2": "Nous faisons de la publicité sur plus de 30 portails en ligne à travers l’Europe et publions sur les principaux réseaux sociaux, y compris Facebook (atteignant plus de 100 000 personnes par mois), Telegram, Instagram et YouTube (plus de 70 000 vues par mois). Nous envoyons également des newsletters hebdomadaires à plus de 14 500 abonnés attentifs aux nouvelles annonces et aux baisses de prix. Ce marketing génère plus de 550 nouvelles demandes d’acheteurs chaque mois.",
+      "paragraph3": "Notre personnel multilingue utilise les dernières technologies numériques pour prendre des photos et vidéos de haute qualité de votre propriété. Découvrez ce que disent nos vendeurs et clients.",
+      "paragraph4": "Nous disposons d’une vaste base de données de clients prêts à acheter en Andalousie et nos experts immobiliers informent constamment les acheteurs des meilleures offres disponibles.",
+      "paragraph5": "Vendre votre propriété avec nous, c’est être entre de bonnes mains. Veuillez remplir le formulaire ci-dessous et nous vous contacterons dès que possible ou appelez le +34 952 741 525."
+    },
+    "form": {
+      "title": "Vendre votre Propriété",
+      "fields": {
+        "firstName": {
+          "label": "Prénom"
+        },
+        "lastName": {
+          "label": "Nom"
+        },
+        "telephone": {
+          "label": "Téléphone"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "location": {
+          "label": "Emplacement de la propriété"
+        },
+        "details": {
+          "label": "Détails de la propriété"
+        },
+        "captcha": {
+          "label": "Captcha",
+          "question": "40 + 5 ="
+        }
+      },
+      "button": {
+        "submit": "Soumettre la Propriété"
       }
     }
   }

@@ -12,8 +12,10 @@ import Sevilla5 from '@/assets/images/sevilla/garbanzos-scaled.jpg';
 import { useEffect, useState } from 'react';
 import { Area, fetchAreas, fetchRegions } from '@/utils/api';
 import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
+import { useTranslations } from 'next-intl';
 
 export default function SevillaPage() {
+  const t = useTranslations('town-guide')
   const [regionName, setRegionName] = useState<string>('')
   const [regionId, setRegionId] = useState<number | null>(null)
   const [areas, setAreas] = useState<Area[]>([])
@@ -76,16 +78,14 @@ export default function SevillaPage() {
         <Image src={Sevilla} alt={`${displayRegionName} Mezquita`} fill className="object-cover mt-0 opacity-45" priority />
         <div className="absolute top-0 left-0 w-full h-full flex items-center">
           <div className="mx-auto max-w-5xl px-5 text-center">
-            <h1 className="font-heading text-5xl font-bold text-white mb-2">{displayRegionName}</h1>
+            <h1 className="font-heading text-5xl font-bold text-white mb-2"> {t('sevilla.title')}</h1>
           </div>
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
         <div className="col-span-3">
           <p className="text-base mb-8 text-neutral-700">
-            Inland Andalucia is collaborating with LuvInland.com to give you the best level of Information about Andalucia and its LIFESTYLE.
-            For Each town we have properties for sale, click on the town name to get all the information you need.
-            Luvinland will return you to us to view the properties for sale in the town selected.
+            {t('description')}
           </p>
           {loading ? (
             <div className="flex justify-center items-center py-10">
@@ -122,11 +122,8 @@ export default function SevillaPage() {
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">About {displayRegionName}</h2>
-                  <p className="text-base text-neutral-700">Sevilla province is a treasure trove of history, culture, and natural beauty. While famous for its capital city with
-                    iconic landmarks like the Giralda and Plaza de España, the inland areas offer a different, more authentic experience.</p>
-                  <p className="text-base text-neutral-700">The province features picturesque white towns, rolling olive groves, and historical sites from various civilizations
-                    that have called this region home, from the Romans and Moors to Renaissance and Baroque influences.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4"> {t('sevilla.section1.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('sevilla.section1.text')}</p>
                 </div>
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
@@ -149,18 +146,16 @@ export default function SevillaPage() {
                   />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Historic Towns</h2>
-                  <p className="text-base text-neutral-700">Inland Sevilla is home to charming historic towns like Osuna, Écija, Carmona, and Marchena, each with unique architecture and
-                    rich heritage. Osuna's Renaissance palaces and Écija's Baroque church towers have earned it the nickname "City of Towers."</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('sevilla.section2.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('sevilla.section2.text')}</p>
                 </div>
               </div>
             </section>
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Natural Landscapes</h2>
-                  <p className="text-base text-neutral-700">The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations,
-                    to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('sevilla.section3.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('sevilla.section3.text')}</p>
                 </div>
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
@@ -183,18 +178,16 @@ export default function SevillaPage() {
                   />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Culinary Traditions</h2>
-                  <p className="text-base text-neutral-700">Sevillian cuisine is a delight for food lovers, featuring specialties like gazpacho, spinach with chickpeas, and Iberian ham.
-                    The inland areas are particularly renowned for olive oils, artisanal cheeses, and traditional sweets.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('sevilla.section4.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('sevilla.section4.text')}</p>
                 </div>
               </div>
             </section>
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div>
-                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">Festivals & Traditions</h2>
-                  <p className="text-base text-neutral-700">Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate
-                    Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals.</p>
+                  <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('sevilla.section5.heading')}</h2>
+                  <p className="text-base text-neutral-700">{t('sevilla.section5.text')}</p>
                 </div>
                 <div className="relative h-[300px] overflow-hidden">
                   <Image

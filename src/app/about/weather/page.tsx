@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { HomeIcon, StarIcon } from "@heroicons/react/24/outline";
 import PromoSidebar from "@/components/PromoSidebar";
+import { useTranslations } from "next-intl";
 
 // Province weather.com URLs (example, real URLs should be used)
 const provinceWeatherLinks = {
@@ -17,7 +18,8 @@ const provinceWeatherLinks = {
 };
 
 const quickTowns = [
-  { province: "Malaga", 
+  {
+    province: "Malaga",
     towns: [
       {
         name: "Alameda",
@@ -269,7 +271,8 @@ const quickTowns = [
       }
     ]
   },
-  { province: "Cordoba", 
+  {
+    province: "Cordoba",
     towns: [
       {
         name: "Almedinilla",
@@ -392,9 +395,9 @@ const quickTowns = [
         weather: "https://weather.com/weather/today/l/SPXX0121:1:SP"
       }
     ]
-     
+
   },
-  { 
+  {
     province: "Granada",
     towns: [
       { name: "Agron", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
@@ -420,7 +423,7 @@ const quickTowns = [
       { name: "Zagra", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" }
     ]
   },
-  { 
+  {
     province: "Jaen",
     towns: [
       { name: "Alcala la Real", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
@@ -460,32 +463,32 @@ const quickTowns = [
   {
     province: "Sevilla",
     towns: [
-        { name: "Aguadulce", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Arahal", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Badolatosa", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Casariche", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Ecija", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "El Rubio", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "El Saucejo", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Estepa", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Gilena", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Herrera", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Isla Redonda", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "La Puebla de Cazalla", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "La Roda de Andalucia", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Lora de Estepa", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Lora Del Rio", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Marchena", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Marinaleda", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Moron de la Frontera", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Pedrera", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Pruna", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
-        { name: "Utrer", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" }
-      ]
+      { name: "Aguadulce", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Arahal", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Badolatosa", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Casariche", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Ecija", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "El Rubio", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "El Saucejo", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Estepa", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Gilena", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Herrera", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Isla Redonda", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "La Puebla de Cazalla", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "La Roda de Andalucia", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Lora de Estepa", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Lora Del Rio", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Marchena", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Marinaleda", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Moron de la Frontera", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Pedrera", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Pruna", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" },
+      { name: "Utrer", weather: "https://weather.com/weather/today/l/SPXX0121:1:SP" }
+    ]
 
-    
+
   },
-  { 
+  {
     province: "Huelva",
     towns: [
       { name: "Ayamonte", weather: "https://weather.com/weather/today/l/SPXX0033:1:SP" },
@@ -568,14 +571,16 @@ const provinceSVG = [
 ];
 
 export default function AboutWeatherPage() {
+  const t = useTranslations("about-us");
+
   return (
     <div className="mx-auto max-w-7xl px-5  my-10 grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Left: Weather Content */}
       <section className="md:col-span-2 bg-white rounded-xl p-8 border border-black/10">
         <div className="mb-4">
-          <h1 className="text-3xl font-bold text-primary-600 mb-6">The Weather in Andalucía</h1>
+          <h1 className="text-3xl font-bold text-primary-600 mb-6">{t("weather.title")}</h1>
           <p className="mb-4 text-neutral-600 text-base">
-            Check the Weather Forecast in any region of Andalucia by clicking a province below
+            {t("weather.text1")}
           </p>
         </div>
         {/* Province Cards Grid */}
@@ -592,7 +597,8 @@ export default function AboutWeatherPage() {
             </a>
           ))}
         </div>
-        <p className="mb-4 text-neutral-600 text-base">Or check it on different towns of each region in Andalucia</p>
+        <p className="mb-4 text-neutral-600 text-base">{t("weather.text2")}
+        </p>
         {/* Quick Towns Section */}
         <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-10">
           {quickTowns.filter((prov) => prov.towns.length > 0).map((prov) => (
@@ -614,7 +620,7 @@ export default function AboutWeatherPage() {
 
       {/* Right: Sidebar (Promos) */}
       <div>
-        
+
         <PromoSidebar />
       </div>
       <style jsx global>{`

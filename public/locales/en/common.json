@@ -241,6 +241,696 @@
       }
     }
   },
+  "buyers-guide": {
+    "title": "The Property Buying Process in Spain",
+    "description": "A comprehensive guide to buying property in Spain, from initial viewing to getting your keys. Understanding each step helps ensure a smooth purchase process.",
+    "steps": [
+      {
+        "heading": "Step 1: Property Viewing and Selection",
+        "items": [
+          "Schedule viewings of properties that match your criteria",
+          "Take detailed notes and photos during viewings",
+          "Ask questions about the property's history and condition",
+          "Research the local area and amenities",
+          "Consider arranging a second viewing if interested"
+        ]
+      },
+      {
+        "heading": "Step 2: Making an Offer",
+        "items": [
+          "Submit your offer through your estate agent",
+          "Negotiate the price and terms",
+          "Agree on fixtures and fittings to be included",
+          "Discuss timeline and any conditions"
+        ]
+      },
+      {
+        "heading": "Step 3: Legal and Administrative Process",
+        "items": [
+          "Appoint a legal representative",
+          "Obtain NIE (Foreign Identity Number)",
+          "Open a Spanish bank account",
+          "Conduct property checks and searches",
+          "Review and sign reservation agreement"
+        ]
+      },
+      {
+        "heading": "Important Documentation",
+        "intro": "Essential documents needed during the process:",
+        "items": [
+          "NIE (Foreigner's Identification Number)",
+          "Passport or ID",
+          "Proof of funds",
+          "Power of Attorney (if not present for completion)"
+        ]
+      },
+      {
+        "heading": "Step 4: Purchase Completion",
+        "items": [
+          "Sign the purchase contract (Escritura)",
+          "Pay remaining balance and taxes",
+          "Register the property in your name",
+          "Receive keys and documentation",
+          "Set up utility contracts"
+        ]
+      },
+      {
+        "heading": "After Purchase Support",
+        "intro": "Our service doesn't end with the purchase. We help with:",
+        "items": [
+          "Setting up utilities and services",
+          "Connecting with local contractors if needed",
+          "Providing local area information",
+          "Ongoing support and advice"
+        ]
+      }
+    ],
+    "cta": {
+      "heading": "Need More Information?",
+      "text": "Contact our team for detailed guidance on the buying process or to arrange a viewing.",
+      "buttons": {
+        "contact": "Contact Us",
+        "properties": "View Properties"
+      }
+    }
+  },
+  "buying-property": {
+    "title": "Buying a Property in Spain",
+    "description": "Your comprehensive guide to purchasing property in inland Spain. Learn about different property types, key considerations, and how to make the right choice for your needs.",
+    "types-of-properties": [
+      {
+        "name": "Cortijos",
+        "description": "Traditional Spanish farmhouses, often with land and outbuildings"
+      },
+      {
+        "name": "Town Houses",
+        "description": "Properties in the heart of traditional Spanish towns"
+      },
+      {
+        "name": "Villas",
+        "description": "Modern or traditional detached houses, often with gardens and pools"
+      },
+      {
+        "name": "Country Properties",
+        "description": "Rural homes with land and beautiful views"
+      },
+      {
+        "name": "Renovation Projects",
+        "description": "Properties needing work but offering great potential"
+      }
+    ],
+    "key-considerations": [
+      "Location and accessibility",
+      "Property condition and potential renovation needs",
+      "Legal status and documentation",
+      "Local amenities and services",
+      "Future resale potential"
+    ],
+    "important-note": "Always work with a reputable agent who can verify the legal status of properties and guide you through the buying process. At Inland Andalucia, we ensure all our properties are legally sound and come with proper documentation.",
+    "our-services": [
+      "Extensive local knowledge and expertise",
+      "Property verification and legal checks",
+      "Multilingual support throughout the process",
+      "Access to trusted local professionals",
+      "After-sale support and guidance"
+    ],
+    "cta": {
+      "heading": "Ready to Start Your Property Search?",
+      "text": "Browse our extensive collection of inland properties.",
+      "buttons": {
+        "properties": "View Properties"
+      }
+    }
+  },
+  "property-taxes": {
+    "title": "Property Taxes in Spain",
+    "description": "Understanding the tax implications of buying and owning property in Spain is crucial for making informed decisions. Here's a comprehensive overview of all the taxes involved.",
+    "purchase-taxes": {
+      "heading": "Purchase Taxes",
+      "transfer-tax": {
+        "heading": "Transfer Tax (ITP)",
+        "intro": "When buying a resale property, you'll need to pay the Property Transfer Tax (ITP):",
+        "items": [
+          "8% for properties up to €400,000",
+          "9% for properties between €400,000 and €700,000",
+          "10% for properties over €700,000"
+        ]
+      },
+      "vat-stamp-duty": {
+        "heading": "VAT (IVA) and Stamp Duty",
+        "intro": "For new properties, instead of ITP, you'll pay:",
+        "items": [
+          "10% VAT (IVA)",
+          "1.5% Stamp Duty (AJD)"
+        ]
+      }
+    },
+    "important-note": {
+      "heading": "Important Note",
+      "text": "Tax rates can vary between regions in Spain and may change over time. Always consult with a legal professional for the most current rates and regulations."
+    },
+    "annual-taxes": {
+      "heading": "Annual Property Taxes",
+      "ibi": {
+        "heading": "IBI (Council Tax)",
+        "intro": "The main annual property tax in Spain, based on the cadastral value of your property:",
+        "items": [
+          "Paid annually to the local town hall",
+          "Rates vary by municipality",
+          "Usually between 0.4% and 1.1% of cadastral value"
+        ]
+      },
+      "basura": {
+        "heading": "Basura (Rubbish Collection)",
+        "intro": "Annual fee for waste collection services:",
+        "items": [
+          "Varies by location and property size",
+          "Typically paid annually"
+        ]
+      }
+    },
+    "non-resident-taxes": {
+      "heading": "Non-Resident Taxes",
+      "intro": "If you're a non-resident property owner, you'll need to:",
+      "items": [
+        "File an annual income tax return",
+        "Pay tax on rental income (if applicable)",
+        "Submit Form 210 for imputed income tax"
+      ]
+    },
+    "capital-gains-tax": {
+      "heading": "Capital Gains Tax",
+      "intro": "When selling your property, you'll need to consider:",
+      "items": [
+        "19-23% tax on the profit made (for non-residents)",
+        "Possible exemptions for primary residences",
+        "Deductions for improvements and buying costs"
+      ]
+    },
+    "cta": {
+      "heading": "Need Tax Advice?",
+      "text": "Our team can connect you with experienced tax advisors who specialize in Spanish property taxation.",
+      "button": "Contact Our Team"
+    }
+  },
+  "faq-content": {
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to the most common questions about buying property in inland Spain. If you can't find what you're looking for, don't hesitate to contact us.",
+    "sections": {
+      "general": {
+        "title": "General Questions",
+        "questions": [
+          {
+            "q": "Do I need to be a resident to buy property in Spain?",
+            "a": "No, you don’t need to be a resident. Non-residents can freely buy property in Spain, but you’ll need an NIE (Foreign Identity Number) to complete the purchase."
+          },
+          {
+            "q": "What additional costs should I budget for when buying?",
+            "a": "Budget approximately 10-12% of the purchase price for additional costs, including: transfer tax (6-10%), notary fees, legal fees, and registration fees."
+          },
+          {
+            "q": "How long does the buying process take?",
+            "a": "The typical buying process takes 2-3 months from offer acceptance to completion. This can vary depending on factors such as mortgage arrangements and legal checks."
+          }
+        ]
+      },
+      "legal": {
+        "title": "Legal & Documentation",
+        "questions": [
+          {
+            "q": "What is an NIE and how do I get one?",
+            "a": "An NIE (Número de Identidad de Extranjero) is a tax identification number for foreigners. You can obtain it through the Spanish consulate in your country or at a police station in Spain. We can assist with this process."
+          },
+          {
+            "q": "Do I need a Spanish bank account?",
+            "a": "Yes, a Spanish bank account is necessary for paying utilities and local taxes. It’s also required if you’re taking out a Spanish mortgage."
+          },
+          {
+            "q": "Is it necessary to make a will in Spain?",
+            "a": "While not mandatory, it’s highly recommended to make a Spanish will for your property to ensure smooth inheritance proceedings and avoid complications with international succession laws."
+          }
+        ]
+      },
+      "property": {
+        "title": "Property & Location",
+        "questions": [
+          {
+            "q": "What’s the difference between urban and rural properties?",
+            "a": "Urban properties are located within town boundaries with access to main services. Rural properties might have more land but could have restricted building rights and limited access to utilities."
+          },
+          {
+            "q": "Can I renovate or extend my property?",
+            "a": "Yes, but you’ll need proper permits from the local town hall. Regulations vary between urban and rural areas, and some properties may have restrictions."
+          },
+          {
+            "q": "What ongoing costs should I expect?",
+            "a": "Regular costs include IBI (council tax), community fees if applicable, utilities, insurance, and non-resident income tax if you’re not a resident."
+          }
+        ]
+      }
+    },
+    "cta": {
+      "heading": "Still Have Questions?",
+      "text": "Our team is here to help you with any questions you might have about buying property in inland Spain.",
+      "button": "Contact Our Team"
+    }
+  },
+  "unpaid-taxes": {
+    "metadata": {
+      "title": "Understanding Unpaid Taxes on Spanish Property | Inland Andalucia",
+      "description": "Learn about the implications of unpaid taxes when buying property in Spain, how to check for tax debts, and protect yourself during property purchase."
+    },
+    "header": {
+      "title": "Understanding Unpaid Taxes",
+      "description": "When buying property in Spain, it's crucial to understand the implications of any unpaid taxes associated with the property. Here's what you need to know to protect yourself."
+    },
+    "warning": {
+      "title": "Important Warning",
+      "text": "In Spain, unpaid taxes associated with a property become the responsibility of the new owner. This makes it essential to conduct proper checks before completing any purchase."
+    },
+    "types": {
+      "title": "Types of Tax Debts to Check",
+      "items": [
+        {
+          "label": "IBI (Council Tax)",
+          "text": "Annual property tax paid to the local town hall"
+        },
+        {
+          "label": "Community Fees",
+          "text": "For properties within a community or urbanization"
+        },
+        {
+          "label": "Plusvalía",
+          "text": "Tax on the increase in land value"
+        },
+        {
+          "label": "Wealth Tax",
+          "text": "For high-value properties"
+        },
+        {
+          "label": "Income Tax",
+          "text": "If the property has been rented"
+        }
+      ]
+    },
+    "checks": {
+      "title": "How to Check for Unpaid Taxes",
+      "intro": "Several checks should be conducted before purchasing a property:",
+      "steps": [
+        "Request a certificate from the town hall showing any outstanding IBI payments",
+        "If applicable, obtain confirmation from the community administrator that all fees are up to date",
+        "Check with the Land Registry for any registered debts or charges",
+        "Verify with the tax office that there are no outstanding tax obligations"
+      ]
+    },
+    "protection": {
+      "title": "Protecting Yourself",
+      "cards": [
+        {
+          "title": "Legal Representation",
+          "text": "Always use a qualified lawyer who can conduct proper due diligence and verify there are no outstanding debts before proceeding with the purchase."
+        },
+        {
+          "title": "Documentation",
+          "text": "Ensure all certificates and clearance documents are obtained and verified before signing the final purchase contract."
+        }
+      ]
+    },
+    "commitment": {
+      "title": "Our Commitment",
+      "intro": "At Inland Andalucia, we ensure that:",
+      "points": [
+        "All properties listed have been checked for outstanding debts",
+        "Necessary documentation is available for review",
+        "Our legal partners can conduct additional checks if required",
+        "You're protected throughout the buying process"
+      ]
+    },
+    "cta": {
+      "title": "Need Professional Assistance?",
+      "text": "Our team can help you verify any property's tax status and connect you with trusted legal experts.",
+      "buttons": {
+        "contact": "Contact Us",
+        "process": "Buying Process"
+      }
+    }
+  },
+  "mortgage-guide": {
+    "metadata": {
+      "title": "Spanish Mortgages Guide | Inland Andalucia",
+      "description": "Complete guide to getting a mortgage in Spain. Learn about Spanish mortgage options, requirements, costs, and how to apply as a foreign buyer."
+    },
+    "header": {
+      "title": "Spanish Mortgages Guide",
+      "description": "Understanding Spanish mortgages is crucial when buying property. Here's everything you need to know about financing your property purchase in Spain."
+    },
+    "sections": {
+      "options": {
+        "title": "Mortgage Options in Spain",
+        "resident": {
+          "title": "Resident Mortgages",
+          "point1": "Up to 80% financing for primary residences",
+          "point2": "Better interest rates",
+          "point3": "Longer repayment terms available",
+          "point4": "More flexible conditions"
+        },
+        "nonResident": {
+          "title": "Non-Resident Mortgages",
+          "point1": "Up to 70% financing typically available",
+          "point2": "Slightly higher interest rates",
+          "point3": "Shorter repayment terms",
+          "point4": "Additional documentation required"
+        }
+      },
+      "requirements": {
+        "title": "Requirements for Non-Resident Buyers",
+        "intro": "To apply for a mortgage in Spain as a non-resident, you'll need:",
+        "point1": "NIE (Foreign Identity Number)",
+        "point2": "Proof of income (usually last 3-6 months of payslips)",
+        "point3": "Tax returns from your home country",
+        "point4": "Bank statements (usually last 3-6 months)",
+        "point5": "Proof of employment or business ownership",
+        "point6": "Credit history documentation",
+        "point7": "List of current assets and liabilities"
+      },
+      "costs": {
+        "title": "Associated Costs",
+        "intro": "When taking out a mortgage, budget for these additional costs:",
+        "point1": "Property valuation fee (€300-€600)",
+        "point2": "Mortgage arrangement fee (1-2% of loan amount)",
+        "point3": "Notary fees for mortgage deed",
+        "point4": "Property insurance (required by lender)",
+        "point5": "Life insurance (may be required)"
+      },
+      "types": {
+        "title": "Types of Spanish Mortgages",
+        "fixed": {
+          "title": "Fixed Rate Mortgages",
+          "description": "Interest rate remains the same throughout the term. Offers security in monthly payments but typically starts with a higher rate."
+        },
+        "variable": {
+          "title": "Variable Rate Mortgages",
+          "description": "Interest rate varies with Euribor. Usually starts lower but payments can change over time. Most common in Spain."
+        }
+      },
+      "process": {
+        "title": "The Application Process",
+        "step1": "Initial consultation and assessment of options",
+        "step2": "Gathering and submitting required documentation",
+        "step3": "Property valuation",
+        "step4": "Bank's assessment and decision",
+        "step5": "Mortgage offer and acceptance",
+        "step6": "Signing at the notary"
+      }
+    },
+    "cta": {
+      "title": "Ready to Explore Your Mortgage Options?",
+      "description": "Our team can connect you with trusted Spanish mortgage advisors who specialize in non-resident mortgages.",
+      "buttons": {
+        "advice": "Get Mortgage Advice",
+        "properties": "View Properties"
+      }
+    }
+  },
+  "about-us": {
+    "location": {
+      "header": {
+        "title": "The location of Andalucia"
+      },
+      "content": {
+        "paragraph1": "The autonomous region of Andalucia lies in the the south of Spain, and its coasts are bathed by both the Mediterranean and Atlantic oceans.",
+        "paragraph2": "It borders Extremadura and Castile-La Mancha in the north, Murcia and the Mediterranean Sea in the east, the Mediterranean and Atlantic ocean in the south, and Portugal in the west. The region's scenery stands out because of its sheer diversity. Some areas are covered in mountains while others are full of plains. There are three distinct geographical structures: the sierra Morena to the north, the Guadalquivir river and Betica depression in the central part of the region, and the Betica mountain ranges in the south.",
+        "paragraph3": "The two most notable mountainous areas are the sub-Betica range, containing La Sagra massif that reaches an altitude of 2,383 metres and the Penibetica mountain range. The Sierra Nevada is also outstanding and is home to el Mulhacen, the highest mountain peak on the Iberian Peninsula reaching a height of 3,481 metres. Next comes Veleta peak at 3,392 metres. Andalucian rivers that lead into the Mediterranean sea are relatively short and contain small amounts of water. Amongst these are the Almanzora, the Almeria, the Adra, the Guadalfeo, the Guadalhorce and the Guadiaro. The rivers that flow into the Atlantic are bigger and have more copious waters. The region's most important river is the Guadalquivir and its tributaries: the Guadalimar, the Guadiana Menor and the Genil. The Guadiana, the Odiel and the Tinto rivers also flow into the Atlantic.",
+        "paragraph4": "The vast stretch of coast that extends along Andalucia is filled with bays and inlets, some a little more craggy than others as we near the Betica mountain ranges. The most notable geographical quirks that are found along the coast include: the steep rock summit of Farallon, Polacra point, Gata cape, the gulf of Almeria, las Entinas point, Adra bay, Sacratif bay, Malaga bay and Calaburras point. Europa Point forms the Gibraltar headland. This is where the Spanish coast begins stretching from the straits of Gibraltar up to the cape of Trafalgar. Within the straits the most notable parts of the landscape are formed by Algeciras bay as well as by Marroqui (Moroccan) and Tarifa points."
+      },
+      "images": {
+        "map": "Map of Andalucia"
+      }
+    },
+    "weather": {
+      "title": "The Weather in Andalucía",
+      "text1": "Check the Weather Forecast in any region of Andalucia by clicking a province below",
+      "text2": "Or check it on different towns of each region in Andalucia"
+    },
+    "airports": {
+      "header": {
+        "title": "The Airports in Andalucia"
+      },
+      "intro": "Andalucia is served by several major airports, making it easy to reach from across Europe and beyond. Below you'll find guides to the main airports in the region, as well as links to popular airlines operating flights to and from Andalucia.",
+      "airports": {
+        "malaga": {
+          "name": "Málaga Airport Guide",
+          "description": "Information on flights, car hire, airport transfers, services and facilities at Málaga Airport.",
+          "button": "Visit Website"
+        },
+        "granada": {
+          "name": "Granada Airport Guide",
+          "description": "Information on flights, car hire, airport transfers, services and facilities at Granada Airport.",
+          "button": "Visit Website"
+        },
+        "sevilla": {
+          "name": "Sevilla Airport Guide",
+          "description": "Information on flights, car hire, airport transfers, services and facilities at Sevilla Airport.",
+          "button": "Visit Website"
+        }
+      },
+      "airlines": {
+        "title": "Airlines",
+        "list": [
+          "Iberia",
+          "Easyjet",
+          "Thomsonfly",
+          "Flybe",
+          "British Airways",
+          "Ryanair",
+          "Monarch",
+          "Clickair"
+        ]
+      },
+      "footerNote": "Track flight status and more at flightstats.com"
+    }
+  },
+  "contact-us": {
+    "our-offices": {
+      "header": {
+        "title": "Our offices"
+      },
+      "intro": "Please feel free to drop by one of our offices in Alcala la Real, Mollina, Axarquia, Martos should you be in the area looking for an inland property we cover most of Inland Andalucia. However in order to best serve you, we ask that you contact us in advance so we can give you the individual attention you deserve while searching your inland property in Andalucia. Click here to go to our contact form",
+      "contactLink": "/contact",
+      "offices": {
+        "mollina": {
+          "name": "Mollina Office",
+          "address": [
+            "Calle Sol 8, 29532 Mollina (Málaga)"
+          ],
+          "phone": "+34 952 741 525",
+          "mobile": "+34 600 370 543",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Mollina",
+            "Mollina3",
+            "Mollina2"
+          ]
+        },
+        "alcala": {
+          "name": "Alcala Office",
+          "address": [
+            "Calle Abad Moya 4 bajo, 23680 Alcalá la Real (Jaén)"
+          ],
+          "phone": "+34 953 587 040",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Alcala",
+            "Alcala2",
+            "Alcala3"
+          ]
+        },
+        "martos": {
+          "name": "Martos Office",
+          "address": [
+            "Calle Lope de Vega, 6, 23600 Martos (Jaén)"
+          ],
+          "phone": "+34 953 704 319",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Martos",
+            "Martos2",
+            "Martos3"
+          ]
+        }
+      }
+    },
+    "newsletter": {
+      "header": {
+        "title": "Subscribe to our Free Newsletter"
+      },
+      "intro": {
+        "paragraph1": "Our free monthly Newsletter provides inland news, properties of the month, information about towns and their fiestas and of course, our property promotions.",
+        "paragraph2": "If you would like to register just fill in your name and email address and click on the 'Register' button. It's so simple!"
+      },
+      "form": {
+        "title": "Subscribe to our Free Newsletter",
+        "fields": {
+          "name": {
+            "label": "Name:"
+          },
+          "email": {
+            "label": "Email:"
+          },
+          "unsubscribe": {
+            "label": "Unsubscribe me from this service"
+          },
+          "captcha": {
+            "label": "Captcha",
+            "question": "9 + 1 ="
+          }
+        },
+        "button": {
+          "subscribe": "Subscribe"
+        }
+      }
+    },
+    "useful-links": {
+      "header": {
+        "title": "Useful Links",
+        "description": "Essential resources and information for living and buying property in Inland Andalucia"
+      },
+      "categories": {
+        "property-legal": {
+          "title": "Property & Legal",
+          "links": [
+            {
+              "title": "Spanish Land Registry",
+              "url": "https://www.registradores.org",
+              "description": "Official property registration information"
+            },
+            {
+              "title": "Spanish Notary Council",
+              "url": "https://www.notariado.org",
+              "description": "Information about the Spanish notary system"
+            }
+          ]
+        },
+        "government-administration": {
+          "title": "Government & Administration",
+          "links": [
+            {
+              "title": "Junta de Andalucía",
+              "url": "https://www.juntadeandalucia.es",
+              "description": "Regional government of Andalusia"
+            },
+            {
+              "title": "Spanish Tax Agency",
+              "url": "https://www.agenciatributaria.es",
+              "description": "Tax information and procedures"
+            }
+          ]
+        },
+        "tourism-culture": {
+          "title": "Tourism & Culture",
+          "links": [
+            {
+              "title": "Andalucia Tourism",
+              "url": "https://www.andalucia.org",
+              "description": "Official tourism portal of Andalusia"
+            },
+            {
+              "title": "Spanish Tourism",
+              "url": "https://www.spain.info",
+              "description": "Official tourism website of Spain"
+            }
+          ]
+        },
+        "education": {
+          "title": "Education",
+          "links": [
+            {
+              "title": "Spanish Language Schools",
+              "url": "#",
+              "description": "Learn Spanish in Andalucia"
+            },
+            {
+              "title": "International Schools",
+              "url": "#",
+              "description": "Education options for expatriates"
+            }
+          ]
+        },
+        "moving-relocation": {
+          "title": "Moving & Relocation",
+          "links": [
+            {
+              "title": "Removal Companies",
+              "url": "#",
+              "description": "International moving services"
+            },
+            {
+              "title": "NIE Number Information",
+              "url": "#",
+              "description": "Guide to obtaining your NIE"
+            }
+          ]
+        },
+        "healthcare": {
+          "title": "Healthcare",
+          "links": [
+            {
+              "title": "Spanish Healthcare System",
+              "url": "#",
+              "description": "Information about healthcare in Spain"
+            },
+            {
+              "title": "Private Medical Insurance",
+              "url": "#",
+              "description": "Healthcare options for residents"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "sell-with-us": {
+    "header": {
+      "title": "Let us Sell your property"
+    },
+    "intro": {
+      "paragraph1": "We are Andalucia's largest most trusted Estate Agent, established for more than 20 years, we have sold 1,000's of properties across all of Inland Andalucia.",
+      "paragraph2": "We advertise across more than 30 online portals across all of Europe and publish on all the main Social Media platforms including Facebook reaching over 100,000 people a month, Telegram, Instagram and YouTube getting over 70,000 views each month. We also send weekly newsletters to over 14,500 subscribers watching new listings and price drops. This marketing provides us with more than 550 new buyer enquiries each month.",
+      "paragraph3": "Our professional multilingual listing staff use the very latest in digital technology to take high quality photographs and videos of your property. See what our Vendors and Clients say.",
+      "paragraph4": "We have an extensive database of clients ready to purchase property in Andalucia and our property experts are constantly informing buyers of the latest deals to be had.",
+      "paragraph5": "Selling your property through us you're in Safe Hands. Please fill in the form below and we will contact you as soon as possible or call +34 952 741 525."
+    },
+    "form": {
+      "title": "Sell Your Property",
+      "fields": {
+        "firstName": {
+          "label": "First Name"
+        },
+        "lastName": {
+          "label": "Last Name"
+        },
+        "telephone": {
+          "label": "Telephone"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "location": {
+          "label": "Property Location"
+        },
+        "details": {
+          "label": "Property Details"
+        },
+        "captcha": {
+          "label": "Captcha",
+          "question": "40 + 5 ="
+        }
+      },
+      "button": {
+        "submit": "Submit Property"
+      }
+    }
+  },
   "footer": {
     "about_title": "Inland Andalucia",
     "about_text": "Specialists in inland properties across Andalucia, Spain. Offering personalized service to buyers and sellers since 2001.",

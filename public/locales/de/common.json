@@ -152,7 +152,7 @@
         "text": "Córdoba viert haar feesten en festivals net als elke andere stad in Spanje, en Semana Santa, oftewel de Paasweek, is een van de belangrijkste. Er zijn maar liefst 32 processies met prachtig versierde en sierlijke afbeeldingen en figuren van heiligen, begeleid door de Nazarenos (mannen gekleed in typische gewaden met capuchons die het hele gezicht bedekken behalve de ogen). Deze processies trekken door de stad, gevolgd door menigten mensen. In mei zijn er drie festivals: van 5 tot en met 12 mei is er het Festival van de \"Patios Cordobeses\", een wedstrijd voor de mooist versierde binnenplaats; de Cruces de Mayo is wanneer de hele stad versierd is met kruizen en duizenden bloemen; de laatste week van mei is wanneer iedereen zich uitleeft op de Feria de Cordoba - flamencomuziek en -dans worden genoten en de hele stad geniet van de festiviteiten."
       }
     },
-     "granada": {
+    "granada": {
       "title": "Grenada",
       "section1": {
         "heading": "Over Grenada",
@@ -194,7 +194,7 @@
         "text": "De keuken van Jaén draait om olijfolie, met traditionele gerechten als pipirrana (groentesalade), andrajos (stoofpot met platte noedels) en ochíos (anijsbrood) die de authentieke smaken van het binnenland van Andalusië weerspiegelen."
       }
     },
-      "malaga": {
+    "malaga": {
       "title": "Malaga",
       "section1": {
         "heading": "Over Málaga",
@@ -221,23 +221,713 @@
       "title": "Sevilla",
       "section1": {
         "heading": "Over Sevilla",
-        "text": "De provincie Sevilla is een schatkamer vol geschiedenis, cultuur en natuurschoon. Hoewel de stad beroemd is om haar hoofdstad met iconische bezienswaardigheden zoals de Giralda en Plaza de España, bieden de gebieden in het binnenland een andere, meer authentieke ervaring.<br />De provincie biedt pittoreske witte stadjes, glooiende olijfgaarden en historische locaties van verschillende beschavingen die deze regio hun thuis hebben genoemd, van de Romeinen en Moren tot invloeden uit de Renaissance en Barok."
+        "text": "De provincie Sevilla is een schatkamer van geschiedenis, cultuur en natuurlijke schoonheid. Hoewel ze beroemd is om haar hoofdstad met iconische bezienswaardigheden zoals de Giralda en het Plaza de España, bieden de binnenlanden een andere, meer authentieke ervaring.<br />De provincie heeft pittoreske witte dorpen, golvende olijfgaarden en historische sites uit verschillende beschavingen die deze regio hun thuis hebben genoemd, van de Romeinen en Moren tot de Renaissance- en Barokinvloeden."
       },
       "section2": {
-        "heading": "Historische steden",
-        "text": "In het binnenland van Sevilla liggen charmante historische steden zoals Osuna, Écija, Carmona en Marchena, elk met een unieke architectuur en een rijk erfgoed. De renaissancepaleizen van Osuna en de barokke kerktorens van Écija hebben de stad de bijnaam \"Stad van de Torens\" opgeleverd."
+        "heading": "Historische Steden",
+        "text": "Het binnenland van Sevilla herbergt charmante historische steden zoals Osuna, Écija, Carmona en Marchena, elk met een unieke architectuur en een rijk erfgoed. De renaissancepaleizen van Osuna en de barokke kerktorens van Écija hebben haar de bijnaam \"Stad van de Torens\" opgeleverd."
       },
       "section3": {
-        "heading": "Natuurlijke landschappen",
-        "text": "The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations, to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves."
+        "heading": "Natuurlijke Landschappen",
+        "text": "De provincie beschikt over diverse natuurlijke landschappen, van het natuurpark Sierra Norte met zijn dichte bossen en granietformaties tot de vruchtbare Guadalquivir-vallei met eindeloze velden zonnebloemen, tarwe en olijfgaarden."
       },
       "section4": {
-        "heading": "Culinary Traditions",
-        "text": "Sevillian cuisine is a delight for food lovers, featuring specialties like gazpacho, spinach with chickpeas, and Iberian ham. The inland areas are particularly renowned for olive oils, artisanal cheeses, and traditional sweets."
+        "heading": "Culinaire Tradities",
+        "text": "De Sevilliaanse keuken is een genot voor fijnproevers, met specialiteiten zoals gazpacho, spinazie met kikkererwten en Iberische ham. De binnenlanden staan vooral bekend om hun olijfolie, ambachtelijke kazen en traditionele zoetigheden."
       },
       "section5": {
-        "heading": "Festivals & Traditions",
-        "text": "Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals."
+        "heading": "Festivals en Tradities",
+        "text": "Het binnenland van Sevilla komt tot leven tijdens de traditionele festivals. Elke stad heeft zijn eigen unieke viering, van de indrukwekkende processies tijdens de Heilige Week tot levendige zomerferia’s, flamenco-optredens en agrarische oogstfeesten."
+      }
+    }
+  },
+  "buyers-guide": {
+    "title": "Het Proces van Een Woning Kopen in Spanje",
+    "description": "Een uitgebreide gids voor het kopen van een woning in Spanje, van de eerste bezichtiging tot het ontvangen van de sleutels. Elk stap begrijpen helpt een soepel aankoopproces te garanderen.",
+    "steps": [
+      {
+        "heading": "Stap 1: Bezichtiging en Selectie van de Woning",
+        "items": [
+          "Plan bezichtigingen van woningen die aan uw criteria voldoen",
+          "Maak gedetailleerde aantekeningen en foto's tijdens de bezichtigingen",
+          "Stel vragen over de geschiedenis en staat van de woning",
+          "Onderzoek de omgeving en voorzieningen",
+          "Overweeg een tweede bezichtiging als u geïnteresseerd bent"
+        ]
+      },
+      {
+        "heading": "Stap 2: Een Bod Doen",
+        "items": [
+          "Dien uw bod in via uw makelaar",
+          "Onderhandel over de prijs en voorwaarden",
+          "Kom overeen welke meubels en voorzieningen inbegrepen zijn",
+          "Bespreek de tijdlijn en eventuele voorwaarden"
+        ]
+      },
+      {
+        "heading": "Stap 3: Juridisch en Administratief Proces",
+        "items": [
+          "Stel een juridisch vertegenwoordiger aan",
+          "Verkrijg een NIE (Buitenlands Identificatienummer)",
+          "Open een Spaanse bankrekening",
+          "Voer controles en onderzoek van de woning uit",
+          "Bekijk en onderteken de reserveringsovereenkomst"
+        ]
+      },
+      {
+        "heading": "Belangrijke Documentatie",
+        "intro": "Essentiële documenten die nodig zijn tijdens het proces:",
+        "items": [
+          "NIE (Buitenlands Identificatienummer)",
+          "Paspoort of ID-kaart",
+          "Bewijs van financiële middelen",
+          "Volmacht (indien niet aanwezig bij de overdracht)"
+        ]
+      },
+      {
+        "heading": "Stap 4: Afronding van de Aankoop",
+        "items": [
+          "Onderteken het koopcontract (Escritura)",
+          "Betaal het resterende bedrag en de belastingen",
+          "Registreer de woning op uw naam",
+          "Ontvang sleutels en documentatie",
+          "Sluit contracten voor nutsvoorzieningen af"
+        ]
+      },
+      {
+        "heading": "Ondersteuning Na de Aankoop",
+        "intro": "Onze service eindigt niet bij de aankoop. Wij helpen met:",
+        "items": [
+          "Het regelen van nutsvoorzieningen en diensten",
+          "Contact leggen met lokale aannemers indien nodig",
+          "Informatie over de omgeving verstrekken",
+          "Voortdurende ondersteuning en advies"
+        ]
+      }
+    ],
+    "cta": {
+      "heading": "Meer Informatie Nodig?",
+      "text": "Neem contact op met ons team voor gedetailleerde begeleiding bij het aankoopproces of om een bezichtiging te regelen.",
+      "buttons": {
+        "contact": "Neem Contact Op",
+        "properties": "Bekijk Woningen"
+      }
+    }
+  },
+  "buying-property": {
+    "title": "Een Eigendom Kopen in Spanje",
+    "description": "Uw complete gids voor het kopen van een woning in het binnenland van Spanje. Leer over verschillende woningtypen, belangrijke overwegingen en hoe u de juiste keuze maakt voor uw behoeften.",
+    "types-of-properties": [
+      {
+        "name": "Cortijos",
+        "description": "Traditionele Spaanse boerderijen, vaak met land en bijgebouwen"
+      },
+      {
+        "name": "Stadshuizen",
+        "description": "Eigendom in het hart van traditionele Spaanse dorpen"
+      },
+      {
+        "name": "Villa's",
+        "description": "Moderne of traditionele vrijstaande huizen, vaak met tuinen en zwembaden"
+      },
+      {
+        "name": "Plattelandswoningen",
+        "description": "Landelijke woningen met grond en prachtige uitzichten"
+      },
+      {
+        "name": "Renovatieprojecten",
+        "description": "Eigendommen die werk nodig hebben maar groot potentieel bieden"
+      }
+    ],
+    "key-considerations": [
+      "Locatie en toegankelijkheid",
+      "Staat van het pand en mogelijke renovatiebehoeften",
+      "Juridische status en documentatie",
+      "Lokale voorzieningen en diensten",
+      "Toekomstig doorverkoop-potentieel"
+    ],
+    "important-note": "Werk altijd met een betrouwbare makelaar die de juridische status van eigendommen kan verifiëren en u door het aankoopproces kan begeleiden. Bij Inland Andalucia zorgen we ervoor dat al onze eigendommen legaal in orde zijn en over de juiste documentatie beschikken.",
+    "our-services": [
+      "Uitgebreide lokale kennis en expertise",
+      "Eigendom verificatie en juridische controles",
+      "Meertalige ondersteuning gedurende het hele proces",
+      "Toegang tot vertrouwde lokale professionals",
+      "Nazorg en begeleiding"
+    ],
+    "cta": {
+      "heading": "Klaar om uw zoektocht naar een woning te beginnen?",
+      "text": "Bekijk onze uitgebreide collectie binnenlandse woningen.",
+      "buttons": {
+        "properties": "Bekijk Eigendommen"
+      }
+    }
+  },
+  "property-taxes": {
+    "title": "Vastgoedbelastingen in Spanje",
+    "description": "Het begrijpen van de fiscale gevolgen bij het kopen en bezitten van een woning in Spanje is cruciaal om weloverwogen beslissingen te nemen. Hier is een uitgebreid overzicht van alle betrokken belastingen.",
+    "purchase-taxes": {
+      "heading": "Aankoopbelastingen",
+      "transfer-tax": {
+        "heading": "Overdrachtsbelasting (ITP)",
+        "intro": "Bij het kopen van een tweedehands woning moet u de Overdrachtsbelasting (ITP) betalen:",
+        "items": [
+          "8% voor woningen tot €400.000",
+          "9% voor woningen tussen €400.000 en €700.000",
+          "10% voor woningen boven €700.000"
+        ]
+      },
+      "vat-stamp-duty": {
+        "heading": "BTW (IVA) en registratiebelasting",
+        "intro": "Voor nieuwe woningen betaalt u in plaats van ITP:",
+        "items": [
+          "10% BTW (IVA)",
+          "1,5% registratiebelasting (AJD)"
+        ]
+      }
+    },
+    "important-note": {
+      "heading": "Belangrijke Opmerking",
+      "text": "Belastingtarieven kunnen variëren tussen regio's in Spanje en kunnen in de loop van de tijd veranderen. Raadpleeg altijd een juridisch professional voor de meest actuele tarieven en regelgeving."
+    },
+    "annual-taxes": {
+      "heading": "Jaarlijkse Vastgoedbelastingen",
+      "ibi": {
+        "heading": "IBI (Gemeentebelasting)",
+        "intro": "De belangrijkste jaarlijkse vastgoedbelasting in Spanje, gebaseerd op de kadastrale waarde van uw woning:",
+        "items": [
+          "Jaarlijks betaald aan het lokale gemeentehuis",
+          "Tarief varieert per gemeente",
+          "Meestal tussen 0,4% en 1,1% van de kadastrale waarde"
+        ]
+      },
+      "basura": {
+        "heading": "Basura (Afvalinzameling)",
+        "intro": "Jaarlijkse vergoeding voor afvalinzameling:",
+        "items": [
+          "Varieert per locatie en woninggrootte",
+          "Meestal jaarlijks betaald"
+        ]
+      }
+    },
+    "non-resident-taxes": {
+      "heading": "Belastingen voor Niet-Ingezetenen",
+      "intro": "Als u een niet-ingezetene bent, moet u:",
+      "items": [
+        "Een jaarlijkse inkomstenbelastingaangifte indienen",
+        "Belasting betalen over huurinkomsten (indien van toepassing)",
+        "Formulier 210 indienen voor ingehouden inkomstenbelasting"
+      ]
+    },
+    "capital-gains-tax": {
+      "heading": "Vermogenswinstbelasting",
+      "intro": "Bij de verkoop van uw woning moet u rekening houden met:",
+      "items": [
+        "19-23% belasting op de gemaakte winst (voor niet-ingezetenen)",
+        "Mogelijke vrijstellingen voor hoofdverblijven",
+        "Aftrekken voor verbeteringen en aankoopkosten"
+      ]
+    },
+    "cta": {
+      "heading": "Belastingadvies Nodig?",
+      "text": "Ons team kan u in contact brengen met ervaren belastingadviseurs die gespecialiseerd zijn in Spaanse vastgoedbelasting.",
+      "button": "Neem Contact op met Ons Team"
+    }
+  },
+  "faq-content": {
+    "title": "Veelgestelde Vragen",
+    "description": "Vind antwoorden op de meest voorkomende vragen over het kopen van onroerend goed in het binnenland van Spanje. Als je niet kunt vinden wat je zoekt, aarzel dan niet om contact met ons op te nemen.",
+    "sections": {
+      "general": {
+        "title": "Algemene Vragen",
+        "questions": [
+          {
+            "q": "Moet ik een inwoner zijn om onroerend goed in Spanje te kopen?",
+            "a": "Nee, je hoeft geen inwoner te zijn. Niet-inwoners kunnen vrij onroerend goed kopen in Spanje, maar je hebt een NIE (Buitenlands Identificatienummer) nodig om de aankoop te voltooien."
+          },
+          {
+            "q": "Met welke extra kosten moet ik rekening houden bij de aankoop?",
+            "a": "Reserveer ongeveer 10-12% van de aankoopprijs voor extra kosten, waaronder: overdrachtsbelasting (6-10%), notariskosten, advocaatkosten en registratiekosten."
+          },
+          {
+            "q": "Hoe lang duurt het aankoopproces?",
+            "a": "Het typische aankoopproces duurt 2-3 maanden vanaf het accepteren van het bod tot de voltooiing. Dit kan variëren afhankelijk van factoren zoals hypotheekafspraken en juridische controles."
+          }
+        ]
+      },
+      "legal": {
+        "title": "Juridisch & Documentatie",
+        "questions": [
+          {
+            "q": "Wat is een NIE en hoe krijg ik er een?",
+            "a": "Een NIE (Número de Identidad de Extranjero) is een fiscaal identificatienummer voor buitenlanders. Je kunt dit verkrijgen via het Spaanse consulaat in je land of bij een politiebureau in Spanje. Wij kunnen hierbij assisteren."
+          },
+          {
+            "q": "Heb ik een Spaanse bankrekening nodig?",
+            "a": "Ja, een Spaanse bankrekening is noodzakelijk om nutsvoorzieningen en lokale belastingen te betalen. Het is ook vereist als je een Spaanse hypotheek afsluit."
+          },
+          {
+            "q": "Is het noodzakelijk om een testament in Spanje te maken?",
+            "a": "Hoewel het niet verplicht is, wordt het sterk aanbevolen om een Spaans testament op te stellen voor je eigendom om een soepel erfrechtproces te garanderen en complicaties met internationale erfrechtwetten te voorkomen."
+          }
+        ]
+      },
+      "property": {
+        "title": "Onroerend Goed & Locatie",
+        "questions": [
+          {
+            "q": "Wat is het verschil tussen stedelijke en landelijke eigendommen?",
+            "a": "Stedelijke eigendommen bevinden zich binnen de stadsgrenzen met toegang tot de belangrijkste voorzieningen. Landelijke eigendommen hebben vaak meer grond, maar kunnen beperkte bouwrechten en beperkte toegang tot nutsvoorzieningen hebben."
+          },
+          {
+            "q": "Kan ik mijn eigendom renoveren of uitbreiden?",
+            "a": "Ja, maar je hebt de juiste vergunningen van het lokale gemeentehuis nodig. De regels verschillen tussen stedelijke en landelijke gebieden, en sommige eigendommen kunnen beperkingen hebben."
+          },
+          {
+            "q": "Met welke terugkerende kosten moet ik rekening houden?",
+            "a": "Regelmatige kosten zijn onder andere IBI (gemeentebelasting), gemeenschapskosten indien van toepassing, nutsvoorzieningen, verzekeringen en inkomstenbelasting voor niet-inwoners als je geen resident bent."
+          }
+        ]
+      }
+    },
+    "cta": {
+      "heading": "Nog Vragen?",
+      "text": "Ons team staat klaar om je te helpen met al je vragen over het kopen van onroerend goed in het binnenland van Spanje.",
+      "button": "Neem Contact Op Met Ons Team"
+    }
+  },
+  "unpaid-taxes": {
+    "metadata": {
+      "title": "Begrijpen van Onbetaalde Belastingen op Spaans Onroerend Goed | Inland Andalucia",
+      "description": "Leer meer over de gevolgen van onbetaalde belastingen bij het kopen van onroerend goed in Spanje, hoe u belastingschulden controleert en uzelf beschermt tijdens het aankoopproces."
+    },
+    "header": {
+      "title": "Begrijpen van Onbetaalde Belastingen",
+      "description": "Bij het kopen van een woning in Spanje is het cruciaal om de gevolgen van eventuele onbetaalde belastingen die aan de woning verbonden zijn te begrijpen. Hier is wat u moet weten om uzelf te beschermen."
+    },
+    "warning": {
+      "title": "Belangrijke Waarschuwing",
+      "text": "In Spanje worden onbetaalde belastingen die aan een woning zijn verbonden de verantwoordelijkheid van de nieuwe eigenaar. Daarom is het essentieel om grondige controles uit te voeren voordat u een aankoop afrondt."
+    },
+    "types": {
+      "title": "Soorten Belastingschulden om te Controleren",
+      "items": [
+        {
+          "label": "IBI (Gemeentebelasting)",
+          "text": "Jaarlijkse onroerendgoedbelasting betaald aan de gemeente"
+        },
+        {
+          "label": "Verenigingskosten",
+          "text": "Voor woningen binnen een gemeenschap of urbanisatie"
+        },
+        {
+          "label": "Plusvalía",
+          "text": "Belasting over de waardestijging van de grond"
+        },
+        {
+          "label": "Vermogensbelasting",
+          "text": "Voor waardevolle eigendommen"
+        },
+        {
+          "label": "Inkomstenbelasting",
+          "text": "Als de woning is verhuurd"
+        }
+      ]
+    },
+    "checks": {
+      "title": "Hoe Onbetaalde Belastingen te Controleren",
+      "intro": "Verschillende controles moeten worden uitgevoerd voordat u een woning koopt:",
+      "steps": [
+        "Vraag een certificaat aan bij de gemeente dat openstaande IBI-betalingen aantoont",
+        "Indien van toepassing, verkrijg bevestiging van de VvE-beheerder dat alle kosten zijn voldaan",
+        "Controleer bij het Kadaster op geregistreerde schulden of lasten",
+        "Verifieer bij de belastingdienst dat er geen openstaande verplichtingen zijn"
+      ]
+    },
+    "protection": {
+      "title": "Uzelf Beschermen",
+      "cards": [
+        {
+          "title": "Juridische Vertegenwoordiging",
+          "text": "Gebruik altijd een gekwalificeerde advocaat die de nodige due diligence kan uitvoeren en kan bevestigen dat er geen openstaande schulden zijn voordat u verdergaat met de aankoop."
+        },
+        {
+          "title": "Documentatie",
+          "text": "Zorg ervoor dat alle certificaten en vrijwaringsdocumenten zijn verkregen en geverifieerd voordat u het definitieve koopcontract ondertekent."
+        }
+      ]
+    },
+    "commitment": {
+      "title": "Onze Toewijding",
+      "intro": "Bij Inland Andalucia zorgen we ervoor dat:",
+      "points": [
+        "Alle vermelde woningen zijn gecontroleerd op openstaande schulden",
+        "De noodzakelijke documentatie beschikbaar is ter inzage",
+        "Onze juridische partners extra controles kunnen uitvoeren indien nodig",
+        "U beschermd bent tijdens het gehele aankoopproces"
+      ]
+    },
+    "cta": {
+      "title": "Professionele Hulp Nodig?",
+      "text": "Ons team kan u helpen om de fiscale status van een woning te verifiëren en u in contact brengen met betrouwbare juridische experts.",
+      "buttons": {
+        "contact": "Neem Contact Op",
+        "process": "Aankoopproces"
+      }
+    }
+  },
+  "mortgage-guide": {
+    "metadata": {
+      "title": "Gids voor Hypotheken in Spanje | Inland Andalucia",
+      "description": "Complete gids voor het verkrijgen van een hypotheek in Spanje. Leer over hypotheekopties, vereisten, kosten en hoe u als buitenlandse koper kunt aanvragen."
+    },
+    "header": {
+      "title": "Gids voor Hypotheken in Spanje",
+      "description": "Het begrijpen van Spaanse hypotheken is cruciaal bij het kopen van een woning. Hier is alles wat u moet weten over het financieren van uw aankoop in Spanje."
+    },
+    "sections": {
+      "options": {
+        "title": "Hypotheekopties in Spanje",
+        "resident": {
+          "title": "Hypotheken voor Inwoners",
+          "point1": "Tot 80% financiering voor primaire woningen",
+          "point2": "Betere rentetarieven",
+          "point3": "Langere terugbetalingstermijnen beschikbaar",
+          "point4": "Flexibelere voorwaarden"
+        },
+        "nonResident": {
+          "title": "Hypotheken voor Niet-Inwoners",
+          "point1": "Financiering doorgaans tot 70%",
+          "point2": "Iets hogere rentetarieven",
+          "point3": "Kortere terugbetalingstermijnen",
+          "point4": "Aanvullende documentatie vereist"
+        }
+      },
+      "requirements": {
+        "title": "Vereisten voor Niet-Inwonende Kopers",
+        "intro": "Om een hypotheek in Spanje aan te vragen als niet-inwoner, heeft u nodig:",
+        "point1": "NIE (Buitenlands Identificatienummer)",
+        "point2": "Inkomensbewijs (meestal laatste 3-6 maanden loonstroken)",
+        "point3": "Belastingaangiften uit uw thuisland",
+        "point4": "Bankafschriften (meestal laatste 3-6 maanden)",
+        "point5": "Bewijs van werk of eigendom van bedrijf",
+        "point6": "Documentatie van kredietgeschiedenis",
+        "point7": "Lijst van huidige activa en passiva"
+      },
+      "costs": {
+        "title": "Bijbehorende Kosten",
+        "intro": "Bij het afsluiten van een hypotheek, budgetteer voor deze extra kosten:",
+        "point1": "Taxatiekosten (€300-€600)",
+        "point2": "Hypotheekaanvraagkosten (1-2% van het leningbedrag)",
+        "point3": "Notariskosten voor hypotheekakte",
+        "point4": "Verzekering van het pand (vereist door kredietverstrekker)",
+        "point5": "Levensverzekering (mogelijk vereist)"
+      },
+      "types": {
+        "title": "Soorten Hypotheken in Spanje",
+        "fixed": {
+          "title": "Hypotheken met Vaste Rente",
+          "description": "De rente blijft hetzelfde gedurende de looptijd. Biedt zekerheid in maandelijkse betalingen, maar begint meestal met een hogere rente."
+        },
+        "variable": {
+          "title": "Hypotheken met Variabele Rente",
+          "description": "De rente varieert met Euribor. Begint meestal lager, maar betalingen kunnen in de loop van de tijd veranderen. Meest voorkomend in Spanje."
+        }
+      },
+      "process": {
+        "title": "Het Aanvraagproces",
+        "step1": "Initiële consultatie en beoordeling van opties",
+        "step2": "Verzamelen en indienen van vereiste documentatie",
+        "step3": "Taxatie van het pand",
+        "step4": "Beoordeling en beslissing van de bank",
+        "step5": "Hypotheekaanbod en acceptatie",
+        "step6": "Ondertekening bij de notaris"
+      }
+    },
+    "cta": {
+      "title": "Klaar om Uw Hypotheekopties te Verkennen?",
+      "description": "Ons team kan u in contact brengen met betrouwbare Spaanse hypotheekadviseurs die gespecialiseerd zijn in hypotheken voor niet-inwoners.",
+      "buttons": {
+        "advice": "Hypotheekadvies Krijgen",
+        "properties": "Bekijk Eigendommen"
+      }
+    }
+  },
+  "about-us": {
+    "location": {
+      "header": {
+        "title": "De locatie van Andalusië"
+      },
+      "content": {
+        "paragraph1": "De autonome regio Andalusië ligt in het zuiden van Spanje en de kusten worden zowel door de Middellandse Zee als de Atlantische Oceaan omspoeld.",
+        "paragraph2": "Het grenst in het noorden aan Extremadura en Castilië-La Mancha, in het oosten aan Murcia en de Middellandse Zee, in het zuiden aan de Middellandse Zee en de Atlantische Oceaan, en in het westen aan Portugal. Het landschap van de regio valt op door zijn enorme diversiteit. Sommige gebieden zijn bergachtig, terwijl andere uit vlaktes bestaan. Er zijn drie verschillende geografische structuren: de Sierra Morena in het noorden, de rivier de Guadalquivir en de Bética-depressie in het centrale deel van de regio, en de Bética-bergketens in het zuiden.",
+        "paragraph3": "De twee meest opvallende berggebieden zijn de sub-Bética, met het La Sagra-massief dat een hoogte van 2.383 meter bereikt, en de Penibética-bergketen. De Sierra Nevada is ook opmerkelijk en herbergt de Mulhacén, de hoogste bergtop van het Iberisch schiereiland met een hoogte van 3.481 meter. Daarna volgt de Veleta-top op 3.392 meter. Andalusische rivieren die in de Middellandse Zee uitmonden, zijn relatief kort en bevatten weinig water, zoals de Almanzora, de Almería, de Adra, de Guadalfeo, de Guadalhorce en de Guadiaro. Rivieren die in de Atlantische Oceaan uitmonden, zijn groter en bevatten meer water. De belangrijkste rivier van de regio is de Guadalquivir en zijn zijrivieren: Guadalimar, Guadiana Menor en Genil. De rivieren Guadiana, Odiel en Tinto stromen ook in de Atlantische Oceaan.",
+        "paragraph4": "De uitgestrekte kustlijn van Andalusië is gevuld met baaien en inhammen, sommige steiler dan andere wanneer we dichter bij de Bética-bergketens komen. De meest opvallende geografische kenmerken langs de kust zijn: de steile rotsachtige top van Farallon, Polacra-punt, Kaap Gata, de Golf van Almería, Las Entinas-punt, Adra-baai, Sacratif-baai, Malaga-baai en Calaburras-punt. Europa Point vormt de Gibraltar-schiereiland. Hier begint de Spaanse kust vanaf de Straat van Gibraltar tot aan Kaap Trafalgar. In de straat vormen de meest opvallende delen van het landschap de baai van Algeciras en de Marokkaanse en Tarifa-punten."
+      },
+      "images": {
+        "map": "Kaart van Andalusië"
+      }
+    },
+    "weather": {
+      "title": "Het weer in Andalusië",
+      "text1": "Bekijk de weersvoorspelling in elke regio van Andalusië door hieronder op een provincie te klikken",
+      "text2": "Of bekijk het in verschillende steden van elke regio van Andalusië"
+    },
+    "airports": {
+      "header": {
+        "title": "De luchthavens in Andalusië"
+      },
+      "intro": "Andalusië wordt bediend door meerdere grote luchthavens, waardoor het gemakkelijk bereikbaar is vanuit heel Europa en daarbuiten. Hieronder vind je gidsen van de belangrijkste luchthavens in de regio, evenals links naar populaire luchtvaartmaatschappijen die vluchten van en naar Andalusië uitvoeren.",
+      "airports": {
+        "malaga": {
+          "name": "Gids van Málaga Airport",
+          "description": "Informatie over vluchten, autoverhuur, transfers, services en faciliteiten op Málaga Airport.",
+          "button": "Bezoek website"
+        },
+        "granada": {
+          "name": "Gids van Granada Airport",
+          "description": "Informatie over vluchten, autoverhuur, transfers, services en faciliteiten op Granada Airport.",
+          "button": "Bezoek website"
+        },
+        "sevilla": {
+          "name": "Gids van Sevilla Airport",
+          "description": "Informatie over vluchten, autoverhuur, transfers, services en faciliteiten op Sevilla Airport.",
+          "button": "Bezoek website"
+        }
+      },
+      "airlines": {
+        "title": "Luchtvaartmaatschappijen",
+        "list": [
+          "Iberia",
+          "Easyjet",
+          "Thomsonfly",
+          "Flybe",
+          "British Airways",
+          "Ryanair",
+          "Monarch",
+          "Clickair"
+        ]
+      },
+      "footerNote": "Volg vluchtstatus en meer op flightstats.com"
+    }
+  },
+  "contact-us": {
+    "our-offices": {
+      "header": {
+        "title": "Onze kantoren"
+      },
+      "intro": "Voel u vrij om een van onze kantoren in Alcalá la Real, Mollina, Axarquía of Martos te bezoeken als u in de regio bent op zoek naar een binnenlands vastgoed, aangezien wij het grootste deel van Binnen-Andalusië bestrijken. Om u echter zo goed mogelijk van dienst te zijn, vragen wij u om vooraf contact met ons op te nemen zodat wij u de individuele aandacht kunnen geven die u verdient bij het zoeken naar uw woning in Andalusië. Klik hier om naar ons contactformulier te gaan",
+      "contactLink": "/contact",
+      "offices": {
+        "mollina": {
+          "name": "Kantoor Mollina",
+          "address": [
+            "Calle Sol 8, 29532 Mollina (Málaga)"
+          ],
+          "phone": "+34 952 741 525",
+          "mobile": "+34 600 370 543",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Mollina",
+            "Mollina3",
+            "Mollina2"
+          ]
+        },
+        "alcala": {
+          "name": "Kantoor Alcalá",
+          "address": [
+            "Calle Abad Moya 4 bajo, 23680 Alcalá la Real (Jaén)"
+          ],
+          "phone": "+34 953 587 040",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Alcala",
+            "Alcala2",
+            "Alcala3"
+          ]
+        },
+        "martos": {
+          "name": "Kantoor Martos",
+          "address": [
+            "Calle Lope de Vega, 6, 23600 Martos (Jaén)"
+          ],
+          "phone": "+34 953 704 319",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Martos",
+            "Martos2",
+            "Martos3"
+          ]
+        }
+      }
+    },
+    "newsletter": {
+      "header": {
+        "title": "Abonneer u op onze Gratis Nieuwsbrief"
+      },
+      "intro": {
+        "paragraph1": "Onze gratis maandelijkse nieuwsbrief biedt nieuws uit het binnenland, woningen van de maand, informatie over steden en hun feesten en natuurlijk onze woningaanbiedingen.",
+        "paragraph2": "Als u zich wilt registreren, vul dan gewoon uw naam en e-mailadres in en klik op de knop 'Registreren'. Het is heel eenvoudig!"
+      },
+      "form": {
+        "title": "Abonneer u op onze Gratis Nieuwsbrief",
+        "fields": {
+          "name": {
+            "label": "Naam:"
+          },
+          "email": {
+            "label": "E-mail:"
+          },
+          "unsubscribe": {
+            "label": "Uitschrijven van deze dienst"
+          },
+          "captcha": {
+            "label": "Captcha",
+            "question": "9 + 1 ="
+          }
+        },
+        "button": {
+          "subscribe": "Abonneren"
+        }
+      }
+    },
+    "useful-links": {
+      "header": {
+        "title": "Handige Links",
+        "description": "Essentiële bronnen en informatie voor wonen en het kopen van onroerend goed in het binnenland van Andalusië"
+      },
+      "categories": {
+        "property-legal": {
+          "title": "Vastgoed & Juridisch",
+          "links": [
+            {
+              "title": "Spaans Kadaster",
+              "url": "https://www.registradores.org",
+              "description": "Officiële informatie over vastgoedregistratie"
+            },
+            {
+              "title": "Spaanse Notarisraad",
+              "url": "https://www.notariado.org",
+              "description": "Informatie over het Spaanse notariële systeem"
+            }
+          ]
+        },
+        "government-administration": {
+          "title": "Overheid & Administratie",
+          "links": [
+            {
+              "title": "Junta de Andalucía",
+              "url": "https://www.juntadeandalucia.es",
+              "description": "Regionale overheid van Andalusië"
+            },
+            {
+              "title": "Spaanse Belastingdienst",
+              "url": "https://www.agenciatributaria.es",
+              "description": "Belastinginformatie en procedures"
+            }
+          ]
+        },
+        "tourism-culture": {
+          "title": "Toerisme & Cultuur",
+          "links": [
+            {
+              "title": "Toerisme Andalusië",
+              "url": "https://www.andalucia.org",
+              "description": "Officieel toerismeportaal van Andalusië"
+            },
+            {
+              "title": "Toerisme Spanje",
+              "url": "https://www.spain.info",
+              "description": "Officiële toerismewebsite van Spanje"
+            }
+          ]
+        },
+        "education": {
+          "title": "Onderwijs",
+          "links": [
+            {
+              "title": "Spaanse Taal Scholen",
+              "url": "#",
+              "description": "Leer Spaans in Andalusië"
+            },
+            {
+              "title": "Internationale Scholen",
+              "url": "#",
+              "description": "Onderwijsopties voor expats"
+            }
+          ]
+        },
+        "moving-relocation": {
+          "title": "Verhuizen & Herlocatie",
+          "links": [
+            {
+              "title": "Verhuisbedrijven",
+              "url": "#",
+              "description": "Internationale verhuisdiensten"
+            },
+            {
+              "title": "Informatie over NIE-nummer",
+              "url": "#",
+              "description": "Gids voor het verkrijgen van uw NIE"
+            }
+          ]
+        },
+        "healthcare": {
+          "title": "Gezondheidszorg",
+          "links": [
+            {
+              "title": "Spaans Gezondheidssysteem",
+              "url": "#",
+              "description": "Informatie over gezondheidszorg in Spanje"
+            },
+            {
+              "title": "Particuliere Ziektekostenverzekering",
+              "url": "#",
+              "description": "Zorgopties voor inwoners"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "sell-with-us": {
+    "header": {
+      "title": "Laat ons uw woning verkopen"
+    },
+    "intro": {
+      "paragraph1": "Wij zijn het grootste en meest vertrouwde makelaarskantoor in Andalusië. Al meer dan 20 jaar actief, hebben wij duizenden woningen verkocht in heel Binnen-Andalusië.",
+      "paragraph2": "Wij adverteren op meer dan 30 online portalen in heel Europa en publiceren op alle grote sociale mediaplatformen, waaronder Facebook (bereik van meer dan 100.000 mensen per maand), Telegram, Instagram en YouTube (meer dan 70.000 weergaven per maand). Ook versturen wij wekelijkse nieuwsbrieven naar meer dan 14.500 abonnees die nieuwe aanbiedingen en prijsdalingen volgen. Deze marketing levert ons meer dan 550 nieuwe kopersaanvragen per maand op.",
+      "paragraph3": "Ons meertalige team gebruikt de nieuwste digitale technologie om hoogwaardige foto’s en video’s van uw woning te maken. Lees wat onze verkopers en klanten zeggen.",
+      "paragraph4": "Wij beschikken over een uitgebreide database van klanten die klaar staan om onroerend goed in Andalusië te kopen en onze experts informeren hen voortdurend over de nieuwste aanbiedingen.",
+      "paragraph5": "Door uw woning via ons te verkopen, bent u in goede handen. Vul alstublieft het onderstaande formulier in en wij nemen zo spoedig mogelijk contact met u op of bel +34 952 741 525."
+    },
+    "form": {
+      "title": "Verkoop uw Woning",
+      "fields": {
+        "firstName": {
+          "label": "Voornaam"
+        },
+        "lastName": {
+          "label": "Achternaam"
+        },
+        "telephone": {
+          "label": "Telefoon"
+        },
+        "email": {
+          "label": "E-mail"
+        },
+        "location": {
+          "label": "Locatie van de woning"
+        },
+        "details": {
+          "label": "Details van de woning"
+        },
+        "captcha": {
+          "label": "Captcha",
+          "question": "40 + 5 ="
+        }
+      },
+      "button": {
+        "submit": "Woning Indienen"
       }
     }
   },

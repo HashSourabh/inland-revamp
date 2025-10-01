@@ -152,7 +152,7 @@
         "text": "Córdoba disfruta de sus fiestas y festivales como cualquier otra ciudad de España, y la Semana Santa es una de las más importantes. Hay nada menos que 32 procesiones en total con imágenes y figuras de santos bellamente decoradas y ornamentadas, acompañadas por los Nazarenos (hombres vestidos con túnicas típicas con capuchas que cubren todo el rostro excepto los ojos). Estas procesiones recorren la ciudad seguidas por multitudes. En mayo hay tres festivales: del 5 al 12 se celebra el Festival de los Patios Cordobeses, un concurso para el patio mejor decorado; las Cruces de Mayo, cuando toda la ciudad se engalana con cruces y miles de flores; y la última semana de mayo es cuando todos se desfogan en la Feria de Córdoba: se disfruta de la música y el baile flamenco y toda la ciudad se deleita con las festividades."
       }
     },
-     "granada": {
+    "granada": {
       "title": "Granada",
       "section1": {
         "heading": "Sobre Granada",
@@ -194,7 +194,7 @@
         "text": "La cocina de Jaén se centra en el aceite de oliva, con platos tradicionales como la pipirrana (ensalada de verduras), los andrajos (guiso con fideos planos) y los ochíos (pan anisado) que ofrecen auténticos sabores del interior de Andalucía."
       }
     },
-      "malaga": {
+    "malaga": {
       "title": "málaga",
       "section1": {
         "heading": "Sobre Málaga",
@@ -220,24 +220,714 @@
     "sevilla": {
       "title": "Sevilla",
       "section1": {
-        "heading": "About Sevilla",
-        "text": "Sevilla province is a treasure trove of history, culture, and natural beauty. While famous for its capital city with iconic landmarks like the Giralda and Plaza de España, the inland areas offer a different, more authentic experience.<br />The province features picturesque white towns, rolling olive groves, and historical sites from various civilizations that have called this region home, from the Romans and Moors to Renaissance and Baroque influences."
+        "heading": "Acerca de Sevilla",
+        "text": "La provincia de Sevilla es un tesoro de historia, cultura y belleza natural. Aunque es famosa por su capital con monumentos icónicos como la Giralda y la Plaza de España, las zonas del interior ofrecen una experiencia diferente y más auténtica.<br />La provincia cuenta con pintorescos pueblos blancos, extensos olivares y sitios históricos de diversas civilizaciones que han habitado esta región, desde los romanos y los moros hasta las influencias renacentistas y barrocas."
       },
       "section2": {
-        "heading": "Historic Towns",
-        "text": "Inland Sevilla is home to charming historic towns like Osuna, Écija, Carmona, and Marchena, each with unique architecture and rich heritage. Osuna's Renaissance palaces and Écija's Baroque church towers have earned it the nickname \"City of Towers.\""
+        "heading": "Pueblos Históricos",
+        "text": "El interior de Sevilla alberga encantadores pueblos históricos como Osuna, Écija, Carmona y Marchena, cada uno con una arquitectura única y un rico patrimonio. Los palacios renacentistas de Osuna y las torres barrocas de Écija le han valido el apodo de \"Ciudad de las Torres\"."
       },
       "section3": {
-        "heading": "Natural Landscapes",
-        "text": "The province boasts diverse natural landscapes, from the Sierra Norte Natural Park with its dense forests and granite formations, to the fertile Guadalquivir Valley with endless fields of sunflowers, wheat, and olive groves."
+        "heading": "Paisajes Naturales",
+        "text": "La provincia presume de paisajes naturales diversos, desde el Parque Natural de la Sierra Norte con sus densos bosques y formaciones graníticas, hasta el fértil Valle del Guadalquivir con interminables campos de girasoles, trigo y olivares."
       },
       "section4": {
-        "heading": "Culinary Traditions",
-        "text": "Sevillian cuisine is a delight for food lovers, featuring specialties like gazpacho, spinach with chickpeas, and Iberian ham. The inland areas are particularly renowned for olive oils, artisanal cheeses, and traditional sweets."
+        "heading": "Tradiciones Culinarias",
+        "text": "La gastronomía sevillana es un deleite para los amantes de la comida, con especialidades como el gazpacho, las espinacas con garbanzos y el jamón ibérico. Las zonas del interior son especialmente reconocidas por sus aceites de oliva, quesos artesanales y dulces tradicionales."
       },
       "section5": {
-        "heading": "Festivals & Traditions",
-        "text": "Inland Sevilla comes alive during its traditional festivals. Each town has its own unique celebration, from the elaborate Holy Week processions to vibrant summer ferias, flamenco performances, and agricultural harvesting festivals."
+        "heading": "Festivales y Tradiciones",
+        "text": "El interior de Sevilla cobra vida durante sus festividades tradicionales. Cada pueblo tiene su propia celebración única, desde las elaboradas procesiones de Semana Santa hasta las animadas ferias de verano, espectáculos de flamenco y festivales agrícolas de cosecha."
+      }
+    }
+  },
+  "buyers-guide": {
+    "title": "El Proceso de Compra de Propiedad en España",
+    "description": "Una guía completa para comprar una propiedad en España, desde la primera visita hasta recibir las llaves. Entender cada paso ayuda a garantizar un proceso de compra sin problemas.",
+    "steps": [
+      {
+        "heading": "Paso 1: Visita y Selección de la Propiedad",
+        "items": [
+          "Programa visitas a propiedades que se ajusten a tus criterios",
+          "Toma notas detalladas y fotos durante las visitas",
+          "Haz preguntas sobre la historia y el estado de la propiedad",
+          "Investiga la zona local y sus servicios",
+          "Considera organizar una segunda visita si estás interesado"
+        ]
+      },
+      {
+        "heading": "Paso 2: Hacer una Oferta",
+        "items": [
+          "Presenta tu oferta a través de tu agente inmobiliario",
+          "Negocia el precio y las condiciones",
+          "Acuerda los muebles y accesorios que se incluirán",
+          "Discute el calendario y cualquier condición"
+        ]
+      },
+      {
+        "heading": "Paso 3: Proceso Legal y Administrativo",
+        "items": [
+          "Designa un representante legal",
+          "Obtén el NIE (Número de Identidad de Extranjero)",
+          "Abre una cuenta bancaria en España",
+          "Realiza comprobaciones e investigaciones sobre la propiedad",
+          "Revisa y firma el contrato de reserva"
+        ]
+      },
+      {
+        "heading": "Documentación Importante",
+        "intro": "Documentos esenciales necesarios durante el proceso:",
+        "items": [
+          "NIE (Número de Identidad de Extranjero)",
+          "Pasaporte o DNI",
+          "Prueba de fondos",
+          "Poder notarial (si no estás presente en la firma)"
+        ]
+      },
+      {
+        "heading": "Paso 4: Finalización de la Compra",
+        "items": [
+          "Firma el contrato de compraventa (Escritura)",
+          "Paga el saldo restante e impuestos",
+          "Registra la propiedad a tu nombre",
+          "Recibe las llaves y la documentación",
+          "Contrata los servicios y suministros"
+        ]
+      },
+      {
+        "heading": "Apoyo Después de la Compra",
+        "intro": "Nuestro servicio no termina con la compra. Te ayudamos con:",
+        "items": [
+          "Configurar los suministros y servicios",
+          "Ponerte en contacto con contratistas locales si es necesario",
+          "Proporcionar información sobre la zona",
+          "Apoyo y asesoramiento continuo"
+        ]
+      }
+    ],
+    "cta": {
+      "heading": "¿Necesitas Más Información?",
+      "text": "Contacta con nuestro equipo para obtener una guía detallada sobre el proceso de compra o para organizar una visita.",
+      "buttons": {
+        "contact": "Contáctanos",
+        "properties": "Ver Propiedades"
+      }
+    }
+  },
+  "buying-property": {
+    "title": "Comprar una Propiedad en España",
+    "description": "Su guía completa para la compra de propiedades en el interior de España. Aprenda sobre los diferentes tipos de propiedades, consideraciones clave y cómo tomar la mejor decisión según sus necesidades.",
+    "types-of-properties": [
+      {
+        "name": "Cortijos",
+        "description": "Casas de campo tradicionales españolas, a menudo con terreno y dependencias"
+      },
+      {
+        "name": "Casas de Pueblo",
+        "description": "Propiedades en el corazón de los pueblos tradicionales españoles"
+      },
+      {
+        "name": "Villas",
+        "description": "Casas independientes modernas o tradicionales, a menudo con jardines y piscinas"
+      },
+      {
+        "name": "Propiedades Rurales",
+        "description": "Viviendas rurales con terreno y vistas impresionantes"
+      },
+      {
+        "name": "Proyectos de Renovación",
+        "description": "Propiedades que necesitan trabajo pero ofrecen gran potencial"
+      }
+    ],
+    "key-considerations": [
+      "Ubicación y accesibilidad",
+      "Condición de la propiedad y posibles necesidades de renovación",
+      "Estado legal y documentación",
+      "Servicios y comodidades locales",
+      "Potencial de reventa futuro"
+    ],
+    "important-note": "Trabaje siempre con un agente de confianza que pueda verificar el estado legal de las propiedades y guiarlo durante el proceso de compra. En Inland Andalucia, nos aseguramos de que todas nuestras propiedades sean legalmente correctas y cuenten con la documentación adecuada.",
+    "our-services": [
+      "Amplio conocimiento y experiencia local",
+      "Verificación de la propiedad y controles legales",
+      "Soporte multilingüe durante todo el proceso",
+      "Acceso a profesionales locales de confianza",
+      "Apoyo y orientación postventa"
+    ],
+    "cta": {
+      "heading": "¿Listo para empezar su búsqueda de propiedad?",
+      "text": "Explore nuestra amplia colección de propiedades en el interior.",
+      "buttons": {
+        "properties": "Ver Propiedades"
+      }
+    }
+  },
+  "property-taxes": {
+    "title": "Impuestos sobre la Propiedad en España",
+    "description": "Comprender las implicaciones fiscales de comprar y poseer una propiedad en España es crucial para tomar decisiones informadas. Aquí tienes una visión completa de todos los impuestos involucrados.",
+    "purchase-taxes": {
+      "heading": "Impuestos de Compra",
+      "transfer-tax": {
+        "heading": "Impuesto de Transmisiones Patrimoniales (ITP)",
+        "intro": "Al comprar una propiedad de segunda mano, deberás pagar el Impuesto de Transmisiones Patrimoniales (ITP):",
+        "items": [
+          "8% para propiedades hasta 400.000 €",
+          "9% para propiedades entre 400.000 € y 700.000 €",
+          "10% para propiedades superiores a 700.000 €"
+        ]
+      },
+      "vat-stamp-duty": {
+        "heading": "IVA y Actos Jurídicos Documentados",
+        "intro": "Para propiedades nuevas, en lugar del ITP, deberás pagar:",
+        "items": [
+          "10% de IVA",
+          "1,5% de Actos Jurídicos Documentados (AJD)"
+        ]
+      }
+    },
+    "important-note": {
+      "heading": "Nota Importante",
+      "text": "Las tasas impositivas pueden variar entre regiones en España y pueden cambiar con el tiempo. Siempre consulta con un profesional legal para obtener las tasas y regulaciones más actualizadas."
+    },
+    "annual-taxes": {
+      "heading": "Impuestos Anuales sobre la Propiedad",
+      "ibi": {
+        "heading": "IBI (Impuesto sobre Bienes Inmuebles)",
+        "intro": "El principal impuesto anual sobre la propiedad en España, basado en el valor catastral de tu propiedad:",
+        "items": [
+          "Pagado anualmente al ayuntamiento local",
+          "Las tasas varían según el municipio",
+          "Generalmente entre 0,4% y 1,1% del valor catastral"
+        ]
+      },
+      "basura": {
+        "heading": "Basura (Recogida de Residuos)",
+        "intro": "Tarifa anual por servicios de recogida de residuos:",
+        "items": [
+          "Varía según la ubicación y el tamaño de la propiedad",
+          "Normalmente pagado anualmente"
+        ]
+      }
+    },
+    "non-resident-taxes": {
+      "heading": "Impuestos para No Residentes",
+      "intro": "Si eres propietario no residente, deberás:",
+      "items": [
+        "Presentar una declaración anual de impuestos sobre la renta",
+        "Pagar impuestos sobre los ingresos por alquiler (si corresponde)",
+        "Presentar el Formulario 210 para el impuesto sobre la renta imputada"
+      ]
+    },
+    "capital-gains-tax": {
+      "heading": "Impuesto sobre Plusvalías",
+      "intro": "Al vender tu propiedad, deberás considerar:",
+      "items": [
+        "19-23% de impuesto sobre las ganancias obtenidas (para no residentes)",
+        "Posibles exenciones para residencias principales",
+        "Deducciones por mejoras y costos de compra"
+      ]
+    },
+    "cta": {
+      "heading": "¿Necesitas Asesoramiento Fiscal?",
+      "text": "Nuestro equipo puede conectarte con asesores fiscales experimentados que se especializan en la tributación de propiedades en España.",
+      "button": "Contacta con Nuestro Equipo"
+    }
+  },
+  "faq-content": {
+    "title": "Preguntas Frecuentes",
+    "description": "Encuentra respuestas a las preguntas más comunes sobre la compra de una propiedad en el interior de España. Si no encuentras lo que buscas, no dudes en contactarnos.",
+    "sections": {
+      "general": {
+        "title": "Preguntas Generales",
+        "questions": [
+          {
+            "q": "¿Necesito ser residente para comprar una propiedad en España?",
+            "a": "No, no necesitas ser residente. Los no residentes pueden comprar libremente una propiedad en España, pero necesitarás un NIE (Número de Identidad de Extranjero) para completar la compra."
+          },
+          {
+            "q": "¿Qué costes adicionales debo presupuestar al comprar?",
+            "a": "Presupuesta aproximadamente un 10-12% del precio de compra para costes adicionales, incluyendo: impuesto de transmisiones (6-10%), honorarios de notario, honorarios legales y tasas de registro."
+          },
+          {
+            "q": "¿Cuánto tiempo tarda el proceso de compra?",
+            "a": "El proceso típico de compra dura entre 2 y 3 meses desde la aceptación de la oferta hasta la finalización. Esto puede variar según factores como la obtención de hipoteca y las comprobaciones legales."
+          }
+        ]
+      },
+      "legal": {
+        "title": "Aspectos Legales y Documentación",
+        "questions": [
+          {
+            "q": "¿Qué es un NIE y cómo lo obtengo?",
+            "a": "Un NIE (Número de Identidad de Extranjero) es un número de identificación fiscal para extranjeros. Puedes obtenerlo a través del consulado español en tu país o en una comisaría de policía en España. Nosotros podemos ayudarte en este proceso."
+          },
+          {
+            "q": "¿Necesito una cuenta bancaria en España?",
+            "a": "Sí, una cuenta bancaria en España es necesaria para pagar los servicios públicos e impuestos locales. También se requiere si vas a solicitar una hipoteca en España."
+          },
+          {
+            "q": "¿Es necesario hacer un testamento en España?",
+            "a": "Aunque no es obligatorio, se recomienda encarecidamente hacer un testamento español para tu propiedad con el fin de garantizar un proceso de herencia fluido y evitar complicaciones con las leyes internacionales de sucesión."
+          }
+        ]
+      },
+      "property": {
+        "title": "Propiedad y Ubicación",
+        "questions": [
+          {
+            "q": "¿Cuál es la diferencia entre propiedades urbanas y rurales?",
+            "a": "Las propiedades urbanas están ubicadas dentro de los límites de la ciudad y tienen acceso a los servicios principales. Las propiedades rurales pueden tener más terreno, pero pueden tener derechos de construcción restringidos y acceso limitado a suministros."
+          },
+          {
+            "q": "¿Puedo renovar o ampliar mi propiedad?",
+            "a": "Sí, pero necesitarás los permisos correspondientes del ayuntamiento local. Las normativas varían entre áreas urbanas y rurales, y algunas propiedades pueden tener restricciones."
+          },
+          {
+            "q": "¿Qué costes continuos debo esperar?",
+            "a": "Los costes regulares incluyen IBI (impuesto municipal), gastos de comunidad si aplica, suministros, seguros e impuesto sobre la renta de no residentes si no eres residente."
+          }
+        ]
+      }
+    },
+    "cta": {
+      "heading": "¿Aún Tienes Preguntas?",
+      "text": "Nuestro equipo está aquí para ayudarte con cualquier consulta que tengas sobre la compra de una propiedad en el interior de España.",
+      "button": "Contacta con Nuestro Equipo"
+    }
+  },
+  "unpaid-taxes": {
+    "metadata": {
+      "title": "Entendiendo los Impuestos Impagos en Propiedades en España | Inland Andalucia",
+      "description": "Conozca las implicaciones de los impuestos impagos al comprar una propiedad en España, cómo verificar deudas fiscales y cómo protegerse durante la compra."
+    },
+    "header": {
+      "title": "Entendiendo los Impuestos Impagos",
+      "description": "Al comprar una propiedad en España, es crucial comprender las implicaciones de cualquier impuesto impago asociado con la propiedad. Esto es lo que necesita saber para protegerse."
+    },
+    "warning": {
+      "title": "Advertencia Importante",
+      "text": "En España, los impuestos impagos asociados a una propiedad pasan a ser responsabilidad del nuevo propietario. Por eso es esencial realizar las comprobaciones adecuadas antes de finalizar cualquier compra."
+    },
+    "types": {
+      "title": "Tipos de Deudas Fiscales a Verificar",
+      "items": [
+        {
+          "label": "IBI (Impuesto de Bienes Inmuebles)",
+          "text": "Impuesto anual de propiedad pagado al ayuntamiento local"
+        },
+        {
+          "label": "Gastos de Comunidad",
+          "text": "Para propiedades dentro de una comunidad o urbanización"
+        },
+        {
+          "label": "Plusvalía",
+          "text": "Impuesto sobre el incremento del valor del terreno"
+        },
+        {
+          "label": "Impuesto sobre el Patrimonio",
+          "text": "Para propiedades de alto valor"
+        },
+        {
+          "label": "Impuesto sobre la Renta",
+          "text": "Si la propiedad ha sido alquilada"
+        }
+      ]
+    },
+    "checks": {
+      "title": "Cómo Verificar Impuestos Impagos",
+      "intro": "Deben realizarse varias comprobaciones antes de comprar una propiedad:",
+      "steps": [
+        "Solicitar un certificado al ayuntamiento que muestre los pagos de IBI pendientes",
+        "Si aplica, obtener confirmación del administrador de la comunidad de que todas las cuotas están al día",
+        "Consultar con el Registro de la Propiedad sobre deudas o cargas registradas",
+        "Verificar con la oficina de impuestos que no existan obligaciones fiscales pendientes"
+      ]
+    },
+    "protection": {
+      "title": "Cómo Protegerse",
+      "cards": [
+        {
+          "title": "Representación Legal",
+          "text": "Utilice siempre un abogado cualificado que pueda realizar la debida diligencia y verificar que no existan deudas pendientes antes de proceder con la compra."
+        },
+        {
+          "title": "Documentación",
+          "text": "Asegúrese de que todos los certificados y documentos de liquidación se obtengan y verifiquen antes de firmar el contrato final de compraventa."
+        }
+      ]
+    },
+    "commitment": {
+      "title": "Nuestro Compromiso",
+      "intro": "En Inland Andalucia nos aseguramos de que:",
+      "points": [
+        "Todas las propiedades listadas hayan sido revisadas en cuanto a deudas pendientes",
+        "La documentación necesaria esté disponible para revisión",
+        "Nuestros socios legales puedan realizar comprobaciones adicionales si es necesario",
+        "Usted esté protegido durante todo el proceso de compra"
+      ]
+    },
+    "cta": {
+      "title": "¿Necesita Asistencia Profesional?",
+      "text": "Nuestro equipo puede ayudarle a verificar el estado fiscal de cualquier propiedad y ponerle en contacto con expertos legales de confianza.",
+      "buttons": {
+        "contact": "Contáctenos",
+        "process": "Proceso de Compra"
+      }
+    }
+  },
+  "mortgage-guide": {
+    "metadata": {
+      "title": "Guía de Hipotecas en España | Inland Andalucia",
+      "description": "Guía completa para obtener una hipoteca en España. Aprende sobre opciones de hipoteca, requisitos, costos y cómo aplicar como comprador extranjero."
+    },
+    "header": {
+      "title": "Guía de Hipotecas en España",
+      "description": "Entender las hipotecas en España es crucial al comprar una propiedad. Aquí tienes todo lo que necesitas saber sobre la financiación de tu compra."
+    },
+    "sections": {
+      "options": {
+        "title": "Opciones de Hipoteca en España",
+        "resident": {
+          "title": "Hipotecas para Residentes",
+          "point1": "Financiación de hasta el 80 % para viviendas principales",
+          "point2": "Mejores tasas de interés",
+          "point3": "Plazos de reembolso más largos disponibles",
+          "point4": "Condiciones más flexibles"
+        },
+        "nonResident": {
+          "title": "Hipotecas para No Residentes",
+          "point1": "Financiación normalmente hasta el 70 %",
+          "point2": "Tasas de interés ligeramente más altas",
+          "point3": "Plazos de reembolso más cortos",
+          "point4": "Documentación adicional requerida"
+        }
+      },
+      "requirements": {
+        "title": "Requisitos para Compradores No Residentes",
+        "intro": "Para solicitar una hipoteca en España como no residente, necesitarás:",
+        "point1": "NIE (Número de Identidad de Extranjero)",
+        "point2": "Comprobante de ingresos (generalmente últimos 3-6 meses de nómina)",
+        "point3": "Declaraciones de impuestos de tu país de origen",
+        "point4": "Extractos bancarios (generalmente últimos 3-6 meses)",
+        "point5": "Comprobante de empleo o propiedad de negocio",
+        "point6": "Documentación de historial crediticio",
+        "point7": "Lista de activos y pasivos actuales"
+      },
+      "costs": {
+        "title": "Costos Asociados",
+        "intro": "Al obtener una hipoteca, presupuestar estos costos adicionales:",
+        "point1": "Tasa de tasación de propiedad (€300-€600)",
+        "point2": "Comisión de apertura de hipoteca (1-2 % del préstamo)",
+        "point3": "Honorarios notariales para la escritura de hipoteca",
+        "point4": "Seguro de propiedad (requerido por el prestamista)",
+        "point5": "Seguro de vida (puede ser requerido)"
+      },
+      "types": {
+        "title": "Tipos de Hipotecas en España",
+        "fixed": {
+          "title": "Hipotecas a Tipo Fijo",
+          "description": "La tasa de interés permanece igual durante todo el plazo. Ofrece seguridad en los pagos mensuales pero generalmente comienza con una tasa más alta."
+        },
+        "variable": {
+          "title": "Hipotecas a Tipo Variable",
+          "description": "La tasa de interés varía según Euribor. Normalmente comienza más baja, pero los pagos pueden cambiar con el tiempo. La más común en España."
+        }
+      },
+      "process": {
+        "title": "El Proceso de Solicitud",
+        "step1": "Consulta inicial y evaluación de opciones",
+        "step2": "Reunir y presentar la documentación requerida",
+        "step3": "Tasación de la propiedad",
+        "step4": "Evaluación y decisión del banco",
+        "step5": "Oferta de hipoteca y aceptación",
+        "step6": "Firma ante notario"
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Explorar Tus Opciones de Hipoteca?",
+      "description": "Nuestro equipo puede conectarte con asesores hipotecarios de confianza en España especializados en hipotecas para no residentes.",
+      "buttons": {
+        "advice": "Obtener Asesoramiento Hipotecario",
+        "properties": "Ver Propiedades"
+      }
+    }
+  },
+  "about-us": {
+    "location": {
+      "header": {
+        "title": "La ubicación de Andalucía"
+      },
+      "content": {
+        "paragraph1": "La comunidad autónoma de Andalucía se encuentra en el sur de España y sus costas están bañadas tanto por el mar Mediterráneo como por el océano Atlántico.",
+        "paragraph2": "Limita al norte con Extremadura y Castilla-La Mancha, al este con Murcia y el mar Mediterráneo, al sur con el Mediterráneo y el océano Atlántico, y al oeste con Portugal. El paisaje de la región destaca por su gran diversidad. Algunas zonas están cubiertas de montañas mientras que otras son llanuras. Existen tres estructuras geográficas distintas: la sierra Morena al norte, el río Guadalquivir y la depresión Bética en la parte central de la región, y las sierras Béticas en el sur.",
+        "paragraph3": "Las dos áreas montañosas más notables son la sub-Bética, que contiene el macizo de La Sagra con una altitud de 2.383 metros, y la sierra Penibética. La Sierra Nevada también es sobresaliente y alberga el Mulhacén, el pico más alto de la Península Ibérica, con 3.481 metros. Le sigue el pico Veleta con 3.392 metros. Los ríos andaluces que desembocan en el Mediterráneo son relativamente cortos y con escaso caudal, entre ellos el Almanzora, el Almería, el Adra, el Guadalfeo, el Guadalhorce y el Guadiaro. Los ríos que desembocan en el Atlántico son más grandes y con mayor caudal. El río más importante de la región es el Guadalquivir y sus afluentes: Guadalimar, Guadiana Menor y Genil. Los ríos Guadiana, Odiel y Tinto también desembocan en el Atlántico.",
+        "paragraph4": "El extenso litoral que se extiende a lo largo de Andalucía está lleno de bahías y ensenadas, algunas más escarpadas que otras a medida que nos acercamos a las sierras Béticas. Los accidentes geográficos más notables de la costa incluyen: la cumbre rocosa de Farallón, el punto Polacra, el cabo de Gata, el golfo de Almería, el punto de Las Entinas, la bahía de Adra, la bahía de Sacratif, la bahía de Málaga y el punto de Calaburras. Europa Point forma el promontorio de Gibraltar. Aquí comienza la costa española desde el estrecho de Gibraltar hasta el cabo de Trafalgar. Dentro del estrecho, las partes más notables del paisaje están formadas por la bahía de Algeciras y por los puntos Marroquí y Tarifa."
+      },
+      "images": {
+        "map": "Mapa de Andalucía"
+      }
+    },
+    "weather": {
+      "title": "El clima en Andalucía",
+      "text1": "Consulta el pronóstico del tiempo en cualquier región de Andalucía haciendo clic en una provincia a continuación",
+      "text2": "O consúltalo en diferentes municipios de cada región de Andalucía"
+    },
+    "airports": {
+      "header": {
+        "title": "Los aeropuertos en Andalucía"
+      },
+      "intro": "Andalucía cuenta con varios aeropuertos importantes, lo que facilita llegar desde toda Europa y más allá. A continuación encontrarás guías de los principales aeropuertos de la región, así como enlaces a las aerolíneas populares que operan vuelos hacia y desde Andalucía.",
+      "airports": {
+        "malaga": {
+          "name": "Guía del aeropuerto de Málaga",
+          "description": "Información sobre vuelos, alquiler de coches, traslados, servicios e instalaciones en el aeropuerto de Málaga.",
+          "button": "Visitar sitio web"
+        },
+        "granada": {
+          "name": "Guía del aeropuerto de Granada",
+          "description": "Información sobre vuelos, alquiler de coches, traslados, servicios e instalaciones en el aeropuerto de Granada.",
+          "button": "Visitar sitio web"
+        },
+        "sevilla": {
+          "name": "Guía del aeropuerto de Sevilla",
+          "description": "Información sobre vuelos, alquiler de coches, traslados, servicios e instalaciones en el aeropuerto de Sevilla.",
+          "button": "Visitar sitio web"
+        }
+      },
+      "airlines": {
+        "title": "Aerolíneas",
+        "list": [
+          "Iberia",
+          "Easyjet",
+          "Thomsonfly",
+          "Flybe",
+          "British Airways",
+          "Ryanair",
+          "Monarch",
+          "Clickair"
+        ]
+      },
+      "footerNote": "Consulta el estado de los vuelos y más en flightstats.com"
+    }
+  },
+  "contact-us": {
+    "our-offices": {
+      "header": {
+        "title": "Nuestras oficinas"
+      },
+      "intro": "No dude en visitar una de nuestras oficinas en Alcalá la Real, Mollina, Axarquía o Martos si se encuentra en la zona buscando una propiedad en el interior, ya que cubrimos la mayor parte del interior de Andalucía. Sin embargo, para poder atenderle mejor, le pedimos que se ponga en contacto con nosotros con antelación para que podamos darle la atención individual que se merece mientras busca su propiedad en el interior de Andalucía. Haga clic aquí para ir a nuestro formulario de contacto",
+      "contactLink": "/contact",
+      "offices": {
+        "mollina": {
+          "name": "Oficina de Mollina",
+          "address": [
+            "Calle Sol 8, 29532 Mollina (Málaga)"
+          ],
+          "phone": "+34 952 741 525",
+          "mobile": "+34 600 370 543",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Mollina",
+            "Mollina3",
+            "Mollina2"
+          ]
+        },
+        "alcala": {
+          "name": "Oficina de Alcalá",
+          "address": [
+            "Calle Abad Moya 4 bajo, 23680 Alcalá la Real (Jaén)"
+          ],
+          "phone": "+34 953 587 040",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Alcala",
+            "Alcala2",
+            "Alcala3"
+          ]
+        },
+        "martos": {
+          "name": "Oficina de Martos",
+          "address": [
+            "Calle Lope de Vega, 6, 23600 Martos (Jaén)"
+          ],
+          "phone": "+34 953 704 319",
+          "email": "info@inlandandalucia.com",
+          "images": [
+            "Martos",
+            "Martos2",
+            "Martos3"
+          ]
+        }
+      }
+    },
+    "newsletter": {
+      "header": {
+        "title": "Suscríbete a nuestro Boletín Gratuito"
+      },
+      "intro": {
+        "paragraph1": "Nuestro boletín mensual gratuito ofrece noticias del interior, propiedades del mes, información sobre pueblos y sus fiestas y, por supuesto, nuestras promociones inmobiliarias.",
+        "paragraph2": "Si deseas registrarte, simplemente completa tu nombre y correo electrónico y haz clic en el botón 'Registrar'. ¡Es muy sencillo!"
+      },
+      "form": {
+        "title": "Suscríbete a nuestro Boletín Gratuito",
+        "fields": {
+          "name": {
+            "label": "Nombre:"
+          },
+          "email": {
+            "label": "Correo electrónico:"
+          },
+          "unsubscribe": {
+            "label": "Darme de baja de este servicio"
+          },
+          "captcha": {
+            "label": "Captcha",
+            "question": "9 + 1 ="
+          }
+        },
+        "button": {
+          "subscribe": "Suscribirse"
+        }
+      }
+    },
+    "useful-links": {
+      "header": {
+        "title": "Enlaces Útiles",
+        "description": "Recursos e información esenciales para vivir y comprar una propiedad en el interior de Andalucía"
+      },
+      "categories": {
+        "property-legal": {
+          "title": "Propiedad y Legal",
+          "links": [
+            {
+              "title": "Registro de la Propiedad de España",
+              "url": "https://www.registradores.org",
+              "description": "Información oficial sobre el registro de propiedades"
+            },
+            {
+              "title": "Consejo General del Notariado",
+              "url": "https://www.notariado.org",
+              "description": "Información sobre el sistema notarial español"
+            }
+          ]
+        },
+        "government-administration": {
+          "title": "Gobierno y Administración",
+          "links": [
+            {
+              "title": "Junta de Andalucía",
+              "url": "https://www.juntadeandalucia.es",
+              "description": "Gobierno regional de Andalucía"
+            },
+            {
+              "title": "Agencia Tributaria Española",
+              "url": "https://www.agenciatributaria.es",
+              "description": "Información y trámites fiscales"
+            }
+          ]
+        },
+        "tourism-culture": {
+          "title": "Turismo y Cultura",
+          "links": [
+            {
+              "title": "Turismo de Andalucía",
+              "url": "https://www.andalucia.org",
+              "description": "Portal oficial de turismo de Andalucía"
+            },
+            {
+              "title": "Turismo de España",
+              "url": "https://www.spain.info",
+              "description": "Página oficial de turismo de España"
+            }
+          ]
+        },
+        "education": {
+          "title": "Educación",
+          "links": [
+            {
+              "title": "Escuelas de Idiomas Españolas",
+              "url": "#",
+              "description": "Aprende español en Andalucía"
+            },
+            {
+              "title": "Colegios Internacionales",
+              "url": "#",
+              "description": "Opciones educativas para expatriados"
+            }
+          ]
+        },
+        "moving-relocation": {
+          "title": "Mudanza y Reubicación",
+          "links": [
+            {
+              "title": "Empresas de Mudanzas",
+              "url": "#",
+              "description": "Servicios de mudanza internacional"
+            },
+            {
+              "title": "Información sobre el NIE",
+              "url": "#",
+              "description": "Guía para obtener tu NIE"
+            }
+          ]
+        },
+        "healthcare": {
+          "title": "Sanidad",
+          "links": [
+            {
+              "title": "Sistema Sanitario Español",
+              "url": "#",
+              "description": "Información sobre la sanidad en España"
+            },
+            {
+              "title": "Seguro Médico Privado",
+              "url": "#",
+              "description": "Opciones de salud para residentes"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "sell-with-us": {
+    "header": {
+      "title": "Déjenos vender su propiedad"
+    },
+    "intro": {
+      "paragraph1": "Somos la agencia inmobiliaria más grande y de mayor confianza de Andalucía. Con más de 20 años de experiencia, hemos vendido miles de propiedades en toda Andalucía Interior.",
+      "paragraph2": "Anunciamos en más de 30 portales online en toda Europa y publicamos en todas las principales plataformas de redes sociales, incluyendo Facebook (alcanzando a más de 100.000 personas al mes), Telegram, Instagram y YouTube (con más de 70.000 visualizaciones mensuales). También enviamos boletines semanales a más de 14.500 suscriptores atentos a nuevas propiedades y bajadas de precio. Este marketing nos genera más de 550 nuevas consultas de compradores cada mes.",
+      "paragraph3": "Nuestro personal multilingüe utiliza la última tecnología digital para realizar fotografías y vídeos de alta calidad de su propiedad. Vea lo que opinan nuestros vendedores y clientes.",
+      "paragraph4": "Disponemos de una amplia base de datos de clientes preparados para comprar en Andalucía y nuestros expertos inmobiliarios informan constantemente a los compradores sobre las mejores oportunidades.",
+      "paragraph5": "Vender su propiedad con nosotros significa estar en buenas manos. Por favor, complete el formulario a continuación y nos pondremos en contacto lo antes posible o llame al +34 952 741 525."
+    },
+    "form": {
+      "title": "Vender su Propiedad",
+      "fields": {
+        "firstName": {
+          "label": "Nombre"
+        },
+        "lastName": {
+          "label": "Apellido"
+        },
+        "telephone": {
+          "label": "Teléfono"
+        },
+        "email": {
+          "label": "Correo electrónico"
+        },
+        "location": {
+          "label": "Ubicación de la propiedad"
+        },
+        "details": {
+          "label": "Detalles de la propiedad"
+        },
+        "captcha": {
+          "label": "Captcha",
+          "question": "40 + 5 ="
+        }
+      },
+      "button": {
+        "submit": "Enviar Propiedad"
       }
     }
   },

@@ -1,161 +1,155 @@
 import { Metadata } from 'next';
 import { BuyersGuideNav } from '@/components/buyers-guide/BuyersGuideNav';
+import { useTranslations } from 'next-intl';
 
 export const metadata: Metadata = {
-  title: 'Spanish Mortgages Guide | Inland Andalucia',
-  description:
-    'Complete guide to getting a mortgage in Spain. Learn about Spanish mortgage options, requirements, costs, and how to apply as a foreign buyer.',
+  title: 'mortgage-guide.metadata.title',
+  description: 'mortgage-guide.metadata.description',
 };
 
 export default function MortgagePage() {
+  const t = useTranslations('mortgage-guide');
+
   return (
     <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
       {/* Left: Main Content */}
       <section className="md:col-span-3 bg-white rounded-xl p-8 border border-black/10">
         <article className="space-y-8">
-      <header>
-        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-3">
-          Spanish Mortgages Guide
-        </h1>
-        <p className="mb-8 mt-0 text-base text-neutral-600 dark:text-slate-300">
-          Understanding Spanish mortgages is crucial when buying property. Here's everything you need
-          to know about financing your property purchase in Spain.
-        </p>
-      </header>
-
-      <section className="space-y-4">
-        <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
-          Mortgage Options in Spain
-        </h2>
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div className="rounded-lg bg-neutral-50 p-6">
-            <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
-              Resident Mortgages
-            </h3>
-            <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Up to 80% financing for primary residences</li>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Better interest rates</li>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Longer repayment terms available</li>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>More flexible conditions</li>
-            </ul>
-          </div>
-          <div className="rounded-lg  bg-neutral-50 p-6">
-            <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
-              Non-Resident Mortgages
-            </h3>
-            <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Up to 70% financing typically available</li>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Slightly higher interest rates</li>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Shorter repayment terms</li>
-              <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Additional documentation required</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
-          Requirements for Non-Resident Buyers
-        </h2>
-        <div className="prose prose-slate max-w-none dark:prose-invert">
-          <p className='text-base text-neutral-600 mb-4'>To apply for a mortgage in Spain as a non-resident, you'll need:</p>
-          <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>NIE (Foreign Identity Number)</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Proof of income (usually last 3-6 months of payslips)</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Tax returns from your home country</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Bank statements (usually last 3-6 months)</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Proof of employment or business ownership</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Credit history documentation</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>List of current assets and liabilities</li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="">
-        <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
-          Associated Costs
-        </h2>
-        <div className="mt-4 space-y-2 text-slate-600 dark:text-slate-300">
-          <p className='text-base text-neutral-600 mb-4'>When taking out a mortgage, budget for these additional costs:</p>
-          <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Property valuation fee (€300-€600)</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Mortgage arrangement fee (1-2% of loan amount)</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Notary fees for mortgage deed</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Property insurance (required by lender)</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Life insurance (may be required)</li>
-          </ul>
-        </div>
-      </div>
-
-      <section className="space-y-4">
-        <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
-          Types of Spanish Mortgages
-        </h2>
-        <div className="grid gap-6 sm:grid-cols-2">
-          <div className="rounded-lg bg-neutral-50 p-6">
-            <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
-              Fixed Rate Mortgages
-            </h3>
-            <p className="text-base text-neutral-600 m-0">
-              Interest rate remains the same throughout the term. Offers security in monthly payments
-              but typically starts with a higher rate.
+          <header>
+            <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-3">
+              {t('header.title')}
+            </h1>
+            <p className="mb-8 mt-0 text-base text-neutral-600 dark:text-slate-300">
+              {t('header.description')}
             </p>
-          </div>
-          <div className="rounded-lg bg-neutral-50 p-6">
-            <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
-              Variable Rate Mortgages
-            </h3>
-            <p className="text-base text-neutral-600 m-0">
-              Interest rate varies with Euribor. Usually starts lower but payments can change over
-              time. Most common in Spain.
-            </p>
-          </div>
-        </div>
-      </section>
+          </header>
 
-      <section className="space-y-4">
-        <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
-          The Application Process
-        </h2>
-        <div className="prose prose-slate max-w-none dark:prose-invert">
-          <ol className='pl-[19px] mt-0 marker:text-primary-900/85'>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Initial consultation and assessment of options</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Gathering and submitting required documentation</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Property valuation</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Bank's assessment and decision</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Mortgage offer and acceptance</li>
-            <li className='p-0 mt-0 mb-2.5 text-neutral-600'>Signing at the notary</li>
-          </ol>
-        </div>
-      </section>
-
-      <div className="mt-8 flex items-center justify-between rounded-lg  bg-neutral-50 p-6 dark:border-slate-700 dark:bg-slate-800">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className='w-[50%]'>
-            <h2 className="text-2xl font-semibold text-primary-900 mt-0 mb-2 dark:text-white">
-              Ready to Explore Your Mortgage Options?
+          <section className="space-y-4">
+            <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
+              {t('sections.options.title')}
             </h2>
-            <p className="mt-0 mb-0 text-base text-neutral-600 dark:text-slate-300">
-              Our team can connect you with trusted Spanish mortgage advisors who specialize in
-              non-resident mortgages.
-            </p>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="rounded-lg bg-neutral-50 p-6">
+                <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
+                  {t('sections.options.resident.title')}
+                </h3>
+                <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.resident.point1')}</li>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.resident.point2')}</li>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.resident.point3')}</li>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.resident.point4')}</li>
+                </ul>
+              </div>
+              <div className="rounded-lg  bg-neutral-50 p-6">
+                <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
+                  {t('sections.options.nonResident.title')}
+                </h3>
+                <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.nonResident.point1')}</li>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.nonResident.point2')}</li>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.nonResident.point3')}</li>
+                  <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.options.nonResident.point4')}</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
+              {t('sections.requirements.title')}
+            </h2>
+            <div className="prose prose-slate max-w-none dark:prose-invert">
+              <p className='text-base text-neutral-600 mb-4'>{t('sections.requirements.intro')}</p>
+              <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.requirements.point1')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.requirements.point2')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.requirements.point3')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.requirements.point4')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.requirements.point5')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.requirements.point6')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.requirements.point7')}</li>
+              </ul>
+            </div>
+          </section>
+
+          <div className="">
+            <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
+              {t('sections.costs.title')}
+            </h2>
+            <div className="mt-4 space-y-2 text-slate-600 dark:text-slate-300">
+              <p className='text-base text-neutral-600 mb-4'>{t('sections.costs.intro')}</p>
+              <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.costs.point1')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.costs.point2')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.costs.point3')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.costs.point4')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.costs.point5')}</li>
+              </ul>
+            </div>
           </div>
-          <div className="flex gap-4 justify-end w-[50%]">
-            <a
-              href="/contact"
-              className="rounded-md bg-primary-600 px-5 py-2 min-h-[40px] inline-flex items-center no-underline text-base font-semibold text-white transition-colors hover:bg-primary-900 dark:bg-blue-500 dark:hover:bg-blue-600"
-            >
-              Get Mortgage Advice
-            </a>
-            <a
-              href="/properties"
-              className="rounded-md border border-primary-600 bg-white px-5 py-2 min-h-[40px] inline-flex items-center text-base font-semibold no-underline text-primary-600 transition-colors hover:bg-primary-900 hover:text-white dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-            >
-              View Properties
-            </a>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
+              {t('sections.types.title')}
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="rounded-lg bg-neutral-50 p-6">
+                <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
+                  {t('sections.types.fixed.title')}
+                </h3>
+                <p className="text-base text-neutral-600 m-0">{t('sections.types.fixed.description')}</p>
+              </div>
+              <div className="rounded-lg bg-neutral-50 p-6">
+                <h3 className="mb-2 mt-0  text-lg font-semibold text-black dark:text-white">
+                  {t('sections.types.variable.title')}
+                </h3>
+                <p className="text-base text-neutral-600 m-0">{t('sections.types.variable.description')}</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
+              {t('sections.process.title')}
+            </h2>
+            <div className="prose prose-slate max-w-none dark:prose-invert">
+              <ol className='pl-[19px] mt-0 marker:text-primary-900/85'>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.process.step1')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.process.step2')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.process.step3')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.process.step4')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.process.step5')}</li>
+                <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('sections.process.step6')}</li>
+              </ol>
+            </div>
+          </section>
+
+          <div className="mt-8 flex items-center justify-between rounded-lg  bg-neutral-50 p-6 dark:border-slate-700 dark:bg-slate-800">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className='w-[50%]'>
+                <h2 className="text-2xl font-semibold text-primary-900 mt-0 mb-2 dark:text-white">
+                  {t('cta.title')}
+                </h2>
+                <p className="mt-0 mb-0 text-base text-neutral-600 dark:text-slate-300">
+                  {t('cta.description')}
+                </p>
+              </div>
+              <div className="flex gap-4 justify-end w-[50%]">
+                <a
+                  href="/contact"
+                  className="rounded-md bg-primary-600 px-5 py-2 min-h-[40px] inline-flex items-center no-underline text-base font-semibold text-white transition-colors hover:bg-primary-900 dark:bg-blue-500 dark:hover:bg-blue-600"
+                >
+                  {t('cta.buttons.advice')}
+                </a>
+                <a
+                  href="/properties"
+                  className="rounded-md border border-primary-600 bg-white px-5 py-2 min-h-[40px] inline-flex items-center text-base font-semibold no-underline text-primary-600 transition-colors hover:bg-primary-900 hover:text-white dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                >
+                  {t('cta.buttons.properties')}
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
         </article>
       </section>
       <div>
