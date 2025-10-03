@@ -63,7 +63,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         ? 'shadow-hover-card'
         : 'shadow-property-card hover:shadow-hover-card'
         } 
-      ${card === 'list' ? 'grid grid-cols-12' : ''}`}
+      ${card === 'list' ? 'grid grid-cols-12' : 'flex flex-col'}`}
     >
       <div className={`relative ${card === 'list' ? 'col-span-2' : ''}`}>
         {/* Property image */}
@@ -107,7 +107,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         </button>
       </div>
 
-      <div className={`p-4 ${card === 'list' ? 'col-span-10 flex flex-col' : ' flex flex-col'}`}>
+      <div className={`p-4 ${card === 'list' ? 'col-span-10 flex flex-col' : ' flex flex-col flex-auto'}`}>
         {/* Property title */}
         <div className={`flex justify-between items-start mb-4 ${card === 'list' ? 'flex-auto' : 'flex-auto'}`}>
           <div>
@@ -118,7 +118,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
             </Link>
             {/* Location */}
             <div className="mt-1 flex items-center text-sm text-neutral-500">
-              <MapPinIcon className="mr-1 h-4 w-4 flex-initial" />
+              <MapPinIcon className="mr-1 h-4 w-4 flex-[0_0_auto]" />
               <span className='block flex-auto'>{property.location.town}, {property.location.province}</span>
             </div>
           </div>
