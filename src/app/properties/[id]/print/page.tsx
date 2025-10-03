@@ -81,7 +81,14 @@ export default function PrintPage({ params }: PrintPageProps) {
             buildSize: db.SQM_Built || 0,
             plotSize: db.SQM_Plot || 0,
             views: db.Viewed || 'Village',
-            description: db.Property_Notes ? { ES: db.Property_Notes, EN: db.Property_Notes } : {},
+            description: db.translations
+              ? db.translations.reduce((acc: any, t: any) => {
+                const lang = t.languageId === 1 ? 'EN' : t.languageId === 2 ? 'ES' : `LANG_${t.languageId}`;
+                acc[lang] = t.description;
+                return acc;
+              }, {})
+              : {},
+
             property_features: db.features || {},
             images,
           });
@@ -206,12 +213,16 @@ export default function PrintPage({ params }: PrintPageProps) {
           <div>Location : {property.location.town}</div>
         </div>
 
-        {property.description.EN && (
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold mb-2">Description </h2>
-            <p>{property.description.EN}</p>
-          </div>
-        )}
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold mb-2">Description</h2>
+          {Object.entries(property.description).map(([lang, text]) => (
+            <div key={lang} className="mb-4">
+              <strong className="block mb-1">{LANGUAGE_FLAGS[lang] || lang}</strong>
+              <p>{text}</p>
+            </div>
+          ))}
+        </div>
+
 
         {/* Features */}
         {/* Features */}
