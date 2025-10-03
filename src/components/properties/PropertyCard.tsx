@@ -63,12 +63,12 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         ? 'shadow-hover-card'
         : 'shadow-property-card hover:shadow-hover-card'
         } 
-      ${card === 'list' ? 'grid grid-cols-9' : ''}`}
+      ${card === 'list' ? 'grid grid-cols-12' : ''}`}
     >
       <div className={`relative ${card === 'list' ? 'col-span-2' : ''}`}>
         {/* Property image */}
         <Link href={`/properties/${property.id}`}>
-          <div className="relative aspect-[4/3] overflow-hidden">
+          <div className={`relative aspect-[4/3] overflow-hidden ${card === 'list' ? 'w-full' : 'w-full'}`}>
             <Image
               src={mainImage?.url || '/placeholder-property.jpg'}
               alt={mainImage?.alt || 'Property Image'}
@@ -107,9 +107,9 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         </button>
       </div>
 
-      <div className={`p-4 ${card === 'list' ? 'col-span-7 flex flex-col' : ''}`}>
+      <div className={`p-4 ${card === 'list' ? 'col-span-10 flex flex-col' : ' flex flex-col'}`}>
         {/* Property title */}
-        <div className={`flex justify-between items-start mb-4 ${card === 'list' ? 'flex-auto' : ''}`}>
+        <div className={`flex justify-between items-start mb-4 ${card === 'list' ? 'flex-auto' : 'flex-auto'}`}>
           <div>
             <Link href={`/properties/${property.id}`}>
               <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
@@ -117,9 +117,9 @@ export default function PropertyCard({ property, card = 'grid', featured = false
               </h3>
             </Link>
             {/* Location */}
-            <div className="mt-2 flex items-center text-sm text-neutral-500">
-              <MapPinIcon className="mr-1 h-4 w-4" />
-              <span>{property.location.town}, {property.location.province}</span>
+            <div className="mt-1 flex items-center text-sm text-neutral-500">
+              <MapPinIcon className="mr-1 h-4 w-4 flex-initial" />
+              <span className='block flex-auto'>{property.location.town}, {property.location.province}</span>
             </div>
           </div>
           <div className="flex flex-col items-end">
@@ -128,7 +128,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
                 {formatPrice(property.originalPrice, property.currency)}
               </h6>
             )}
-            <h4 className={`text-xl font-bold ${property.isReduced ? 'text-red-500' : 'text-neutral-900'}`}>
+            <h4 className={`font-bold ${property.isReduced ? 'text-red-500' : 'text-neutral-900'} ${card === 'list' ? 'text-2xl' : 'text-xl'}`}>
               {formatPrice(property.price, property.currency)}
             </h4>
             {property.isReduced && property.savingsAmount && (
@@ -158,9 +158,9 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         )}
 
         {/* Features */}
-        <div className={`flex flex-col justify-start ${card === 'list' ? 'items-center' : ''}`}>
+        <div className={`flex justify-start ${card === 'list' ? 'items-center flex-row' : 'flex-col'}`}>
           <div className="flex-auto">
-            <div className={`flex pt-4 ${card === 'list' ? 'justify-start gap-10' : 'justify-between'}`}>
+            <div className={`flex  ${card === 'list' ? 'justify-start gap-10' : 'justify-between pt-3s'}`}>
 
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">{t('filter_titles.beds')}</span>
@@ -188,7 +188,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
           </div>
 
           {/* Call to action */}
-          <div className="flex-initial mt-4">
+          <div className={`flex-initial ${card === 'list' ? 'mt-0' : 'mt-4'}`}>
             <Link
               href={`/properties/${property.id}`}
               className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600"
