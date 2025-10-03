@@ -75,11 +75,49 @@
       "email": "Correo electrónico",
       "contact_us": "Contáctenos",
       "description": "Descripción"
+    },
+    "filter_titles": {
+      "all_properties": "Todas las propiedades",
+      "in_area_region": "Propiedades en {area}, {region}",
+      "in_town": "Propiedades en {town}",
+      "in_region": "Propiedades en {region}",
+      "in_province": "Zonas en {province}",
+      "beds": "Habitaciones",
+      "baths": "Baños",
+      "size": "Tamaño",
+      "type": "Tipo",
+      "areas_in_region": "Zonas en {region}"
     }
   },
   "about": {
     "title": "Acerca de Inland Andalucía",
     "description": "Nos especializamos en ayudarte a encontrar la propiedad rural perfecta en la hermosa campiña de Andalucía, España."
+  },
+  "aboutPage": {
+    "hero": {
+      "title": "Bienvenido a Inland Andalucia",
+      "description": "Su socio de confianza para encontrar propiedades auténticas españolas en el corazón de Andalucía"
+    },
+    "aboutHero": {
+      "p1": "El principal agente de propiedades interiores desde 2001.",
+      "p2": "Con oficinas en Málaga interior (Mollina) y Jaén (Alcalá la Real), podemos ayudarle en cada paso.",
+      "p3": "Inland Andalucia está dedicado a encontrarle la propiedad interior de mejor valor en la región de Andalucía.",
+      "p4": "Puede seleccionar de nuestro portafolio de propiedades constantemente actualizado o contactarnos con sus requisitos.",
+      "p5": "En los últimos tres meses, el 80% de nuestras ventas fueron de casas con un coste inferior a 100.000 Euros (aprox. £72.000).",
+      "p6": "El 50% costaron menos de 150.000€ (aprox. £108.000) y el 5% fueron propiedades más caras, pero con grandes descuentos."
+    },
+    "values": {
+      "title": "Atención personal y dedicada a usted",
+      "p1": "Nuestra atención personal a sus necesidades no flaqueará después de que haya encontrado la propiedad interior de sus sueños. También estamos felices y dispuestos a ayudar y ofrecer consejos en todos los aspectos de su compra.",
+      "p2": "Estaremos encantados de ayudarle con cambios de cuentas de electricidad y agua, apertura de cuentas bancarias, solicitud de NIE, etc.",
+      "p3": "Puede confiar en nuestra amplia experiencia y superior conocimiento local para ser la guía adecuada que le ayude a comprar su nueva propiedad en Andalucía interior.",
+      "p4": "Nos enorgullecemos de un servicio personalizado y de calidad, tratando de ofrecerle toda la ayuda posible. Como siempre queremos que tenga la atención individual que necesita, intente reservar una cita con nosotros antes de salir de su hogar, así estaremos listos y disponibles personalmente en un horario preestablecido que le convenga."
+    },
+    "ctaSection": {
+      "description": "A continuación, una lista de nuestras propiedades interiores en Andalucía ordenadas por provincia y alfabéticamente:",
+      "noTowns": "Sin pueblos, total de propiedades: {count}",
+      "loading": "Cargando provincias y pueblos..."
+    }
   },
   "contact": {
     "title": "Contáctanos",
@@ -317,6 +355,8 @@
   "buying-property": {
     "title": "Comprar una Propiedad en España",
     "description": "Su guía completa para la compra de propiedades en el interior de España. Aprenda sobre los diferentes tipos de propiedades, consideraciones clave y cómo tomar la mejor decisión según sus necesidades.",
+    "types-of-properties-header": "Tipos de Propiedades",
+    "types-of-properties-intro": "Inland Andalucía ofrece una amplia variedad de propiedades para adaptarse a diferentes preferencias y presupuestos:",
     "types-of-properties": [
       {
         "name": "Cortijos",
@@ -339,6 +379,8 @@
         "description": "Propiedades que necesitan trabajo pero ofrecen gran potencial"
       }
     ],
+    "key-considerations-header": "Consideraciones Clave",
+    "key-considerations-intro": "Al comprar una propiedad en el interior de España, tenga en cuenta estos factores importantes:",
     "key-considerations": [
       "Ubicación y accesibilidad",
       "Condición de la propiedad y posibles necesidades de renovación",
@@ -346,7 +388,10 @@
       "Servicios y comodidades locales",
       "Potencial de reventa futuro"
     ],
+    "important-note-header": "Nota Importante",
     "important-note": "Trabaje siempre con un agente de confianza que pueda verificar el estado legal de las propiedades y guiarlo durante el proceso de compra. En Inland Andalucia, nos aseguramos de que todas nuestras propiedades sean legalmente correctas y cuenten con la documentación adecuada.",
+    "our-services-header": "Nuestros Servicios",
+    "our-services-intro": "Cuando elige Inland Andalucia, se beneficia de:",
     "our-services": [
       "Amplio conocimiento y experiencia local",
       "Verificación de la propiedad y controles legales",
@@ -974,5 +1019,59 @@
     "continue": "Continuar",
     "submit": "Enviar",
     "reset": "Restablecer"
+  },
+  "contactPage": {
+    "hero": {
+      "title": "Contáctanos",
+      "description": "Ponte en contacto con nuestro equipo de expertos para comenzar tu viaje inmobiliario en Inland Andalucia"
+    },
+    "contactInfo": {
+      "title": "Ponerse en Contacto",
+      "description": "Nuestro equipo está aquí para ayudarte a encontrar la propiedad de tus sueños en Inland Andalucia. Contáctanos hoy para recibir asistencia personalizada.",
+      "offices": {
+        "mainOffice": {
+          "title": "Oficina Principal",
+          "address": "Calle Andalucia 12\n29550 Ardales\nMálaga, España"
+        }
+      },
+      "email": {
+        "title": "Envíanos un Email",
+        "emailAddress": "info@inlandandalucia.com"
+      },
+      "phone": {
+        "title": "Hablamos",
+        "number": "+34 952 741 525"
+      },
+      "qr": {
+        "description": "Escanea el código QR a continuación con tu móvil para guardar automáticamente nuestros datos de contacto",
+        "offices": {
+          "mollina": "Oficina Mollina",
+          "alcala": "Oficina Alcala La Real",
+          "martos": "Oficina Martos"
+        }
+      }
+    },
+    "form": {
+      "title": "Envíanos un Mensaje",
+      "fields": {
+        "name": "Nombre Completo *",
+        "email": "Email *",
+        "phone": "Número de Teléfono",
+        "subject": "Asunto *",
+        "message": "Mensaje *"
+      },
+      "subjectOptions": {
+        "placeholder": "Por favor selecciona",
+        "propertyInquiry": "Consulta de Propiedad",
+        "buying": "Información de Compra",
+        "selling": "Información de Venta",
+        "viewingTrip": "Visita de Propiedad",
+        "general": "Consulta General"
+      },
+      "submitButton": "Enviar Mensaje"
+    },
+    "mapSection": {
+      "title": "Encuéntranos"
+    }
   }
 }

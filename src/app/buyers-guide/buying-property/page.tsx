@@ -26,11 +26,12 @@ export default function BuyingPropertyPage() {
 
           <section className="space-y-4">
             <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
-              {t('types-of-properties.heading', { defaultValue: 'Types of Properties' })}
+              {t('types-of-properties-header')}
             </h2>
             <div className="prose prose-slate max-w-none dark:prose-invert">
               <p className='text-base text-neutral-600 mb-4'>
-                {t('types-of-properties.intro', { defaultValue: 'Inland Andalucia offers a diverse range of properties to suit different preferences and budgets:' })}
+                {t('types-of-properties-intro')}
+
               </p>
               <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
                 <li className='p-0 mt-0 mb-2.5 text-neutral-600'>
@@ -54,10 +55,10 @@ export default function BuyingPropertyPage() {
 
           <section className="space-y-4">
             <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
-              {t('key-considerations.heading', { defaultValue: 'Key Considerations' })}
+              {t('key-considerations-header')}
             </h2>
             <div className="prose prose-slate max-w-none dark:prose-invert">
-              <p className='text-base text-neutral-600 mb-4'>{t('key-considerations.intro', { defaultValue: 'When buying a property in inland Spain, consider these important factors:' })}</p>
+              <p className='text-base text-neutral-600 mb-4'>{t('key-considerations-intro')}</p>
               <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
                 <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('key-considerations.0')}</li>
                 <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('key-considerations.1')}</li>
@@ -68,21 +69,23 @@ export default function BuyingPropertyPage() {
             </div>
           </section>
 
+
           <div className="rounded-lg bg-yellow-50 p-6 dark:bg-yellow-900/20 border border-black/10">
             <h3 className="mb-3 mt-0 text-2xl font-semibold text-primary-900 dark:text-white">
-              {t('important-note.heading', { defaultValue: 'Important Note' })}
+              {t('important-note-header')}
             </h3>
             <p className="text-neutral-600 text-base dark:text-slate-300">
-              {t('important-note.text')}
+              {t('important-note')}
             </p>
           </div>
 
+
           <section className="space-y-4">
             <h2 className="text-2xl font-semibold text-primary-900 mt-10 mb-4 dark:text-white">
-              {t('our-services.heading', { defaultValue: 'Our Services' })}
+              {t('our-services-header')}
             </h2>
             <div className="prose prose-slate max-w-none dark:prose-invert">
-              <p className='text-base text-neutral-600 mb-4'>{t('our-services.intro', { defaultValue: 'When you choose Inland Andalucia, you benefit from:' })}</p>
+              <p className='text-base text-neutral-600 mb-4'>{t('our-services-intro')}</p>
               <ul className='pl-[19px] mt-0 marker:text-primary-900/85'>
                 <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('our-services.0')}</li>
                 <li className='p-0 mt-0 mb-2.5 text-neutral-600'>{t('our-services.1')}</li>
@@ -92,6 +95,7 @@ export default function BuyingPropertyPage() {
               </ul>
             </div>
           </section>
+
 
           <div className="mt-8 flex items-center justify-between rounded-lg bg-neutral-50 p-6 dark:border-slate-700 dark:bg-slate-800">
             <div>

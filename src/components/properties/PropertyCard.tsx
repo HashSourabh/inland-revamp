@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { HeartIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface PropertyCardProps {
   property: {
@@ -36,7 +37,7 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property, card = 'grid', featured = false }: PropertyCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
-  console.log(property, card)
+  const t = useTranslations('properties');
 
   // Find the featured image or fallback to the first image
   const mainImage = property.images.find(img => img.isFeatured) || property.images[0];
@@ -160,24 +161,29 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         <div className={`flex flex-col justify-start ${card === 'list' ? 'items-center' : ''}`}>
           <div className="flex-auto">
             <div className={`flex pt-4 ${card === 'list' ? 'justify-start gap-10' : 'justify-between'}`}>
+
               <div className="flex flex-col items-center">
-                <span className="text-sm text-neutral-500">Beds</span>
+                <span className="text-sm text-neutral-500">{t('filter_titles.beds')}</span>
                 <span className="font-medium text-neutral-900">{property.features.bedrooms}</span>
               </div>
+
               <div className="flex flex-col items-center">
-                <span className="text-sm text-neutral-500">Baths</span>
+                <span className="text-sm text-neutral-500">{t('filter_titles.baths')}</span>
                 <span className="font-medium text-neutral-900">{property.features.bathrooms}</span>
               </div>
+
               <div className="flex flex-col items-center">
-                <span className="text-sm text-neutral-500">Size</span>
+                <span className="text-sm text-neutral-500">{t('filter_titles.size')}</span>
                 <span className="font-medium text-neutral-900">
                   {property.features.buildSize > 0 ? `${property.features.buildSize} m²` : 'N/A'}
                 </span>
               </div>
+
               <div className="flex flex-col items-center">
-                <span className="text-sm text-neutral-500">Type</span>
+                <span className="text-sm text-neutral-500">{t('filter_titles.type')}</span>
                 <span className="font-medium text-neutral-900">{property.features.type}</span>
               </div>
+
             </div>
           </div>
 
@@ -187,10 +193,11 @@ export default function PropertyCard({ property, card = 'grid', featured = false
               href={`/properties/${property.id}`}
               className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600"
             >
-              View Details
+              {t('viewDetails')}
             </Link>
           </div>
         </div>
+
       </div>
     </div>
   );

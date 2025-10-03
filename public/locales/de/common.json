@@ -78,6 +78,18 @@
       "email": "E-mail",
       "contact_us": "Neem contact met ons op",
       "description": "Beschrijving"
+    },
+    "filter_titles": {
+      "all_properties": "Alle woningen",
+      "in_area_region": "Woningen in {area}, {region}",
+      "in_town": "Woningen in {town}",
+      "in_region": "Woningen in {region}",
+      "in_province": "Gebieden in {province}",
+      "beds": "Slaapkamers",
+      "baths": "Badkamers",
+      "size": "Oppervlakte",
+      "type": "Type",
+      "areas_in_region": "Gebieden in {region}"
     }
   },
   "promo": {
@@ -315,50 +327,57 @@
     }
   },
   "buying-property": {
-    "title": "Een Eigendom Kopen in Spanje",
-    "description": "Uw complete gids voor het kopen van een woning in het binnenland van Spanje. Leer over verschillende woningtypen, belangrijke overwegingen en hoe u de juiste keuze maakt voor uw behoeften.",
+    "title": "Een Woning Kopen in Spanje",
+    "description": "Uw complete gids voor het kopen van een woning in het binnenland van Spanje. Leer meer over de verschillende woningtypes, belangrijke overwegingen en hoe u de juiste keuze maakt voor uw behoeften.",
+    "types-of-properties-header": "Soorten Woningen",
+    "types-of-properties-intro": "Inland Andalucia biedt een breed scala aan woningen voor verschillende voorkeuren en budgetten:",
     "types-of-properties": [
       {
         "name": "Cortijos",
-        "description": "Traditionele Spaanse boerderijen, vaak met land en bijgebouwen"
+        "description": "Traditionele Spaanse boerderijen, vaak met grond en bijgebouwen"
       },
       {
         "name": "Stadshuizen",
-        "description": "Eigendom in het hart van traditionele Spaanse dorpen"
+        "description": "Woningen in het hart van traditionele Spaanse steden"
       },
       {
-        "name": "Villa's",
-        "description": "Moderne of traditionele vrijstaande huizen, vaak met tuinen en zwembaden"
+        "name": "Villa’s",
+        "description": "Vrijstaande huizen, modern of traditioneel, vaak met tuin en zwembad"
       },
       {
-        "name": "Plattelandswoningen",
-        "description": "Landelijke woningen met grond en prachtige uitzichten"
+        "name": "Landelijke Woningen",
+        "description": "Plattelandswoningen met grond en prachtig uitzicht"
       },
       {
         "name": "Renovatieprojecten",
-        "description": "Eigendommen die werk nodig hebben maar groot potentieel bieden"
+        "description": "Woningen die werk vereisen maar veel potentieel bieden"
       }
     ],
+    "key-considerations-header": "Belangrijke Overwegingen",
+    "key-considerations-intro": "Bij het kopen van een woning in het binnenland van Spanje moet u met deze factoren rekening houden:",
     "key-considerations": [
-      "Locatie en toegankelijkheid",
-      "Staat van het pand en mogelijke renovatiebehoeften",
+      "Locatie en bereikbaarheid",
+      "Staat van de woning en mogelijke renovatiebehoeften",
       "Juridische status en documentatie",
       "Lokale voorzieningen en diensten",
-      "Toekomstig doorverkoop-potentieel"
+      "Toekomstig wederverkooppotentieel"
     ],
-    "important-note": "Werk altijd met een betrouwbare makelaar die de juridische status van eigendommen kan verifiëren en u door het aankoopproces kan begeleiden. Bij Inland Andalucia zorgen we ervoor dat al onze eigendommen legaal in orde zijn en over de juiste documentatie beschikken.",
+    "important-note-header": "Belangrijke Opmerking",
+    "important-note": "Werk altijd samen met een betrouwbare makelaar die de juridische status van woningen kan controleren en u door het aankoopproces kan begeleiden. Bij Inland Andalucia zorgen wij ervoor dat al onze woningen legaal in orde zijn en over de juiste documentatie beschikken.",
+    "our-services-header": "Onze Diensten",
+    "our-services-intro": "Wanneer u voor Inland Andalucia kiest, profiteert u van:",
     "our-services": [
       "Uitgebreide lokale kennis en expertise",
-      "Eigendom verificatie en juridische controles",
-      "Meertalige ondersteuning gedurende het hele proces",
-      "Toegang tot vertrouwde lokale professionals",
-      "Nazorg en begeleiding"
+      "Woningverificatie en juridische controles",
+      "Meertalige ondersteuning tijdens het hele proces",
+      "Toegang tot betrouwbare lokale professionals",
+      "Nazorg en begeleiding na aankoop"
     ],
     "cta": {
-      "heading": "Klaar om uw zoektocht naar een woning te beginnen?",
-      "text": "Bekijk onze uitgebreide collectie binnenlandse woningen.",
+      "heading": "Klaar om uw zoektocht naar een woning te starten?",
+      "text": "Bekijk ons uitgebreide aanbod van woningen in het binnenland.",
       "buttons": {
-        "properties": "Bekijk Eigendommen"
+        "properties": "Bekijk Woningen"
       }
     }
   },
@@ -974,5 +993,85 @@
     "continue": "Fortfahren",
     "submit": "Absenden",
     "reset": "Zurücksetzen"
+  },
+  "aboutPage": {
+    "hero": {
+      "title": "Welkom bij Inland Andalucia",
+      "description": "Uw betrouwbare partner voor het vinden van authentieke Spaanse woningen in het hart van Andalusië"
+    },
+    "aboutHero": {
+      "p1": "De toonaangevende inlandse makelaar sinds 2001.",
+      "p2": "Met kantoren in het binnenland van Málaga (Mollina) en Jaén (Alcalá la Real) kunnen we u bij elke stap helpen.",
+      "p3": "Inland Andalucia is toegewijd aan het vinden van de beste waarde inlandse woning in de regio Andalusië.",
+      "p4": "U kunt kiezen uit ons voortdurend bijgewerkte vastgoedportfolio of contact met ons opnemen met uw wensen.",
+      "p5": "In de afgelopen drie maanden waren 80% van onze verkopen voor woningen die minder dan 100.000 euro kostten (circa £72.000).",
+      "p6": "50% kostten minder dan 150.000 € (circa £108.000) en 5% waren duurdere woningen, maar met grote kortingen."
+    },
+    "values": {
+      "title": "Persoonlijke zorg en aandacht voor u",
+      "p1": "Onze persoonlijke aandacht voor uw behoeften zal niet afnemen nadat u de inlandse woning van uw dromen hebt gevonden. We helpen ook graag en geven advies over elk aspect van uw aankoop.",
+      "p2": "We helpen graag met wijzigingen van elektriciteit- en waterrekeningen, openen van bankrekeningen, aanvragen van NIE, enz.",
+      "p3": "U kunt vertrouwen op onze jarenlange ervaring en superieure lokale kennis om de juiste gids te zijn die u helpt bij het kopen van uw nieuwe woning in het binnenland van Andalusië.",
+      "p4": "We zijn trots op een gepersonaliseerde en goede service en proberen u zoveel mogelijk te helpen. Omdat we altijd willen dat u de individuele aandacht krijgt die u nodig hebt, probeer alstublieft een afspraak met ons te maken voordat u uw huis verlaat, zodat we persoonlijk klaar en beschikbaar zijn op een vooraf afgesproken tijd en datum die u uitkomt."
+    },
+    "ctaSection": {
+      "description": "Hieronder vindt u een lijst van onze inlandse woningen in Andalusië, gesorteerd per provincie en alfabetisch:",
+      "noTowns": "Geen dorpen, totaal aantal woningen: {count}",
+      "loading": "Bezig met laden van provincies en dorpen..."
+    }
+  },
+  "contactPage": {
+    "hero": {
+      "title": "Neem Contact Op",
+      "description": "Neem contact op met ons team van experts om uw vastgoedreis in Inland Andalucia te starten"
+    },
+    "contactInfo": {
+      "title": "Neem Contact Op",
+      "description": "Ons team staat klaar om u te helpen uw droomwoning in Inland Andalucia te vinden. Neem vandaag nog contact met ons op voor persoonlijke assistentie.",
+      "offices": {
+        "mainOffice": {
+          "title": "Hoofdkantoor",
+          "address": "Calle Andalucia 12\n29550 Ardales\nMálaga, Spanje"
+        }
+      },
+      "email": {
+        "title": "Email Ons",
+        "emailAddress": "info@inlandandalucia.com"
+      },
+      "phone": {
+        "title": "Wij Spreken",
+        "number": "+34 952 741 525"
+      },
+      "qr": {
+        "description": "Scan onderstaande QR-code met uw mobiel om onze contactgegevens automatisch op te slaan",
+        "offices": {
+          "mollina": "Mollina Kantoor",
+          "alcala": "Alcala La Real Kantoor",
+          "martos": "Martos Kantoor"
+        }
+      }
+    },
+    "form": {
+      "title": "Stuur Ons een Bericht",
+      "fields": {
+        "name": "Volledige Naam *",
+        "email": "Email *",
+        "phone": "Telefoonnummer",
+        "subject": "Onderwerp *",
+        "message": "Bericht *"
+      },
+      "subjectOptions": {
+        "placeholder": "Selecteer alstublieft",
+        "propertyInquiry": "Vastgoed Vraag",
+        "buying": "Koopinformatie",
+        "selling": "Verkoopinformatie",
+        "viewingTrip": "Bezichtiging",
+        "general": "Algemene Vraag"
+      },
+      "submitButton": "Verstuur Bericht"
+    },
+    "mapSection": {
+      "title": "Vind Ons"
+    }
   }
 }

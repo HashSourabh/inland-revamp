@@ -75,6 +75,18 @@
       "email": "E-mail",
       "contact_us": "Contate-nos",
       "description": "Descrição"
+    },
+    "filter_titles": {
+      "all_properties": "Todas as propriedades",
+      "in_area_region": "Propriedades em {area}, {region}",
+      "in_town": "Propriedades em {town}",
+      "in_region": "Propriedades em {region}",
+      "in_province": "Áreas em {province}",
+      "beds": "Quartos",
+      "baths": "Banheiros",
+      "size": "Tamanho",
+      "type": "Tipo",
+      "areas_in_region": "Áreas em {region}"
     }
   },
   "promo": {
@@ -302,11 +314,13 @@
   },
   "buying-property": {
     "title": "Comprar uma Propriedade em Espanha",
-    "description": "O seu guia completo para adquirir imóveis no interior de Espanha. Descubra os diferentes tipos de propriedades, considerações importantes e como fazer a escolha certa para as suas necessidades.",
+    "description": "O seu guia completo para a compra de propriedades no interior de Espanha. Saiba mais sobre os diferentes tipos de propriedades, fatores importantes e como fazer a melhor escolha para as suas necessidades.",
+    "types-of-properties-header": "Tipos de Propriedades",
+    "types-of-properties-intro": "A Inland Andalucia oferece uma grande variedade de propriedades para diferentes gostos e orçamentos:",
     "types-of-properties": [
       {
         "name": "Cortijos",
-        "description": "Casas de campo tradicionais espanholas, frequentemente com terreno e anexos"
+        "description": "Quintas tradicionais espanholas, muitas vezes com terrenos e anexos"
       },
       {
         "name": "Casas de Vila",
@@ -314,35 +328,40 @@
       },
       {
         "name": "Villas",
-        "description": "Casas independentes modernas ou tradicionais, frequentemente com jardins e piscinas"
+        "description": "Casas independentes modernas ou tradicionais, geralmente com jardins e piscinas"
       },
       {
         "name": "Propriedades Rurais",
-        "description": "Casas rurais com terreno e belas vistas"
+        "description": "Casas rurais com terreno e vistas deslumbrantes"
       },
       {
         "name": "Projetos de Renovação",
-        "description": "Propriedades que precisam de obras, mas oferecem grande potencial"
+        "description": "Propriedades que necessitam de obras mas oferecem grande potencial"
       }
     ],
+    "key-considerations-header": "Fatores Importantes",
+    "key-considerations-intro": "Ao comprar uma propriedade no interior de Espanha, tenha em consideração estes fatores essenciais:",
     "key-considerations": [
       "Localização e acessibilidade",
-      "Condição do imóvel e possíveis necessidades de renovação",
-      "Estado legal e documentação",
+      "Condição da propriedade e possíveis necessidades de renovação",
+      "Situação legal e documentação",
       "Serviços e comodidades locais",
-      "Potencial de revenda futuro"
+      "Potencial de revenda futura"
     ],
-    "important-note": "Trabalhe sempre com um agente de confiança que possa verificar o estado legal das propriedades e orientá-lo durante o processo de compra. Na Inland Andalucia, garantimos que todas as nossas propriedades estão legalmente corretas e com a documentação adequada.",
+    "important-note-header": "Nota Importante",
+    "important-note": "Trabalhe sempre com um agente de confiança que possa verificar a situação legal das propriedades e guiá-lo durante o processo de compra. Na Inland Andalucia, garantimos que todas as nossas propriedades são legalmente seguras e possuem a documentação adequada.",
+    "our-services-header": "Os Nossos Serviços",
+    "our-services-intro": "Ao escolher a Inland Andalucia, beneficia de:",
     "our-services": [
       "Amplo conhecimento e experiência local",
-      "Verificação da propriedade e cheques legais",
-      "Suporte multilíngue durante todo o processo",
+      "Verificação da propriedade e controlos legais",
+      "Apoio multilingue durante todo o processo",
       "Acesso a profissionais locais de confiança",
-      "Apoio e orientação pós-venda"
+      "Apoio e acompanhamento pós-venda"
     ],
     "cta": {
-      "heading": "Pronto para iniciar a sua pesquisa de propriedade?",
-      "text": "Explore a nossa extensa coleção de propriedades no interior.",
+      "heading": "Pronto para começar a sua procura de propriedade?",
+      "text": "Explore a nossa vasta coleção de propriedades no interior.",
       "buttons": {
         "properties": "Ver Propriedades"
       }
@@ -876,34 +895,47 @@
     }
   },
   "sell-with-us": {
-  "header": {
-    "title": "Deixe-nos vender a sua propriedade"
-  },
-  "intro": {
-    "paragraph1": "Somos a maior e mais confiável agência imobiliária da Andaluzia. Estabelecidos há mais de 20 anos, vendemos milhares de propriedades em toda a Andaluzia Interior.",
-    "paragraph2": "Anunciamos em mais de 30 portais online em toda a Europa e publicamos em todas as principais redes sociais, incluindo Facebook (alcançando mais de 100.000 pessoas por mês), Telegram, Instagram e YouTube (com mais de 70.000 visualizações mensais). Também enviamos newsletters semanais para mais de 14.500 assinantes atentos a novos anúncios e reduções de preço. Este marketing gera mais de 550 novos contatos de compradores todos os meses.",
-    "paragraph3": "A nossa equipa multilingue utiliza as mais recentes tecnologias digitais para tirar fotografias e vídeos de alta qualidade da sua propriedade. Veja o que dizem os nossos vendedores e clientes.",
-    "paragraph4": "Dispomos de uma vasta base de dados de clientes prontos para comprar na Andaluzia e os nossos especialistas informam constantemente os compradores sobre as melhores oportunidades.",
-    "paragraph5": "Vender a sua propriedade connosco significa estar em boas mãos. Por favor, preencha o formulário abaixo e entraremos em contacto o mais rapidamente possível ou ligue para +34 952 741 525."
-  },
-  "form": {
-    "title": "Vender a sua Propriedade",
-    "fields": {
-      "firstName": { "label": "Primeiro Nome" },
-      "lastName": { "label": "Apelido" },
-      "telephone": { "label": "Telefone" },
-      "email": { "label": "Email" },
-      "location": { "label": "Localização da propriedade" },
-      "details": { "label": "Detalhes da propriedade" },
-      "captcha": {
-        "label": "Captcha",
-        "question": "40 + 5 ="
-      }
+    "header": {
+      "title": "Deixe-nos vender a sua propriedade"
     },
-    "button": { "submit": "Submeter Propriedade" }
-  }
-}
-,
+    "intro": {
+      "paragraph1": "Somos a maior e mais confiável agência imobiliária da Andaluzia. Estabelecidos há mais de 20 anos, vendemos milhares de propriedades em toda a Andaluzia Interior.",
+      "paragraph2": "Anunciamos em mais de 30 portais online em toda a Europa e publicamos em todas as principais redes sociais, incluindo Facebook (alcançando mais de 100.000 pessoas por mês), Telegram, Instagram e YouTube (com mais de 70.000 visualizações mensais). Também enviamos newsletters semanais para mais de 14.500 assinantes atentos a novos anúncios e reduções de preço. Este marketing gera mais de 550 novos contatos de compradores todos os meses.",
+      "paragraph3": "A nossa equipa multilingue utiliza as mais recentes tecnologias digitais para tirar fotografias e vídeos de alta qualidade da sua propriedade. Veja o que dizem os nossos vendedores e clientes.",
+      "paragraph4": "Dispomos de uma vasta base de dados de clientes prontos para comprar na Andaluzia e os nossos especialistas informam constantemente os compradores sobre as melhores oportunidades.",
+      "paragraph5": "Vender a sua propriedade connosco significa estar em boas mãos. Por favor, preencha o formulário abaixo e entraremos em contacto o mais rapidamente possível ou ligue para +34 952 741 525."
+    },
+    "form": {
+      "title": "Vender a sua Propriedade",
+      "fields": {
+        "firstName": {
+          "label": "Primeiro Nome"
+        },
+        "lastName": {
+          "label": "Apelido"
+        },
+        "telephone": {
+          "label": "Telefone"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "location": {
+          "label": "Localização da propriedade"
+        },
+        "details": {
+          "label": "Detalhes da propriedade"
+        },
+        "captcha": {
+          "label": "Captcha",
+          "question": "40 + 5 ="
+        }
+      },
+      "button": {
+        "submit": "Submeter Propriedade"
+      }
+    }
+  },
   "about": {
     "title": "Sobre Inland Andalucía",
     "description": "Especializamo-nos em ajudá-lo a encontrar a propriedade rural perfeita na bela paisagem da Andaluzia, Espanha."
@@ -961,5 +993,85 @@
     "continue": "Continuar",
     "submit": "Enviar",
     "reset": "Redefinir"
+  },
+  "aboutPage": {
+    "hero": {
+      "title": "Bem-vindo ao Inland Andalucia",
+      "description": "O seu parceiro de confiança para encontrar propriedades espanholas autênticas no coração da Andaluzia"
+    },
+    "aboutHero": {
+      "p1": "O principal agente de propriedades do interior desde 2001.",
+      "p2": "Com escritórios no interior de Málaga (Mollina) e Jaén (Alcalá la Real), podemos ajudá-lo em cada etapa.",
+      "p3": "Inland Andalucia dedica-se a encontrar para si a propriedade do interior com melhor valor na região da Andaluzia.",
+      "p4": "Pode escolher do nosso portfólio de propriedades constantemente atualizado ou entrar em contacto connosco com os seus requisitos.",
+      "p5": "Nos últimos três meses, 80% das nossas vendas foram de casas com custo inferior a 100.000 euros (aprox. £72.000).",
+      "p6": "50% custaram menos de 150.000€ (aprox. £108.000) e 5% foram propriedades mais caras, mas com grandes descontos."
+    },
+    "values": {
+      "title": "Atenção pessoal e dedicada a si",
+      "p1": "A nossa atenção pessoal às suas necessidades não diminuirá depois de encontrar a propriedade do interior dos seus sonhos. Também estamos felizes e dispostos a ajudar e dar conselhos sobre todos os aspectos da sua compra.",
+      "p2": "Ficaríamos felizes em ajudar com alterações de contas de eletricidade e água, abertura de contas bancárias, pedido de NIE, etc.",
+      "p3": "Pode confiar na nossa longa experiência e conhecimento local superior para ser o guia certo que o ajudará a comprar a sua nova propriedade no interior da Andaluzia.",
+      "p4": "Orgulhamo-nos de um serviço personalizado e de qualidade, tentando oferecer-lhe toda a ajuda possível. Como sempre queremos que tenha a atenção individual de que necessita, tente marcar uma reunião connosco antes de sair de casa, para que possamos estar prontos e disponíveis pessoalmente numa hora e data pré-agendadas que lhe convêm."
+    },
+    "ctaSection": {
+      "description": "Abaixo está uma lista das nossas propriedades do interior da Andaluzia ordenadas por província e em ordem alfabética:",
+      "noTowns": "Sem vilas, total de propriedades: {count}",
+      "loading": "Carregando províncias e vilas..."
+    }
+  },
+  "contactPage": {
+    "hero": {
+      "title": "Contacte-nos",
+      "description": "Entre em contato com nossa equipe de especialistas para iniciar sua jornada imobiliária em Inland Andalucia"
+    },
+    "contactInfo": {
+      "title": "Entre em Contato",
+      "description": "Nossa equipe está aqui para ajudá-lo a encontrar a propriedade dos seus sonhos em Inland Andalucia. Contate-nos hoje para assistência personalizada.",
+      "offices": {
+        "mainOffice": {
+          "title": "Escritório Principal",
+          "address": "Calle Andalucia 12\n29550 Ardales\nMálaga, Espanha"
+        }
+      },
+      "email": {
+        "title": "Envie-nos um Email",
+        "emailAddress": "info@inlandandalucia.com"
+      },
+      "phone": {
+        "title": "Falamos",
+        "number": "+34 952 741 525"
+      },
+      "qr": {
+        "description": "Escaneie o QR code abaixo com seu celular para salvar automaticamente nossos contatos",
+        "offices": {
+          "mollina": "Escritório Mollina",
+          "alcala": "Escritório Alcala La Real",
+          "martos": "Escritório Martos"
+        }
+      }
+    },
+    "form": {
+      "title": "Envie-nos uma Mensagem",
+      "fields": {
+        "name": "Nome Completo *",
+        "email": "Email *",
+        "phone": "Número de Telefone",
+        "subject": "Assunto *",
+        "message": "Mensagem *"
+      },
+      "subjectOptions": {
+        "placeholder": "Por favor selecione",
+        "propertyInquiry": "Consulta de Propriedade",
+        "buying": "Informações de Compra",
+        "selling": "Informações de Venda",
+        "viewingTrip": "Visita de Propriedade",
+        "general": "Consulta Geral"
+      },
+      "submitButton": "Enviar Mensagem"
+    },
+    "mapSection": {
+      "title": "Encontre-nos"
+    }
   }
 }

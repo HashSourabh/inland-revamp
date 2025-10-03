@@ -75,11 +75,49 @@
       "email": "E-mail",
       "contact_us": "Contactez-nous",
       "description": "Description"
+    },
+    "filter_titles": {
+      "all_properties": "Toutes les propriétés",
+      "in_area_region": "Propriétés à {area}, {region}",
+      "in_town": "Propriétés à {town}",
+      "in_region": "Propriétés en {region}",
+      "in_province": "Zones dans {province}",
+      "beds": "Chambres",
+      "baths": "Salles de bain",
+      "size": "Superficie",
+      "type": "Type",
+      "areas_in_region": "Zones dans {region}"
     }
   },
   "about": {
     "title": "À Propos d'Inland Andalucía",
     "description": "Nous nous spécialisons dans l'aide à trouver la propriété rurale parfaite dans la belle campagne d'Andalousie, en Espagne."
+  },
+  "aboutPage": {
+    "hero": {
+      "title": "Bienvenue à Inland Andalucia",
+      "description": "Votre partenaire de confiance pour trouver des propriétés espagnoles authentiques au cœur de l'Andalousie"
+    },
+    "aboutHero": {
+      "p1": "Le principal agent immobilier intérieur depuis 2001.",
+      "p2": "Avec des bureaux dans l'intérieur de Málaga (Mollina) et Jaén (Alcalá la Real), nous pouvons vous assister à chaque étape.",
+      "p3": "Inland Andalucia est dédié à trouver pour vous la propriété intérieure de meilleure valeur dans la région d'Andalousie.",
+      "p4": "Vous pouvez choisir parmi notre portefeuille de propriétés constamment mis à jour ou nous contacter avec vos exigences.",
+      "p5": "Au cours des trois derniers mois, 80 % de nos ventes concernaient des maisons coûtant moins de 100 000 euros (environ 72 000 £).",
+      "p6": "50 % ont coûté moins de 150 000 € (environ 108 000 £) et 5 % étaient des propriétés plus chères, mais avec de grandes réductions."
+    },
+    "values": {
+      "title": "Soin et attention personnelle",
+      "p1": "Notre attention personnelle à vos besoins ne faiblira pas après que vous ayez trouvé la propriété intérieure de vos rêves. Nous sommes également heureux et prêts à aider et à offrir des conseils sur tous les aspects de votre achat.",
+      "p2": "Nous serons heureux d'aider avec les changements de compte d'électricité et d'eau, l'ouverture de comptes bancaires, la demande de NIE, etc.",
+      "p3": "Vous pouvez compter sur notre longue expérience et notre connaissance locale supérieure pour être le guide adéquat pour vous aider à acheter votre nouvelle propriété dans l'intérieur de l'Andalousie.",
+      "p4": "Nous sommes fiers d'un service personnalisé et de qualité, en essayant de vous offrir toute l'aide possible. Comme nous voulons toujours que vous ayez l'attention individuelle dont vous avez besoin, veuillez essayer de prendre rendez-vous avec nous avant de quitter votre domicile, afin que nous soyons prêts et disponibles personnellement à une heure et une date préarrangées qui vous conviennent."
+    },
+    "ctaSection": {
+      "description": "Ci-dessous, une liste de nos propriétés intérieures en Andalousie triées par province et par ordre alphabétique :",
+      "noTowns": "Pas de villes, total des propriétés : {count}",
+      "loading": "Chargement des provinces et des villes..."
+    }
   },
   "advance_search": {
     "title": "Propriété en Andalousie",
@@ -360,47 +398,54 @@
   },
   "buying-property": {
     "title": "Acheter une Propriété en Espagne",
-    "description": "Votre guide complet pour l'achat de biens immobiliers dans l'intérieur de l'Espagne. Découvrez les différents types de propriétés, les points clés à considérer et comment faire le bon choix selon vos besoins.",
+    "description": "Votre guide complet pour l’achat d’une propriété dans l’intérieur de l’Espagne. Découvrez les différents types de propriétés, les considérations clés et comment faire le meilleur choix pour vos besoins.",
+    "types-of-properties-header": "Types de Propriétés",
+    "types-of-properties-intro": "Inland Andalucia propose une large gamme de propriétés pour répondre à différents goûts et budgets :",
     "types-of-properties": [
       {
         "name": "Cortijos",
-        "description": "Fermes espagnoles traditionnelles, souvent avec terrain et dépendances"
+        "description": "Fermes traditionnelles espagnoles, souvent avec des terres et dépendances"
       },
       {
-        "name": "Maisons de Village",
-        "description": "Propriétés au cœur des villages traditionnels espagnols"
+        "name": "Maisons de Ville",
+        "description": "Propriétés situées au cœur des villes espagnoles traditionnelles"
       },
       {
         "name": "Villas",
-        "description": "Maisons individuelles modernes ou traditionnelles, souvent avec jardins et piscines"
+        "description": "Maisons individuelles modernes ou traditionnelles, souvent avec jardin et piscine"
       },
       {
         "name": "Propriétés Rurales",
-        "description": "Maisons rurales avec terrain et belles vues"
+        "description": "Maisons de campagne avec terrains et belles vues"
       },
       {
         "name": "Projets de Rénovation",
         "description": "Propriétés nécessitant des travaux mais offrant un grand potentiel"
       }
     ],
+    "key-considerations-header": "Points Importants à Considérer",
+    "key-considerations-intro": "Lors de l’achat d’une propriété dans l’intérieur de l’Espagne, gardez à l’esprit ces facteurs essentiels :",
     "key-considerations": [
       "Emplacement et accessibilité",
-      "État de la propriété et besoins potentiels de rénovation",
-      "Statut juridique et documentation",
+      "État de la propriété et éventuels besoins de rénovation",
+      "Statut légal et documentation",
       "Commodités et services locaux",
       "Potentiel de revente futur"
     ],
-    "important-note": "Travaillez toujours avec un agent réputé qui peut vérifier le statut légal des propriétés et vous guider tout au long du processus d'achat. Chez Inland Andalucia, nous garantissons que toutes nos propriétés sont légalement conformes et disposent des documents appropriés.",
+    "important-note-header": "Note Importante",
+    "important-note": "Travaillez toujours avec un agent de confiance qui peut vérifier le statut légal des propriétés et vous guider tout au long du processus d’achat. Chez Inland Andalucia, nous nous assurons que toutes nos propriétés soient légalement en règle et disposent de la documentation appropriée.",
+    "our-services-header": "Nos Services",
+    "our-services-intro": "En choisissant Inland Andalucia, vous bénéficiez de :",
     "our-services": [
-      "Large connaissance et expertise locale",
-      "Vérification de la propriété et contrôles juridiques",
-      "Support multilingue tout au long du processus",
+      "Connaissance et expertise locale approfondies",
+      "Vérification des propriétés et contrôles légaux",
+      "Assistance multilingue tout au long du processus",
       "Accès à des professionnels locaux de confiance",
-      "Assistance et conseils après-vente"
+      "Support et accompagnement après-vente"
     ],
     "cta": {
-      "heading": "Prêt à commencer votre recherche de propriété?",
-      "text": "Parcourez notre vaste collection de propriétés dans l'intérieur.",
+      "heading": "Prêt à commencer votre recherche de propriété ?",
+      "text": "Parcourez notre vaste collection de propriétés dans l’intérieur de l’Espagne.",
       "buttons": {
         "properties": "Voir les Propriétés"
       }
@@ -973,6 +1018,60 @@
       "button": {
         "submit": "Soumettre la Propriété"
       }
+    }
+  },
+  "contactPage": {
+    "hero": {
+      "title": "Contactez-nous",
+      "description": "Contactez notre équipe d'experts pour commencer votre parcours immobilier à Inland Andalucia"
+    },
+    "contactInfo": {
+      "title": "Entrer en Contact",
+      "description": "Notre équipe est là pour vous aider à trouver la propriété de vos rêves à Inland Andalucia. Contactez-nous dès aujourd'hui pour une assistance personnalisée.",
+      "offices": {
+        "mainOffice": {
+          "title": "Bureau Principal",
+          "address": "Calle Andalucia 12\n29550 Ardales\nMálaga, Espagne"
+        }
+      },
+      "email": {
+        "title": "Envoyez-nous un Email",
+        "emailAddress": "info@inlandandalucia.com"
+      },
+      "phone": {
+        "title": "Nous Parlons",
+        "number": "+34 952 741 525"
+      },
+      "qr": {
+        "description": "Scannez le QR code ci-dessous avec votre mobile pour sauvegarder automatiquement nos coordonnées",
+        "offices": {
+          "mollina": "Bureau de Mollina",
+          "alcala": "Bureau d'Alcala La Real",
+          "martos": "Bureau de Martos"
+        }
+      }
+    },
+    "form": {
+      "title": "Envoyez-nous un Message",
+      "fields": {
+        "name": "Nom Complet *",
+        "email": "Email *",
+        "phone": "Numéro de Téléphone",
+        "subject": "Sujet *",
+        "message": "Message *"
+      },
+      "subjectOptions": {
+        "placeholder": "Veuillez sélectionner",
+        "propertyInquiry": "Demande de Propriété",
+        "buying": "Informations sur l'Achat",
+        "selling": "Informations sur la Vente",
+        "viewingTrip": "Visite de Propriété",
+        "general": "Demande Générale"
+      },
+      "submitButton": "Envoyer le Message"
+    },
+    "mapSection": {
+      "title": "Nous Trouver"
     }
   }
 }

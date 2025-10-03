@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Property } from '@/types/property';
 import TownFilter from './TownFilter';
+import { useTranslations } from 'next-intl';
 
 interface RegionCount {
   regionId: number;
@@ -67,6 +68,7 @@ export default function AreaFilter({
   onRegionChange,
   onAreaChange,
 }: AreaFilterProps) {
+  const t=useTranslations('properties');
   // Get the current region name for styling areas
   const currentRegionName = useMemo(() => {
     if (selectedRegion) {
@@ -144,7 +146,9 @@ export default function AreaFilter({
       {selectedRegion && areas.length > 0 && (
         <div className="flex flex-wrap gap-2 pl-4 border-l-2 border-gray-200">
           <div className="w-full mb-2">
-            <span className="text-sm font-medium text-gray-600">Areas in {currentRegionName}:</span>
+            <span className="text-sm font-medium text-gray-600">
+              {t('filter_titles.areas_in_region', { region: currentRegionName })}:
+            </span>
           </div>
           {areas.map((area) => {
             const colors = areaColors[currentRegionName] || {

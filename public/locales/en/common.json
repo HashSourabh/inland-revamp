@@ -70,6 +70,18 @@
       "email": "Email",
       "contact_us": "Contact Us",
       "description": "Description"
+    },
+    "filter_titles": {
+      "all_properties": "All Properties",
+      "in_area_region": "Properties in {area}, {region}",
+      "in_town": "Properties in {town}",
+      "in_region": "Properties in {region}",
+      "in_province": "Areas in {province}",
+      "beds": "Beds",
+      "baths": "Baths",
+      "size": "Size",
+      "type": "Type",
+      "areas_in_region": "Areas in {region}"
     }
   },
   "banner": {
@@ -80,6 +92,32 @@
   "about": {
     "title": "About Inland Andalucia",
     "description": "We specialize in helping you find the perfect rural property in the beautiful countryside of Andalucia, Spain."
+  },
+  "aboutPage": {
+    "hero": {
+      "title": "Welcome to Inland Andalucia",
+      "description": "Your trusted partner for finding authentic Spanish properties in the heart of Andalucia"
+    },
+    "aboutHero": {
+      "p1": "The leading inland property agent ever since 2001.",
+      "p2": "With offices in inland Málaga (Mollina) and Jaén (Alcalá la Real) we can assist you at every step.",
+      "p3": "Inland Andalucia is dedicated to finding you the best value inland property in the Andalucia region.",
+      "p4": "You can select from our constantly updated property portfolio or contact us with your requirements.",
+      "p5": "In the last three months 80% of our sales were for homes costing less than 100,000 Euros (circa £72.000).",
+      "p6": "50% have been costing less than 150,000€ (circa £108.000) and 5% have been more expensive properties, but with great discounts."
+    },
+    "values": {
+      "title": "Personal care and attention to you",
+      "p1": "Our personal attention to your needs will not falter after you have found the inland property of your dreams. We are also happy and willing to help and offer advice on every aspect of your purchase.",
+      "p2": "We should be pleased to help with electricity and water account changes, opening of bank accounts, NIE application etc.",
+      "p3": "You can rely on our long standing experience and superior local knowledge to be the right guide to help you buy your new property in inland Andalucia.",
+      "p4": "We pride ourselves in personalised and good service, trying to give you as much help as possible. As we always want you to have the individual attention you need, please try to reserve an appointment with us before you leave your home, that way we can be ready and available for you personally at a pre-arranged time and date that suits you."
+    },
+    "ctaSection": {
+      "description": "Below is a list of our inland properties in Andalucia sorted by province and in alphabetical order:",
+      "noTowns": "No towns, total properties: {count}",
+      "loading": "Loading provinces and towns..."
+    }
   },
   "promo": {
     "exclusive": {
@@ -316,47 +354,54 @@
   },
   "buying-property": {
     "title": "Buying a Property in Spain",
-    "description": "Your comprehensive guide to purchasing property in inland Spain. Learn about different property types, key considerations, and how to make the right choice for your needs.",
+    "description": "Your complete guide to purchasing properties in inland Spain. Learn about different types of properties, key considerations, and how to make the best decision according to your needs.",
+    "types-of-properties-header": "Types of Properties",
+    "types-of-properties-intro": "Inland Andalucía offers a wide variety of properties to suit different preferences and budgets:",
     "types-of-properties": [
       {
         "name": "Cortijos",
-        "description": "Traditional Spanish farmhouses, often with land and outbuildings"
+        "description": "Traditional Spanish country houses, often with land and outbuildings"
       },
       {
-        "name": "Town Houses",
-        "description": "Properties in the heart of traditional Spanish towns"
+        "name": "Village Houses",
+        "description": "Properties in the heart of traditional Spanish villages"
       },
       {
         "name": "Villas",
         "description": "Modern or traditional detached houses, often with gardens and pools"
       },
       {
-        "name": "Country Properties",
-        "description": "Rural homes with land and beautiful views"
+        "name": "Rural Properties",
+        "description": "Rural homes with land and stunning views"
       },
       {
         "name": "Renovation Projects",
-        "description": "Properties needing work but offering great potential"
+        "description": "Properties that need work but offer great potential"
       }
     ],
+    "key-considerations-header": "Key Considerations",
+    "key-considerations-intro": "When buying a property in inland Spain, keep these important factors in mind:",
     "key-considerations": [
       "Location and accessibility",
       "Property condition and potential renovation needs",
       "Legal status and documentation",
-      "Local amenities and services",
+      "Local services and amenities",
       "Future resale potential"
     ],
-    "important-note": "Always work with a reputable agent who can verify the legal status of properties and guide you through the buying process. At Inland Andalucia, we ensure all our properties are legally sound and come with proper documentation.",
+    "important-note-header": "Important Note",
+    "important-note": "Always work with a trusted agent who can verify the legal status of properties and guide you through the buying process. At Inland Andalucia, we ensure that all our properties are legally correct and have the proper documentation.",
+    "our-services-header": "Our Services",
+    "our-services-intro": "When you choose Inland Andalucia, you benefit from:",
     "our-services": [
-      "Extensive local knowledge and expertise",
+      "Extensive local knowledge and experience",
       "Property verification and legal checks",
       "Multilingual support throughout the process",
       "Access to trusted local professionals",
-      "After-sale support and guidance"
+      "Post-sale support and guidance"
     ],
     "cta": {
-      "heading": "Ready to Start Your Property Search?",
-      "text": "Browse our extensive collection of inland properties.",
+      "heading": "Ready to start your property search?",
+      "text": "Explore our wide collection of inland properties.",
       "buttons": {
         "properties": "View Properties"
       }
@@ -974,5 +1019,60 @@
     "continue": "Continue",
     "submit": "Submit",
     "reset": "Reset"
+  },
+  "contactPage": {
+    "hero": {
+      "title": "Contact Us",
+      "description": "Get in touch with our team of experts to start your property journey in Inland Andalucia"
+    },
+    "contactInfo": {
+      "title": "Get In Touch",
+      "description": "Our team is here to help you find your dream property in Inland Andalucia. Contact us today for personalized assistance.",
+      "offices": {
+        "mainOffice": {
+          "title": "Main Office",
+          "address": "Calle Andalucia 12\n29550 Ardales\nMálaga, Spain"
+        }
+      },
+      "email": {
+        "title": "Email Us",
+        "emailAddress": "info@inlandandalucia.com"
+      },
+      "phone": {
+        "title": "We Speak",
+        "number": "+34 952 741 525"
+      },
+      "qr": {
+        "description": "Scan the below QR-code with your mobile to autosave our contact details",
+        "offices": {
+          "mollina": "Mollina Office",
+          "alcala": "Alcala La Real Office",
+          "martos": "Martos Office"
+        }
+      }
+    },
+    "form": {
+      "title": "Send Us a Message",
+      "fields": {
+        "name": "Full Name *",
+        "email": "Email *",
+        "phone": "Phone Number",
+        "subject": "Subject *",
+        "message": "Message *"
+      },
+      "subjectOptions": {
+        "placeholder": "Please select",
+        "propertyInquiry": "Property Inquiry",
+        "buying": "Buying Information",
+        "selling": "Selling Information",
+        "viewingTrip": "Viewing Trip",
+        "general": "General Inquiry"
+      },
+      "submitButton": "Send Message"
+    },
+    "mapSection": {
+      "title": "Find Us"
+    }
   }
+
 }

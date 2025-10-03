@@ -256,14 +256,6 @@ export default function PropertiesLayout({
       setLoading(true);
 
       try {
-        console.log("🔄 Fetching with params:", {
-          currentPage,
-          selectedRegion,
-          selectedArea,
-          selectedPropertyType,
-          fetchId: currentFetch
-        });
-
         const queryParams = {
           page: String(currentPage),
           limit: String(PROPERTIES_PER_PAGE),
@@ -281,7 +273,6 @@ export default function PropertiesLayout({
         const query = new URLSearchParams(queryParams);
         const url = `${API_BASE_URL}/properties?${query.toString()}`;
 
-        console.log("🌐 API URL:", url);
 
         const res = await fetch(url);
         if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
@@ -290,30 +281,25 @@ export default function PropertiesLayout({
 
         // Check if this is still the latest fetch
         if (currentFetch !== fetchPropertiesRef.current) {
-          console.log("🚫 Ignoring outdated fetch response", currentFetch);
           return;
         }
 
-        console.log("📦 API Response:", data, "FetchID:", currentFetch);
 
         if (data.success) {
           const newProperties = data.data ? [...data.data] : [];
           const total = data.pagination?.total ?? data.total ?? (data.data?.length || 0);
           const pages = data.pagination?.totalPages ?? data.totalPages ?? Math.ceil(total / PROPERTIES_PER_PAGE);
 
-          console.log("✅ Setting properties:", { count: newProperties.length, total, pages, fetchId: currentFetch });
 
           setProperties(newProperties);
           setTotalProperties(total); // This should be the filtered count
           setTotalPages(pages);
         } else {
-          console.log("❌ API returned success=false");
           setProperties([]);
           setTotalProperties(0);
           setTotalPages(1);
         }
       } catch (err) {
-        console.error("❌ Fetch error:", err);
         if (currentFetch === fetchPropertiesRef.current) {
           setError(err instanceof Error ? err.message : 'Failed to load properties');
           setProperties([]);
@@ -417,18 +403,23 @@ export default function PropertiesLayout({
     if (selectedArea && areas.length > 0) {
       const area = areas.find(a => a.areaId === selectedArea);
       const region = regionCounts.find(r => r.regionId === selectedRegion);
-      return `Properties in ${area?.areaName}, ${region?.regionName}`;
+      return t("filter_titles.in_area_region", {
+        area: area?.areaName,
+        region: region?.regionName
+      });
     }
     if (selectedTown) {
-      return `Properties in ${selectedTown}`;
+      return t("filter_titles.in_town", { town: selectedTown });
     }
     if (selectedRegion && regionCounts.find(r => r.regionId === selectedRegion)) {
-      return `Properties in ${regionCounts.find(r => r.regionId === selectedRegion)?.regionName}`;
+      return t("filter_titles.in_region", {
+        region: regionCounts.find(r => r.regionId === selectedRegion)?.regionName
+      });
     }
     if (selectedProvince) {
-      return `Areas in ${selectedProvince}`;
+      return t("filter_titles.in_province", { province: selectedProvince });
     }
-    return 'All Properties';
+    return t("filter_titles.all_properties");
   };
 
   const getPageNumbers = () => {
@@ -471,10 +462,10 @@ export default function PropertiesLayout({
         {/* Header */}
         <header className="mb-8">
           <h1 className="font-heading text-3xl font-bold text-primary-600">
-             {t('properties_for_sale')}
+            {t('properties_for_sale')}
           </h1>
           <p className="mt-2 text-neutral-600 text-xl">
-          {t('sub_text')}
+            {t('sub_text')}
           </p>
         </header>
 
