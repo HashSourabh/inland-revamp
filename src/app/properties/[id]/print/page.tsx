@@ -135,33 +135,33 @@ export default function PrintPage({ params }: PrintPageProps) {
   console.log("propertypropertypropertyproperty",property);
   return (
     <div className="min-h-screen bg-white text-black p-8 print:p-0">
+      {/* Buttons (hidden in print) */}
+      <div className="mx-auto max-w-4xl px-8 flex gap-4 mb-5 print:hidden">
+        <Link href={`/properties/${property.id}`} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
+          <ArrowLeftIcon className="h-4 w-4" /> Back
+        </Link>
+        <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
+          <PrinterIcon className="h-4 w-4" /> Print
+        </button>
+      </div>
       <style jsx global>{`
         @media print {
           header, footer, nav, .print\:hidden { display: none !important; }
           .no-print { display: none !important; }
           html, body { margin: 0 !important; padding: 0 !important; background: #ffffff !important; }
           #__next { padding: 0 !important; }
-          .print-container { max-width: 210mm; margin: 0 auto; }
           .print-logo { height: 22mm; }
           .print-hero { height: 75mm !important; }
           .print-thumb { height: 45mm !important; }
         }
       `}</style>
-      <div className="print-container mx-auto max-w-4xl">
-        {/* Buttons (hidden in print) */}
-        <div className="flex gap-4 mb-8 print:hidden">
-          <Link href={`/properties/${property.id}`} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
-            <ArrowLeftIcon className="h-4 w-4" /> Back
-          </Link>
-          <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
-            <PrinterIcon className="h-4 w-4" /> Print
-          </button>
-        </div>
+      <div className="max-w-[210mm] print-container mx-auto print:p-8 print:-mt-[104px]">
+        
         {/* Print Header: Logo */}
         <div className="flex items-stretch justify-between mb-6">
           <div className="flex items-center gap-3 w-1/3 border-r-4 border-secondary-600">
             <div className="relative">
-              <svg width="225" height="60" viewBox="0 0 1220 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="200" height="60" viewBox="0 0 1220 328" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M144.656 1.03472L145.437 0.999869C150.98 0.765779 156.439 1.40998 161.86 2.55809C171.474 4.59521 181.03 7.54902 190.516 10.1419L239.934 23.7923C248.811 26.3304 257.713 28.7767 266.641 31.1313C272.577 32.7083 278.808 34.0378 284.571 36.1723C286.839 37.0122 288.732 38.2782 290.471 39.9624C293.065 42.4749 294.372 44.8854 295.157 48.3977C296.829 55.8895 295.866 64.9788 295.848 72.7019L295.822 111.228C284.38 112.184 273.009 113.214 261.691 115.221C257.395 116.014 253.121 116.913 248.871 117.921C244.619 118.928 240.397 120.041 236.202 121.26C232.007 122.48 227.845 123.804 223.717 125.233C219.588 126.661 215.498 128.192 211.447 129.826C207.395 131.461 203.387 133.195 199.423 135.031C195.458 136.866 191.543 138.8 187.676 140.832C183.809 142.864 179.995 144.992 176.235 147.217C172.474 149.44 168.773 151.757 165.129 154.167L157.254 150.103C127.558 133.519 90.0192 120.245 56.4416 115.323C38.0709 112.63 19.4616 111.991 0.927429 111.393L0.816645 71.6307C0.797882 64.5544 0.173361 56.8294 1.19639 49.8407C1.63866 46.8189 2.47047 43.6775 4.46917 41.2982C6.24361 39.1851 8.70871 37.3052 11.2828 36.2956C17.2306 33.9619 23.7843 32.6199 29.9546 30.9482L62.1509 22.1144L103.637 10.6288C117.072 6.83781 130.686 2.08901 144.656 1.03472Z" fill="rgb(var(--color-primary))" />
                 <path d="M0.950707 141.12C48.2976 139.127 97.5405 151.819 138.573 175.389C118.205 192.478 102.118 214.04 88.4565 236.69C86.1085 240.636 83.8703 244.644 81.7421 248.713C79.6144 252.783 77.5997 256.907 75.6978 261.087C73.7964 265.267 72.0113 269.496 70.3423 273.774C68.6727 278.052 67.1219 282.372 65.69 286.736C51.9001 279.666 37.5804 272.832 26.4924 261.742C2.57237 237.817 0.915861 211.067 0.877441 179.361L0.950707 141.12Z" fill="rgb(var(--color-secondary))" />
                 <path d="M291.169 140.409C292.601 140.168 294.229 140.269 295.684 140.229C295.794 151.279 295.821 162.328 295.766 173.378C292.677 173.71 289.598 174.117 286.529 174.6C283.459 175.083 280.404 175.64 277.362 176.273C274.32 176.906 271.295 177.613 268.287 178.394C265.28 179.175 262.294 180.029 259.329 180.957C256.363 181.884 253.423 182.884 250.506 183.956C247.59 185.028 244.702 186.17 241.842 187.384C238.981 188.598 236.152 189.881 233.354 191.233C230.557 192.585 227.795 194.006 225.068 195.493C191.016 213.74 160.492 243.007 142.429 277.36C135.386 290.756 130.219 304.953 125.845 319.413C119.71 316.211 113.596 312.967 107.505 309.682L92.7898 301.846C100.959 273.551 116.394 245.764 135.1 223.089C169.057 181.928 215.303 153.2 267.995 143.32C275.675 141.88 283.399 141.157 291.169 140.409Z" fill="rgb(var(--color-secondary))" />
@@ -184,33 +184,33 @@ export default function PrintPage({ params }: PrintPageProps) {
               </svg>
             </div>
           </div>
-          <div className="text-sm text-neutral-500 w-2/3 pl-10">
-            <h2 className='text-5xl font-normal font-yellowtail text-primary-600 mb-6 text-center'>You're in Safe Hands</h2>
+          <div className="text-sm text-neutral-500 w-2/3 pl-7">
+            <h2 className='text-4xl font-normal font-yellowtail text-primary-600 mb-6 text-center'>You're in Safe Hands</h2>
             <div className='flex justify-between w-full'>
               <div className="text-sm text-neutral-600">
-                <h4 className='text-3xl font-bold font-heading text-primary-600 mb-1'>Molina Office</h4>
-                <div className='text-lg font-medium mb-2 text-primary-600'>info@inlandandalucia.com</div>
-                <div className='text-lg font-medium text-primary-600'>www.inlandandalucia.com</div>
+                <h4 className='text-2xl font-bold font-heading text-primary-600 mb-1'>Molina Office</h4>
+                <div className='text-base font-medium mb-1.5 text-primary-600'>info@inlandandalucia.com</div>
+                <div className='text-base font-medium text-primary-600'>www.inlandandalucia.com</div>
               </div>
               <div>
                 <div className='flex gap-2'>
-                  <div className='w-10 h-10 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={EnFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-10 h-10 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={EsFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-10 h-10 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={FrFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-10 h-10 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={PtFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-10 h-10 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={DeFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
                 </div>
-                <h4 className='text-lg font-semibold text-primary-600 mt-2 tracking-[.39rem]'>+34 952 741 525</h4>
+                <h4 className='text-lg font-semibold text-primary-600 mt-2 tracking-[.22rem]'>+34 952 741 525</h4>
               </div>
             </div>
           </div>
@@ -218,17 +218,17 @@ export default function PrintPage({ params }: PrintPageProps) {
         
 
         {/* Title */}
-        <h1 className="text-3xl font-bold mb-3">{property.ref} - {property.type}</h1>
+        <h1 className="text-2xl font-bold mb-3">{property.ref} - {property.type}</h1>
         <div className="grid grid-cols-3 items-baseline mb-1">
-          <p>Ref: <strong className='text-2xl'>{property.ref}</strong></p>
+          <p>Ref: <strong className='text-xl'>{property.ref}</strong></p>
           <p className="text-center"><strong>Town House</strong></p>
-          <p className="mb-1 text-right">Price / Precio: <strong className='text-2xl'>{formatPrice(property.price.current)}</strong></p>
+          <p className="mb-1 text-right">Price / Precio: <strong className='text-xl'>{formatPrice(property.price.current)}</strong></p>
         </div>
-        <p className="mb-4">Location / Localidad: {property.location.town} - {property.location.province}</p>
+        <p className="mb-3">Location / Localidad: {property.location.town} - {property.location.province}</p>
 
         {/* Images */}
         {property.images.length > 0 && (
-          <div className="mb-6">
+          <div className="mb-5">
             {/* Hero image */}
             <img
               src={property.images[0].url}
@@ -252,7 +252,7 @@ export default function PrintPage({ params }: PrintPageProps) {
         )}
 
         {/* Property Specs */}
-        <div className="grid grid-cols-3 gap-4 mb-6 text-sm font-medium">
+        <div className="grid grid-cols-3 gap-2 mb-5 text-sm font-medium">
           <div>Beds: <strong> {property.bedrooms}</strong></div>
           <div>Built : <strong>{property.buildSize} m²</strong></div>
           <div>Baths : <strong>{property.bathrooms}</strong></div>
@@ -261,17 +261,15 @@ export default function PrintPage({ params }: PrintPageProps) {
           <div>Location : <strong>{property.location.town}</strong></div>
         </div>
 
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2">Description</h2>
-          {Object.entries(property.description).map(([lang, text]) => (
-            <div key={lang} className="mb-4">
-              <p className='text-sm'> 
-                  <Image src={languages.find(l => l.code === lang.toLowerCase())?.flag || languages[0].flag} alt={`${lang} flag`} width={40} height={40}  className='w-7 h-auto object-cover object-center inline-block mr-2' />
-                  {text}
-                </p>
-            </div>
-          ))}
-        </div>
+        <h2 className="text-lg font-semibold">Description</h2>
+        {Object.entries(property.description).map(([lang, text]) => (
+          <div key={lang} className="py-2">
+            <p className='text-sm'> 
+                <Image src={languages.find(l => l.code === lang.toLowerCase())?.flag || languages[0].flag} alt={`${lang} flag`} width={40} height={40}  className='w-7 h-auto object-cover object-center inline-block mr-2' />
+                {text}
+              </p>
+          </div>
+        ))}
 
 
         {/* Features */}
@@ -286,7 +284,7 @@ export default function PrintPage({ params }: PrintPageProps) {
                 : '';
 
               return (
-                <div key={lang} className="mb-2">
+                <div key={lang} className="mb-2 text-sm">
                   <strong className='capitalize'>{LANGUAGE_FLAGS[flagKey] || flagKey}:</strong> {featuresText || 'No features'}
                 </div>
               );
