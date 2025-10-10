@@ -23,7 +23,7 @@ interface PropertyData {
 }
 
 // FIX: Add validation for Stripe key
-const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";
 const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
 export default function ReserveForView() {
@@ -126,8 +126,8 @@ export default function ReserveForView() {
         <section className="bg-white rounded-xl p-8 border border-black/10 space-y-4">
           <h2 className="font-semibold text-gray-600 mb-4">Card Payment</h2>
           <Elements stripe={stripePromise}>
-            <CheckoutForm 
-              amount={parseFloat(amount)} 
+            <CheckoutForm
+              amount={parseFloat(amount)}
               buyerEmail={buyerEmail}
               onPaymentSuccess={() => setShowSuccessModal(true)}
             />
@@ -137,7 +137,7 @@ export default function ReserveForView() {
 
       {/* Success Modal */}
       {showSuccessModal && (
-        <PaymentSuccessModal 
+        <PaymentSuccessModal
           onClose={() => setShowSuccessModal(false)}
           propertyId={propertyData?.id}
         />
@@ -147,12 +147,12 @@ export default function ReserveForView() {
 }
 
 // Stripe Checkout Form Component
-function CheckoutForm({ 
-  amount, 
-  buyerEmail, 
-  onPaymentSuccess 
-}: { 
-  amount: number; 
+function CheckoutForm({
+  amount,
+  buyerEmail,
+  onPaymentSuccess
+}: {
+  amount: number;
   buyerEmail: string;
   onPaymentSuccess: () => void;
 }) {
@@ -271,10 +271,10 @@ function CheckoutForm({
 }
 
 // Payment Success Modal Component
-function PaymentSuccessModal({ 
-  onClose, 
-  propertyId 
-}: { 
+function PaymentSuccessModal({
+  onClose,
+  propertyId
+}: {
   onClose: () => void;
   propertyId?: string;
 }) {
@@ -285,7 +285,7 @@ function PaymentSuccessModal({
     // Start fade out after 3 seconds
     const timer = setTimeout(() => {
       setFadeOut(true);
-      
+
       // Redirect after fade animation completes
       setTimeout(() => {
         if (propertyId) {
@@ -300,12 +300,10 @@ function PaymentSuccessModal({
   }, [propertyId, router]);
 
   return (
-    <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-500 ${
-      fadeOut ? 'opacity-0' : 'opacity-100'
-    }`}>
-      <div className={`bg-white rounded-xl p-8 max-w-md mx-4 text-center transform transition-all duration-500 ${
-        fadeOut ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
+    <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'
       }`}>
+      <div className={`bg-white rounded-xl p-8 max-w-md mx-4 text-center transform transition-all duration-500 ${fadeOut ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
+        }`}>
         <div className="mb-6">
           <CheckCircleIcon className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-green-800 mb-2">Payment Successful!</h2>
@@ -318,7 +316,7 @@ function PaymentSuccessModal({
             </p>
           </div>
         </div>
-        
+
         <div className="flex justify-center space-x-3">
           <button
             onClick={() => {
