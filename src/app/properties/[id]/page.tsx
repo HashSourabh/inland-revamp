@@ -23,6 +23,7 @@ interface PropertyDetailsProps {
 interface Property {
   id: string;
   title: string;
+  propertyRef: string,
   price: { current: number; original?: number };
   location: { town: string; province: string };
   description: string;
@@ -36,14 +37,18 @@ interface Property {
 }
 
 export default function PropertyDetails({ params }: PropertyDetailsProps) {
-  const t = useTranslations('properties')
+  const t = useTranslations('properties');
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
 
   const [property, setProperty] = useState<Property | null>(null);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-
   const [loading, setLoading] = useState(true);
   const [isView, setIsView] = useState(false);
+
+  // **Email reservation states**
+  const [email, setEmail] = useState('');
+  const [emailExists, setEmailExists] = useState<boolean | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const propertyId = params.id;
 
@@ -57,7 +62,6 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
         if (data.success && data.data) {
           const db = data.data;
-
           const addressParts = db.Property_Address?.split(",") || [];
           const location = {
             town: addressParts[0]?.trim() || "Unknown",
@@ -65,8 +69,6 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           };
 
           const numPhotos = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
-
-          // **Optimize images**: featured image first, lazy-load the rest
           const images = Array.from({ length: numPhotos }, (_, i) => ({
             url: `https://www.inlandandalucia.com/images/photos/properties/${db.Property_Ref}/${db.Property_Ref}_${i + 1}.jpg`,
             alt: `${db.Property_Ref} image ${i + 1}`,
@@ -75,7 +77,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
           setProperty({
             id: db.Property_ID.toString(),
-            title: `Property (${db.Property_Ref})`,
+            propertyRef: db.Property_Ref || "",
+            title: `${db.PropertyType ?? 'Property'}(${db.Property_Ref})`,
             price: { current: db.Public_Price, original: db.Original_Price },
             location,
             description: db.description || "",
@@ -124,19 +127,45 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
         <p className="text-neutral-600">Property not found</p>
       </div>
     );
-  function getEmbedUrl(url: string) {
-    if (url.includes("youtube.com/watch")) {
-      return url.replace("watch?v=", "embed/");
-    }
-    if (url.includes("youtu.be")) {
-      const id = url.split("youtu.be/")[1];
-      return `https://www.youtube.com/embed/${id}`;
-    }
-    return url;
-  }
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(price);
+  const validateEmail = (email: string) => {
+    // Basic regex for email validation
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+  // **Handle email reservation**
+  const handleReserve = async () => {
+    if (!email) return;
+
+    if (!validateEmail(email)) {
+      setEmailExists(true);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/users/check-email?email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+
+      if (data.exists && data.data) {
+        sessionStorage.setItem('buyerData', JSON.stringify(data.data));
+        sessionStorage.setItem('buyerEmail', email);
+        sessionStorage.setItem('propertyData', JSON.stringify(property));
+        window.location.href = 'reserve-for-view';
+      } else {
+        setEmailExists(false);
+      }
+    } catch (err) {
+      console.error(err);
+      setEmailExists(null);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-neutral-50 pb-16 dark:bg-neutral-900">
@@ -220,13 +249,50 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
       </div>
 
       {/* Reserve Popup */}
-      <Popup isOpen={isView} onClose={() => setIsView(false)} title="Reserve For Viewing" description="On receipt, we will reserve this property for you to view within 2 weeks.">
+      <Popup
+        isOpen={isView}
+        onClose={() => {
+          setIsView(false);
+          setEmail('');
+          setEmailExists(null);
+        }}
+        title="Reserve For Viewing"
+        description="On receipt, we will reserve this property for you to view within 2 weeks."
+      >
         <div className="space-y-4">
           <p>Please enter your email to reserve this property for viewing.</p>
-          <input type="email" placeholder="Your email" className="w-full border rounded px-3 py-2" />
-          <button className="w-full bg-primary-600 text-white px-4 py-2 rounded">Reserve</button>
+          <input
+            type="email"
+            placeholder="Your email"
+            className="w-full border rounded px-3 py-2"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setEmailExists(null); // reset status when typing
+            }}
+          />
+          <button
+            className="w-full bg-primary-600 text-white px-4 py-2 rounded"
+            onClick={handleReserve}
+            disabled={isSubmitting || !email}
+          >
+            {isSubmitting ? "Checking..." : "Reserve"}
+          </button>
+
+          {/* Show status below input */}
+          {emailExists !== null && (
+            <p className={`text-sm ${emailExists ? "text-red-600" : "text-green-600"}`}>
+              {emailExists
+                ? validateEmail(email)
+                  ? "This email is already registered."
+                  : "Please enter a valid email address."
+                : "Email is available for reservation!"}
+            </p>
+          )}
         </div>
       </Popup>
+
+
       {/* Video Popup */}
       <Popup
         isOpen={isVideoOpen}
@@ -244,12 +310,10 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               className="w-full h-full rounded"
             />
           </div>
-
         ) : (
           <p>No video available for this property.</p>
         )}
       </Popup>
-
     </div>
   );
 }

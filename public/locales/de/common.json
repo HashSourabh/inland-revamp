@@ -93,6 +93,7 @@
     }
   },
   "promo": {
+    "button":"Klik hier",
     "exclusive": {
       "title": "Exklusive Immobilien",
       "short_description": "KLICKEN Sie hier für die neuesten Angebote mit noch mehr fantastischen Preisnachlässen"
@@ -1073,5 +1074,34 @@
     "mapSection": {
       "title": "Vind Ons"
     }
+  },
+  "franchisePage": {
+    "title": "FRANCHISE PROFIEL",
+    "introParagraph1": "Als je geïnspireerd bent door de vastgoedsector.",
+    "introParagraph2": "Je houdt van het zuiden van Spanje (Andalusië) en wonen in een rustig stadje als onderdeel van een gemeenschap en je droomt van een levensveranderende ervaring, dan hebben wij de perfecte kans voor jou.",
+    "introParagraph3": "INLAND ANDALUCIA FRANCHISE biedt je de kans om een nieuw leven te beginnen in Andalusië met veel zon en een stressvrij leven, omringd door natuur en een zeer goed inkomen, zonder limiet op je verdiensten.",
+    "introParagraph4": "INLAND ANDALUCIA is een zelfstandig bedrijf ideaal voor een individu of gezin met de volgende vereisten:",
+    "requirement1": "Engels als moedertaal.",
+    "requirement2": "Commerciële instelling.",
+    "requirement3": "Basiscomputer vaardigheden.",
+    "requirement4": "Economische solvabiliteit.",
+    "requirement5": "Liefhebber van het platteland.",
+    "requirement6": "Bereid om deel uit te maken van een netwerk.",
+    "advantageText": "Het zou voordelig zijn om ervaring in onroerend goed te hebben en Spaans te spreken.",
+    "callToAction": "Wil je meer weten?",
+    "watchVideoButton": "▶ Bekijk video",
+    "formInstruction": "OF je kunt het onderstaande formulier invullen en we nemen contact op om een afspraak te maken:",
+    "formLabelFirstName": "Voornaam",
+    "formLabelLastName": "Achternaam",
+    "formLabelAddress": "Adres",
+    "formLabelTelephone": "Telefoon",
+    "formLabelEmail": "Email",
+    "formLabelComments": "Opmerkingen",
+    "submitButton": "Verzend franchiseprofiel",
+    "qrInstruction": "Scan de onderstaande QR-code met je mobiel om onze contactgegevens automatisch op te slaan",
+    "qrNameMartin": "Martin Gillen",
+    "qrNameJohn": "John Gillen",
+    "qrAltMartin": "Martin Gillen QR",
+    "qrAltJohn": "John Gillen QR"
   }
 }

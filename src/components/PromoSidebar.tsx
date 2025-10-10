@@ -22,7 +22,7 @@ export default function PromoSidebar() {
           href="/properties/exclusives"
           className="inline-block bg-secondary-500 text-white font-medium px-8 py-2 rounded-md shadow hover:bg-primary-600 transition"
         >
-          {t('exclusive.title')}
+         {t('button')}
         </Link>
       </div>
 
@@ -40,7 +40,7 @@ export default function PromoSidebar() {
           href="/sell-your-property"
           className="inline-block bg-secondary-500 text-white font-medium px-8 py-2 rounded-md shadow hover:bg-primary-600 transition"
         >
-          {t('sell_your_house.title')}
+          {t('button')}
         </Link>
       </div>
 
@@ -61,7 +61,7 @@ export default function PromoSidebar() {
           href="/franchise"
           className="inline-block bg-secondary-500 text-white font-medium px-8 py-2 rounded-md shadow hover:bg-primary-600 transition"
         >
-          {t('franchise.title')}
+          {t('button')}
         </Link>
       </div>
 
@@ -77,7 +77,7 @@ export default function PromoSidebar() {
           href="/sell-your-property"
           className="inline-block bg-secondary-500 text-white font-medium px-8 py-2 rounded-md shadow hover:bg-primary-600 transition"
         >
-          {t('safe_hands.title')}
+         {t('button')}
         </Link>
       </div>
     </aside>

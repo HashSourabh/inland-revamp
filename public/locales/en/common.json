@@ -120,6 +120,7 @@
     }
   },
   "promo": {
+    "button":"Click Here",
     "exclusive": {
       "title": "Exclusive Properties",
       "short_description": "CLICK here for latest listings with more fantastic price reductions"
@@ -1073,6 +1074,34 @@
     "mapSection": {
       "title": "Find Us"
     }
+  },
+  "franchisePage": {
+    "title": "FRANCHISE PROFILE",
+    "introParagraph1": "If you are inspired by real estate business.",
+    "introParagraph2": "You like the south of Spain (Andalucia) and living in a calm town as part of a community and you are dreaming for a life changing experience, then we have the perfect chance for you.",
+    "introParagraph3": "INLAND ANDALUCIA FRANCHISE offers you the opportunity to start a new life in Andalucia plenty of sun and stress free lifestyle, surrounded by nature and a very good income, with no ceiling on your earnings.",
+    "introParagraph4": "INLAND ANDALUCIA is a self-employment business ideal for an individual or family with the following requirements:",
+    "requirement1": "English native speaking.",
+    "requirement2": "Commercial attitude.",
+    "requirement3": "Basic Computer skills.",
+    "requirement4": "Economic solvency.",
+    "requirement5": "Country lover.",
+    "requirement6": "Willing to be a part of a network.",
+    "advantageText": "It would be advantageous to have real estate experience and being Spanish speaking",
+    "callToAction": "Want to know more ?",
+    "watchVideoButton": "▶ Watch video",
+    "formInstruction": "OR You can complete the form below and we will make contact to arrange a meeting :",
+    "formLabelFirstName": "First Name",
+    "formLabelLastName": "Last Name",
+    "formLabelAddress": "Address",
+    "formLabelTelephone": "Telephone",
+    "formLabelEmail": "Email",
+    "formLabelComments": "Comments",
+    "submitButton": "Submit Franchise Profile",
+    "qrInstruction": "Scan the below QR-code with your mobile to autosave our contact details",
+    "qrNameMartin": "Martin Gillen",
+    "qrNameJohn": "John Gillen",
+    "qrAltMartin": "Martin Gillen QR",
+    "qrAltJohn": "John Gillen QR"
   }
-
 }

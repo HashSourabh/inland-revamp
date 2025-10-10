@@ -1,9 +1,12 @@
 "use client";
 
 import PromoSidebar from "@/components/PromoSidebar";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export default function FranchisePage() {
+    const t = useTranslations("franchisePage");
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -25,60 +28,46 @@ export default function FranchisePage() {
 
     return (
         <div className="mx-auto max-w-7xl px-5 my-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <section className="md:col-span-2 bg-white rounded-xl  p-8 border border-black/10">
-                <h1 className="text-3xl font-bold mb-6">FRANCHISE PROFILE</h1>
+            {/* Left: Content */}
+            <section className="md:col-span-2 bg-white rounded-xl p-8 border border-black/10">
+                <h1 className="text-3xl font-bold mb-6">{t("title")}</h1>
                 <div className="prose prose-lg max-w-none mb-10">
-                    <p>
-                        If you are inspired by real estate business.
-                    </p>
-                    <p>
-                        You like the south of Spain (Andalucia) and living in a calm town as part of a community and you are dreaming
-                        for a life changing experience, then we have the perfect chance for you.
-                    </p>
-                    <p>
-                        <strong>INLAND ANDALUCIA FRANCHISE</strong> offers you the opportunity to start a new life in Andalucia plenty
-                        of sun and stress free lifestyle, surrounded by nature and a very good income, with no ceiling on your
-                        earnings.
-                    </p>
-                    <p>
-                        <strong>INLAND ANDALUCIA</strong> is a self-employment business ideal for an individual or family with the
-                        following requirements:
-                    </p>
+                    <p>{t("introParagraph1")}</p>
+                    <p>{t("introParagraph2")}</p>
+                    <p>{t("introParagraph3")}</p>
+                    <p>{t("introParagraph4")}</p>
 
                     <ul className="list-disc list-inside">
-                        <li>English native speaking.</li>
-                        <li>Commercial attitude.</li>
-                        <li>Basic Computer skills.</li>
-                        <li>Economic solvency.</li>
-                        <li>Country lover.</li>
-                        <li>Willing to be a part of a network.</li>
+                        <li>{t("requirement1")}</li>
+                        <li>{t("requirement2")}</li>
+                        <li>{t("requirement3")}</li>
+                        <li>{t("requirement4")}</li>
+                        <li>{t("requirement5")}</li>
+                        <li>{t("requirement6")}</li>
                     </ul>
 
-                    <p>
-                        It would be advantageous to have real estate experience and being Spanish speaking
-                    </p>
+                    <p>{t("advantageText")}</p>
 
                     <p className="mt-6 font-medium text-gray-800">
-                        Want to know more ?
+                        {t("callToAction")}
                         <button
                             type="button"
                             className="ml-3 inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-md shadow hover:bg-primary-700 transition"
                             onClick={() => window.open("https://www.youtube.com/watch?v=dummy", "_blank")}
                         >
-                            ▶ Watch video
+                            {t("watchVideoButton")}
                         </button>
-                        <span className="ml-3">
-                            OR You can complete the form below and we will make contact to arrange a meeting :
-                        </span>
+                        <span className="ml-3">{t("formInstruction")}</span>
                     </p>
                 </div>
+
                 <form
                     onSubmit={handleSubmit}
                     className="bg-white shadow-md rounded-xl p-8 space-y-6 border border-gray-200"
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">First Name</label>
+                            <label className="block text-sm font-medium text-gray-700">{t("formLabelFirstName")}</label>
                             <input
                                 type="text"
                                 name="firstName"
@@ -90,7 +79,7 @@ export default function FranchisePage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Last Name</label>
+                            <label className="block text-sm font-medium text-gray-700">{t("formLabelLastName")}</label>
                             <input
                                 type="text"
                                 name="lastName"
@@ -102,7 +91,7 @@ export default function FranchisePage() {
                         </div>
 
                         <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700">Address</label>
+                            <label className="block text-sm font-medium text-gray-700">{t("formLabelAddress")}</label>
                             <input
                                 type="text"
                                 name="address"
@@ -113,7 +102,7 @@ export default function FranchisePage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Telephone</label>
+                            <label className="block text-sm font-medium text-gray-700">{t("formLabelTelephone")}</label>
                             <input
                                 type="tel"
                                 name="telephone"
@@ -125,7 +114,7 @@ export default function FranchisePage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Email</label>
+                            <label className="block text-sm font-medium text-gray-700">{t("formLabelEmail")}</label>
                             <input
                                 type="email"
                                 name="email"
@@ -137,7 +126,7 @@ export default function FranchisePage() {
                         </div>
 
                         <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700">Comments</label>
+                            <label className="block text-sm font-medium text-gray-700">{t("formLabelComments")}</label>
                             <textarea
                                 name="comments"
                                 value={formData.comments}
@@ -146,39 +135,40 @@ export default function FranchisePage() {
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                             />
                         </div>
-                    </div>
 
-                    <button
-                        type="submit"
-                        className="w-full md:w-auto float-end px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow hover:bg-primary-700 transition"
-                    >
-                        Submit Franchise Profile
-                    </button>
+                        <button
+                            type="submit"
+                            className="w-full md:w-auto float-end px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow hover:bg-primary-700 transition"
+                        >
+                            {t("submitButton")}
+                        </button>
+                    </div>
                 </form>
+
                 <div className="mt-10 text-center prose prose-lg max-w-none mb-10">
-                    <p>
-                        Scan the below QR-code with your mobile to autosave our contact details
-                    </p>
-                    <div className=" mt-4 flex gap-8 justify-center">
+                    <p>{t("qrInstruction")}</p>
+                    <div className="mt-4 flex gap-8 justify-center">
                         <div className="flex flex-col items-center">
-                            <img src="/qr-martin.png" alt="Martin Gillen QR" className="h-28 w-28" />
-                            <span className="mt-2 text-sm text-gray-600">Martin Gillen</span>
+                            <img src="/qr-martin.png" alt={t("qrAltMartin")} className="h-28 w-28" />
+                            <span className="mt-2 text-sm text-gray-600">{t("qrNameMartin")}</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <img src="/qr-john.png" alt="John Gillen QR" className="h-28 w-28" />
-                            <span className="mt-2 text-sm text-gray-600">John Gillen</span>
+                            <img src="/qr-john.png" alt={t("qrAltJohn")} className="h-28 w-28" />
+                            <span className="mt-2 text-sm text-gray-600">{t("qrNameJohn")}</span>
                         </div>
                     </div>
                 </div>
             </section>
+
             <div>
                 <PromoSidebar />
             </div>
+
             <style jsx global>{`
-                    .font-script {
-                      font-family: 'Dancing Script', cursive;
-                    }
-                  `}</style>
+                .font-script {
+                  font-family: 'Dancing Script', cursive;
+                }
+            `}</style>
         </div>
     );
 }

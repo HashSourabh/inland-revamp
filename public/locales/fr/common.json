@@ -148,6 +148,7 @@
     "phoneNumber": "Numéro de Téléphone"
   },
   "promo": {
+    "button":"Cliquez ici",
     "exclusive": {
       "title": "Propriétés Exclusives",
       "short_description": "CLIQUEZ ici pour découvrir les dernières annonces avec encore plus de réductions incroyables"
@@ -1073,5 +1074,34 @@
     "mapSection": {
       "title": "Nous Trouver"
     }
+  },
+  "franchisePage": {
+    "title": "PROFIL DE FRANCHISE",
+    "introParagraph1": "Si vous êtes inspiré par le secteur immobilier.",
+    "introParagraph2": "Vous aimez le sud de l'Espagne (Andalousie) et vivre dans une ville calme en tant que membre d'une communauté et vous rêvez d'une expérience qui change votre vie, alors nous avons la chance parfaite pour vous.",
+    "introParagraph3": "LA FRANCHISE INLAND ANDALUCIA vous offre l'opportunité de commencer une nouvelle vie en Andalousie, avec beaucoup de soleil et un style de vie sans stress, entouré par la nature et un très bon revenu, sans plafond sur vos gains.",
+    "introParagraph4": "INLAND ANDALUCIA est une entreprise indépendante idéale pour un individu ou une famille avec les exigences suivantes :",
+    "requirement1": "Anglais langue maternelle.",
+    "requirement2": "Attitude commerciale.",
+    "requirement3": "Compétences informatiques de base.",
+    "requirement4": "Solvabilité économique.",
+    "requirement5": "Amoureux de la campagne.",
+    "requirement6": "Volonté de faire partie d'un réseau.",
+    "advantageText": "Il serait avantageux d'avoir de l'expérience dans l'immobilier et de parler espagnol.",
+    "callToAction": "Vous voulez en savoir plus ?",
+    "watchVideoButton": "▶ Regarder la vidéo",
+    "formInstruction": "OU vous pouvez remplir le formulaire ci-dessous et nous vous contacterons pour organiser une réunion :",
+    "formLabelFirstName": "Prénom",
+    "formLabelLastName": "Nom",
+    "formLabelAddress": "Adresse",
+    "formLabelTelephone": "Téléphone",
+    "formLabelEmail": "Email",
+    "formLabelComments": "Commentaires",
+    "submitButton": "Soumettre le profil de franchise",
+    "qrInstruction": "Scannez le QR-code ci-dessous avec votre mobile pour enregistrer automatiquement nos coordonnées",
+    "qrNameMartin": "Martin Gillen",
+    "qrNameJohn": "John Gillen",
+    "qrAltMartin": "QR de Martin Gillen",
+    "qrAltJohn": "QR de John Gillen"
   }
 }

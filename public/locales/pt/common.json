@@ -90,6 +90,7 @@
     }
   },
   "promo": {
+    "button":"Clique aqui",
     "exclusive": {
       "title": "Propriedades Exclusivas",
       "short_description": "CLIQUE aqui para ver os últimos anúncios com mais reduções de preço fantásticas"
@@ -1073,5 +1074,34 @@
     "mapSection": {
       "title": "Encontre-nos"
     }
+  },
+  "franchisePage": {
+    "title": "PERFIL DE FRANQUIA",
+    "introParagraph1": "Se você é inspirado pelo negócio imobiliário.",
+    "introParagraph2": "Você gosta do sul da Espanha (Andaluzia) e viver em uma cidade calma como parte de uma comunidade e sonha com uma experiência que mude sua vida, então temos a oportunidade perfeita para você.",
+    "introParagraph3": "A FRANQUIA INLAND ANDALUCIA oferece a você a oportunidade de começar uma nova vida na Andaluzia com muito sol e um estilo de vida sem estresse, rodeado pela natureza e com uma renda muito boa, sem teto para seus ganhos.",
+    "introParagraph4": "INLAND ANDALUCIA é um negócio de trabalho próprio ideal para um indivíduo ou família com os seguintes requisitos:",
+    "requirement1": "Inglês nativo.",
+    "requirement2": "Atitude comercial.",
+    "requirement3": "Habilidades básicas de informática.",
+    "requirement4": "Solvência econômica.",
+    "requirement5": "Amante do campo.",
+    "requirement6": "Disposto a fazer parte de uma rede.",
+    "advantageText": "Seria vantajoso ter experiência em imóveis e falar espanhol.",
+    "callToAction": "Quer saber mais?",
+    "watchVideoButton": "▶ Assistir vídeo",
+    "formInstruction": "OU você pode preencher o formulário abaixo e entraremos em contato para agendar uma reunião:",
+    "formLabelFirstName": "Nome",
+    "formLabelLastName": "Sobrenome",
+    "formLabelAddress": "Endereço",
+    "formLabelTelephone": "Telefone",
+    "formLabelEmail": "Email",
+    "formLabelComments": "Comentários",
+    "submitButton": "Enviar perfil de franquia",
+    "qrInstruction": "Escaneie o QR-code abaixo com seu celular para salvar automaticamente nossos contatos",
+    "qrNameMartin": "Martin Gillen",
+    "qrNameJohn": "John Gillen",
+    "qrAltMartin": "QR de Martin Gillen",
+    "qrAltJohn": "QR de John Gillen"
   }
 }

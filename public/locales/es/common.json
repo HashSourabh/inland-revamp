@@ -130,6 +130,7 @@
     "phoneNumber": "Número de Teléfono"
   },
   "promo": {
+    "button":"Haga clic aquí",
     "exclusive": {
       "title": "Propiedades Exclusivas",
       "short_description": "HAZ CLIC aquí para ver las últimas ofertas con más reducciones de precio fantásticas"
@@ -1073,5 +1074,34 @@
     "mapSection": {
       "title": "Encuéntranos"
     }
+  },
+  "franchisePage": {
+    "title": "PERFIL DE FRANQUICIA",
+    "introParagraph1": "Si te inspira el negocio inmobiliario.",
+    "introParagraph2": "Te gusta el sur de España (Andalucía) y vivir en un pueblo tranquilo como parte de una comunidad y sueñas con una experiencia que cambie tu vida, entonces tenemos la oportunidad perfecta para ti.",
+    "introParagraph3": "FRANQUICIA INLAND ANDALUCÍA te ofrece la oportunidad de comenzar una nueva vida en Andalucía con mucho sol y un estilo de vida sin estrés, rodeado de naturaleza y con muy buenos ingresos, sin límite en tus ganancias.",
+    "introParagraph4": "INLAND ANDALUCÍA es un negocio de autoempleo ideal para un individuo o familia con los siguientes requisitos:",
+    "requirement1": "Inglés nativo.",
+    "requirement2": "Actitud comercial.",
+    "requirement3": "Habilidades informáticas básicas.",
+    "requirement4": "Solvencia económica.",
+    "requirement5": "Amante del campo.",
+    "requirement6": "Dispuesto a formar parte de una red.",
+    "advantageText": "Sería ventajoso tener experiencia en bienes raíces y hablar español.",
+    "callToAction": "¿Quieres saber más?",
+    "watchVideoButton": "▶ Ver video",
+    "formInstruction": "O puedes completar el formulario a continuación y nos pondremos en contacto para concertar una reunión:",
+    "formLabelFirstName": "Nombre",
+    "formLabelLastName": "Apellido",
+    "formLabelAddress": "Dirección",
+    "formLabelTelephone": "Teléfono",
+    "formLabelEmail": "Correo electrónico",
+    "formLabelComments": "Comentarios",
+    "submitButton": "Enviar perfil de franquicia",
+    "qrInstruction": "Escanea el código QR a continuación con tu móvil para guardar automáticamente nuestros datos de contacto",
+    "qrNameMartin": "Martin Gillen",
+    "qrNameJohn": "John Gillen",
+    "qrAltMartin": "Código QR de Martin Gillen",
+    "qrAltJohn": "Código QR de John Gillen"
   }
 }
