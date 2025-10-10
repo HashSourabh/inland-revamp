@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, HomeIcon } from '@heroicons/react/24/outline';
 import {
   MagnifyingGlassIcon,
   MapIcon,
@@ -107,9 +107,9 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
 
   return (
     <nav className={`hidden md:flex items-center gap-5 ${isRtl ? 'flex-row-reverse' : ''}`}>
-      {/* <Link href="/" className="text-neutral-900 hover:text-primary-600 transition-colors">
-        {t('home')}
-      </Link> */}
+      <Link href="/" className="text-neutral-900 hover:text-primary-600 transition-colors">
+        <HomeIcon className="h-5 w-5 text-secondary-400" />
+      </Link>
 
       {/* Property Search Dropdown */}
       <div className="relative group">
