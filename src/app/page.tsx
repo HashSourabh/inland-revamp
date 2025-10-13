@@ -14,6 +14,7 @@ import Hero from "@/sections/Hero";
 import { Property } from "@/types/property";
 import { useKeenSlider } from "keen-slider/react";
 import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
+import { usePropertyData } from '@/hooks/usePropertyData';
 
 // API base
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
@@ -228,20 +229,28 @@ const SectionLoader = ({ title, subtitle }: { title: string; subtitle?: string }
 // --- COMPONENT ---
 export default function Home() {
   const t = useTranslations('home');
-  const [featuredProperties, setFeaturedProperties] = useState<PropertyForCard[]>([]);
-  const [exclusiveProperties, setExclusiveProperties] = useState<PropertyForCard[]>([]);
-  const [regionCounts, setRegionCounts] = useState<RegionCount[]>([]);
+  // Use cached property data
+  const {
+    featuredProperties,
+    exclusiveProperties,
+    propertyTypesMap,
+    setFeaturedProperties,
+    setExclusiveProperties,
+    setPropertyTypesMap,
+    updateLastFetchTime,
+    needsRefresh,
+    hasData
+  } = usePropertyData();
 
-  // Separate loading states for each section
+  // Local state for non-cached data
+  const [regionCounts, setRegionCounts] = useState<RegionCount[]>([]);
   const [featuredLoading, setFeaturedLoading] = useState(true);
   const [exclusiveLoading, setExclusiveLoading] = useState(true);
   const [regionsLoading, setRegionsLoading] = useState(true);
   const [typesLoading, setTypesLoading] = useState(true);
-
   const [searchRef, setSearchRef] = useState('');
   const [searching, setSearching] = useState(false);
   const [featuredPage, setFeaturedPage] = useState(1);
-  const [propertyTypesMap, setPropertyTypesMap] = useState<Record<number, string>>({});
 
   function Autoplay(slider: any) {
     let timeout: ReturnType<typeof setTimeout>
@@ -290,9 +299,15 @@ export default function Home() {
     [Autoplay]
   )
 
-  // Load property types first
+  // Load property types first (only if not cached)
   useEffect(() => {
     const loadPropertyTypes = async () => {
+      // Skip if already loaded and not stale
+      if (hasData && !needsRefresh) {
+        setTypesLoading(false);
+        return;
+      }
+
       try {
         const typesList = await propertyService.getPropertyTypes();
         const typesMap: Record<number, string> = {};
@@ -300,6 +315,7 @@ export default function Home() {
           typesMap[t.id] = t.name;
         });
         setPropertyTypesMap(typesMap);
+        updateLastFetchTime();
       } catch (err) {
         console.error("Error loading property types:", err);
       } finally {
@@ -308,17 +324,24 @@ export default function Home() {
     };
 
     loadPropertyTypes();
-  }, []);
+  }, [hasData, needsRefresh, setPropertyTypesMap, updateLastFetchTime]);
 
-  // Load featured properties
+  // Load featured properties (only if not cached)
   useEffect(() => {
     const loadFeaturedProperties = async () => {
       if (typesLoading) return; // Wait for types to load first
+
+      // Skip if already loaded and not stale
+      if (hasData && !needsRefresh) {
+        setFeaturedLoading(false);
+        return;
+      }
 
       try {
         setFeaturedLoading(true);
         const featuredDb = await propertyService.getFeaturedProperties(featuredPage);
         setFeaturedProperties(featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
+        updateLastFetchTime();
       } catch (err) {
         console.error("Error loading featured properties:", err);
       } finally {
@@ -327,17 +350,24 @@ export default function Home() {
     };
 
     loadFeaturedProperties();
-  }, [featuredPage, propertyTypesMap, typesLoading]);
+  }, [featuredPage, propertyTypesMap, typesLoading, hasData, needsRefresh, setFeaturedProperties, updateLastFetchTime]);
 
-  // Load exclusive properties
+  // Load exclusive properties (only if not cached)
   useEffect(() => {
     const loadExclusiveProperties = async () => {
       if (typesLoading) return; // Wait for types to load first
+
+      // Skip if already loaded and not stale
+      if (hasData && !needsRefresh) {
+        setExclusiveLoading(false);
+        return;
+      }
 
       try {
         setExclusiveLoading(true);
         const exclusiveDb = await propertyService.getExclusiveProperties();
         setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
+        updateLastFetchTime();
       } catch (err) {
         console.error("Error loading exclusive properties:", err);
       } finally {
@@ -346,7 +376,7 @@ export default function Home() {
     };
 
     loadExclusiveProperties();
-  }, [propertyTypesMap, typesLoading]);
+  }, [propertyTypesMap, typesLoading, hasData, needsRefresh, setExclusiveProperties, updateLastFetchTime]);
 
   // Load regions
   useEffect(() => {

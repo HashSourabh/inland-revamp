@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Open_Sans, Playfair_Display,Work_Sans,DM_Sans  } from 'next/font/google';
+import { PropertyCacheProvider } from '@/context/PropertyCacheContext';
 
 // Font configuration
 const openSans = Open_Sans({
@@ -42,7 +43,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${workSans.variable} ${playfairDisplay.variable}`}>
       <body className={`${workSans.className} min-h-screen`}>
-        {children}
+        <PropertyCacheProvider>
+          {children}
+        </PropertyCacheProvider>
       </body>
     </html>
   );

@@ -8,6 +8,7 @@ import LayoutSwitcher from '@/components/properties/LayoutSwitcher';
 import AreaFilter from '@/components/properties/AreaFilter';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import { useTranslations } from 'next-intl';
+import { useRegionData } from '@/hooks/useRegionData';
 
 const transformPropertyForCard = (property: any) => {
   const propertyType =
@@ -112,12 +113,13 @@ export default function PropertiesLayout({
 }: PropertiesLayoutProps) {
   const t = useTranslations('properties');
   const searchParams = useSearchParams();
+  const { regionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
+  
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   const [selectedTown, setSelectedTown] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [regionCounts, setRegionCounts] = useState<{ regionId: number; regionName: string; count: number }[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [selectedArea, setSelectedArea] = useState<number | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
@@ -125,7 +127,8 @@ export default function PropertiesLayout({
   // Total properties count from API (for sidebar/info)
   const [totalPropertiesCount, setTotalPropertiesCount] = useState<number>(0);
 
-  const [areas, setAreas] = useState<{ areaId: number; areaName: string; count: number }[]>([]);
+  // Get areas for selected region from cache
+  const areas = selectedRegion ? areasCache.get(selectedRegion) || [] : [];
 
   const [properties, setProperties] = useState<Property[]>(initialProperties);
   const [totalProperties, setTotalProperties] = useState<number>(initialTotal);
@@ -190,61 +193,40 @@ export default function PropertiesLayout({
     setCurrentPage(1);
   }, [searchParams]);
 
-  // Fetch region counts (only for sidebar - don't override filtered results)
+  // Fetch region counts using cache (only for sidebar - don't override filtered results)
   useEffect(() => {
-    const fetchRegionCounts = async () => {
+    const loadRegionCounts = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/properties/regions/counts`);
-        if (!res.ok) throw new Error(`Failed to fetch region counts: ${res.status}`);
-        const data = await res.json();
-
-        if (data && data.success && data.data?.regions) {
-          const formatted = data.data.regions.map((r: any) => ({
-            regionId: r.regionId,
-            regionName: r.region,
-            count: r.count,
-          }));
-          setRegionCounts(formatted);
-
-          // Only set the total count for the sidebar/filters
-          // Don't override the filtered results count
-          const totalCount = data.data?.total?.properties || 0;
-          setTotalPropertiesCount(totalCount);
-        } else {
-          setRegionCounts([]);
-          setTotalPropertiesCount(0);
-        }
+        const counts = await fetchRegionCounts();
+        
+        // Calculate total properties count from region counts
+        const totalCount = counts.reduce((sum: number, region: any) => sum + region.count, 0);
+        setTotalPropertiesCount(totalCount);
       } catch (err) {
         console.error("Error loading region counts:", err);
-        setRegionCounts([]);
         setTotalPropertiesCount(0);
       }
     };
 
-    fetchRegionCounts();
-  }, [API_BASE_URL]);
+    loadRegionCounts();
+  }, [fetchRegionCounts]);
 
-  // Fetch areas when a region is selected
+  // Fetch areas when a region is selected (using cache)
   useEffect(() => {
     if (!selectedRegion) {
-      setAreas([]);
       return;
     }
 
-    const fetchAreas = async () => {
+    const loadAreas = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/properties/regions/${selectedRegion}/areas`);
-        if (!res.ok) throw new Error("Failed to fetch areas");
-        const data = await res.json();
-        setAreas(data.data.areas || []);
+        await fetchAreas(selectedRegion);
       } catch (err) {
         console.error("Error loading areas:", err);
-        setAreas([]);
       }
     };
 
-    fetchAreas();
-  }, [selectedRegion, API_BASE_URL]);
+    loadAreas();
+  }, [selectedRegion, fetchAreas]);
 
   // Main properties fetch effect with race condition prevention
   useEffect(() => {
