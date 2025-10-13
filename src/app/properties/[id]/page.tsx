@@ -47,7 +47,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
   // **Email reservation states**
   const [email, setEmail] = useState('');
-  const [emailExists, setEmailExists] = useState<boolean | null>(null);
+  const [emailExists, setEmailExists] = useState<boolean | null| "invalid">(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const propertyId = params.id;
@@ -139,8 +139,12 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
   const handleReserve = async () => {
     if (!email) return;
 
+    // Reset state first
+    setEmailExists(null);
+
+    // Validate email format first
     if (!validateEmail(email)) {
-      setEmailExists(true);
+      setEmailExists("invalid"); // distinguish invalid email
       return;
     }
 
@@ -151,11 +155,13 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
       const data = await res.json();
 
       if (data.exists && data.data) {
+        // ✅ Email found — proceed to reservation page
         sessionStorage.setItem('buyerData', JSON.stringify(data.data));
         sessionStorage.setItem('buyerEmail', email);
         sessionStorage.setItem('propertyData', JSON.stringify(property));
         window.location.href = 'reserve-for-view';
       } else {
+        // ❌ Email not found
         setEmailExists(false);
       }
     } catch (err) {
@@ -165,6 +171,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
       setIsSubmitting(false);
     }
   };
+
 
 
   return (
@@ -281,14 +288,22 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
           {/* Show status below input */}
           {emailExists !== null && (
-            <p className={`text-sm ${emailExists ? "text-red-600" : "text-green-600"}`}>
-              {emailExists
-                ? validateEmail(email)
-                  ? "This email is already registered."
-                  : "Please enter a valid email address."
-                : "Email is available for reservation!"}
+            <p
+              className={`text-sm ${emailExists === true
+                  ? "text-green-600"
+                  : emailExists === false
+                    ? "text-red-600"
+                    : "text-yellow-600"
+                }`}
+            >
+              {emailExists === "invalid"
+                ? "Please enter a valid email address."
+                : emailExists === true
+                  ? "Email found! Redirecting..."
+                  : "User not found or email does not exist."}
             </p>
           )}
+
         </div>
       </Popup>
 
