@@ -15,7 +15,7 @@ export function TownGuideNav() {
     { title: t('granada'), href: '/town-guide/granada' },
     { title: t('jaen'), href: '/town-guide/jaen' },
     { title: t('malaga'), href: '/town-guide/malaga' },
-    { title: t('seville'), href: '/town-guide/seville' },
+    { title: t('seville'), href: '/town-guide/sevilla' },
 
   ];
 
