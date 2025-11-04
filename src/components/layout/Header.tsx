@@ -8,11 +8,19 @@ import { useTranslations } from 'next-intl';
 import MobileMenu from './MobileMenu';
 import Navigation from './Navigation';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { useAuth } from '@/context/AuthContext';
+import dynamic from 'next/dynamic';
+import ConfirmDialog from '../shared/ConfirmDialog';
+import { Toaster } from 'react-hot-toast';
+const AuthModal = dynamic(() => import('../auth/AuthModal'), { ssr: false });
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const tCta = useTranslations('cta');
+  const { user, openAuth, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,8 +46,40 @@ export default function Header() {
               <span>info@inlandandalucia.com</span>
             </a>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="relative flex items-center space-x-3">
             <LanguageSwitcher />
+            {!user ? (
+              <a
+                href="#auth"
+                onClick={(e) => { e.preventDefault(); openAuth('login'); }}
+                className="text-sm text-white/90 hover:text-white underline-offset-4 hover:underline"
+              >
+                Login / Register
+              </a>
+            ) : (
+              <div className="relative">
+                <button
+                  onClick={() => setProfileOpen(v => !v)}
+                  className="flex items-center gap-2 text-white/90 hover:text-white"
+                >
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white text-primary-700 border border-white/60 text-sm font-medium">
+                    👤
+                  </span>
+                </button>
+                {profileOpen && (
+                  <div className="absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg z-50">
+                    <Link href="/account" className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">My Profile</Link>
+                    <a
+                      href="#logout"
+                      onClick={(e) => { e.preventDefault(); setProfileOpen(false); setLogoutConfirmOpen(true); }}
+                      className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      Logout
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -78,7 +118,7 @@ export default function Header() {
           {/* Main Navigation */}
           <Navigation />
 
-          {/* CTA Button */}
+          {/* CTA Button only */}
           <div className="hidden md:block">
             <Link
               href="/sell-with-us"
@@ -92,6 +132,42 @@ export default function Header() {
 
       {/* Mobile Menu */}
       <MobileMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />
+      <AuthModal />
+      <ConfirmDialog
+        open={logoutConfirmOpen}
+        onClose={() => setLogoutConfirmOpen(false)}
+        onConfirm={() => {
+          logout();
+        }}
+        title="Logout"
+        description="Are you sure you want to logout?"
+        confirmText="Logout"
+        confirmButtonClassName="bg-primary-600 hover:bg-primary-700"
+      />
+      <Toaster
+        position="top-right"
+        gutter={12}
+        toastOptions={{
+          duration: 4000,
+          style: {
+            borderRadius: "10px",
+            padding: "12px 16px",
+            fontWeight: "500",
+          },
+          success: {
+            iconTheme: {
+              primary: "#fff",
+              secondary: "#10b981",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#fff",
+              secondary: "#ef4444",
+            },
+          },
+        }}
+      />
     </header>
   );
 } 

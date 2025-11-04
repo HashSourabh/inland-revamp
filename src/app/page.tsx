@@ -252,6 +252,26 @@ export default function Home() {
   const [searching, setSearching] = useState(false);
   const [featuredPage, setFeaturedPage] = useState(1);
 
+  // Add timeout to prevent infinite loading
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (featuredLoading) {
+        console.warn('Featured properties loading timeout - setting to false');
+        setFeaturedLoading(false);
+      }
+      if (exclusiveLoading) {
+        console.warn('Exclusive properties loading timeout - setting to false');
+        setExclusiveLoading(false);
+      }
+      if (typesLoading) {
+        console.warn('Property types loading timeout - setting to false');
+        setTypesLoading(false);
+      }
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timeout);
+  }, [featuredLoading, exclusiveLoading, typesLoading]);
+
   function Autoplay(slider: any) {
     let timeout: ReturnType<typeof setTimeout>
     let mouseOver = false
@@ -302,14 +322,21 @@ export default function Home() {
   // Load property types first (only if not cached)
   useEffect(() => {
     const loadPropertyTypes = async () => {
+      console.log('Loading property types...', { hasData, needsRefresh, typesLoading });
+      
       // Skip if already loaded and not stale
       if (hasData && !needsRefresh) {
+        console.log('Property types already loaded, skipping');
         setTypesLoading(false);
         return;
       }
 
       try {
+        setTypesLoading(true);
+        console.log('Fetching property types from API...');
         const typesList = await propertyService.getPropertyTypes();
+        console.log('Property types fetched:', typesList);
+        
         const typesMap: Record<number, string> = {};
         typesList.forEach((t) => {
           typesMap[t.id] = t.name;
@@ -318,7 +345,10 @@ export default function Home() {
         updateLastFetchTime();
       } catch (err) {
         console.error("Error loading property types:", err);
+        // Set loading to false even on error to prevent infinite loading
+        setTypesLoading(false);
       } finally {
+        console.log('Property types loading finished');
         setTypesLoading(false);
       }
     };
@@ -344,6 +374,8 @@ export default function Home() {
         updateLastFetchTime();
       } catch (err) {
         console.error("Error loading featured properties:", err);
+        // Set loading to false even on error to prevent infinite loading
+        setFeaturedLoading(false);
       } finally {
         setFeaturedLoading(false);
       }
@@ -355,22 +387,34 @@ export default function Home() {
   // Load exclusive properties (only if not cached)
   useEffect(() => {
     const loadExclusiveProperties = async () => {
-      if (typesLoading) return; // Wait for types to load first
+      console.log('Loading exclusive properties...', { typesLoading, hasData, needsRefresh, exclusiveLoading });
+      
+      if (typesLoading) {
+        console.log('Waiting for types to load first');
+        return; // Wait for types to load first
+      }
 
       // Skip if already loaded and not stale
       if (hasData && !needsRefresh) {
+        console.log('Exclusive properties already loaded, skipping');
         setExclusiveLoading(false);
         return;
       }
 
       try {
         setExclusiveLoading(true);
+        console.log('Fetching exclusive properties from API...');
         const exclusiveDb = await propertyService.getExclusiveProperties();
+        console.log('Exclusive properties fetched:', exclusiveDb);
+        
         setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
         updateLastFetchTime();
       } catch (err) {
         console.error("Error loading exclusive properties:", err);
+        // Set loading to false even on error to prevent infinite loading
+        setExclusiveLoading(false);
       } finally {
+        console.log('Exclusive properties loading finished');
         setExclusiveLoading(false);
       }
     };
@@ -414,6 +458,15 @@ export default function Home() {
     if (e.key === 'Enter') {
       handleQuickSearch();
     }
+  };
+
+  const handleRefresh = () => {
+    console.log('Manual refresh triggered');
+    setFeaturedLoading(true);
+    setExclusiveLoading(true);
+    setTypesLoading(true);
+    // Clear cache to force reload
+    // The useEffects will trigger again due to state changes
   };
 
   return (
@@ -464,7 +517,16 @@ export default function Home() {
           </div>
 
           {exclusiveLoading ? (
-            <PageOverlayLoader />
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+              <p className="text-neutral-600 font-medium mb-4">Loading Properties...</p>
+              <button
+                onClick={handleRefresh}
+                className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
           ) : exclusiveProperties.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {exclusiveProperties.slice(0, 3).map((property) => (
@@ -474,6 +536,9 @@ export default function Home() {
           ) : (
             <div className="text-center py-12">
               <p className="text-neutral-500">{t('exclusive.none')}</p>
+              <p className="text-neutral-400 text-sm mt-2">
+                Unable to load exclusive properties at this time. Please try refreshing the page.
+              </p>
             </div>
           )}
 

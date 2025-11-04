@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { HeartIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
 
 interface PropertyCardProps {
@@ -33,10 +34,12 @@ interface PropertyCardProps {
   };
   card?: 'list' | 'grid';
   featured?: boolean;
+  favouriteIds?: string[];
 }
 
-export default function PropertyCard({ property, card = 'grid', featured = false }: PropertyCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
+export default function PropertyCard({ property, card = 'grid', featured = false, favouriteIds = [] }: PropertyCardProps) {
+  const [isFavorite, setIsFavorite] = useState<boolean>(favouriteIds.includes(property.id));
+  const { openAuth, user } = useAuth();
   const t = useTranslations('properties');
 
   // Find the featured image or fallback to the first image
@@ -53,8 +56,33 @@ export default function PropertyCard({ property, card = 'grid', featured = false
     }).format(price);
   };
 
-  const handleFavoriteClick = () => {
-    setIsFavorite(!isFavorite);
+  const handleFavoriteClick = async () => {
+    // Require login
+    if (!user) {
+      openAuth('login');
+      return;
+    }
+
+    const newState = !isFavorite;
+    setIsFavorite(newState); // optimistic
+
+    try {
+      const defaultApiBase = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.hostname}:4000` : '';
+      const apiBase = (process.env.NEXT_PUBLIC_API_BASE as string) || defaultApiBase;
+      const url = newState
+        ? `${apiBase}/api/v1/buyers/me/favourites`
+        : `${apiBase}/api/v1/buyers/me/favourites/${encodeURIComponent(property.id)}`;
+      const res = await fetch(url, {
+        method: newState ? 'POST' : 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: newState ? JSON.stringify({ propertyRef: property.id }) : undefined,
+      });
+      if (!res.ok) throw new Error('Favourite request failed');
+    } catch (e) {
+      // revert on error
+      setIsFavorite(!newState);
+    }
   };
 
   return (

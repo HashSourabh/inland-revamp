@@ -1,5 +1,19 @@
 // utils/api.ts
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
+// Compute a single, consistent API base URL (should include /api/v1)
+function computeApiBase(): string {
+  const raw = (process.env.NEXT_PUBLIC_API_BASE || process.env.NEXT_PUBLIC_API_URL || "").trim();
+  if (raw) {
+    // Do not force versioning; assume user provided the full base (often includes /api/v1)
+    return raw.replace(/\/$/, "");
+  }
+  // Fallback for local dev: assume backend on port 4000 with versioned base
+  if (typeof window !== "undefined") {
+    return `${window.location.protocol}//${window.location.hostname}:4000/api/v1`;
+  }
+  return "https://inlandandalucia.onrender.com/api/v1";
+}
+
+export const API_BASE_URL = computeApiBase();
 
 // Types for API responses
 export interface Region {
@@ -180,6 +194,59 @@ export async function fetchPropertyTypes(): Promise<PropertyType[]> {
     return [];
   } catch (err) {
     console.error("Error loading property types:", err);
+    return [];
+  }
+}
+
+// Fetch top N properties filtered by optional type and location keywords
+export interface TopPropertyItem {
+  id: number | string;
+  title: string;
+  link: string;
+}
+
+export async function fetchTopProperties({
+  location,
+  propertyType,
+  limit = 5,
+}: {
+  location?: string;
+  propertyType?: string | number; // name/code or id
+  limit?: number;
+}): Promise<TopPropertyItem[]> {
+  try {
+    const params = new URLSearchParams({
+      limit: String(limit),
+    });
+
+    if (location && location.trim()) {
+      // backend supports generic location matching (province/town/area)
+      params.set('location', location.trim());
+    }
+
+    if (propertyType !== undefined && propertyType !== null && String(propertyType).trim()) {
+      // Prefer numeric id; if not numeric, pass as code/name for backend to interpret if supported
+      const pt = String(propertyType).trim();
+      if (/^\d+$/.test(pt)) {
+        params.set('propertyType', pt);
+      } else {
+        params.set('propertyTypeCode', pt);
+      }
+    }
+
+    const url = `${API_BASE_URL}/properties?${params.toString()}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed to fetch top properties: ${res.status}`);
+    const data = await res.json();
+
+    const list = (data?.data || []) as Array<any>;
+    return list.slice(0, limit).map((p: any) => ({
+      id: p.Property_ID ?? p.id,
+      title: p.Property_Address ?? p.title ?? `Property ${p.Property_ID ?? p.id}`,
+      link: `/properties/${p.Property_ID ?? p.id}`,
+    }));
+  } catch (error) {
+    console.error('Error fetching top properties:', error);
     return [];
   }
 }

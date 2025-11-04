@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropertyCard from './PropertyCard';
 import { Property } from '@/types/property';
+import { useAuth } from '@/context/AuthContext';
 
 interface PropertyGridProps {
   properties: Property[];
@@ -41,6 +42,22 @@ export default function PropertyGrid({
   featuredProperty, 
   loading = false 
 }: PropertyGridProps) {
+  const { user } = useAuth();
+  const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadFavs = async () => {
+      if (!user) { setFavouriteIds([]); return; }
+      try {
+        const defaultApiBase = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.hostname}:4000` : '';
+        const apiBase = (process.env.NEXT_PUBLIC_API_BASE as string) || defaultApiBase;
+        const res = await fetch(`${apiBase}/api/v1/buyers/me/favourites`, { credentials: 'include' });
+        const data = await res.json();
+        if (res.ok) setFavouriteIds((data.favourites || []).map((f: any) => String(f.Property_Ref)));
+      } catch {}
+    };
+    loadFavs();
+  }, [user]);
   if (loading) {
     return (
       <div className="w-full">
@@ -84,14 +101,14 @@ export default function PropertyGrid({
       {/* Featured property */}
       {featuredProperty && (
         <div className="mb-8">
-          <PropertyCard property={transformPropertyForCard(featuredProperty)} featured={true} />
+          <PropertyCard property={transformPropertyForCard(featuredProperty)} featured={true} favouriteIds={favouriteIds} />
         </div>
       )}
       
       {/* Property grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {properties.map((property) => (
-          <PropertyCard key={property.id} property={transformPropertyForCard(property)} />
+          <PropertyCard key={property.id} property={transformPropertyForCard(property)} favouriteIds={favouriteIds} />
         ))}
       </div>
       

@@ -1,7 +1,10 @@
 import './globals.css';
+import '../styles/tidio.css';
 import type { Metadata } from 'next';
 import { Open_Sans, Playfair_Display,Work_Sans,DM_Sans  } from 'next/font/google';
 import { PropertyCacheProvider } from '@/context/PropertyCacheContext';
+import { AuthProvider } from '@/context/AuthContext';
+import TidioLoader from '@/components/loader/TidioLoader';
 
 // Font configuration
 const openSans = Open_Sans({
@@ -41,11 +44,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${workSans.variable} ${playfairDisplay.variable}`}>
-      <body className={`${workSans.className} min-h-screen`}>
-        <PropertyCacheProvider>
-          {children}
-        </PropertyCacheProvider>
+    <html lang="en" className={`${workSans.variable} ${playfairDisplay.variable}`} suppressHydrationWarning>
+      <head></head>
+      <body className={`${workSans.className} min-h-screen`} suppressHydrationWarning>
+        <AuthProvider>
+          <PropertyCacheProvider>
+            {children}
+          </PropertyCacheProvider>
+        </AuthProvider>
+        <TidioLoader />
       </body>
     </html>
   );
