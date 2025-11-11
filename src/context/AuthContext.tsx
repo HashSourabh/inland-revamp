@@ -15,13 +15,21 @@ type Buyer = {
   role?: string;
 };
 
+// ✅ Added authData to pass token/email to modal
+type AuthData = {
+  token?: string;
+  email?: string;
+  resetCode?: string;
+};
+
 type AuthContextValue = {
   user: Buyer | null;
   loading: boolean;
-  openAuth: (mode?: "login" | "register") => void;
+  openAuth: (mode?: "login" | "register" | "forgot" | "reset", data?: AuthData) => void; // ✅ Updated
   closeAuth: () => void;
   isAuthOpen: boolean;
-  authMode: "login" | "register";
+  authMode: "login" | "register" | "forgot" | "reset"; // ✅ Added forgot & reset
+  authData?: AuthData; // ✅ Added authData
   refresh: () => Promise<void>;
   logout: () => Promise<void>;
 };
@@ -45,7 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Buyer | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"login" | "register">("login");
+  const [authMode, setAuthMode] = useState<"login" | "register" | "forgot" | "reset">("login"); // ✅ Updated
+  const [authData, setAuthData] = useState<AuthData | undefined>(undefined); // ✅ Added
 
   const refresh = async () => {
     try {
@@ -126,14 +135,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const openAuth = (mode: "login" | "register" = "login") => {
+  // ✅ Updated to accept mode and data
+  const openAuth = (mode: "login" | "register" | "forgot" | "reset" = "login", data?: AuthData) => {
     setAuthMode(mode);
+    setAuthData(data);
     setIsAuthOpen(true);
   };
-  const closeAuth = () => setIsAuthOpen(false);
+
+  // ✅ Clear authData when closing
+  const closeAuth = () => {
+    setIsAuthOpen(false);
+    setAuthData(undefined);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loading, openAuth, closeAuth, isAuthOpen, authMode, refresh, logout }}>
+    <AuthContext.Provider value={{ user, loading, openAuth, closeAuth, isAuthOpen, authMode, authData, refresh, logout }}>
       {children}
       <GlobalLoader active={loading} />
     </AuthContext.Provider>
@@ -147,6 +163,3 @@ export function useAuth() {
 }
 
 export { setToken, getToken };
-
-
-

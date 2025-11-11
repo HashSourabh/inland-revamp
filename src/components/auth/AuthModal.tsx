@@ -1,19 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { API_BASE_URL } from "@/utils/api";
 import { setToken } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 
 export default function AuthModal() {
-  const { isAuthOpen, closeAuth, authMode, refresh } = useAuth();
-  const [mode, setMode] = useState<"login" | "register" | "forgot" | "reset">(authMode);
+  const { isAuthOpen, closeAuth, authMode, refresh, authData, openAuth } = useAuth();
+  const [mode, setMode] = useState<"login" | "register" | "forgot" | "reset">("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [resetToken, setResetToken] = useState<string | null>(null);
   const [forgotEmailSent, setForgotEmailSent] = useState(false);
+  const initializedRef = useRef(false);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -66,15 +67,49 @@ export default function AuthModal() {
     }
   };
 
+  // Initialize when modal opens, reset when it closes
+  useEffect(() => {
+    if (isAuthOpen && !initializedRef.current) {
+      initializedRef.current = true;
+      setMode(authMode);
+      setError(null);
+      setFieldErrors({});
+      setForgotEmailSent(false);
+      
+      if (authData?.token) setResetToken(authData.token);
+      if (authData?.email) {
+        setForm(prev => ({ ...prev, email: authData.email || "" }));
+      }
+      if (authData?.resetCode) {
+        setForm(prev => ({ ...prev, resetCode: authData.resetCode || "" }));
+      }
+    }
+    
+    if (!isAuthOpen && initializedRef.current) {
+      initializedRef.current = false;
+      setForm({
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        resetCode: "",
+      });
+      setResetToken(null);
+      setForgotEmailSent(false);
+      setError(null);
+      setFieldErrors({});
+      setMode("login");
+    }
+  }, [isAuthOpen, authMode, authData]);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    // Clear previous field errors
     setFieldErrors({});
     
-    // Validation for login
     if (mode === "login") {
       const loginErrors: Record<string, string> = {};
       if (!form.email.trim()) {
@@ -90,13 +125,12 @@ export default function AuthModal() {
       }
     }
     
-    // Validation for register
     if (mode === "register") {
       const nextFieldErrors: Record<string, string> = {};
       if (!form.firstName.trim()) nextFieldErrors.firstName = "First name is required";
       if (!form.lastName.trim()) nextFieldErrors.lastName = "Last name is required";
-        const usernameOk = /^(?=(?:.*[A-Za-z]){3,})(?=.*\d)[A-Za-z\d]{4,50}$/.test(form.username);
-        if (!usernameOk) nextFieldErrors.username = "4-50 chars, min 3 letters and 1 number";
+      const usernameOk = /^(?=(?:.*[A-Za-z]){3,})(?=.*\d)[A-Za-z\d]{4,50}$/.test(form.username);
+      if (!usernameOk) nextFieldErrors.username = "4-50 chars, min 3 letters and 1 number";
       const emailOk = /^(?:[a-zA-Z0-9_'^&\/+-])+(?:\.(?:[a-zA-Z0-9_'^&\/+-])+)*@(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})$/.test(form.email);
       if (!emailOk) nextFieldErrors.email = "Enter a valid email";
       const pwOk = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(form.password);
@@ -110,7 +144,6 @@ export default function AuthModal() {
       }
     }
 
-    // Validation for forgot password
     if (mode === "forgot") {
       const forgotErrors: Record<string, string> = {};
       const emailOk = /^(?:[a-zA-Z0-9_'^&\/+-])+(?:\.(?:[a-zA-Z0-9_'^&\/+-])+)*@(?:(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})$/.test(form.email);
@@ -122,7 +155,6 @@ export default function AuthModal() {
       }
     }
 
-    // Validation for reset password
     if (mode === "reset") {
       const resetErrors: Record<string, string> = {};
       if (!form.email.trim()) resetErrors.email = "Email is required";
@@ -152,11 +184,11 @@ export default function AuthModal() {
       } else if (mode === "register") {
         url = `${apiBase}/auth/register`;
         payload = {
-            firstName: form.firstName,
-            lastName: form.lastName,
-            username: form.username,
-            email: form.email,
-            password: form.password,
+          firstName: form.firstName,
+          lastName: form.lastName,
+          username: form.username,
+          email: form.email,
+          password: form.password,
           confirmPassword: form.confirmPassword,
         };
       } else if (mode === "forgot") {
@@ -181,6 +213,7 @@ export default function AuthModal() {
       const contentType = res.headers.get('content-type') || '';
       const isJson = contentType.includes('application/json');
       const data = isJson ? await res.json() : await res.text();
+      
       if (!res.ok) {
         if (isJson) {
           const serverMsg = (data as any)?.message || "Request failed";
@@ -194,13 +227,12 @@ export default function AuthModal() {
           if (Object.keys(mapped).length) setFieldErrors(mapped);
           throw new Error(serverMsg);
         }
-        // HTML/text response indicates wrong API base
         throw new Error("Could not reach API. Set NEXT_PUBLIC_API_BASE to your backend (e.g. http://localhost:4000)");
       }
+      
       if (mode === "forgot") {
         if (isJson && (data as any)?.token) {
           setResetToken((data as any).token);
-          // In dev, also store the code if provided
           if ((data as any)?.resetCode) {
             setForm({ ...form, resetCode: (data as any).resetCode });
           }
@@ -212,8 +244,8 @@ export default function AuthModal() {
       
       if (mode === "reset") {
         showToast("success", (data as any)?.message || "Your password has been reset successfully.");
-        setMode("login");
-        setForm({ firstName: "", lastName: "", username: "", email: form.email, password: "", confirmPassword: "", resetCode: "" });
+        closeAuth();
+        setTimeout(() => openAuth("login"), 100);
         return;
       }
 
@@ -222,20 +254,15 @@ export default function AuthModal() {
       }
       await refresh();
       closeAuth();
-      setForm({ firstName: "", lastName: "", username: "", email: "", password: "", confirmPassword: "", resetCode: "" });
       showToast("success", (data as any)?.message || (mode === "login" ? "Login successfully." : "Account created successfully."));
     } catch (err: any) {
-      let toastTitle = "";
       let toastMessage = "";
 
       if (err?.message?.includes("fetch") || err?.message?.includes("network") || err?.name === "TypeError" || err?.message?.includes("Could not reach API")) {
-        toastTitle = "Network Error";
         toastMessage = "Please check your connection and try again";
       } else if (mode === "login") {
-        toastTitle = "Login Failed";
         toastMessage = err?.message || "Invalid credentials or account not found";
       } else {
-        toastTitle = "Registration Failed";
         toastMessage = err?.message || "Unable to create account. Please try again";
       }
 
@@ -246,7 +273,6 @@ export default function AuthModal() {
     }
   };
 
-
   if (!isAuthOpen) return null;
 
   return (
@@ -256,7 +282,17 @@ export default function AuthModal() {
           <h2 className="text-lg font-semibold">
             {mode === "login" ? "Login" : mode === "register" ? "Create Account" : mode === "forgot" ? "Forgot Password" : "Reset Password"}
           </h2>
-          <button onClick={closeAuth} className="text-gray-500 hover:text-gray-700">✕</button>
+          <button 
+            type="button" 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              closeAuth();
+            }} 
+            className="text-gray-500 hover:text-gray-700"
+          >
+            ✕
+          </button>
         </div>
 
         <form onSubmit={submit} className="space-y-4 px-5 py-5 relative">
@@ -265,7 +301,7 @@ export default function AuthModal() {
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
             </div>
           )}
-          {/* Forgot Password Mode */}
+          
           {mode === "forgot" && (
             <>
               {forgotEmailSent ? (
@@ -273,23 +309,13 @@ export default function AuthModal() {
                   <div className="text-4xl mb-3">📧</div>
                   <h3 className="text-lg font-semibold mb-2">Check your email</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    We've sent a password reset code to <strong>{form.email}</strong>
+                    We've sent a password reset link to <strong>{form.email}</strong>
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMode("reset");
-                      setForgotEmailSent(false);
-                    }}
-                    className="text-primary-600 hover:underline text-sm"
-                  >
-                    I have the code
-                  </button>
                 </div>
               ) : (
                 <>
                   <p className="text-sm text-gray-600 mb-4">
-                    Enter your email address and we'll send you a code to reset your password.
+                    Enter your email address and we'll send you a link to reset your password.
                   </p>
                   <div>
                     <label className="block text-sm mb-1">Email</label>
@@ -315,18 +341,19 @@ export default function AuthModal() {
             </>
           )}
 
-          {/* Reset Password Mode */}
           {mode === "reset" && (
             <>
               <p className="text-sm text-gray-600 mb-4">
-                Enter the reset code from your email and your new password.
+                {resetToken 
+                  ? "Enter your new password below." 
+                  : "Enter the reset code from your email and your new password."}
               </p>
               <div className="space-y-3">
                 <div>
                   <label className="block text-sm mb-1">Email</label>
                   <input 
                     type="email" 
-                    className={`w-full rounded-md border px-3 py-2 ${fieldErrors.email ? 'border-red-500' : ''}`} 
+                    className={`w-full rounded-md border px-3 py-2 bg-gray-50 ${fieldErrors.email ? 'border-red-500' : ''}`} 
                     value={form.email} 
                     onChange={(e) => {
                       const v = e.target.value;
@@ -338,9 +365,11 @@ export default function AuthModal() {
                     }} 
                     aria-invalid={!!fieldErrors.email}
                     disabled={loading}
+                    readOnly={!!resetToken}
                   />
                   {fieldErrors.email && <p className="text-xs text-red-600 mt-1">{fieldErrors.email}</p>}
                 </div>
+                
                 {!resetToken && (
                   <div>
                     <label className="block text-sm mb-1">Reset Code</label>
@@ -355,6 +384,7 @@ export default function AuthModal() {
                     {fieldErrors.resetCode && <p className="text-xs text-red-600 mt-1">{fieldErrors.resetCode}</p>}
                   </div>
                 )}
+                
                 <div>
                   <label className="block text-sm mb-1">New Password</label>
                   <input 
@@ -379,6 +409,7 @@ export default function AuthModal() {
                   />
                   {fieldErrors.password && <p className="text-xs text-red-600 mt-1">{fieldErrors.password}</p>}
                 </div>
+                
                 <div>
                   <label className="block text-sm mb-1">Confirm New Password</label>
                   <input 
@@ -465,13 +496,13 @@ export default function AuthModal() {
           )}
 
           {(mode === "login" || mode === "register") && (
-          <div className="space-y-3">
-            <div>
+            <div className="space-y-3">
+              <div>
                 <label className="block text-sm mb-1">{mode === "login" ? "Email or Username" : "Email"}</label>
-              <input 
+                <input 
                   type={mode === "login" ? "text" : "email"} 
                   className={`w-full rounded-md border px-3 py-2 ${fieldErrors.email ? 'border-red-500' : ''}`} 
-                value={form.email} 
+                  value={form.email} 
                   onChange={(e) => {
                     const v = e.target.value;
                     setForm({ ...form, email: v });
@@ -482,15 +513,15 @@ export default function AuthModal() {
                   }} 
                   aria-invalid={!!fieldErrors.email}
                   disabled={loading}
-              />
-              {fieldErrors.email && <p className="text-xs text-red-600 mt-1">{fieldErrors.email}</p>}
-            </div>
-            <div>
-              <label className="block text-sm mb-1">Password</label>
-              <input 
-                type="password" 
+                />
+                {fieldErrors.email && <p className="text-xs text-red-600 mt-1">{fieldErrors.email}</p>}
+              </div>
+              <div>
+                <label className="block text-sm mb-1">Password</label>
+                <input 
+                  type="password" 
                   className={`w-full rounded-md border px-3 py-2 ${fieldErrors.password ? 'border-red-500' : ''}`} 
-                value={form.password} 
+                  value={form.password} 
                   onChange={(e) => {
                     const v = e.target.value;
                     const next = { ...form, password: v };
@@ -506,9 +537,9 @@ export default function AuthModal() {
                   }} 
                   aria-invalid={!!fieldErrors.password}
                   disabled={loading}
-              />
-              {fieldErrors.password && <p className="text-xs text-red-600 mt-1">{fieldErrors.password}</p>}
-            </div>
+                />
+                {fieldErrors.password && <p className="text-xs text-red-600 mt-1">{fieldErrors.password}</p>}
+              </div>
               {mode === "login" && (
                 <div className="text-right">
                   <button
@@ -524,13 +555,13 @@ export default function AuthModal() {
                   </button>
                 </div>
               )}
-            {mode === "register" && (
-              <div>
-                <label className="block text-sm mb-1">Confirm Password</label>
-                <input 
-                  type="password" 
+              {mode === "register" && (
+                <div>
+                  <label className="block text-sm mb-1">Confirm Password</label>
+                  <input 
+                    type="password" 
                     className={`w-full rounded-md border px-3 py-2 ${fieldErrors.confirmPassword ? 'border-red-500' : ''}`} 
-                  value={form.confirmPassword} 
+                    value={form.confirmPassword} 
                     onChange={(e) => {
                       const v = e.target.value;
                       const next = { ...form, confirmPassword: v };
@@ -542,17 +573,15 @@ export default function AuthModal() {
                     }} 
                     aria-invalid={!!fieldErrors.confirmPassword}
                     disabled={loading}
-                />
-                {fieldErrors.confirmPassword && <p className="text-xs text-red-600 mt-1">{fieldErrors.confirmPassword}</p>}
-              </div>
-            )}
-          </div>
+                  />
+                  {fieldErrors.confirmPassword && <p className="text-xs text-red-600 mt-1">{fieldErrors.confirmPassword}</p>}
+                </div>
+              )}
+            </div>
           )}
 
-          {/* No global error block; errors are per-field and via toast for API-level messages */}
-
           <button type="submit" disabled={loading} className="w-full rounded-md bg-primary-600 text-white py-2 hover:bg-primary-700 disabled:opacity-60">
-            {mode === "login" ? "Login" : mode === "register" ? "Create account" : mode === "forgot" ? "Send Reset Code" : "Reset Password"}
+            {mode === "login" ? "Login" : mode === "register" ? "Create account" : mode === "forgot" ? "Send Reset Link" : "Reset Password"}
           </button>
 
           <div className="text-center text-sm text-gray-600 pt-2">
@@ -593,11 +622,11 @@ export default function AuthModal() {
                 Remember your password?{" "}
                 <button
                   type="button"
-                  onClick={() => {
-                    setMode("login");
-                    setError(null);
-                    setFieldErrors({});
-                    setForgotEmailSent(false);
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeAuth();
+                    setTimeout(() => openAuth("login"), 100);
                   }}
                   className="text-primary-600 hover:underline"
                 >
@@ -608,10 +637,6 @@ export default function AuthModal() {
           </div>
         </form>
       </div>
-
-      {/* Toaster is mounted globally in Header */}
     </div>
   );
 }
-
-

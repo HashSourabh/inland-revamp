@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { HeartIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { getToken, useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
 
 interface PropertyCardProps {
@@ -64,26 +64,47 @@ export default function PropertyCard({ property, card = 'grid', featured = false
     }
 
     const newState = !isFavorite;
-    setIsFavorite(newState); // optimistic
+    setIsFavorite(newState); // optimistic update
 
     try {
-      const defaultApiBase = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.hostname}:4000` : '';
-      const apiBase = (process.env.NEXT_PUBLIC_API_BASE as string) || defaultApiBase;
+      const token = getToken(); // ✅ get JWT token
+
+      const defaultApiBase =
+        typeof window !== "undefined"
+          ? `${window.location.protocol}//${window.location.hostname}:4000`
+          : "";
+
+      const apiBase =
+        (process.env.NEXT_PUBLIC_API_BASE as string) || defaultApiBase;
+
       const url = newState
         ? `${apiBase}/api/v1/buyers/me/favourites`
         : `${apiBase}/api/v1/buyers/me/favourites/${encodeURIComponent(property.id)}`;
+
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      };
+
+      // ✅ Add token if available
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const res = await fetch(url, {
-        method: newState ? 'POST' : 'DELETE',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: newState ? JSON.stringify({ propertyRef: property.id }) : undefined,
+        method: newState ? "POST" : "DELETE",
+        headers,
+        body: newState
+          ? JSON.stringify({ propertyRef: property.id })
+          : undefined,
       });
-      if (!res.ok) throw new Error('Favourite request failed');
+
+      if (!res.ok) throw new Error("Favourite request failed");
     } catch (e) {
-      // revert on error
-      setIsFavorite(!newState);
+      console.error("❌ Favourite toggle failed:", e);
+      setIsFavorite(!newState); // revert on error
     }
   };
+
 
   return (
     <div
