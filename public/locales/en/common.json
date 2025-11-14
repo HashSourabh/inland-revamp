@@ -1077,7 +1077,7 @@
   },
   "auth": {
     "titles": {
-      "login": "Login",
+      "login": "Log In to Your Account",
       "register": "Create Account",
       "forgot": "Forgot Password",
       "reset": "Reset Password",

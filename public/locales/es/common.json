@@ -1095,7 +1095,7 @@
   },
   "auth": {
     "titles": {
-      "login": "Iniciar sesión",
+      "login": "Inicia sesión en tu cuenta",
       "register": "Crear cuenta",
       "forgot": "Olvidé mi contraseña",
       "reset": "Restablecer contraseña",

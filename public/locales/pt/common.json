@@ -1169,7 +1169,7 @@
   },
   "auth": {
     "titles": {
-      "login": "Entrar",
+      "login": "Faça login na sua conta",
       "register": "Criar conta",
       "forgot": "Esqueci minha senha",
       "reset": "Redefinir senha",

@@ -118,18 +118,18 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         toast("This property is already in your favourites", {
           icon: "ℹ️",
           duration: 3000,
-          position: "top-center",
+          position: "top-right",
         });
         setIsFavorite(true);
       } else if (newState) {
         toast.success("Property added to favourites! ❤️", {
           duration: 3000,
-          position: "top-center",
+          position: "top-right",
         });
       } else {
         toast.success("Property removed from favourites", {
           duration: 3000,
-          position: "top-center",
+          position: "top-right",
         });
       }
     } catch (err) {
@@ -138,7 +138,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
 
       toast.error("Failed to update favourites. Please try again.", {
         duration: 4000,
-        position: "top-center",
+        position: "top-right",
       });
     }
   };

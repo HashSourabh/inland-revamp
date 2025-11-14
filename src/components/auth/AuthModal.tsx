@@ -194,9 +194,9 @@ export default function AuthModal() {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-md rounded-xl bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b px-5 py-3">
-          <h2 className="text-lg font-semibold">
+      <div className="w-full max-w-[550px] rounded-xl bg-white shadow-xl">
+        <div className="flex items-center justify-between  px-8 pt-8 pb-3">
+          <h2 className="text-2xl font-heading  text-center mx-auto font-bold">
             {mode === "login"
               ? t("titles.login")
               : mode === "register"
@@ -205,10 +205,13 @@ export default function AuthModal() {
               ? t("titles.forgot")
               : t("titles.reset")}
           </h2>
+          {mode === "register" &&(
+            <p></p>
+          )}
           <button onClick={closeAuth} className="text-gray-500 hover:text-gray-700">✕</button>
         </div>
 
-        <form onSubmit={submit} className="space-y-4 px-5 py-5 relative">
+        <form onSubmit={submit} className="space-y-4 px-8 pt-5 pb-10 relative">
           {loading && (
             <div className="absolute inset-0 z-20 flex items-center justify-center rounded-b-xl bg-white/70">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
@@ -225,52 +228,54 @@ export default function AuthModal() {
               </div>
             ) : (
               <>
-                <p className="text-sm text-gray-600 mb-4">{t("messages.enterEmailToReset")}</p>
-                <label className="block text-sm mb-1">{t("fields.email")}</label>
-                <input
-                  type="email"
-                  className={`w-full rounded-md border px-3 py-2 ${fieldErrors.email ? "border-red-500" : ""}`}
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  disabled={loading}
-                />
+                <p className="text-base text-gray-600 mb-4">{t("messages.enterEmailToReset")}</p>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.email")}</label>
+                  <input
+                    type="email"
+                    className={`w-full rounded-md border border  border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-3 ${fieldErrors.email ? "border-red-500" : ""}`}
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    disabled={loading}
+                  />
+                </div>
               </>
             )
           )}
 
           {/* Login/Register shared fields */}
           {(mode === "login" || mode === "register") && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {mode === "register" && (
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm mb-1">{t("fields.firstName")}</label>
-                    <input className="w-full rounded-md border px-3 py-2" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} />
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.firstName")}</label>
+                    <input className="w-full rounded-md border  border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-3" value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-sm mb-1">{t("fields.lastName")}</label>
-                    <input className="w-full rounded-md border px-3 py-2" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.lastName")}</label>
+                    <input className="w-full rounded-md border border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-3" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} />
                   </div>
                 </div>
               )}
 
               <div>
-                <label className="block text-sm mb-1">
+                <label className="block text-sm font-medium text-neutral-700 mb-1">
                   {mode === "login" ? t("fields.emailOrUsername") : t("fields.email")}
                 </label>
                 <input
                   type={mode === "login" ? "text" : "email"}
-                  className="w-full rounded-md border px-3 py-2"
+                  className="w-full rounded-md border border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-3"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                 />
               </div>
 
               <div>
-                <label className="block text-sm mb-1">{t("fields.password")}</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.password")}</label>
                 <input
                   type="password"
-                  className="w-full rounded-md border px-3 py-2"
+                  className="w-full rounded-md border border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-3"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                 />
@@ -278,10 +283,10 @@ export default function AuthModal() {
 
               {mode === "register" && (
                 <div>
-                  <label className="block text-sm mb-1">{t("fields.confirmPassword")}</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.confirmPassword")}</label>
                   <input
                     type="password"
-                    className="w-full rounded-md border px-3 py-2"
+                    className="w-full rounded-md border border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-3"
                     value={form.confirmPassword}
                     onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
                   />
@@ -298,7 +303,7 @@ export default function AuthModal() {
             </div>
           )}
 
-          <button type="submit" disabled={loading} className="w-full rounded-md bg-primary-600 text-white py-2 hover:bg-primary-700 disabled:opacity-60">
+          <button type="submit" disabled={loading} className="w-full rounded-md min-h-[50px] bg-primary-600 text-white py-2 hover:bg-primary-700 disabled:opacity-60">
             {mode === "login"
               ? t("buttons.login")
               : mode === "register"

@@ -1169,7 +1169,7 @@
   },
   "auth": {
     "titles": {
-      "login": "Connexion",
+      "login": "Connectez-vous à votre compte",
       "register": "Créer un compte",
       "forgot": "Mot de passe oublié",
       "reset": "Réinitialiser le mot de passe",

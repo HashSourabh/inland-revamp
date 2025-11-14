@@ -1069,7 +1069,7 @@
   },
   "auth": {
     "titles": {
-      "login": "Inloggen",
+      "login": "Melden Sie sich bei Ihrem Konto an",
       "register": "Account aanmaken",
       "forgot": "Wachtwoord vergeten",
       "reset": "Wachtwoord opnieuw instellen",
