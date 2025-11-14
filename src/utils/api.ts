@@ -1,15 +1,21 @@
 // utils/api.ts
 // Compute a single, consistent API base URL (should include /api/v1)
 function computeApiBase(): string {
-  const raw = (process.env.NEXT_PUBLIC_API_BASE || process.env.NEXT_PUBLIC_API_URL || "").trim();
+  const raw =
+    (process.env.NEXT_PUBLIC_API_BASE ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      "").trim();
+
   if (raw) {
-    // Do not force versioning; assume user provided the full base (often includes /api/v1)
     return raw.replace(/\/$/, "");
   }
-  // Fallback for local dev: assume backend on port 4000 with versioned base
-  if (typeof window !== "undefined") {
+
+  // Only use port 4000 on localhost
+  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
     return `${window.location.protocol}//${window.location.hostname}:4000/api/v1`;
   }
+
+  // Default for production
   return "https://inlandandalucia.onrender.com/api/v1";
 }
 
@@ -81,14 +87,14 @@ export async function fetchRegions(): Promise<Region[]> {
 export async function findRegionByName(regionName: string): Promise<Region | null> {
   try {
     const regions = await fetchRegions();
-    
+
     // Normalize the region name from URL (replace hyphens with spaces, etc.)
     const normalizedName = regionName
       .replace(/-/g, ' ')
       .toLowerCase()
       .trim();
 
-    const matchingRegion = regions.find(region => 
+    const matchingRegion = regions.find(region =>
       region.region.toLowerCase().trim() === normalizedName
     );
 
@@ -108,17 +114,17 @@ export async function fetchAreas(regionId: number): Promise<{ areas: Area[], reg
         'Content-Type': 'application/json',
       },
     });
-    
+
     if (!res.ok) {
       throw new Error(`Failed to fetch areas: ${res.status} ${res.statusText}`);
     }
-    
+
     const response: AreasApiResponse = await res.json();
-    
+
     if (!response.success) {
       throw new Error('Failed to fetch areas');
     }
-    
+
     return {
       areas: response.data.areas || [],
       regionId: response.data.regionId
@@ -136,7 +142,7 @@ export async function fetchAreasByRegionName(regionName: string): Promise<{ area
     if (!region) {
       throw new Error(`Region "${regionName}" not found`);
     }
-    
+
     return await fetchAreas(region.regionId);
   } catch (error) {
     console.error('Error fetching areas by region name:', error);
@@ -152,18 +158,18 @@ export async function fetchPropertiesByLocation(location: string, page: number =
       page: page.toString(),
       limit: limit.toString(),
     });
-    
+
     const res = await fetch(`${API_BASE_URL}/properties?${params}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    
+
     if (!res.ok) {
       throw new Error(`Failed to fetch properties: ${res.status} ${res.statusText}`);
     }
-    
+
     const data = await res.json();
     return data;
   } catch (error) {
@@ -182,7 +188,7 @@ export async function fetchPropertyTypes(): Promise<PropertyType[]> {
   try {
     const res = await fetch(`${API_BASE_URL}/properties/types?languageId=1`);
     if (!res.ok) throw new Error(`Failed: ${res.status}`);
-    
+
     const data = await res.json();
     if (data?.success && data.data) {
       return data.data.map((r: any) => ({
