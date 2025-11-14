@@ -53,16 +53,16 @@ export default function PropertyGrid({
       }
 
       // Correct base URL resolution
-      // const isLocalhost =
-      //   typeof window !== "undefined" &&
-      //   (window.location.hostname === "localhost" ||
-      //     window.location.hostname === "127.0.0.1");
+      const isLocalhost =
+        typeof window !== "undefined" &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1");
 
-      const apiBase ="https://inlandandalucia.onrender.com/api/v1";
-        // process.env.NEXT_PUBLIC_API_BASE ||
-        // (isLocalhost
-        //   ? `${window.location.protocol}//${window.location.hostname}:4000/api/v1`
-        //   : "https://inlandandalucia.onrender.com/api/v1");
+      const apiBase =
+        process.env.NEXT_PUBLIC_API_BASE ||
+        (isLocalhost
+          ? `${window.location.protocol}//${window.location.hostname}:4000/api/v1`
+          : "https://inlandandalucia.onrender.com/api/v1");
 
       try {
         const res = await fetch(`${apiBase}/buyers/me/favourites`, {
