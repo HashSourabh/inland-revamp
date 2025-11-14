@@ -71,18 +71,23 @@ export default function PropertyCard({ property, card = 'grid', featured = false
       const buyerId = user?.id;
       const propertyId = property?.id;
 
-      const defaultApiBase =
-        typeof window !== "undefined"
-          ? `${window.location.protocol}//${window.location.hostname}`
-          : "";
+      // identify localhost only
+      const isLocalhost =
+        typeof window !== "undefined" &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1");
 
+      // final safe api base
       const apiBase =
-        (process.env.NEXT_PUBLIC_API_BASE as string) || defaultApiBase;
+        process.env.NEXT_PUBLIC_API_BASE ||
+        (isLocalhost
+          ? `${window.location.protocol}//${window.location.hostname}:4000/api/v1`
+          : "https://inlandandalucia.onrender.com/api/v1");
 
-      // Different URLs for POST and DELETE
+      // URLs for POST or DELETE
       const url = newState
-        ? `${apiBase}/api/v1/buyers/${buyerId}/favourites`
-        : `${apiBase}/api/v1/buyers/${buyerId}/favourites/${propertyId}`;
+        ? `${apiBase}/buyers/${buyerId}/favourites`
+        : `${apiBase}/buyers/${buyerId}/favourites/${propertyId}`;
 
       const headers: HeadersInit = {
         "Content-Type": "application/json",
@@ -94,53 +99,50 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         propertyId,
         newState,
         url,
-        method: newState ? "POST" : "DELETE"
+        method: newState ? "POST" : "DELETE",
       });
 
       const res = await fetch(url, {
         method: newState ? "POST" : "DELETE",
         headers,
-        // Only send body for POST request
         ...(newState && { body: JSON.stringify({ propertyId }) }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-
-        // Check the alreadyExists flag
-        if (data.alreadyExists) {
-          toast('This property is already in your favourites', {
-            icon: 'ℹ️',
-            duration: 3000,
-            position: 'top-center',
-          });
-          setIsFavorite(true);
-        } else if (newState) {
-          toast.success('Property added to favourites! ❤️', {
-            duration: 3000,
-            position: 'top-center',
-          });
-        } else {
-          toast.success('Property removed from favourites', {
-            duration: 3000,
-            position: 'top-center',
-          });
-        }
-      } else {
+      if (!res.ok) {
         throw new Error(`Server responded with status ${res.status}`);
       }
 
-    } catch (e) {
-      console.error("❌ Favourite toggle failed:", e);
-      setIsFavorite(!newState); // revert on error
+      const data = await res.json();
 
-      // Show error toast
-      toast.error('Failed to update favourites. Please try again.', {
+      if (data.alreadyExists) {
+        toast("This property is already in your favourites", {
+          icon: "ℹ️",
+          duration: 3000,
+          position: "top-center",
+        });
+        setIsFavorite(true);
+      } else if (newState) {
+        toast.success("Property added to favourites! ❤️", {
+          duration: 3000,
+          position: "top-center",
+        });
+      } else {
+        toast.success("Property removed from favourites", {
+          duration: 3000,
+          position: "top-center",
+        });
+      }
+    } catch (err) {
+      console.error("❌ Favourite toggle failed:", err);
+      setIsFavorite(!newState); // rollback optimistic update
+
+      toast.error("Failed to update favourites. Please try again.", {
         duration: 4000,
-        position: 'top-center',
+        position: "top-center",
       });
     }
   };
+
 
 
 
