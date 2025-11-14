@@ -73,7 +73,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
 
       const defaultApiBase =
         typeof window !== "undefined"
-          ? `${window.location.protocol}//${window.location.hostname}:4000`
+          ? `${window.location.protocol}//${window.location.hostname}`
           : "";
 
       const apiBase =
