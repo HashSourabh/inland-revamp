@@ -90,7 +90,7 @@
     }
   },
   "promo": {
-    "button":"Clique aqui",
+    "button": "Clique aqui",
     "exclusive": {
       "title": "Propriedades Exclusivas",
       "short_description": "CLIQUE aqui para ver os últimos anúncios com mais reduções de preço fantásticas"
@@ -1073,6 +1073,147 @@
     },
     "mapSection": {
       "title": "Encontre-nos"
+    }
+  },
+  "Profile_account": {
+    "title": "Minha Conta",
+    "loading": "Carregando...",
+    "loginRequired": "Por favor, faça login para ver sua conta.",
+    "tabs": {
+      "profile": "Meu Perfil",
+      "favourites": "Favoritos",
+      "reservations": "Reservas"
+    },
+    "profile": {
+      "title": "Meu Perfil",
+      "uploadPhoto": "Enviar Foto",
+      "uploading": "Enviando...",
+      "changePassword": "Alterar Senha",
+      "firstName": "Nome",
+      "lastName": "Sobrenome",
+      "username": "Nome de Usuário",
+      "email": "E-mail",
+      "address": "Endereço",
+      "addressPlaceholder": "Insira seu endereço",
+      "phone": "Número de Telefone",
+      "phonePlaceholder": "Insira seu número de contato",
+      "saveChanges": "Salvar Alterações",
+      "saving": "Salvando...",
+      "updateSuccess": "Perfil atualizado com sucesso!",
+      "updateError": "Falha ao atualizar o perfil",
+      "uploadSuccess": "Imagem de perfil atualizada com sucesso!",
+      "uploadError": "Falha ao enviar a imagem",
+      "invalidFileType": "Selecione um arquivo de imagem",
+      "fileTooLarge": "Imagem muito grande. Escolha uma imagem menor que 10MB"
+    },
+    "password": {
+      "title": "Alterar Senha",
+      "currentPassword": "Senha Atual",
+      "newPassword": "Nova Senha",
+      "confirmPassword": "Confirmar Nova Senha",
+      "passwordHint": "Mínimo de 8 caracteres com maiúscula, minúscula, número e símbolo.",
+      "updatePassword": "Atualizar Senha",
+      "updating": "Atualizando...",
+      "success": "Senha alterada com sucesso",
+      "allFieldsRequired": "Todos os campos de senha são obrigatórios",
+      "weakPassword": "A nova senha deve ter maiúscula, minúscula, número e símbolo, mínimo de 8 caracteres",
+      "passwordMismatch": "As senhas não coincidem",
+      "updateError": "Falha ao atualizar a senha",
+      "currentPasswordRequired": "A senha atual é obrigatória",
+      "newPasswordRequired": "A nova senha é obrigatória",
+      "confirmPasswordRequired": "A confirmação da senha é obrigatória",
+      "passwordStrengthError": "Mínimo 8 caracteres com maiúscula, minúscula, número e símbolo"
+    },
+    "favourites": {
+      "title": "Favoritos",
+      "noFavourites": "Nenhum favorito ainda.",
+      "beds": "quartos",
+      "baths": "banheiros",
+      "view": "Ver",
+      "remove": "Remover",
+      "removeTitle": "Remover favorito",
+      "removeDescription": "Tem certeza de que deseja remover este favorito?",
+      "removeConfirm": "Remover",
+      "removeCancel": "Cancelar"
+    },
+    "favourite": {
+      "title": "Meus Favoritos",
+      "noFavourites": "Nenhuma propriedade favorita ainda.",
+      "image": "Imagem",
+      "propertyRef": "Referência da Propriedade",
+      "propertyAddress": "Endereço da Propriedade",
+      "bedrooms": "Quartos",
+      "bathrooms": "Casas de Banho",
+      "publicPrice": "Preço (EUR)",
+      "dateAdded": "Data Adicionada",
+      "action": "Ação",
+      "viewProperty": "Ver Propriedade",
+      "remove": "Remover",
+      "imageAlt": "imagem destacada",
+      "loading": "Carregando os seus favoritos..."
+    },
+    "reservations": {
+      "title": "Minhas Reservas",
+      "noReservations": "Nenhuma reserva ainda.",
+      "image": "Imagem",
+      "propertyRef": "Referência da Propriedade",
+      "propertyAddress": "Endereço da Propriedade",
+      "bedrooms": "Quartos",
+      "bathrooms": "Banheiros",
+      "reservedAmount": "Valor Reservado (EUR)",
+      "reservationDate": "Data da Reserva",
+      "action": "Ação",
+      "viewProperty": "Ver Propriedade",
+      "imageAlt": "imagem destacada"
+    }
+  },
+  "auth": {
+    "titles": {
+      "login": "Entrar",
+      "register": "Criar conta",
+      "forgot": "Esqueci minha senha",
+      "reset": "Redefinir senha",
+      "checkEmail": "Verifique seu e-mail"
+    },
+    "fields": {
+      "firstName": "Nome",
+      "lastName": "Sobrenome",
+      "username": "Nome de usuário",
+      "email": "E-mail",
+      "emailOrUsername": "E-mail ou nome de usuário",
+      "password": "Senha",
+      "confirmPassword": "Confirmar senha"
+    },
+    "buttons": {
+      "login": "Entrar",
+      "register": "Criar conta",
+      "sendResetLink": "Enviar link de redefinição",
+      "resetPassword": "Redefinir senha",
+      "backToLogin": "Voltar para login"
+    },
+    "links": {
+      "forgotPassword": "Esqueceu a senha?",
+      "noAccount": "Não tem uma conta?",
+      "haveAccount": "Já tem uma conta?",
+      "rememberPassword": "Lembrou da sua senha?"
+    },
+    "messages": {
+      "loginSuccess": "Login realizado com sucesso.",
+      "accountCreated": "Conta criada com sucesso.",
+      "resetLinkSent": "Link de redefinição de senha enviado para o seu e-mail.",
+      "passwordReset": "Sua senha foi redefinida com sucesso.",
+      "checkEmail": "Enviamos um link de redefinição de senha para {email}.",
+      "enterEmailToReset": "Digite seu e-mail para receber um link de redefinição.",
+      "apiNotConfigured": "A URL base da API não está configurada.",
+      "networkError": "Verifique sua conexão com a internet."
+    },
+    "validation": {
+      "firstNameRequired": "O nome é obrigatório.",
+      "lastNameRequired": "O sobrenome é obrigatório.",
+      "usernameFormat": "De 4 a 50 caracteres, pelo menos 3 letras e 1 número.",
+      "email": "Digite um e-mail válido.",
+      "password": "Mínimo de 8 caracteres com maiúscula, minúscula, número e símbolo.",
+      "passwordsMismatch": "As senhas não coincidem."
     }
   },
   "franchisePage": {

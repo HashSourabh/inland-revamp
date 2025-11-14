@@ -124,7 +124,7 @@ export default function Header() {
               href="/sell-with-us"
               className="rounded-md bg-secondary-500 px-4 py-2 min-h-[38px] inline-flex font-normal text-white shadow-md hover:bg-primary-600 transition-colors text-[15px]"
             >
-             {tCta('sellWithUs')}
+              {tCta('sellWithUs')}
             </Link>
           </div>
         </div>
@@ -139,9 +139,10 @@ export default function Header() {
         onConfirm={() => {
           logout();
         }}
-        title="Logout"
-        description="Are you sure you want to logout?"
-        confirmText="Logout"
+        titleKey="logout.title"
+        descriptionKey="logout.description"
+        confirmKey="logout.confirm"
+        cancelKey="logout.cancel"
         confirmButtonClassName="bg-primary-600 hover:bg-primary-700"
       />
       <Toaster

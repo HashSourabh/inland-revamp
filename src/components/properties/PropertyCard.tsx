@@ -5,6 +5,7 @@ import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { getToken, useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 
 interface PropertyCardProps {
   property: {
@@ -57,9 +58,8 @@ export default function PropertyCard({ property, card = 'grid', featured = false
   };
 
   const handleFavoriteClick = async () => {
-    // Require login
     if (!user) {
-      openAuth('login');
+      openAuth("login");
       return;
     }
 
@@ -67,7 +67,9 @@ export default function PropertyCard({ property, card = 'grid', featured = false
     setIsFavorite(newState); // optimistic update
 
     try {
-      const token = getToken(); // ✅ get JWT token
+      const token = getToken();
+      const buyerId = user?.id;
+      const propertyId = property?.id;
 
       const defaultApiBase =
         typeof window !== "undefined"
@@ -77,33 +79,69 @@ export default function PropertyCard({ property, card = 'grid', featured = false
       const apiBase =
         (process.env.NEXT_PUBLIC_API_BASE as string) || defaultApiBase;
 
+      // Different URLs for POST and DELETE
       const url = newState
-        ? `${apiBase}/api/v1/buyers/me/favourites`
-        : `${apiBase}/api/v1/buyers/me/favourites/${encodeURIComponent(property.id)}`;
+        ? `${apiBase}/api/v1/buyers/${buyerId}/favourites`
+        : `${apiBase}/api/v1/buyers/${buyerId}/favourites/${propertyId}`;
 
       const headers: HeadersInit = {
         "Content-Type": "application/json",
       };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      // ✅ Add token if available
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
+      console.log("⭐ Favourite request:", {
+        buyerId,
+        propertyId,
+        newState,
+        url,
+        method: newState ? "POST" : "DELETE"
+      });
 
       const res = await fetch(url, {
         method: newState ? "POST" : "DELETE",
         headers,
-        body: newState
-          ? JSON.stringify({ propertyRef: property.id })
-          : undefined,
+        // Only send body for POST request
+        ...(newState && { body: JSON.stringify({ propertyId }) }),
       });
 
-      if (!res.ok) throw new Error("Favourite request failed");
+      if (res.ok) {
+        const data = await res.json();
+
+        // Check the alreadyExists flag
+        if (data.alreadyExists) {
+          toast('This property is already in your favourites', {
+            icon: 'ℹ️',
+            duration: 3000,
+            position: 'top-center',
+          });
+          setIsFavorite(true);
+        } else if (newState) {
+          toast.success('Property added to favourites! ❤️', {
+            duration: 3000,
+            position: 'top-center',
+          });
+        } else {
+          toast.success('Property removed from favourites', {
+            duration: 3000,
+            position: 'top-center',
+          });
+        }
+      } else {
+        throw new Error(`Server responded with status ${res.status}`);
+      }
+
     } catch (e) {
       console.error("❌ Favourite toggle failed:", e);
       setIsFavorite(!newState); // revert on error
+
+      // Show error toast
+      toast.error('Failed to update favourites. Please try again.', {
+        duration: 4000,
+        position: 'top-center',
+      });
     }
   };
+
 
 
   return (

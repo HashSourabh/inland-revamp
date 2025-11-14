@@ -148,7 +148,7 @@
     "phoneNumber": "Numéro de Téléphone"
   },
   "promo": {
-    "button":"Cliquez ici",
+    "button": "Cliquez ici",
     "exclusive": {
       "title": "Propriétés Exclusives",
       "short_description": "CLIQUEZ ici pour découvrir les dernières annonces avec encore plus de réductions incroyables"
@@ -1073,6 +1073,147 @@
     },
     "mapSection": {
       "title": "Nous Trouver"
+    }
+  },
+  "Profile_account": {
+    "title": "Mon Compte",
+    "loading": "Chargement...",
+    "loginRequired": "Veuillez vous connecter pour accéder à votre compte.",
+    "tabs": {
+      "profile": "Mon Profil",
+      "favourites": "Favoris",
+      "reservations": "Réservations"
+    },
+    "profile": {
+      "title": "Mon Profil",
+      "uploadPhoto": "Téléverser une Photo",
+      "uploading": "Téléversement...",
+      "changePassword": "Changer le Mot de Passe",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "username": "Nom d'utilisateur",
+      "email": "E-mail",
+      "address": "Adresse",
+      "addressPlaceholder": "Entrez votre adresse",
+      "phone": "Numéro de Téléphone",
+      "phonePlaceholder": "Entrez votre numéro de contact",
+      "saveChanges": "Enregistrer les Modifications",
+      "saving": "Enregistrement...",
+      "updateSuccess": "Profil mis à jour avec succès !",
+      "updateError": "Échec de la mise à jour du profil",
+      "uploadSuccess": "Photo de profil mise à jour avec succès !",
+      "uploadError": "Échec du téléversement de l'image",
+      "invalidFileType": "Veuillez sélectionner un fichier image",
+      "fileTooLarge": "Image trop grande. Sélectionnez une image inférieure à 10 Mo"
+    },
+    "password": {
+      "title": "Changer le Mot de Passe",
+      "currentPassword": "Mot de Passe Actuel",
+      "newPassword": "Nouveau Mot de Passe",
+      "confirmPassword": "Confirmer le Nouveau Mot de Passe",
+      "passwordHint": "Min 8 caractères avec majuscules, minuscules, chiffre et symbole.",
+      "updatePassword": "Mettre à Jour le Mot de Passe",
+      "updating": "Mise à jour...",
+      "success": "Mot de passe changé avec succès",
+      "allFieldsRequired": "Tous les champs de mot de passe sont obligatoires",
+      "weakPassword": "Le nouveau mot de passe doit contenir majuscules, minuscules, chiffre et symbole, min 8 caractères",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "updateError": "Échec de la mise à jour du mot de passe",
+      "currentPasswordRequired": "Le mot de passe actuel est requis",
+      "newPasswordRequired": "Le nouveau mot de passe est requis",
+      "confirmPasswordRequired": "La confirmation du mot de passe est requise",
+      "passwordStrengthError": "Min 8 caractères avec majuscules, minuscules, chiffre et symbole"
+    },
+    "favourites": {
+      "title": "Favoris",
+      "noFavourites": "Aucun favori pour le moment.",
+      "beds": "chambres",
+      "baths": "salles de bain",
+      "view": "Voir",
+      "remove": "Supprimer",
+      "removeTitle": "Supprimer le favori",
+      "removeDescription": "Êtes-vous sûr de vouloir supprimer ce favori ?",
+      "removeConfirm": "Supprimer",
+      "removeCancel": "Annuler"
+    },
+    "favourite": {
+      "title": "Mes favoris",
+      "noFavourites": "Aucune propriété favorite pour le moment.",
+      "image": "Image",
+      "propertyRef": "Référence du bien",
+      "propertyAddress": "Adresse du bien",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de bain",
+      "publicPrice": "Prix (EUR)",
+      "dateAdded": "Date d’ajout",
+      "action": "Action",
+      "viewProperty": "Voir la propriété",
+      "remove": "Supprimer",
+      "imageAlt": "image principale",
+      "loading": "Chargement de vos favoris..."
+    },
+    "reservations": {
+      "title": "Mes Réservations",
+      "noReservations": "Aucune réservation pour le moment.",
+      "image": "Image",
+      "propertyRef": "Référence de Propriété",
+      "propertyAddress": "Adresse de la Propriété",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de Bain",
+      "reservedAmount": "Montant Réservé (EUR)",
+      "reservationDate": "Date de Réservation",
+      "action": "Action",
+      "viewProperty": "Voir la Propriété",
+      "imageAlt": "image principale"
+    }
+  },
+  "auth": {
+    "titles": {
+      "login": "Connexion",
+      "register": "Créer un compte",
+      "forgot": "Mot de passe oublié",
+      "reset": "Réinitialiser le mot de passe",
+      "checkEmail": "Vérifiez votre e-mail"
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "username": "Nom d'utilisateur",
+      "email": "E-mail",
+      "emailOrUsername": "E-mail ou nom d'utilisateur",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe"
+    },
+    "buttons": {
+      "login": "Se connecter",
+      "register": "Créer un compte",
+      "sendResetLink": "Envoyer le lien de réinitialisation",
+      "resetPassword": "Réinitialiser le mot de passe",
+      "backToLogin": "Retour à la connexion"
+    },
+    "links": {
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "rememberPassword": "Vous vous souvenez de votre mot de passe ?"
+    },
+    "messages": {
+      "loginSuccess": "Connexion réussie.",
+      "accountCreated": "Compte créé avec succès.",
+      "resetLinkSent": "Lien de réinitialisation du mot de passe envoyé à votre e-mail.",
+      "passwordReset": "Votre mot de passe a été réinitialisé avec succès.",
+      "checkEmail": "Nous avons envoyé un lien de réinitialisation du mot de passe à {email}.",
+      "enterEmailToReset": "Entrez votre e-mail pour recevoir un lien de réinitialisation.",
+      "apiNotConfigured": "L’URL de base de l’API n’est pas configurée.",
+      "networkError": "Veuillez vérifier votre connexion Internet."
+    },
+    "validation": {
+      "firstNameRequired": "Le prénom est obligatoire.",
+      "lastNameRequired": "Le nom est obligatoire.",
+      "usernameFormat": "4 à 50 caractères, au moins 3 lettres et 1 chiffre.",
+      "email": "Entrez une adresse e-mail valide.",
+      "password": "Minimum 8 caractères avec majuscule, minuscule, chiffre et symbole.",
+      "passwordsMismatch": "Les mots de passe ne correspondent pas."
     }
   },
   "franchisePage": {

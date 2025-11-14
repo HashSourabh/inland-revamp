@@ -93,7 +93,7 @@
     }
   },
   "promo": {
-    "button":"Klik hier",
+    "button": "Klik hier",
     "exclusive": {
       "title": "Exklusive Immobilien",
       "short_description": "KLICKEN Sie hier für die neuesten Angebote mit noch mehr fantastischen Preisnachlässen"
@@ -974,6 +974,147 @@
     "copyright": "© 2024 Inland Andalucía. Alle Rechte vorbehalten.",
     "privacy": "Datenschutzrichtlinie",
     "terms": "Nutzungsbedingungen"
+  },
+  "Profile_account": {
+    "title": "Mijn Account",
+    "loading": "Laden...",
+    "loginRequired": "Log in om uw account te bekijken.",
+    "tabs": {
+      "profile": "Mijn Profiel",
+      "favourites": "Favorieten",
+      "reservations": "Reserveringen"
+    },
+    "profile": {
+      "title": "Mijn Profiel",
+      "uploadPhoto": "Foto Uploaden",
+      "uploading": "Bezig met uploaden...",
+      "changePassword": "Wachtwoord Wijzigen",
+      "firstName": "Voornaam",
+      "lastName": "Achternaam",
+      "username": "Gebruikersnaam",
+      "email": "E-mail",
+      "address": "Adres",
+      "addressPlaceholder": "Voer uw adres in",
+      "phone": "Telefoonnummer",
+      "phonePlaceholder": "Voer uw contactnummer in",
+      "saveChanges": "Wijzigingen Opslaan",
+      "saving": "Bezig met opslaan...",
+      "updateSuccess": "Profiel succesvol bijgewerkt!",
+      "updateError": "Profiel bijwerken mislukt",
+      "uploadSuccess": "Profielfoto succesvol bijgewerkt!",
+      "uploadError": "Afbeelding uploaden mislukt",
+      "invalidFileType": "Selecteer een afbeeldingsbestand",
+      "fileTooLarge": "Afbeelding te groot. Kies een afbeelding kleiner dan 10 MB"
+    },
+    "password": {
+      "title": "Wachtwoord Wijzigen",
+      "currentPassword": "Huidig Wachtwoord",
+      "newPassword": "Nieuw Wachtwoord",
+      "confirmPassword": "Bevestig Nieuw Wachtwoord",
+      "passwordHint": "Minimaal 8 tekens met hoofdletter, kleine letter, cijfer en speciaal teken.",
+      "updatePassword": "Wachtwoord Bijwerken",
+      "updating": "Bezig met bijwerken...",
+      "success": "Wachtwoord succesvol gewijzigd",
+      "allFieldsRequired": "Alle wachtwoordvelden zijn verplicht",
+      "weakPassword": "Nieuw wachtwoord moet hoofdletter, kleine letter, cijfer en speciaal teken bevatten, minimaal 8 tekens",
+      "passwordMismatch": "Wachtwoorden komen niet overeen",
+      "updateError": "Wachtwoord bijwerken mislukt",
+      "currentPasswordRequired": "Huidig wachtwoord is vereist",
+      "newPasswordRequired": "Nieuw wachtwoord is vereist",
+      "confirmPasswordRequired": "Bevestiging van wachtwoord is vereist",
+      "passwordStrengthError": "Minimaal 8 tekens met hoofdletter, kleine letter, cijfer en speciaal teken"
+    },
+    "favourites": {
+      "title": "Favorieten",
+      "noFavourites": "Nog geen favorieten.",
+      "beds": "slaapkamers",
+      "baths": "badkamers",
+      "view": "Bekijken",
+      "remove": "Verwijderen",
+      "removeTitle": "Favoriet verwijderen",
+      "removeDescription": "Weet u zeker dat u deze favoriet wilt verwijderen?",
+      "removeConfirm": "Verwijderen",
+      "removeCancel": "Annuleren"
+    },
+    "favourite": {
+      "title": "Mijn favorieten",
+      "noFavourites": "Nog geen favoriete woningen.",
+      "image": "Afbeelding",
+      "propertyRef": "Woningreferentie",
+      "propertyAddress": "Adres van de woning",
+      "bedrooms": "Slaapkamers",
+      "bathrooms": "Badkamers",
+      "publicPrice": "Prijs (EUR)",
+      "dateAdded": "Datum toegevoegd",
+      "action": "Actie",
+      "viewProperty": "Bekijk woning",
+      "remove": "Verwijderen",
+      "imageAlt": "uitgelichte afbeelding",
+      "loading": "Je favorieten worden geladen..."
+    },
+    "reservations": {
+      "title": "Mijn Reserveringen",
+      "noReservations": "Nog geen reserveringen.",
+      "image": "Afbeelding",
+      "propertyRef": "Woningreferentie",
+      "propertyAddress": "Woningadres",
+      "bedrooms": "Slaapkamers",
+      "bathrooms": "Badkamers",
+      "reservedAmount": "Gereserveerd Bedrag (EUR)",
+      "reservationDate": "Reserveringsdatum",
+      "action": "Actie",
+      "viewProperty": "Bekijk Woning",
+      "imageAlt": "uitgelichte afbeelding"
+    }
+  },
+  "auth": {
+    "titles": {
+      "login": "Inloggen",
+      "register": "Account aanmaken",
+      "forgot": "Wachtwoord vergeten",
+      "reset": "Wachtwoord opnieuw instellen",
+      "checkEmail": "Controleer je e-mail"
+    },
+    "fields": {
+      "firstName": "Voornaam",
+      "lastName": "Achternaam",
+      "username": "Gebruikersnaam",
+      "email": "E-mail",
+      "emailOrUsername": "E-mail of gebruikersnaam",
+      "password": "Wachtwoord",
+      "confirmPassword": "Bevestig wachtwoord"
+    },
+    "buttons": {
+      "login": "Inloggen",
+      "register": "Account aanmaken",
+      "sendResetLink": "Herstel-link verzenden",
+      "resetPassword": "Wachtwoord herstellen",
+      "backToLogin": "Terug naar inloggen"
+    },
+    "links": {
+      "forgotPassword": "Wachtwoord vergeten?",
+      "noAccount": "Nog geen account?",
+      "haveAccount": "Heb je al een account?",
+      "rememberPassword": "Wachtwoord toch onthouden?"
+    },
+    "messages": {
+      "loginSuccess": "Succesvol ingelogd.",
+      "accountCreated": "Account succesvol aangemaakt.",
+      "resetLinkSent": "Wachtwoordherstel-link verzonden naar je e-mail.",
+      "passwordReset": "Je wachtwoord is succesvol hersteld.",
+      "checkEmail": "We hebben een herstel-link verzonden naar {email}.",
+      "enterEmailToReset": "Voer je e-mailadres in om een herstel-link te ontvangen.",
+      "apiNotConfigured": "API-basis-URL is niet geconfigureerd.",
+      "networkError": "Controleer je internetverbinding."
+    },
+    "validation": {
+      "firstNameRequired": "Voornaam is verplicht.",
+      "lastNameRequired": "Achternaam is verplicht.",
+      "usernameFormat": "4–50 tekens, minimaal 3 letters en 1 cijfer.",
+      "email": "Voer een geldig e-mailadres in.",
+      "password": "Minimaal 8 tekens met hoofdletter, kleine letter, cijfer en symbool.",
+      "passwordsMismatch": "Wachtwoorden komen niet overeen."
+    }
   },
   "common": {
     "loading": "Wird geladen...",

@@ -130,7 +130,7 @@
     "phoneNumber": "Número de Teléfono"
   },
   "promo": {
-    "button":"Haga clic aquí",
+    "button": "Haga clic aquí",
     "exclusive": {
       "title": "Propiedades Exclusivas",
       "short_description": "HAZ CLIC aquí para ver las últimas ofertas con más reducciones de precio fantásticas"
@@ -977,6 +977,98 @@
       }
     }
   },
+  "Profile_account": {
+    "title": "Mi Cuenta",
+    "loading": "Cargando...",
+    "loginRequired": "Por favor, inicia sesión para ver tu cuenta.",
+    "tabs": {
+      "profile": "Mi Perfil",
+      "favourites": "Favoritos",
+      "reservations": "Reservas"
+    },
+    "profile": {
+      "title": "Mi Perfil",
+      "uploadPhoto": "Subir Foto",
+      "uploading": "Subiendo...",
+      "changePassword": "Cambiar Contraseña",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "username": "Nombre de Usuario",
+      "email": "Correo Electrónico",
+      "address": "Dirección",
+      "addressPlaceholder": "Introduce tu dirección",
+      "phone": "Número de Teléfono",
+      "phonePlaceholder": "Introduce tu número de contacto",
+      "saveChanges": "Guardar Cambios",
+      "saving": "Guardando...",
+      "updateSuccess": "¡Perfil actualizado con éxito!",
+      "updateError": "Error al actualizar el perfil",
+      "uploadSuccess": "¡Imagen de perfil actualizada con éxito!",
+      "uploadError": "Error al subir la imagen",
+      "invalidFileType": "Por favor, selecciona un archivo de imagen",
+      "fileTooLarge": "Imagen demasiado grande. Selecciona una imagen menor de 10 MB"
+    },
+    "password": {
+      "title": "Cambiar Contraseña",
+      "currentPassword": "Contraseña Actual",
+      "newPassword": "Nueva Contraseña",
+      "confirmPassword": "Confirmar Nueva Contraseña",
+      "passwordHint": "Mínimo 8 caracteres con mayúscula, minúscula, número y símbolo.",
+      "updatePassword": "Actualizar Contraseña",
+      "updating": "Actualizando...",
+      "success": "Contraseña cambiada con éxito",
+      "allFieldsRequired": "Todos los campos de contraseña son obligatorios",
+      "weakPassword": "La nueva contraseña debe tener mayúsculas, minúsculas, número y símbolo, mínimo 8 caracteres",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "updateError": "Error al actualizar la contraseña",
+      "currentPasswordRequired": "Se requiere la contraseña actual",
+      "newPasswordRequired": "Se requiere una nueva contraseña",
+      "confirmPasswordRequired": "Se requiere confirmación de contraseña",
+      "passwordStrengthError": "Mínimo 8 caracteres con mayúscula, minúscula, número y símbolo"
+    },
+    "favourites": {
+      "title": "Favoritos",
+      "noFavourites": "Aún no tienes favoritos.",
+      "beds": "habitaciones",
+      "baths": "baños",
+      "view": "Ver",
+      "remove": "Eliminar",
+      "removeTitle": "Eliminar favorito",
+      "removeDescription": "¿Estás seguro de que deseas eliminar este favorito?",
+      "removeConfirm": "Eliminar",
+      "removeCancel": "Cancelar"
+    },
+    "favourite": {
+      "title": "Mis Favoritos",
+      "noFavourites": "Aún no tienes propiedades favoritas.",
+      "image": "Imagen",
+      "propertyRef": "Referencia de la Propiedad",
+      "propertyAddress": "Dirección de la Propiedad",
+      "bedrooms": "Dormitorios",
+      "bathrooms": "Baños",
+      "publicPrice": "Precio (EUR)",
+      "dateAdded": "Fecha Añadida",
+      "action": "Acción",
+      "viewProperty": "Ver Propiedad",
+      "remove": "Eliminar",
+      "imageAlt": "imagen destacada",
+      "loading": "Cargando tus favoritos..."
+    },
+    "reservations": {
+      "title": "Mis Reservas",
+      "noReservations": "Aún no tienes reservas.",
+      "image": "Imagen",
+      "propertyRef": "Referencia de Propiedad",
+      "propertyAddress": "Dirección de la Propiedad",
+      "bedrooms": "Dormitorios",
+      "bathrooms": "Baños",
+      "reservedAmount": "Importe Reservado (EUR)",
+      "reservationDate": "Fecha de Reserva",
+      "action": "Acción",
+      "viewProperty": "Ver Propiedad",
+      "imageAlt": "imagen destacada"
+    }
+  },
   "footer": {
     "about_title": "Inland Andalucia",
     "about_text": "Especialistas en propiedades del interior de Andalucía, España. Ofreciendo un servicio personalizado a compradores y vendedores desde 2001.",
@@ -1000,6 +1092,55 @@
     "copyright": "© 2024 Inland Andalucía. Todos los derechos reservados.",
     "privacy": "Política de Privacidad",
     "terms": "Términos y Condiciones"
+  },
+  "auth": {
+    "titles": {
+      "login": "Iniciar sesión",
+      "register": "Crear cuenta",
+      "forgot": "Olvidé mi contraseña",
+      "reset": "Restablecer contraseña",
+      "checkEmail": "Revisa tu correo electrónico"
+    },
+    "fields": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "emailOrUsername": "Correo o nombre de usuario",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña"
+    },
+    "buttons": {
+      "login": "Iniciar sesión",
+      "register": "Crear cuenta",
+      "sendResetLink": "Enviar enlace de restablecimiento",
+      "resetPassword": "Restablecer contraseña",
+      "backToLogin": "Volver al inicio de sesión"
+    },
+    "links": {
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes una cuenta?",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "rememberPassword": "¿Recordaste tu contraseña?"
+    },
+    "messages": {
+      "loginSuccess": "Inicio de sesión exitoso.",
+      "accountCreated": "Cuenta creada con éxito.",
+      "resetLinkSent": "Enlace de restablecimiento de contraseña enviado a tu correo.",
+      "passwordReset": "Tu contraseña se ha restablecido correctamente.",
+      "checkEmail": "Hemos enviado un enlace de restablecimiento de contraseña a {email}.",
+      "enterEmailToReset": "Ingresa tu correo electrónico para recibir un enlace de restablecimiento.",
+      "apiNotConfigured": "La URL base de la API no está configurada.",
+      "networkError": "Por favor, verifica tu conexión a internet."
+    },
+    "validation": {
+      "firstNameRequired": "El nombre es obligatorio.",
+      "lastNameRequired": "El apellido es obligatorio.",
+      "usernameFormat": "De 4 a 50 caracteres, al menos 3 letras y 1 número.",
+      "email": "Introduce una dirección de correo válida.",
+      "password": "Mínimo 8 caracteres con mayúscula, minúscula, número y símbolo.",
+      "passwordsMismatch": "Las contraseñas no coinciden."
+    }
   },
   "common": {
     "loading": "Cargando...",

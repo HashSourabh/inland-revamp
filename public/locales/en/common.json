@@ -120,7 +120,7 @@
     }
   },
   "promo": {
-    "button":"Click Here",
+    "button": "Click Here",
     "exclusive": {
       "title": "Exclusive Properties",
       "short_description": "CLICK here for latest listings with more fantastic price reductions"
@@ -1073,6 +1073,147 @@
     },
     "mapSection": {
       "title": "Find Us"
+    }
+  },
+  "auth": {
+    "titles": {
+      "login": "Login",
+      "register": "Create Account",
+      "forgot": "Forgot Password",
+      "reset": "Reset Password",
+      "checkEmail": "Check your email"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "username": "Username",
+      "email": "Email",
+      "emailOrUsername": "Email or Username",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "buttons": {
+      "login": "Login",
+      "register": "Create Account",
+      "sendResetLink": "Send Reset Link",
+      "resetPassword": "Reset Password",
+      "backToLogin": "Back to Login"
+    },
+    "links": {
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "haveAccount": "Already have an account?",
+      "rememberPassword": "Remember your password?"
+    },
+    "messages": {
+      "loginSuccess": "Login successful.",
+      "accountCreated": "Account created successfully.",
+      "resetLinkSent": "Password reset link sent to your email.",
+      "passwordReset": "Your password has been reset successfully.",
+      "checkEmail": "We've sent a password reset link to {email}.",
+      "enterEmailToReset": "Enter your email address to receive a password reset link.",
+      "apiNotConfigured": "API base URL is not configured.",
+      "networkError": "Please check your internet connection."
+    },
+    "validation": {
+      "firstNameRequired": "First name is required.",
+      "lastNameRequired": "Last name is required.",
+      "usernameFormat": "4–50 chars, at least 3 letters and 1 number.",
+      "email": "Enter a valid email address.",
+      "password": "Min 8 chars with upper, lower, number & special.",
+      "passwordsMismatch": "Passwords do not match."
+    }
+  },
+  "Profile_account": {
+    "title": "My Account",
+    "loading": "Loading...",
+    "loginRequired": "Please login to view your account.",
+    "tabs": {
+      "profile": "My Profile",
+      "favourites": "Favourites",
+      "reservations": "Reservations"
+    },
+    "profile": {
+      "title": "My Profile",
+      "uploadPhoto": "Upload Photo",
+      "uploading": "Uploading...",
+      "changePassword": "Change Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "username": "Username",
+      "email": "Email",
+      "address": "Address",
+      "addressPlaceholder": "Enter your address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your contact number",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "updateSuccess": "Profile updated successfully!",
+      "updateError": "Failed to update profile",
+      "uploadSuccess": "Profile image updated successfully!",
+      "uploadError": "Failed to upload image",
+      "invalidFileType": "Please select an image file",
+      "fileTooLarge": "Image too large. Please select an image smaller than 10MB"
+    },
+    "password": {
+      "title": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "passwordHint": "Min 8 chars with upper, lower, number and special.",
+      "updatePassword": "Update Password",
+      "updating": "Updating...",
+      "success": "Password changed successfully",
+      "allFieldsRequired": "All password fields are required",
+      "weakPassword": "New password must have upper, lower, number and special, min 8 chars",
+      "passwordMismatch": "Passwords do not match",
+      "updateError": "Failed to update password",
+      "currentPasswordRequired": "Current password is required",
+      "newPasswordRequired": "New password is required",
+      "confirmPasswordRequired": "Confirm password is required",
+      "passwordStrengthError": "Min 8 chars with upper, lower, number and special"
+    },
+    "favourites": {
+      "title": "Favourites",
+      "noFavourites": "No favourites yet.",
+      "beds": "beds",
+      "baths": "baths",
+      "view": "View",
+      "remove": "Remove",
+      "removeTitle": "Remove favourite",
+      "removeDescription": "Are you sure you want to remove this favourite?",
+      "removeConfirm": "Remove",
+      "removeCancel": "Cancel"
+    },
+    "reservations": {
+      "title": "My Reservations",
+      "noReservations": "No reservations yet.",
+      "image": "Image",
+      "propertyRef": "Property Ref",
+      "propertyAddress": "Property Address",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "reservedAmount": "Reserved Amount (EUR)",
+      "reservationDate": "Reservation Date",
+      "action": "Action",
+      "viewProperty": "View Property",
+      "imageAlt": "featured image"
+    },
+    "favourite": {
+      "title": "My Favourites",
+      "noFavourites": "No favourite properties yet.",
+      "image": "Image",
+      "propertyRef": "Property Ref",
+      "propertyAddress": "Property Address",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "publicPrice": "Price (EUR)",
+      "dateAdded": "Date Added",
+      "action": "Action",
+      "viewProperty": "View Property",
+      "remove": "Remove",
+      "imageAlt": "featured image",
+      "loading": "Loading your favourites..."
     }
   },
   "franchisePage": {

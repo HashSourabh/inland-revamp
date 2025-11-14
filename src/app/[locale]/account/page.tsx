@@ -6,14 +6,34 @@ import Link from "next/link";
 import { API_BASE_URL } from "@/utils/api";
 import ConfirmDialog from "@/components/shared/ConfirmDialog";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
-type Favourite = { Property_Ref: string; Created_At: string };
-type Reservation = { Id: number; Property_Ref: string; Amount_Cents: number; Currency: string; Status: string; Created_At: string };
+type Favourite = { Property_Ref: string; Created_At: string, Property_ID: number; };
+type Reservation = {
+  PaypalTransactionId: number;
+  Buyer_Id: number;
+  TransactionNumber: string;
+  ReservedAmount: number;
+  Currency: string;
+  PropertyRef: string;
+  ReservedDate: string;
+  PaymentMethod: string;
+  property: {
+    Property_ID: number;
+    Property_Ref: string;
+    Bedrooms: number;
+    Bathrooms: number;
+    Num_Photos: number;
+    Property_Type_ID: number;
+    Property_Address: string;
+    Public_Price: number;
+    SQM_Built: number;
+    SQM_Plot: number;
+    Video_URL?: string;
+    Property_Notes?: string;
+  };
+};
 
-/**
- * Compress image on client side using Canvas API
- * Reduces image size by 70-90% before uploading
- */
 function compressImage(
   file: File,
   options: { maxWidth: number; maxHeight: number; quality: number }
@@ -25,7 +45,6 @@ function compressImage(
       const img = new Image();
 
       img.onload = () => {
-        // Create canvas
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
@@ -34,7 +53,6 @@ function compressImage(
           return;
         }
 
-        // Calculate new dimensions maintaining aspect ratio
         let width = img.width;
         let height = img.height;
 
@@ -50,47 +68,49 @@ function compressImage(
           }
         }
 
-        // Set canvas size
         canvas.width = width;
         canvas.height = height;
-
-        // Draw and compress image
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Convert to base64 with compression
         const compressedBase64 = canvas.toDataURL('image/jpeg', options.quality);
-
         resolve(compressedBase64);
       };
 
-      img.onerror = () => {
-        reject(new Error('Failed to load image'));
-      };
-
+      img.onerror = () => reject(new Error('Failed to load image'));
       img.src = e.target?.result as string;
     };
 
-    reader.onerror = () => {
-      reject(new Error('Failed to read file'));
-    };
-
+    reader.onerror = () => reject(new Error('Failed to read file'));
     reader.readAsDataURL(file);
   });
 }
 
 export default function AccountPage() {
+  const t = useTranslations('Profile_account');
+  const [mounted, setMounted] = useState(false);
   const { user, loading, refresh } = useAuth();
-  const [tab, setTab] = useState<"profile" | "favourites" | "reservations">("profile");
+  const [tab, setTab] = useState<"profile" | "favourites" | "reservations" | "criterias">("profile");
   const [favourites, setFavourites] = useState<Favourite[]>([]);
   const [favDetails, setFavDetails] = useState<any[]>([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingRemoveRef, setPendingRemoveRef] = useState<string | null>(null);
   const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [pwdLoading, setPwdLoading] = useState(false);
+  const [reservationsLoading, setReservationsLoading] = useState(false);
+  const [isFavLoading, setIsFavLoading] = useState(false);
+  const [pendingRemoveId, setPendingRemoveId] = useState<number | null>(null);
+
 
   const [profileForm, setProfileForm] = useState({
     firstName: "",
     lastName: "",
+    contactNumber: "",
+    buyer_address: "",
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const showToast = (type: "success" | "error" | "info", message: string) => {
     const icon = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
@@ -122,15 +142,13 @@ export default function AccountPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
-      showToast('error', 'Please select an image file');
+      showToast('error', t('profile.invalidFileType'));
       return;
     }
 
-    // Validate file size (max 10MB before compression)
     if (file.size > 10 * 1024 * 1024) {
-      showToast('error', 'Image too large. Please select an image smaller than 10MB');
+      showToast('error', t('profile.fileTooLarge'));
       return;
     }
 
@@ -138,7 +156,6 @@ export default function AccountPage() {
     console.log('📸 Original file size:', (file.size / 1024).toFixed(2), 'KB');
 
     try {
-      // ✅ Compress image on client side before uploading
       const compressedBase64 = await compressImage(file, {
         maxWidth: 400,
         maxHeight: 400,
@@ -146,8 +163,6 @@ export default function AccountPage() {
       });
 
       console.log('📸 Compressed size:', (compressedBase64.length / 1024).toFixed(2), 'KB');
-
-      // Show instant preview
       setProfilePreview(compressedBase64);
 
       try {
@@ -169,89 +184,136 @@ export default function AccountPage() {
         }
 
         console.log('✅ Upload successful:', data);
-
-        // Refresh user data to get the new image URL
         await refresh();
-
-        // Clear preview after successful upload
         setProfilePreview(null);
-
-        showToast('success', 'Profile image updated successfully!');
+        showToast('success', t('profile.uploadSuccess'));
 
       } catch (uploadError: any) {
         console.error('❌ Upload error:', uploadError);
-        showToast('error', uploadError.message || 'Failed to upload image');
+        showToast('error', uploadError.message || t('profile.uploadError'));
         setProfilePreview(null);
       }
 
       setUploading(false);
 
-      // Allow selecting the same file again
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     } catch (compressionError: any) {
       console.error('❌ Compression error:', compressionError);
-      showToast('error', 'Failed to process image');
+      showToast('error', t('profile.uploadError'));
       setUploading(false);
     }
   };
 
   useEffect(() => {
+    console.log('User data changed:', user);
     if (user) {
       setProfileForm({
         firstName: user.firstName || "",
         lastName: user.lastName || "",
+        contactNumber: user.Buyer_Telephone ? String(user.Buyer_Telephone) : "",
+        buyer_address: user.Buyer_Address || "",
       });
     }
   }, [user]);
 
-useEffect(() => {
-  if (!user) return;
+  // useEffect(() => {
+  //   if (!user || tab !== "favourites") return;
 
-  const apiBase = API_BASE_URL;
-  const token = getToken();
+  //   const apiBase = API_BASE_URL;
+  //   const token = getToken();
+  //   const buyerId = localStorage.getItem("buyer_Id");
+  //   console.log(buyerId, 'this is the buyer data from local storage');
 
-  // Prepare auth header
-  const authHeaders: HeadersInit = {};
-  if (token) authHeaders["Authorization"] = `Bearer ${token}`;
+  //   const authHeaders: HeadersInit = {};
+  //   if (token) authHeaders["Authorization"] = `Bearer ${token}`;
 
-  if (tab === "favourites") {
+  //   // ✅ Just call /me/favourites (no buyer_id)
+  //   fetch(`${apiBase}/buyers/favourites?buyer_id=${buyerId}`, { headers: authHeaders })
+  //     .then((r) => r.json())
+  //     .then(async (d) => {
+  //       const favs = d.favourites || [];
+  //       setFavourites(favs);
+
+  //       const items = await Promise.all(
+  //         favs.map(async (f: any) => {
+  //           try {
+  //             const resp = await fetch(
+  //               `${apiBase}/properties/ref/${encodeURIComponent(f.Property_Ref)}`
+  //             );
+  //             const pd = await resp.json();
+  //             const data = pd?.data ?? pd;
+  //             return { ref: f.Property_Ref, createdAt: f.Created_At, data: data || {} };
+  //           } catch {
+  //             return { ref: f.Property_Ref, createdAt: f.Created_At, data: null };
+  //           }
+  //         })
+  //       );
+
+  //       setFavDetails(items);
+  //     })
+  //     .catch((err) => {
+  //       console.error("❌ Failed to load favourites:", err);
+  //       setFavourites([]);
+  //       setFavDetails([]);
+  //     });
+  // }, [tab, user]);
+
+  useEffect(() => {
+    if (!user || tab !== "favourites") return;
+
+    const apiBase = API_BASE_URL;
+    const token = getToken();
+
+    const authHeaders: HeadersInit = {};
+    if (token) authHeaders["Authorization"] = `Bearer ${token}`;
+
+    setIsFavLoading(true);
+
     fetch(`${apiBase}/buyers/me/favourites`, { headers: authHeaders })
-      .then(r => r.json())
-      .then(async (d) => {
-        const favs = d.favourites || [];
-        setFavourites(favs);
-
-        const items = await Promise.all(
-          favs.map(async (f: any) => {
-            try {
-              const resp = await fetch(`${apiBase}/properties/ref/${encodeURIComponent(f.Property_Ref)}`);
-              const pd = await resp.json();
-              const data = pd && pd.data ? pd.data : pd;
-              return { ref: f.Property_Ref, createdAt: f.Created_At, data: data || {} };
-            } catch {
-              return { ref: f.Property_Ref, createdAt: f.Created_At, data: null };
-            }
-          })
-        );
-
-        setFavDetails(items);
+      .then((r) => r.json())
+      .then((d) => {
+        setFavDetails(d.favourites || []);
       })
-      .catch(() => {
-        setFavourites([]);
+      .catch((err) => {
+        console.error("❌ Failed to load favourites:", err);
         setFavDetails([]);
+      })
+      .finally(() => {
+        setIsFavLoading(false);
       });
-  }
+  }, [tab, user]);
 
-  if (tab === "reservations") {
-    fetch(`${apiBase}/reservations`, { headers: authHeaders })
-      .then(r => r.json())
+
+
+  useEffect(() => {
+    if (tab !== "reservations") return;
+    setReservationsLoading(true);
+
+    const buyerId = localStorage.getItem("buyer_Id");
+    console.log(buyerId, 'this is the buyer data from local storage');
+
+    if (!buyerId) {
+      console.warn("⚠️ No Buyer_ID found in localStorage.");
+      setReservations([]);
+      setReservationsLoading(false);
+      return;
+    }
+
+    const apiBase = API_BASE_URL;
+    const token = getToken();
+    const authHeaders: HeadersInit = {};
+    if (token) authHeaders["Authorization"] = `Bearer ${token}`;
+
+    fetch(`${apiBase}/reservations?buyer_id=${buyerId}`, {
+      headers: authHeaders,
+    })
+      .then((r) => r.json())
       .then((d) => setReservations(d.reservations || []))
-      .catch(() => setReservations([]));
-  }
-}, [tab, user]);
-
+      .catch(() => setReservations([]))
+      .finally(() => setReservationsLoading(false));
+  }, [tab, user]);
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -268,6 +330,8 @@ useEffect(() => {
         body: JSON.stringify({
           firstName: profileForm.firstName,
           lastName: profileForm.lastName,
+          contactNumber: profileForm.contactNumber,
+          buyer_address: profileForm.buyer_address,
         }),
       });
 
@@ -275,21 +339,25 @@ useEffect(() => {
       if (!res.ok) throw new Error(data?.message || data?.error || "Profile update failed");
 
       await refresh();
-      showToast("success", "✅ Profile updated successfully!");
+      showToast("success", t('profile.updateSuccess'));
     } catch (err: any) {
-      showToast("error", err.message || "Failed to update profile");
+      showToast("error", err.message || t('profile.updateError'));
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <div className="max-w-5xl mx-auto px-4 py-10">Loading...</div>;
-  if (!user) return <div className="max-w-5xl mx-auto px-4 py-10">Please login to view your account.</div>;
+  if (!mounted) {
+    return <div className="max-w-5xl mx-auto px-4 py-10">{t('loading')}</div>;
+  }
+
+  if (loading) return <div className="max-w-5xl mx-auto px-4 py-10">{t('loading')}</div>;
+  if (!user) return <div className="max-w-5xl mx-auto px-4 py-10">{t('loginRequired')}</div>;
 
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-semibold mb-6">My Account</h1>
+        <h1 className="text-2xl font-semibold mb-6">{t('title')}</h1>
 
         <div className="flex gap-6">
           {/* Sidebar */}
@@ -301,21 +369,28 @@ useEffect(() => {
                     }`}
                   onClick={() => setTab("profile")}
                 >
-                  My Profile
+                  {t('tabs.profile')}
                 </button>
                 <button
                   className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "favourites" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"
                     }`}
                   onClick={() => setTab("favourites")}
                 >
-                  Favourites
+                  {t('tabs.favourites')}
                 </button>
                 <button
                   className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "reservations" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"
                     }`}
                   onClick={() => setTab("reservations")}
                 >
-                  Reservations
+                  {t('tabs.reservations')}
+                </button>
+                <button
+                  className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"
+                    }`}
+                  onClick={() => setTab("criterias")}
+                >
+                  Criterias
                 </button>
               </nav>
             </div>
@@ -327,7 +402,6 @@ useEffect(() => {
               <div className="bg-white border rounded-lg shadow-sm p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-4">
-                    {/* Avatar */}
                     {(profilePreview || user.profileImageUrl) ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -343,7 +417,7 @@ useEffect(() => {
                       </div>
                     )}
                     <div>
-                      <div className="text-xl font-semibold">My Profile</div>
+                      <div className="text-xl font-semibold">{t('profile.title')}</div>
                       <div>
                         <button
                           type="button"
@@ -351,7 +425,7 @@ useEffect(() => {
                           className="text-primary-600 hover:underline text-sm inline-flex items-center gap-1"
                           disabled={uploading}
                         >
-                          <span>{uploading ? "Uploading..." : "Upload Photo"}</span>
+                          <span>{uploading ? t('profile.uploading') : t('profile.uploadPhoto')}</span>
                         </button>
                         <input
                           ref={fileInputRef}
@@ -372,14 +446,14 @@ useEffect(() => {
                     }}
                     className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50"
                   >
-                    Change Password
+                    {t('profile.changePassword')}
                   </button>
                 </div>
 
                 <form onSubmit={handleSaveProfile} className="max-w-xl space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-1">First Name</label>
+                      <label className="block text-sm font-medium mb-1">{t('profile.firstName')}</label>
                       <input
                         type="text"
                         className="w-full rounded-md border px-3 py-2"
@@ -391,7 +465,7 @@ useEffect(() => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-1">Last Name</label>
+                      <label className="block text-sm font-medium mb-1">{t('profile.lastName')}</label>
                       <input
                         type="text"
                         className="w-full rounded-md border px-3 py-2"
@@ -405,24 +479,18 @@ useEffect(() => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Username
-                      <span className="ml-2 text-xs text-gray-500">(Cannot be changed)</span>
-                    </label>
+                    <label className="block text-sm font-medium mb-1">{t('profile.username')}</label>
                     <input
                       type="text"
                       className="w-full rounded-md border px-3 py-2 bg-gray-50 text-gray-600 cursor-not-allowed"
-                      value={(user as any).username || ""}
+                      value={user.username || ""}
                       disabled
                       readOnly
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Email
-                      <span className="ml-2 text-xs text-gray-500">(Cannot be changed)</span>
-                    </label>
+                    <label className="block text-sm font-medium mb-1">{t('profile.email')}</label>
                     <input
                       type="email"
                       className="w-full rounded-md border px-3 py-2 bg-gray-50 text-gray-600 cursor-not-allowed"
@@ -432,12 +500,34 @@ useEffect(() => {
                     />
                   </div>
 
+                  <div>
+                    <label className="block text-sm font-medium mb-1">{t('profile.address')}</label>
+                    <input
+                      type="text"
+                      className="w-full rounded-md border px-3 py-2"
+                      value={profileForm.buyer_address}
+                      onChange={(e) => setProfileForm({ ...profileForm, buyer_address: e.target.value })}
+                      placeholder={t('profile.addressPlaceholder')}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">{t('profile.phone')}</label>
+                    <input
+                      type="tel"
+                      className="w-full rounded-md border px-3 py-2"
+                      value={profileForm.contactNumber}
+                      onChange={(e) => setProfileForm({ ...profileForm, contactNumber: e.target.value })}
+                      placeholder={t('profile.phonePlaceholder')}
+                    />
+                  </div>
+
                   <button
                     type="submit"
                     disabled={saving}
                     className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {saving ? "Saving..." : "Save Changes"}
+                    {saving ? t('profile.saving') : t('profile.saveChanges')}
                   </button>
                 </form>
 
@@ -447,18 +537,22 @@ useEffect(() => {
                   onSubmit={async (e: React.FormEvent) => {
                     e.preventDefault();
                     setPwdMsg(null);
+                    setPwdLoading(true);
 
                     if (!pwdForm.currentPassword.trim() || !pwdForm.newPassword.trim() || !pwdForm.confirmPassword.trim()) {
-                      return setPwdMsg({ type: 'error', text: 'All password fields are required' });
+                      setPwdLoading(false);
+                      return setPwdMsg({ type: 'error', text: t('password.allFieldsRequired') });
                     }
 
                     const strong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pwdForm.newPassword);
                     if (!strong) {
-                      return setPwdMsg({ type: 'error', text: 'New password must have upper, lower, number and special, min 8 chars' });
+                      setPwdLoading(false);
+                      return setPwdMsg({ type: 'error', text: t('password.weakPassword') });
                     }
 
                     if (pwdForm.newPassword !== pwdForm.confirmPassword) {
-                      return setPwdMsg({ type: 'error', text: 'Passwords do not match' });
+                      setPwdLoading(false);
+                      return setPwdMsg({ type: 'error', text: t('password.passwordMismatch') });
                     }
 
                     try {
@@ -476,99 +570,226 @@ useEffect(() => {
                       });
 
                       const data = await res.json();
-                      if (!res.ok) throw new Error(data?.message || data?.error || 'Failed to update password');
+                      if (!res.ok) throw new Error(data?.message || data?.error || t('password.updateError'));
 
-                      setPwdMsg({ type: 'success', text: data?.message || 'Password changed successfully' });
+                      setPwdMsg({ type: 'success', text: data?.message || t('password.success') });
                       setPwdForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
                       setTimeout(() => setPwdOpen(false), 1200);
                     } catch (err: any) {
-                      setPwdMsg({ type: 'error', text: err.message || 'Failed to update password' });
+                      setPwdMsg({ type: 'error', text: err.message || t('password.updateError') });
+                    } finally {
+                      setPwdLoading(false);
                     }
                   }}
                   pwdForm={pwdForm}
                   setPwdForm={setPwdForm}
                   pwdMsg={pwdMsg}
                   setPwdMsg={setPwdMsg}
+                  pwdLoading={pwdLoading}
                 />
               </div>
             )}
 
             {tab === "favourites" && (
               <div className="bg-white border rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold mb-4">Favourites</h2>
-                <div className="grid gap-3">
-                  {favourites.length === 0 && <div className="text-gray-600">No favourites yet.</div>}
-                  {favDetails.map((item) => (
-                    <div key={item.ref} className="rounded-md border p-3 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={item.data?.imageUrl || '/images/map-preview.jpg'}
-                          alt={item.data?.title || 'Property'}
-                          className="h-16 w-24 rounded object-cover border"
-                        />
-                        <div>
-                          <div className="text-sm text-gray-500">{item.data?.title || `Ref ${item.ref}`}</div>
-                          <div className="font-medium">
-                            {item.data?.Property_Address || `${item.data?.town || ''}${item.data?.province ? ', ' + item.data.province : ''}`}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {(item.data?.Bedrooms !== undefined) && <span>{item.data.Bedrooms} beds</span>} {" "}
-                            {(item.data?.Bathrooms !== undefined) && <span>{item.data.Bathrooms} baths</span>} {" "}
-                            {(item.data?.Public_Price !== undefined) && <span>• €{Number(item.data.Public_Price).toLocaleString()}</span>}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Link
-                          href={`/properties/${encodeURIComponent(item.data?.Property_ID || item.ref)}`}
-                          className="text-primary-700 hover:underline"
-                        >
-                          View
-                        </Link>
-                        <button
-                          onClick={() => { setPendingRemoveRef(item.ref); setConfirmOpen(true); }}
-                          className="text-sm text-red-600 hover:underline"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <h2 className="text-xl font-semibold mb-4">{t('favourite.title')}</h2>
+
+                {/* 🔄 Loader while fetching */}
+                {isFavLoading ? (
+                  <div className="flex justify-center items-center py-10 text-gray-600">
+                    <svg
+                      className="animate-spin h-6 w-6 text-primary-600 mr-2"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                    {t('favourite.loading')}
+                  </div>
+                ) : favDetails.length === 0 ? (
+                  <div className="text-gray-600">{t('favourite.noFavourites')}</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full border text-sm text-gray-700">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="border p-2 text-left">S. No.</th>
+                          <th className="border p-2 text-left">{t('favourite.image')}</th>
+                          <th className="border p-2 text-left">{t('favourite.propertyRef')}</th>
+                          <th className="border p-2 text-left">{t('favourite.propertyAddress')}</th>
+                          <th className="border p-2 text-left">{t('favourite.bedrooms')}</th>
+                          <th className="border p-2 text-left">{t('favourite.bathrooms')}</th>
+                          <th className="border p-2 text-left">{t('favourite.publicPrice')}</th>
+                          <th className="border p-2 text-left">{t('favourite.dateAdded')}</th>
+                          <th className="border p-2 text-left">{t('favourite.action')}</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {favDetails.map((f) => {
+                          const ref = f.Property_Ref || f.Property_ID;
+                          const img = ref
+                            ? `https://www.inlandandalucia.com/images/photos/properties/${ref}/${ref}_1.jpg`
+                            : "https://www.inlandandalucia.com/images/no-image-available.jpg";
+
+                          return (
+                            <tr key={ref} className="hover:bg-gray-50">
+                              <td className="border p-2">{favDetails.indexOf(f) + 1}</td>
+                              <td className="border p-2">
+                                <img
+                                  src={img}
+                                  alt={`Property ${ref}`}
+                                  className="w-20 h-20 object-cover rounded-md"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                                  }}
+                                />
+                              </td>
+                              <td className="border p-2 font-medium">{ref}</td>
+                              <td className="border p-2">{f.Property_Address || "-"}</td>
+                              <td className="border p-2">{f.Bedrooms || "-"}</td>
+                              <td className="border p-2">{f.Bathrooms || "-"}</td>
+                              <td className="border p-2">
+                                €{f.Public_Price ? f.Public_Price.toLocaleString() : "-"}
+                              </td>
+                              <td className="border p-2">
+                                {new Date(f.DateCreated).toLocaleDateString()}
+                              </td>
+                              <td className="border p-2 text-center">
+                                <Link
+                                  href={`/properties/${encodeURIComponent(f.Property_ID)}`}
+                                  className="text-primary-700 hover:underline"
+                                >
+                                  {t('favourite.viewProperty')}
+                                </Link>
+                                <button
+                                  onClick={() => { setPendingRemoveId(f.Property_ID); setConfirmOpen(true); }}
+                                  className="ml-3 text-sm text-red-600 hover:underline"
+                                >
+                                  {t('favourite.remove')}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             )}
 
+
+
             {tab === "reservations" && (
               <div className="bg-white border rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold mb-4">My Reservations</h2>
-                <div className="grid gap-3">
-                  {reservations.length === 0 && <div className="text-gray-600">No reservations yet.</div>}
-                  {reservations.map((r) => (
-                    <div key={r.Id} className="rounded-md border p-3 flex items-center justify-between">
-                      <div>
-                        <div className="text-sm text-gray-500">Property Ref</div>
-                        <div className="font-medium">{r.Property_Ref}</div>
-                        <div className="text-sm text-gray-500">
-                          Status: <span className="font-medium capitalize">{r.Status}</span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-medium">
-                          {(r.Amount_Cents / 100).toFixed(2)} {r.Currency.toUpperCase()}
-                        </div>
-                        <Link
-                          href={`/properties?keywords=${encodeURIComponent(r.Property_Ref)}`}
-                          className="text-primary-700 hover:underline text-sm"
-                        >
-                          View
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <h2 className="text-xl font-semibold mb-4">{t('reservations.title')}</h2>
+
+                {reservationsLoading ? (
+                  <div className="flex flex-col items-center justify-center py-12">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent mb-4" />
+                    <p className="text-gray-600">{t('loading')}</p>
+                  </div>
+                ) : reservations.length === 0 ? (
+                  <div className="text-gray-600">{t('reservations.noReservations')}</div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full border text-sm text-gray-700">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="border p-2 text-left">S. No.</th>
+                          <th className="border p-2 text-left">{t('reservations.image')}</th>
+                          <th className="border p-2 text-left">{t('reservations.propertyRef')}</th>
+                          <th className="border p-2 text-left">{t('reservations.propertyAddress')}</th>
+                          <th className="border p-2 text-left">{t('reservations.bedrooms')}</th>
+                          <th className="border p-2 text-left">{t('reservations.bathrooms')}</th>
+                          <th className="border p-2 text-left">{t('reservations.reservedAmount')}</th>
+                          <th className="border p-2 text-left">{t('reservations.reservationDate')}</th>
+                          <th className="border p-2 text-left">{t('reservations.action')}</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {reservations.map((r) => {
+                          const property = r.property;
+                          const propertyId = property?.Property_ID || null;
+                          const propertyRef = property?.Property_Ref || "N/A";
+
+                          const featuredImage = propertyRef
+                            ? `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_1.jpg`
+                            : null;
+
+                          return (
+                            <tr key={r.PaypalTransactionId} className="hover:bg-gray-50">
+                              <td className="border p-2">{reservations.indexOf(r) + 1}</td>
+                              <td className="border p-2">
+                                {featuredImage ? (
+                                  <img
+                                    src={featuredImage}
+                                    alt={`${propertyRef} ${t('reservations.imageAlt')}`}
+                                    className="w-20 h-20 object-cover rounded-md"
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src =
+                                        "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="w-20 h-20 bg-gray-200 rounded-md flex items-center justify-center text-gray-500">
+                                    N/A
+                                  </div>
+                                )}
+                              </td>
+
+                              <td className="border p-2 font-medium">{propertyRef}</td>
+                              <td className="border p-2">{property?.Property_Address || "-"}</td>
+                              <td className="border p-2">{property?.Bedrooms || "-"}</td>
+                              <td className="border p-2">{property?.Bathrooms || "-"}</td>
+                              <td className="border p-2 font-medium">
+                                {r.ReservedAmount?.toLocaleString() || "-"}
+                              </td>
+                              <td className="border p-2">
+                                {new Date(r.ReservedDate).toLocaleDateString()}
+                              </td>
+                              <td className="border p-2 text-center">
+                                <Link
+                                  href={`/properties/${propertyId}`}
+                                  className="text-primary-700 hover:underline"
+                                >
+                                  {t('reservations.viewProperty')}
+                                </Link>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             )}
+
+            {tab === "criterias" && (
+              <div className="bg-white border rounded-lg shadow-sm p-6 mt-6">
+
+                <h2 className="text-xl font-semibold mb-4">Criterias</h2>
+                <div className="text-gray-600">Criterias management coming soon...</div>
+              </div>
+            )}
+
           </div>
         </div>
       </div>
@@ -577,43 +798,74 @@ useEffect(() => {
         open={confirmOpen}
         onClose={() => {
           setConfirmOpen(false);
-          setPendingRemoveRef(null);
+          setPendingRemoveId(null);
         }}
         onConfirm={async () => {
-          if (!pendingRemoveRef) return;
+          if (!pendingRemoveId) return;
+
+          const apiBase = API_BASE_URL;
+          const token = getToken();
+          const buyerId = localStorage.getItem("buyer_Id");
+
+          if (!buyerId || !token) return;
+
           try {
             const res = await fetch(
-              `${API_BASE_URL}/buyers/me/favourites/${encodeURIComponent(pendingRemoveRef)}`,
+              `${apiBase}/buyers/${buyerId}/favourites/${pendingRemoveId}`, // Use Property_ID
               {
-                method: 'DELETE',
-                credentials: 'include'
+                method: "DELETE",
+                headers: {
+                  "Authorization": `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
               }
             );
+
             if (res.ok) {
-              setFavourites((prev) => prev.filter((x) => x.Property_Ref !== pendingRemoveRef));
-              setFavDetails((prev) => prev.filter((x) => x.ref !== pendingRemoveRef));
+              // Remove by Property_ID
+              setFavourites((prev) => prev.filter((x) => x.Property_ID !== pendingRemoveId));
+              setFavDetails((prev) => prev.filter((x) => x.Property_ID !== pendingRemoveId));
+              // showToast("success", t("favourites.removeSuccess"));
+              toast.error('Favourite removed successfully.');
+
+            } else {
+              const errMsg = await res.text();
+              console.error("❌ Failed to delete favourite:", errMsg);
             }
-          } catch { }
-          setPendingRemoveRef(null);
+          } catch (err) {
+            console.error("❌ Delete request failed:", err);
+          } finally {
+            setPendingRemoveId(null);
+          }
         }}
-        title="Remove favourite"
-        description="Are you sure you want to remove this favourite?"
-        confirmText="Remove"
+        titleKey="favourites.removeTitle"
+        descriptionKey="favourites.removeDescription"
+        confirmKey="favourites.removeConfirm"
+        cancelKey="favourites.removeCancel"
         confirmButtonClassName="bg-red-600 hover:bg-red-700"
       />
+
+
     </>
   );
 }
 
 // Password Modal Component
-function PasswordModal({ open, onClose, onSubmit, pwdForm, setPwdForm, pwdMsg }: any) {
+function PasswordModal({ open, onClose, onSubmit, pwdForm, setPwdForm, pwdMsg, pwdLoading }: any) {
+  const t = useTranslations('Profile_account');
+
   if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-md rounded-xl bg-white shadow-xl p-6">
+      <div className="w-full max-w-md rounded-xl bg-white shadow-xl p-6 relative">
+        {pwdLoading && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-white/70">
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
+          </div>
+        )}
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold">Change Password</h3>
+          <h3 className="text-lg font-semibold">{t('password.title')}</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-xl">
             ✕
           </button>
@@ -624,14 +876,20 @@ function PasswordModal({ open, onClose, onSubmit, pwdForm, setPwdForm, pwdMsg }:
             {pwdMsg.text}
           </div>
         )}
-        <FieldwisePasswordForm onSubmit={onSubmit} pwdForm={pwdForm} setPwdForm={setPwdForm} />
+        <FieldwisePasswordForm
+          onSubmit={onSubmit}
+          pwdForm={pwdForm}
+          setPwdForm={setPwdForm}
+          pwdLoading={pwdLoading}
+        />
       </div>
     </div>
   );
 }
 
 // Password Form with Validation
-function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
+function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm, pwdLoading }: any) {
+  const t = useTranslations('Profile_account');
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [show, setShow] = React.useState<{ current: boolean; new: boolean; confirm: boolean }>({
     current: false,
@@ -644,22 +902,22 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
     const nextErrors: Record<string, string> = {};
 
     if (!pwdForm.currentPassword?.trim()) {
-      nextErrors.currentPassword = 'Current password is required';
+      nextErrors.currentPassword = t('password.currentPasswordRequired');
     }
     if (!pwdForm.newPassword?.trim()) {
-      nextErrors.newPassword = 'New password is required';
+      nextErrors.newPassword = t('password.newPasswordRequired');
     }
 
     const strong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pwdForm.newPassword || '');
     if (pwdForm.newPassword && !strong) {
-      nextErrors.newPassword = 'Min 8 chars with upper, lower, number and special';
+      nextErrors.newPassword = t('password.passwordStrengthError');
     }
 
     if (!pwdForm.confirmPassword?.trim()) {
-      nextErrors.confirmPassword = 'Confirm password is required';
+      nextErrors.confirmPassword = t('password.confirmPasswordRequired');
     }
     if (pwdForm.newPassword !== pwdForm.confirmPassword) {
-      nextErrors.confirmPassword = 'Passwords do not match';
+      nextErrors.confirmPassword = t('password.passwordMismatch');
     }
 
     setErrors(nextErrors);
@@ -671,7 +929,7 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <div>
-        <label className="block text-sm mb-1">Current Password</label>
+        <label className="block text-sm mb-1">{t('password.currentPassword')}</label>
         <div className="relative">
           <input
             type={show.current ? 'text' : 'password'}
@@ -681,11 +939,13 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
               setPwdForm({ ...pwdForm, currentPassword: e.target.value });
               if (errors.currentPassword) setErrors({ ...errors, currentPassword: '' });
             }}
+            disabled={pwdLoading}
           />
           <button
             type="button"
             onClick={() => setShow({ ...show, current: !show.current })}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+            disabled={pwdLoading}
           >
             {show.current ? '🙈' : '👁️'}
           </button>
@@ -694,7 +954,7 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
       </div>
 
       <div>
-        <label className="block text-sm mb-1">New Password</label>
+        <label className="block text-sm mb-1">{t('password.newPassword')}</label>
         <div className="relative">
           <input
             type={show.new ? 'text' : 'password'}
@@ -704,21 +964,23 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
               setPwdForm({ ...pwdForm, newPassword: e.target.value });
               if (errors.newPassword) setErrors({ ...errors, newPassword: '' });
             }}
+            disabled={pwdLoading}
           />
           <button
             type="button"
             onClick={() => setShow({ ...show, new: !show.new })}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+            disabled={pwdLoading}
           >
             {show.new ? '🙈' : '👁️'}
           </button>
         </div>
-        <p className="text-xs text-gray-500 mt-1">Min 8 chars with upper, lower, number and special.</p>
+        <p className="text-xs text-gray-500 mt-1">{t('password.passwordHint')}</p>
         {errors.newPassword && <p className="text-xs text-red-600 mt-1">{errors.newPassword}</p>}
       </div>
 
       <div>
-        <label className="block text-sm mb-1">Confirm New Password</label>
+        <label className="block text-sm mb-1">{t('password.confirmPassword')}</label>
         <div className="relative">
           <input
             type={show.confirm ? 'text' : 'password'}
@@ -728,11 +990,13 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
               setPwdForm({ ...pwdForm, confirmPassword: e.target.value });
               if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: '' });
             }}
+            disabled={pwdLoading}
           />
           <button
             type="button"
             onClick={() => setShow({ ...show, confirm: !show.confirm })}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+            disabled={pwdLoading}
           >
             {show.confirm ? '🙈' : '👁️'}
           </button>
@@ -742,9 +1006,10 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm }: any) {
 
       <button
         type="submit"
-        className="w-full rounded-md bg-primary-600 text-white py-2 hover:bg-primary-700"
+        disabled={pwdLoading}
+        className="w-full rounded-md bg-primary-600 text-white py-2 hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        Update Password
+        {pwdLoading ? t('password.updating') : t('password.updatePassword')}
       </button>
     </form>
   );

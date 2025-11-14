@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { API_BASE_URL } from "@/utils/api";
 import toast from "react-hot-toast";
 import GlobalLoader from "@/components/shared/GlobalLoader";
+import { useRouter } from "next/navigation";
 
 type Buyer = {
   id: number;
@@ -13,6 +14,8 @@ type Buyer = {
   username?: string;
   profileImageUrl?: string;
   role?: string;
+  Buyer_Telephone?: number;
+  Buyer_Address?: string;
 };
 
 // ✅ Added authData to pass token/email to modal
@@ -46,10 +49,11 @@ function setToken(token: string | null) {
   try {
     if (token) localStorage.setItem("ia_token", token);
     else localStorage.removeItem("ia_token");
-  } catch {}
+  } catch { }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<Buyer | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -66,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
+        localStorage.setItem("buyer_Id", data.user.id);
       } else {
         setUser(null);
       }
@@ -83,10 +88,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         method: "POST",
         headers: token ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` } : { "Content-Type": "application/json" },
       });
-      
+
       const data = res.ok ? await res.json() : null;
       const message = data?.message || (res.ok ? "Logged out successfully." : "Logout failed. Please try again.");
-      
+
       if (res.ok) {
         toast.custom((t) => (
           <div style={{
@@ -94,9 +99,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             background: '#10b981', color: '#fff', padding: '10px 14px', borderRadius: '10px',
             minWidth: '320px', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
           }}>
-            <div style={{fontSize: '18px'}}>✅</div>
-            <div style={{flex: 1, fontWeight: 500}}>{message}</div>
-            <button onClick={() => toast.dismiss(t.id)} style={{opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px'}}>✕</button>
+            <div style={{ fontSize: '18px' }}>✅</div>
+            <div style={{ flex: 1, fontWeight: 500 }}>{message}</div>
+            <button onClick={() => toast.dismiss(t.id)} style={{ opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px' }}>✕</button>
           </div>
         ), { duration: 4000 });
       } else {
@@ -106,9 +111,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             background: '#ef4444', color: '#fff', padding: '10px 14px', borderRadius: '10px',
             minWidth: '320px', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
           }}>
-            <div style={{fontSize: '18px'}}>❌</div>
-            <div style={{flex: 1, fontWeight: 500}}>{message}</div>
-            <button onClick={() => toast.dismiss(t.id)} style={{opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px'}}>✕</button>
+            <div style={{ fontSize: '18px' }}>❌</div>
+            <div style={{ flex: 1, fontWeight: 500 }}>{message}</div>
+            <button onClick={() => toast.dismiss(t.id)} style={{ opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px' }}>✕</button>
           </div>
         ), { duration: 4000 });
       }
@@ -119,14 +124,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           background: '#ef4444', color: '#fff', padding: '10px 14px', borderRadius: '10px',
           minWidth: '320px', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
         }}>
-          <div style={{fontSize: '18px'}}>❌</div>
-          <div style={{flex: 1, fontWeight: 500}}>Logout failed. Please try again.</div>
-          <button onClick={() => toast.dismiss(t.id)} style={{opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px'}}>✕</button>
+          <div style={{ fontSize: '18px' }}>❌</div>
+          <div style={{ flex: 1, fontWeight: 500 }}>Logout failed. Please try again.</div>
+          <button onClick={() => toast.dismiss(t.id)} style={{ opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px' }}>✕</button>
         </div>
       ), { duration: 4000 });
     } finally {
       setToken(null);
       setUser(null);
+      router.push("/");
     }
   };
 
