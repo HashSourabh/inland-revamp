@@ -33,6 +33,22 @@ type Reservation = {
     Property_Notes?: string;
   };
 };
+type CriteriaOption = {
+  id: number;
+  label: string;
+  value: string;
+};
+
+type CriteriaCategory = {
+  id: number;
+  title: string;
+  key: string;
+  options: CriteriaOption[];
+};
+type BuyerCriteriaItem = { value: string; id: number | null };
+type BuyerCriteria = {
+  [key: string]: BuyerCriteriaItem[];
+};
 
 function compressImage(
   file: File,
@@ -99,6 +115,11 @@ export default function AccountPage() {
   const [reservationsLoading, setReservationsLoading] = useState(false);
   const [isFavLoading, setIsFavLoading] = useState(false);
   const [pendingRemoveId, setPendingRemoveId] = useState<number | null>(null);
+
+  const [criteriaCategories, setCriteriaCategories] = useState<CriteriaCategory[]>([]);
+  const [buyerCriteria, setBuyerCriteria] = useState<BuyerCriteria>({});
+  const [criteriaLoading, setCriteriaLoading] = useState(false);
+  const [criteriaSaving, setCriteriaSaving] = useState(false);
 
 
   const [profileForm, setProfileForm] = useState({
@@ -218,48 +239,6 @@ export default function AccountPage() {
     }
   }, [user]);
 
-  // useEffect(() => {
-  //   if (!user || tab !== "favourites") return;
-
-  //   const apiBase = API_BASE_URL;
-  //   const token = getToken();
-  //   const buyerId = localStorage.getItem("buyer_Id");
-  //   console.log(buyerId, 'this is the buyer data from local storage');
-
-  //   const authHeaders: HeadersInit = {};
-  //   if (token) authHeaders["Authorization"] = `Bearer ${token}`;
-
-  //   // ✅ Just call /me/favourites (no buyer_id)
-  //   fetch(`${apiBase}/buyers/favourites?buyer_id=${buyerId}`, { headers: authHeaders })
-  //     .then((r) => r.json())
-  //     .then(async (d) => {
-  //       const favs = d.favourites || [];
-  //       setFavourites(favs);
-
-  //       const items = await Promise.all(
-  //         favs.map(async (f: any) => {
-  //           try {
-  //             const resp = await fetch(
-  //               `${apiBase}/properties/ref/${encodeURIComponent(f.Property_Ref)}`
-  //             );
-  //             const pd = await resp.json();
-  //             const data = pd?.data ?? pd;
-  //             return { ref: f.Property_Ref, createdAt: f.Created_At, data: data || {} };
-  //           } catch {
-  //             return { ref: f.Property_Ref, createdAt: f.Created_At, data: null };
-  //           }
-  //         })
-  //       );
-
-  //       setFavDetails(items);
-  //     })
-  //     .catch((err) => {
-  //       console.error("❌ Failed to load favourites:", err);
-  //       setFavourites([]);
-  //       setFavDetails([]);
-  //     });
-  // }, [tab, user]);
-
   useEffect(() => {
     if (!user || tab !== "favourites") return;
 
@@ -314,6 +293,45 @@ export default function AccountPage() {
       .catch(() => setReservations([]))
       .finally(() => setReservationsLoading(false));
   }, [tab, user]);
+  useEffect(() => {
+    if (tab !== "criterias") return;
+
+    const fetchCriteria = async () => {
+      setCriteriaLoading(true);
+      try {
+        const token = getToken();
+        const headers: HeadersInit = {};
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+
+        // Fetch categories
+        const categoriesRes = await fetch(`${API_BASE_URL}/criterias`, { headers });
+        const categoriesData = await categoriesRes.json();
+        setCriteriaCategories(categoriesData.categories || []);
+
+        // Fetch buyer's saved criteria
+        const buyerCriteriaRes = await fetch(`${API_BASE_URL}/criterias/buyer`, { headers });
+        const buyerCriteriaData = await buyerCriteriaRes.json();
+
+        const mappedBuyerCriteria: BuyerCriteria = {};
+        Object.entries(buyerCriteriaData.criteria || {}).forEach(([key, items]: any) => {
+          mappedBuyerCriteria[key] = (items as any[]).map(item => ({
+            value: item.value,
+            id: item.id || null
+          }));
+        });
+
+        setBuyerCriteria(mappedBuyerCriteria);
+
+      } catch (error) {
+        console.error("Failed to load criteria:", error);
+        showToast("error", "Failed to load criteria");
+      } finally {
+        setCriteriaLoading(false);
+      }
+    };
+
+    fetchCriteria();
+  }, [tab]);
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -339,13 +357,90 @@ export default function AccountPage() {
       if (!res.ok) throw new Error(data?.message || data?.error || "Profile update failed");
 
       await refresh();
-      showToast("success", t('profile.updateSuccess'));
+      // showToast("success", t('profile.updateSuccess'));
     } catch (err: any) {
       showToast("error", err.message || t('profile.updateError'));
     } finally {
       setSaving(false);
     }
   };
+  // Add a ref to track ongoing save operations
+  const savingRef = useRef(false);
+
+  const handleCriteriaChange = (
+    categoryKey: string,
+    optionValue: string,
+    checked: boolean
+  ) => {
+    setCriteriaLoading(true);
+    setBuyerCriteria(prev => {
+      const categoryValues: BuyerCriteriaItem[] = prev[categoryKey] || [];
+      let updatedCategory: BuyerCriteriaItem[];
+
+      if (checked) {
+        // Add option if not already present
+        if (!categoryValues.some(item => item.value === optionValue)) {
+          updatedCategory = [...categoryValues, { value: optionValue, id: null }];
+        } else {
+          updatedCategory = categoryValues;
+        }
+      } else {
+        // Remove option
+        updatedCategory = categoryValues.filter(item => item.value !== optionValue);
+      }
+
+      const newBuyerCriteria = { ...prev, [categoryKey]: updatedCategory };
+
+      // Save only the changed category (debounced)
+      if (!savingRef.current) {
+        savingRef.current = true;
+
+        // Use setTimeout to avoid race conditions
+        setTimeout(() => {
+          handleSaveCriteria({ [categoryKey]: updatedCategory.map(item => item.value) });
+        }, 0);
+      }
+
+      return newBuyerCriteria;
+    });
+  };
+
+  // Handler to save criteria
+  const handleSaveCriteria = async (criteriaToSave: Record<string, string[]>) => {
+    // Prevent duplicate calls
+    if (criteriaSaving) {
+      console.log('⏭️ Skipping duplicate save call');
+      return;
+    }
+
+    setCriteriaSaving(true);
+
+    try {
+      const token = getToken();
+      const headers: HeadersInit = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch(`${API_BASE_URL}/criterias/update`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({ criteria: criteriaToSave }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "Failed to save criteria");
+
+      showToast("success", "Criteria saved successfully");
+    } catch (error: any) {
+      showToast("error", error.message || "Failed to save criteria");
+    } finally {
+      setCriteriaSaving(false);
+      savingRef.current = false;
+      setCriteriaLoading(false); // Reset the ref
+    }
+  };
+
+
+
 
   if (!mounted) {
     return <div className="max-w-5xl mx-auto px-4 py-10">{t('loading')}</div>;
@@ -783,12 +878,54 @@ export default function AccountPage() {
             )}
 
             {tab === "criterias" && (
-              <div className="bg-white border rounded-lg shadow-sm p-6 mt-6">
+              <div className="bg-white border rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold">Buyer Criterias</h2>
+                </div>
 
-                <h2 className="text-xl font-semibold mb-4">Criterias</h2>
-                <div className="text-gray-600">Criterias management coming soon...</div>
+                {criteriaLoading ? (
+                  <div className="flex justify-center items-center py-12">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+                  </div>
+                ) : criteriaCategories.length === 0 ? (
+                  <div className="text-center py-8 text-gray-600">No criteria available</div>
+                ) : (
+                  <div className="space-y-6">
+                    {criteriaCategories.map((category) => (
+                      <div key={category.id} className="border-b pb-6 last:border-b-0">
+                        <h3 className="text-base font-semibold text-gray-800 mb-4 bg-yellow-400 px-4 py-2 inline-block">
+                          {category.title}
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                          {category.options.map((option) => {
+                            const isChecked = (buyerCriteria[category.key] || []).some(item => item.value === option.value);
+
+
+                            return (
+                              <label
+                                key={option.id}
+                                className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  disabled={criteriaLoading} 
+                                  onChange={(e) => handleCriteriaChange(category.key, option.value, e.target.checked)}
+                                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                                />
+                                <span className="text-sm text-gray-700">{option.label}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
+
 
           </div>
         </div>
