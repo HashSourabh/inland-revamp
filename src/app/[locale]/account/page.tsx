@@ -721,7 +721,6 @@ export default function AccountPage() {
                     <table className="min-w-full border text-sm text-gray-700">
                       <thead className="bg-gray-100">
                         <tr>
-                          <th className="border p-2 text-left">S. No.</th>
                           <th className="border p-2 text-left">{t('favourite.image')}</th>
                           <th className="border p-2 text-left">{t('favourite.propertyRef')}</th>
                           <th className="border p-2 text-left">{t('favourite.propertyAddress')}</th>
@@ -742,12 +741,11 @@ export default function AccountPage() {
 
                           return (
                             <tr key={ref} className="hover:bg-gray-50">
-                              <td className="border p-2">{favDetails.indexOf(f) + 1}</td>
                               <td className="border p-2">
                                 <img
                                   src={img}
                                   alt={`Property ${ref}`}
-                                  className="w-20 h-20 object-cover rounded-md"
+                                  className="w-20 h-20 min-w-20 object-cover rounded-md"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       "https://www.inlandandalucia.com/images/no-image-available.jpg";
@@ -806,7 +804,7 @@ export default function AccountPage() {
                     <table className="min-w-full border text-sm text-gray-700">
                       <thead className="bg-gray-100">
                         <tr>
-                          <th className="border p-2 text-left">S. No.</th>
+
                           <th className="border p-2 text-left">{t('reservations.image')}</th>
                           <th className="border p-2 text-left">{t('reservations.propertyRef')}</th>
                           <th className="border p-2 text-left">{t('reservations.propertyAddress')}</th>
@@ -830,13 +828,12 @@ export default function AccountPage() {
 
                           return (
                             <tr key={r.PaypalTransactionId} className="hover:bg-gray-50">
-                              <td className="border p-2">{reservations.indexOf(r) + 1}</td>
                               <td className="border p-2">
                                 {featuredImage ? (
                                   <img
                                     src={featuredImage}
                                     alt={`${propertyRef} ${t('reservations.imageAlt')}`}
-                                    className="w-20 h-20 object-cover rounded-md"
+                                    className="w-20 h-20 min-w-20 object-cover rounded-md"
                                     onError={(e) => {
                                       (e.target as HTMLImageElement).src =
                                         "https://www.inlandandalucia.com/images/no-image-available.jpg";
@@ -878,29 +875,33 @@ export default function AccountPage() {
             )}
 
             {tab === "criterias" && (
-              <div className="bg-white border rounded-lg shadow-sm p-6">
+              <div className="relative bg-white border rounded-lg shadow-sm p-6">
+                {/* Overlay loader */}
+                {criteriaLoading && (
+                  <div className="absolute inset-0 bg-white/70 flex justify-center items-center z-10">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-semibold">Buyer Criterias</h2>
                 </div>
 
-                {criteriaLoading ? (
-                  <div className="flex justify-center items-center py-12">
-                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
-                  </div>
-                ) : criteriaCategories.length === 0 ? (
+                {criteriaCategories.length === 0 ? (
                   <div className="text-center py-8 text-gray-600">No criteria available</div>
                 ) : (
                   <div className="space-y-6">
                     {criteriaCategories.map((category) => (
                       <div key={category.id} className="border-b pb-6 last:border-b-0">
-                        <h3 className="text-base font-semibold text-gray-800 mb-4  px-4 py-2 inline-block">
+                        <h3 className="text-base font-semibold text-gray-800 mb-4 px-4 py-2 inline-block">
                           {category.title}
                         </h3>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                           {category.options.map((option) => {
-                            const isChecked = (buyerCriteria[category.key] || []).some(item => item.value === option.value);
-
+                            const isChecked = (buyerCriteria[category.key] || []).some(
+                              (item) => item.value === option.value
+                            );
 
                             return (
                               <label
@@ -910,8 +911,10 @@ export default function AccountPage() {
                                 <input
                                   type="checkbox"
                                   checked={isChecked}
-                                  disabled={criteriaLoading} 
-                                  onChange={(e) => handleCriteriaChange(category.key, option.value, e.target.checked)}
+                                  disabled={criteriaLoading}
+                                  onChange={(e) =>
+                                    handleCriteriaChange(category.key, option.value, e.target.checked)
+                                  }
                                   className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                                 />
                                 <span className="text-sm text-gray-700">{option.label}</span>
@@ -925,6 +928,7 @@ export default function AccountPage() {
                 )}
               </div>
             )}
+
 
 
           </div>

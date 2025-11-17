@@ -21,6 +21,7 @@ export default function Header() {
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const tCta = useTranslations('cta');
   const { user, openAuth, logout } = useAuth();
+  console.log('Header user:', user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +31,7 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-   useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
       if (profileOpen && !target.closest('.profile-dropdown')) {
@@ -74,9 +75,17 @@ export default function Header() {
                   onClick={() => setProfileOpen(v => !v)}
                   className="flex items-center gap-2 text-white/90 hover:text-white"
                 >
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white text-primary-700 border border-white/60 text-sm font-medium">
-                    👤
-                  </span>
+                  {user?.profileImageUrl ? (
+                    <img
+                      src={user.profileImageUrl}
+                      alt="Profile"
+                      className="h-7 w-7 rounded-full border border-white/60 object-contain"
+                    />
+                  ) : (
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white text-primary-700 border border-white/60 text-sm font-medium">
+                      👤
+                    </span>
+                  )}
                 </button>
                 {profileOpen && (
                   <div className="profile-dropdown absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg z-50">

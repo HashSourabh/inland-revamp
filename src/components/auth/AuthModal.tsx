@@ -6,9 +6,11 @@ import { setToken } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 export default function AuthModal() {
   const t = useTranslations("auth");
+  const router = useRouter();
   const { isAuthOpen, closeAuth, authMode, refresh, authData, openAuth } = useAuth();
   const [mode, setMode] = useState<"login" | "register" | "forgot" | "reset">("login");
   const [loading, setLoading] = useState(false);
@@ -180,6 +182,11 @@ export default function AuthModal() {
 
       if (data?.token) setToken(data.token);
       await refresh();
+      if (mode === "login"|| mode === "register") {
+        closeAuth();
+        router.push("/account");
+        return;
+      }
       closeAuth();
       showToast("success", data?.message || (mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated")));
     } catch (err: any) {
@@ -200,12 +207,12 @@ export default function AuthModal() {
             {mode === "login"
               ? t("titles.login")
               : mode === "register"
-              ? t("titles.register")
-              : mode === "forgot"
-              ? t("titles.forgot")
-              : t("titles.reset")}
+                ? t("titles.register")
+                : mode === "forgot"
+                  ? t("titles.forgot")
+                  : t("titles.reset")}
           </h2>
-          {mode === "register" &&(
+          {mode === "register" && (
             <p></p>
           )}
           <button onClick={closeAuth} className="text-gray-500 hover:text-gray-700">✕</button>
@@ -307,10 +314,10 @@ export default function AuthModal() {
             {mode === "login"
               ? t("buttons.login")
               : mode === "register"
-              ? t("buttons.register")
-              : mode === "forgot"
-              ? t("buttons.sendResetLink")
-              : t("buttons.resetPassword")}
+                ? t("buttons.register")
+                : mode === "forgot"
+                  ? t("buttons.sendResetLink")
+                  : t("buttons.resetPassword")}
           </button>
 
           <div className="text-center text-sm text-gray-600 pt-2">
