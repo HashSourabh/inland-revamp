@@ -30,7 +30,19 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (profileOpen && !target.closest('.profile-dropdown')) {
+        setProfileOpen(false);
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [profileOpen]);
   return (
     <header className={`w-full fixed top-0 left-0 right-0 z-50 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
       {/* Top bar with contact info and language selector */}
@@ -67,7 +79,7 @@ export default function Header() {
                   </span>
                 </button>
                 {profileOpen && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg z-50">
+                  <div className="profile-dropdown absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg z-50">
                     <Link href="/account" className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">My Profile</Link>
                     <a
                       href="#logout"
