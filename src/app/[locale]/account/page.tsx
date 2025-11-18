@@ -365,14 +365,12 @@ export default function AccountPage() {
     }
   };
   // Add a ref to track ongoing save operations
-  const savingRef = useRef(false);
-
+  // Remove the auto-save logic from handleCriteriaChange
   const handleCriteriaChange = (
     categoryKey: string,
     optionValue: string,
     checked: boolean
   ) => {
-    setCriteriaLoading(true);
     setBuyerCriteria(prev => {
       const categoryValues: BuyerCriteriaItem[] = prev[categoryKey] || [];
       let updatedCategory: BuyerCriteriaItem[];
@@ -389,24 +387,12 @@ export default function AccountPage() {
         updatedCategory = categoryValues.filter(item => item.value !== optionValue);
       }
 
-      const newBuyerCriteria = { ...prev, [categoryKey]: updatedCategory };
-
-      // Save only the changed category (debounced)
-      if (!savingRef.current) {
-        savingRef.current = true;
-
-        // Use setTimeout to avoid race conditions
-        setTimeout(() => {
-          handleSaveCriteria({ [categoryKey]: updatedCategory.map(item => item.value) });
-        }, 0);
-      }
-
-      return newBuyerCriteria;
+      return { ...prev, [categoryKey]: updatedCategory };
     });
   };
 
-  // Handler to save criteria
-  const handleSaveCriteria = async (criteriaToSave: Record<string, string[]>) => {
+  // Updated handler to save ALL criteria when Save button is clicked
+  const handleSaveCriteria = async () => {
     // Prevent duplicate calls
     if (criteriaSaving) {
       console.log('⏭️ Skipping duplicate save call');
@@ -416,6 +402,22 @@ export default function AccountPage() {
     setCriteriaSaving(true);
 
     try {
+      // Convert buyerCriteria to the format expected by the API
+      const criteriaToSave: Record<string, string[]> = {};
+
+      Object.entries(buyerCriteria).forEach(([key, items]) => {
+        if (items && items.length > 0) {
+          criteriaToSave[key] = items.map(item => item.value);
+        }
+      });
+
+      // Only send request if there are criteria to save
+      if (Object.keys(criteriaToSave).length === 0) {
+        showToast("info", "No criteria selected");
+        setCriteriaSaving(false);
+        return;
+      }
+
       const token = getToken();
       const headers: HeadersInit = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
@@ -434,10 +436,9 @@ export default function AccountPage() {
       showToast("error", error.message || "Failed to save criteria");
     } finally {
       setCriteriaSaving(false);
-      savingRef.current = false;
-      setCriteriaLoading(false); // Reset the ref
     }
   };
+
 
 
 
@@ -885,6 +886,23 @@ export default function AccountPage() {
 
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-semibold">Buyer Criterias</h2>
+                  <button
+                    onClick={handleSaveCriteria}
+                    disabled={criteriaSaving || criteriaLoading}
+                    className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {criteriaSaving ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        Saving...
+                      </>
+                    ) : (
+                      "Save"
+                    )}
+                  </button>
                 </div>
 
                 {criteriaCategories.length === 0 ? (
