@@ -302,9 +302,10 @@ export default function AccountPage() {
         const token = getToken();
         const headers: HeadersInit = {};
         if (token) headers["Authorization"] = `Bearer ${token}`;
+        const language_id = localStorage.getItem("LanguageId") || "1";
 
         // Fetch categories
-        const categoriesRes = await fetch(`${API_BASE_URL}/criterias`, { headers });
+        const categoriesRes = await fetch(`${API_BASE_URL}/criterias?language_id=${language_id}`, { headers });
         const categoriesData = await categoriesRes.json();
         setCriteriaCategories(categoriesData.categories || []);
 
