@@ -768,6 +768,8 @@ export default function AccountPage() {
                                 <Link
                                   href={`/properties/${encodeURIComponent(f.Property_ID)}`}
                                   className="text-primary-700 hover:underline"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                 >
                                   {t('favourite.viewProperty')}
                                 </Link>
@@ -862,6 +864,8 @@ export default function AccountPage() {
                                 <Link
                                   href={`/properties/${propertyId}`}
                                   className="text-primary-700 hover:underline"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                 >
                                   {t('reservations.viewProperty')}
                                 </Link>
