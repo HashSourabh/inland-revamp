@@ -16,3 +16,13 @@
   z-index: 9999 !important;
 }
 
+.custom-corrected {
+  opacity: 1 !important;
+  color: #111 !important;
+}
+
+.custom-hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
