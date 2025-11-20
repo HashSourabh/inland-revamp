@@ -182,12 +182,14 @@ export default function AuthModal() {
 
       if (data?.token) setToken(data.token);
       await refresh();
-      if (mode === "login"|| mode === "register") {
+      if (mode === "login" || mode === "register") {
+        showToast("success", data?.message || t("messages.accountCreated"));
         closeAuth();
         router.push("/account");
         return;
       }
       closeAuth();
+      console.log("data", data);
       showToast("success", data?.message || (mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated")));
     } catch (err: any) {
       showToast("error", err?.message || t("messages.networkError"));

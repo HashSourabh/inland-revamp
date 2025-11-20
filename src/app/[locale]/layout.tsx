@@ -5,6 +5,9 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { MainLayout } from '@/components/layout';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
+import { PropertyCacheProvider } from '@/context/PropertyCacheContext';
+import { AuthProvider } from '@/context/AuthContext';
+import TidioLoader from '@/components/loader/TidioLoader';
 
 // Font configuration
 const openSans = Open_Sans({
@@ -56,9 +59,14 @@ export default async function RootLayout({
     >
       <body className={`${workSans.className} min-h-screen`}>
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <MainLayout>{children}</MainLayout>
+          <AuthProvider>
+            <PropertyCacheProvider>
+              <MainLayout>{children}</MainLayout>
+            </PropertyCacheProvider>
+          </AuthProvider>
           <ThemeSwitcher />
         </NextIntlClientProvider>
+        <TidioLoader />
       </body>
     </html>
   );

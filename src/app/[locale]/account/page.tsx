@@ -949,6 +949,26 @@ export default function AccountPage() {
                     ))}
                   </div>
                 )}
+                <div className="flex items-right justify-between mb-6">
+
+                  <button
+                    onClick={handleSaveCriteria}
+                    disabled={criteriaSaving || criteriaLoading}
+                    className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {criteriaSaving ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        Saving...
+                      </>
+                    ) : (
+                      "Save"
+                    )}
+                  </button>
+                </div>
               </div>
             )}
 

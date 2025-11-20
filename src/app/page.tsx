@@ -15,6 +15,7 @@ import { Property } from "@/types/property";
 import { useKeenSlider } from "keen-slider/react";
 import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
 import { usePropertyData } from '@/hooks/usePropertyData';
+import { useRegionData } from '@/hooks/useRegionData';
 
 // API base
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
@@ -42,12 +43,6 @@ interface DatabaseProperty {
   Original_Price?: number;
   Num_Photos?: number;
   SQM_Built?: number;
-}
-
-interface RegionCount {
-  regionId: number;
-  region: string;
-  count: number;
 }
 
 interface ApiResponse<T> {
@@ -84,17 +79,6 @@ const propertyService = {
       return data.success ? data.data : [];
     } catch (err) {
       console.error("Error fetching exclusive properties:", err);
-      return [];
-    }
-  },
-
-  async getRegionCounts(): Promise<RegionCount[]> {
-    try {
-      const res = await fetch(`${API_BASE_URL}/properties/regions/counts`);
-      const data: ApiResponse<{ regions: RegionCount[] }> = await res.json();
-      return data.success ? data.data.regions : [];
-    } catch (err) {
-      console.error("Error fetching region counts:", err);
       return [];
     }
   },
@@ -239,14 +223,19 @@ export default function Home() {
     setPropertyTypesMap,
     updateLastFetchTime,
     needsRefresh,
-    hasData
+    hasData,
+    clearCache
   } = usePropertyData();
+  const {
+    regionCounts,
+    fetchRegionCounts,
+    isRegionCountsStale,
+  } = useRegionData();
 
   // Local state for non-cached data
-  const [regionCounts, setRegionCounts] = useState<RegionCount[]>([]);
   const [featuredLoading, setFeaturedLoading] = useState(true);
   const [exclusiveLoading, setExclusiveLoading] = useState(true);
-  const [regionsLoading, setRegionsLoading] = useState(true);
+  const [regionsLoading, setRegionsLoading] = useState(() => regionCounts.length === 0);
   const [typesLoading, setTypesLoading] = useState(true);
   const [searchRef, setSearchRef] = useState('');
   const [searching, setSearching] = useState(false);
@@ -422,22 +411,29 @@ export default function Home() {
     loadExclusiveProperties();
   }, [propertyTypesMap, typesLoading, hasData, needsRefresh, setExclusiveProperties, updateLastFetchTime]);
 
-  // Load regions
+  // Load regions with cache-aware hook
   useEffect(() => {
+    let isMounted = true;
+
     const loadRegions = async () => {
-      try {
-        setRegionsLoading(true);
-        const regionsDb = await propertyService.getRegionCounts();
-        setRegionCounts(regionsDb);
-      } catch (err) {
-        console.error("Error loading regions:", err);
-      } finally {
+      if (regionCounts.length > 0 && !isRegionCountsStale()) {
+        setRegionsLoading(false);
+        return;
+      }
+
+      setRegionsLoading(true);
+      await fetchRegionCounts();
+      if (isMounted) {
         setRegionsLoading(false);
       }
     };
 
     loadRegions();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fetchRegionCounts, isRegionCountsStale, regionCounts.length]);
 
   // --- QUICK SEARCH ---
   const handleQuickSearch = async () => {
@@ -465,8 +461,9 @@ export default function Home() {
     setFeaturedLoading(true);
     setExclusiveLoading(true);
     setTypesLoading(true);
-    // Clear cache to force reload
-    // The useEffects will trigger again due to state changes
+    setRegionsLoading(true);
+    setFeaturedPage(1);
+    clearCache();
   };
 
   return (
@@ -658,7 +655,7 @@ export default function Home() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {regionCounts.map((r) => (
                 <div key={r.regionId} className="bg-neutral-50 rounded-lg p-6 text-center hover:shadow-md transition-shadow">
-                  <h3 className="text-xl font-semibold mb-2">{r.region}</h3>
+                  <h3 className="text-xl font-semibold mb-2">{r.regionName}</h3>
                   <p className="text-3xl font-bold text-primary-600 mb-2">{r.count}</p>
                   <p>Available Properties</p>
                   <Link
