@@ -1,12 +1,8 @@
 import './globals.css';
-import '../styles/tidio.css';
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { Open_Sans, Playfair_Display,Work_Sans,DM_Sans  } from 'next/font/google';
 import { PropertyCacheProvider } from '@/context/PropertyCacheContext';
 import { AuthProvider } from '@/context/AuthContext';
-import TidioLoader from '@/components/loader/TidioLoader';
-import TidioListener from '@/components/TidioListener';
 
 // Font configuration
 const openSans = Open_Sans({
@@ -54,13 +50,6 @@ export default function RootLayout({
             {children}
           </PropertyCacheProvider>
         </AuthProvider>
-        <Script
-          id="tidio"
-          src="//code.tidio.co/egmmkeqjhcxreesz9g4b9ykarz2npaoa.js"
-          strategy="lazyOnload"
-        />
-        <TidioListener />
-        <TidioLoader />
       </body>
     </html>
   );
