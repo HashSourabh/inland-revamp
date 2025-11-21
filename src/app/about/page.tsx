@@ -110,7 +110,7 @@ export default function AboutPage() {
               <div className="h-full w-full bg-neutral-200"></div>
               <Image
                 src={mollina}
-                alt={t('aboutHero.altImage')}
+                alt="Inland Andalucia team working in Mollina office"
                 width={600}
                 height={400}
                 className="object-cover h-[400px]"

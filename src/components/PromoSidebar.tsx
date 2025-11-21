@@ -37,7 +37,7 @@ export default function PromoSidebar() {
           </h3>
         </div>
         <Link
-          href="/sell-your-property"
+          href="/sell-with-us"
           className="inline-block bg-secondary-500 text-white font-medium px-8 py-2 rounded-md shadow hover:bg-primary-600 transition"
         >
           {t('button')}
@@ -73,12 +73,12 @@ export default function PromoSidebar() {
         <p className="mb-4 text-base font-medium text-gray-500 mt-2">
           {t('safe_hands.short_description')}
         </p>
-        <Link
-          href="/sell-your-property"
+        {/* <Link
+          href="about/safe-hands"
           className="inline-block bg-secondary-500 text-white font-medium px-8 py-2 rounded-md shadow hover:bg-primary-600 transition"
         >
          {t('button')}
-        </Link>
+        </Link> */}
       </div>
     </aside>
   );
