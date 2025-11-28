@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { getToken, useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '@/utils/api';
 
 interface PropertyCardProps {
   property: {
@@ -71,23 +72,10 @@ export default function PropertyCard({ property, card = 'grid', featured = false
       const buyerId = user?.id;
       const propertyId = property?.id;
 
-      // identify localhost only
-      const isLocalhost =
-        typeof window !== "undefined" &&
-        (window.location.hostname === "localhost" ||
-          window.location.hostname === "127.0.0.1");
-
-      // final safe api base
-      const apiBase =
-        process.env.NEXT_PUBLIC_API_BASE ||
-        (isLocalhost
-          ? `${window.location.protocol}//${window.location.hostname}:4000/api/v1`
-          : "https://inlandandalucia.onrender.com/api/v1");
-
       // URLs for POST or DELETE
       const url = newState
-        ? `${apiBase}/buyers/${buyerId}/favourites`
-        : `${apiBase}/buyers/${buyerId}/favourites/${propertyId}`;
+        ? `${API_BASE_URL}/buyers/${buyerId}/favourites`
+        : `${API_BASE_URL}/buyers/${buyerId}/favourites/${propertyId}`;
 
       const headers: HeadersInit = {
         "Content-Type": "application/json",

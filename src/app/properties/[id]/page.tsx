@@ -13,8 +13,10 @@ import {
   UserGroupIcon,
   PlayIcon,
 } from '@heroicons/react/24/outline';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Cookies from 'js-cookie';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 interface PropertyDetailsProps {
   params: { id: string };
@@ -38,17 +40,20 @@ interface Property {
 
 export default function PropertyDetails({ params }: PropertyDetailsProps) {
   const t = useTranslations('properties');
+  const locale = useLocale();
+  const router = useRouter();
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
+  const { user, openAuth } = useAuth();
 
   const [property, setProperty] = useState<Property | null>(null);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isView, setIsView] = useState(false);
 
-  // **Email reservation states**
-  const [email, setEmail] = useState('');
-  const [emailExists, setEmailExists] = useState<boolean | null| "invalid">(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // **Email reservation states** (commented out - no longer needed)
+  // const [email, setEmail] = useState('');
+  // const [emailExists, setEmailExists] = useState<boolean | null| "invalid">(null);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   const propertyId = params.id;
 
@@ -130,47 +135,53 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(price);
-  const validateEmail = (email: string) => {
-    // Basic regex for email validation
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  };
-  // **Handle email reservation**
-  const handleReserve = async () => {
-    if (!email) return;
-
-    // Reset state first
-    setEmailExists(null);
-
-    // Validate email format first
-    if (!validateEmail(email)) {
-      setEmailExists("invalid"); // distinguish invalid email
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/users/check-email?email=${encodeURIComponent(email)}`);
-      const data = await res.json();
-
-      if (data.exists && data.data) {
-        // ✅ Email found — proceed to reservation page
-        sessionStorage.setItem('buyerData', JSON.stringify(data.data));
-        sessionStorage.setItem('buyerEmail', email);
+  
+  // **Handle Reserve For Viewing button click**
+  const handleReserveForViewing = () => {
+    if (user) {
+      // User is logged in - proceed to reservation page
+      if (property) {
         sessionStorage.setItem('propertyData', JSON.stringify(property));
-        window.location.href = 'reserve-for-view';
-      } else {
-        // ❌ Email not found
-        setEmailExists(false);
+        router.push(`/${locale}/properties/reserve-for-view`);
       }
-    } catch (err) {
-      console.error(err);
-      setEmailExists(null);
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      // User is not logged in - show login/register modal
+      openAuth('login');
     }
   };
+
+  // **Old email reservation handler - commented out**
+  // const validateEmail = (email: string) => {
+  //   // Basic regex for email validation
+  //   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   return re.test(email);
+  // };
+  // const handleReserve = async () => {
+  //   if (!email) return;
+  //   setEmailExists(null);
+  //   if (!validateEmail(email)) {
+  //     setEmailExists("invalid");
+  //     return;
+  //   }
+  //   setIsSubmitting(true);
+  //   try {
+  //     const res = await fetch(`${API_BASE_URL}/users/check-email?email=${encodeURIComponent(email)}`);
+  //     const data = await res.json();
+  //     if (data.exists && data.data) {
+  //       sessionStorage.setItem('buyerData', JSON.stringify(data.data));
+  //       sessionStorage.setItem('buyerEmail', email);
+  //       sessionStorage.setItem('propertyData', JSON.stringify(property));
+  //       window.location.href = 'reserve-for-view';
+  //     } else {
+  //       setEmailExists(false);
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     setEmailExists(null);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
 
 
@@ -198,7 +209,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <button className="rounded-md bg-primary-600 px-4 py-2 text-sm text-white" onClick={() => setIsView(true)}>{t('details.reserve_viewing')}</button>
+            <button className="rounded-md bg-primary-600 px-4 py-2 text-sm text-white" onClick={handleReserveForViewing}>{t('details.reserve_viewing')}</button>
             {property.videoUrl && (
               <button
                 className="inline-flex items-center gap-2 rounded-md bg-yellow-400 px-4 py-2 text-sm text-neutral-900"
@@ -255,8 +266,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
         </div>
       </div>
 
-      {/* Reserve Popup */}
-      <Popup
+      {/* Reserve Popup - Commented out - Now using login/auth flow */}
+      {/* <Popup
         isOpen={isView}
         onClose={() => {
           setIsView(false);
@@ -275,7 +286,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              setEmailExists(null); // reset status when typing
+              setEmailExists(null);
             }}
           />
           <button
@@ -286,7 +297,6 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             {isSubmitting ? "Checking..." : "Reserve"}
           </button>
 
-          {/* Show status below input */}
           {emailExists !== null && (
             <p
               className={`text-sm ${emailExists === true
@@ -305,7 +315,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           )}
 
         </div>
-      </Popup>
+      </Popup> */}
 
 
       {/* Video Popup */}

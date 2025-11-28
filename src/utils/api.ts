@@ -1,10 +1,8 @@
 // utils/api.ts
 // Compute a single, consistent API base URL (should include /api/v1)
+// Uses NEXT_PUBLIC_API_URL from .env.development (local) or .env (server/production)
 function computeApiBase(): string {
-  const raw =
-    (process.env.NEXT_PUBLIC_API_BASE ||
-      process.env.NEXT_PUBLIC_API_URL ||
-      "").trim();
+  const raw = (process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE || "").trim();
 
   if (raw) {
     return raw.replace(/\/$/, "");

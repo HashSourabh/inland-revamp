@@ -4,6 +4,7 @@ import { HomeIcon, EnvelopeIcon, MapPinIcon, HomeModernIcon, UserCircleIcon, Che
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 interface BuyerData {
   Buyer_ID: number;
@@ -27,22 +28,27 @@ const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "
 const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
 
 export default function ReserveForView() {
-  const [buyerData, setBuyerData] = useState<BuyerData | null>(null);
-  const [buyerEmail, setBuyerEmail] = useState<string>("");
+  const { user, loading: authLoading, openAuth } = useAuth();
+  const router = useRouter();
   const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
   const [amount, setAmount] = useState<string>("");
   const [amountError, setAmountError] = useState<string>("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
-    const storedBuyer = sessionStorage.getItem("buyerData");
-    const storedEmail = sessionStorage.getItem("buyerEmail");
+    // Get property data from sessionStorage
     const storedProperty = sessionStorage.getItem("propertyData");
-
-    if (storedBuyer) setBuyerData(JSON.parse(storedBuyer));
-    if (storedEmail) setBuyerEmail(storedEmail);
-    if (storedProperty) setPropertyData(JSON.parse(storedProperty));
+    if (storedProperty) {
+      setPropertyData(JSON.parse(storedProperty));
+    }
   }, []);
+
+  useEffect(() => {
+    // Show login modal if not authenticated (after loading completes)
+    if (!authLoading && !user) {
+      openAuth('login');
+    }
+  }, [user, authLoading, openAuth]);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -55,7 +61,25 @@ export default function ReserveForView() {
     }
   };
 
-  const fullName = buyerData ? `${buyerData.Buyer_Forename} ${buyerData.Buyer_Surname}` : "";
+  // Get user information from auth context
+  const fullName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : "";
+  const buyerEmail = user?.email || "";
+
+  // Show loading state while checking authentication
+  if (authLoading) {
+    return (
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect if not authenticated (handled in useEffect, but show message here too)
+  if (!user) {
+    return null; // useEffect will handle redirect
+  }
 
   // FIX: Show error if Stripe key is missing
   if (!stripePromise) {
@@ -81,11 +105,11 @@ export default function ReserveForView() {
           <h2 className="font-semibold text-gray-600 mb-4">Customer Details</h2>
           <div className="flex items-center mb-2">
             <UserCircleIcon className="w-6 h-6 text-secondary-600 mr-2" />
-            <span className="text-gray-600">{fullName}</span>
+            <span className="text-gray-600">{fullName || user?.username || "User"}</span>
           </div>
           <div className="flex items-center">
             <EnvelopeIcon className="w-6 h-6 text-secondary-600 mr-2" />
-            <span className="text-gray-600">{buyerEmail}</span>
+            <span className="text-gray-600">{buyerEmail || "No email"}</span>
           </div>
         </div>
         <div>

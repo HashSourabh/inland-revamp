@@ -5,8 +5,12 @@ import { getToken } from "@/context/AuthContext";
 import Link from "next/link";
 import { API_BASE_URL } from "@/utils/api";
 import ConfirmDialog from "@/components/shared/ConfirmDialog";
+import AccountSectionLoader from "@/components/loader/AccountSectionLoader";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 type Favourite = { Property_Ref: string; Created_At: string, Property_ID: number; };
 type Reservation = {
@@ -128,6 +132,7 @@ export default function AccountPage() {
     contactNumber: "",
     buyer_address: "",
   });
+  const [profileErrors, setProfileErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -334,8 +339,66 @@ export default function AccountPage() {
     fetchCriteria();
   }, [tab]);
 
+  const clearProfileError = (field: keyof typeof profileForm | "firstName" | "lastName") => {
+    setProfileErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
+
+  const validateProfileForm = () => {
+    const errors: Record<string, string> = {};
+    const firstName = profileForm.firstName.trim();
+    const lastName = profileForm.lastName.trim();
+    const address = profileForm.buyer_address?.trim() || "";
+    const phone = profileForm.contactNumber?.trim() || "";
+
+    if (!firstName) errors.firstName = t("profile.firstNameRequired");
+    else if (firstName.length < 2 || firstName.length > 100) errors.firstName = t("profile.firstNameLength");
+
+    if (!lastName) errors.lastName = t("profile.lastNameRequired");
+    else if (lastName.length < 2 || lastName.length > 100) errors.lastName = t("profile.lastNameLength");
+
+    // Only validate address if it has a value
+    if (address && address.length > 0) {
+      if (address.length < 5 || address.length > 255) {
+        errors.buyer_address = t("profile.addressLength");
+      }
+    }
+
+    // Only validate phone if it has a value
+    if (phone && phone.length > 0) {
+      // Count only digits for validation (excluding formatting characters)
+      const phoneDigits = phone.replace(/\D/g, '');
+      if (phoneDigits.length < 8 || phoneDigits.length > 20) {
+        errors.contactNumber = t("profile.phoneLength");
+      }
+    }
+
+    return errors;
+  };
+
+  const mapServerProfileErrors = (details: any): Record<string, string> => {
+    if (!Array.isArray(details)) return {};
+    const mapped: Record<string, string> = {};
+    details.forEach((detail) => {
+      const key = detail?.path || detail?.field;
+      const msg = detail?.msg || detail?.message;
+      if (key && msg) mapped[key] = msg;
+    });
+    return mapped;
+  };
+
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    const validationErrors = validateProfileForm();
+    if (Object.keys(validationErrors).length) {
+      setProfileErrors(validationErrors);
+      return;
+    }
+    setProfileErrors({});
     setSaving(true);
 
     try {
@@ -343,22 +406,38 @@ export default function AccountPage() {
       const headers: HeadersInit = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
+      // Build payload - only include optional fields if they have values
+      const payload: any = {
+        firstName: profileForm.firstName.trim(),
+        lastName: profileForm.lastName.trim(),
+      };
+      
+      const trimmedPhone = profileForm.contactNumber?.trim() || "";
+      const trimmedAddress = profileForm.buyer_address?.trim() || "";
+      
+      // Only include optional fields if they have values
+      if (trimmedPhone) {
+        payload.contactNumber = trimmedPhone;
+      }
+      if (trimmedAddress) {
+        payload.buyer_address = trimmedAddress;
+      }
+
       const res = await fetch(`${API_BASE_URL}/buyers/me`, {
         method: "PUT",
         headers,
-        body: JSON.stringify({
-          firstName: profileForm.firstName,
-          lastName: profileForm.lastName,
-          contactNumber: profileForm.contactNumber,
-          buyer_address: profileForm.buyer_address,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.message || data?.error || "Profile update failed");
+      if (!res.ok) {
+        const serverErrors = mapServerProfileErrors(data?.details);
+        if (Object.keys(serverErrors).length) setProfileErrors(serverErrors);
+        throw new Error(data?.message || data?.error || "Profile update failed");
+      }
 
       await refresh();
-      // showToast("success", t('profile.updateSuccess'));
+      showToast("success", data?.message || t('profile.updateSuccess'));
     } catch (err: any) {
       showToast("error", err.message || t('profile.updateError'));
     } finally {
@@ -445,46 +524,42 @@ export default function AccountPage() {
 
 
   if (!mounted) {
-    return <div className="max-w-5xl mx-auto px-4 py-10">{t('loading')}</div>;
+    return null;
   }
 
-  if (loading) return <div className="max-w-5xl mx-auto px-4 py-10">{t('loading')}</div>;
-  if (!user) return <div className="max-w-5xl mx-auto px-4 py-10">{t('loginRequired')}</div>;
+  if (!user) {
+    return <div className="max-w-5xl mx-auto px-4 py-10">{t('loginRequired')}</div>;
+  }
 
   return (
-    <>
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-semibold mb-6">{t('title')}</h1>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-semibold mb-6">{t('title')}</h1>
 
-        <div className="flex gap-6">
-          {/* Sidebar */}
-          <div className="w-64 flex-shrink-0">
+      <div className="flex gap-6">
+        {/* Sidebar */}
+        <div className="w-64 flex-shrink-0">
             <div className="bg-white border rounded-lg shadow-sm">
               <nav className="p-2">
                 <button
-                  className={`w-full text-left px-4 py-3 rounded-md transition-colors ${tab === "profile" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                className={`w-full text-left px-4 py-3 rounded-md transition-colors ${tab === "profile" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("profile")}
                 >
                   {t('tabs.profile')}
                 </button>
                 <button
-                  className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "favourites" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "favourites" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("favourites")}
                 >
                   {t('tabs.favourites')}
                 </button>
                 <button
-                  className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "reservations" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "reservations" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("reservations")}
                 >
                   {t('tabs.reservations')}
                 </button>
                 <button
-                  className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("criterias")}
                 >
                   Criterias
@@ -553,25 +628,31 @@ export default function AccountPage() {
                       <label className="block text-sm font-medium mb-1">{t('profile.firstName')}</label>
                       <input
                         type="text"
-                        className="w-full rounded-md border px-3 py-2"
+                        className={`w-full rounded-md border px-3 py-2 ${profileErrors.firstName ? 'border-red-500' : ''}`}
                         value={profileForm.firstName}
-                        onChange={(e) => setProfileForm({ ...profileForm, firstName: e.target.value })}
-                        required
-                        minLength={2}
-                        maxLength={100}
+                        onChange={(e) => {
+                          setProfileForm({ ...profileForm, firstName: e.target.value });
+                          clearProfileError("firstName");
+                        }}
+                        aria-invalid={Boolean(profileErrors.firstName)}
+                        aria-required="true"
                       />
+                      {profileErrors.firstName && <p className="text-xs text-red-600 mt-1">{profileErrors.firstName}</p>}
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">{t('profile.lastName')}</label>
                       <input
                         type="text"
-                        className="w-full rounded-md border px-3 py-2"
+                        className={`w-full rounded-md border px-3 py-2 ${profileErrors.lastName ? 'border-red-500' : ''}`}
                         value={profileForm.lastName}
-                        onChange={(e) => setProfileForm({ ...profileForm, lastName: e.target.value })}
-                        required
-                        minLength={2}
-                        maxLength={100}
+                        onChange={(e) => {
+                          setProfileForm({ ...profileForm, lastName: e.target.value });
+                          clearProfileError("lastName");
+                        }}
+                        aria-invalid={Boolean(profileErrors.lastName)}
+                        aria-required="true"
                       />
+                      {profileErrors.lastName && <p className="text-xs text-red-600 mt-1">{profileErrors.lastName}</p>}
                     </div>
                   </div>
 
@@ -601,22 +682,36 @@ export default function AccountPage() {
                     <label className="block text-sm font-medium mb-1">{t('profile.address')}</label>
                     <input
                       type="text"
-                      className="w-full rounded-md border px-3 py-2"
+                      className={`w-full rounded-md border px-3 py-2 ${profileErrors.buyer_address ? 'border-red-500' : ''}`}
                       value={profileForm.buyer_address}
-                      onChange={(e) => setProfileForm({ ...profileForm, buyer_address: e.target.value })}
+                      onChange={(e) => {
+                        setProfileForm({ ...profileForm, buyer_address: e.target.value });
+                        clearProfileError("buyer_address");
+                      }}
                       placeholder={t('profile.addressPlaceholder')}
+                      aria-invalid={Boolean(profileErrors.buyer_address)}
                     />
+                    {profileErrors.buyer_address && <p className="text-xs text-red-600 mt-1">{profileErrors.buyer_address}</p>}
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-1">{t('profile.phone')}</label>
-                    <input
-                      type="tel"
-                      className="w-full rounded-md border px-3 py-2"
-                      value={profileForm.contactNumber}
-                      onChange={(e) => setProfileForm({ ...profileForm, contactNumber: e.target.value })}
+                    <PhoneInput
+                      international
+                      defaultCountry="ES"
+                      value={profileForm.contactNumber || undefined}
+                      onChange={(value) => {
+                        setProfileForm({ ...profileForm, contactNumber: value || "" });
+                        clearProfileError("contactNumber");
+                      }}
+                      className={`phone-input-wrapper ${profileErrors.contactNumber ? 'phone-input-error' : ''}`}
+                      numberInputProps={{
+                        className: `w-full rounded-md border px-3 py-2 ${profileErrors.contactNumber ? 'border-red-500' : 'border-gray-300'}`,
+                        "aria-invalid": Boolean(profileErrors.contactNumber),
+                      }}
                       placeholder={t('profile.phonePlaceholder')}
                     />
+                    {profileErrors.contactNumber && <p className="text-xs text-red-600 mt-1">{profileErrors.contactNumber}</p>}
                   </div>
 
                   <button
@@ -641,8 +736,7 @@ export default function AccountPage() {
                       return setPwdMsg({ type: 'error', text: t('password.allFieldsRequired') });
                     }
 
-                    const strong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pwdForm.newPassword);
-                    if (!strong) {
+                    if (pwdForm.newPassword.length < 8) {
                       setPwdLoading(false);
                       return setPwdMsg({ type: 'error', text: t('password.weakPassword') });
                     }
@@ -693,92 +787,97 @@ export default function AccountPage() {
 
                 {/* 🔄 Loader while fetching */}
                 {isFavLoading ? (
-                  <div className="flex justify-center items-center py-10 text-gray-600">
-                    <svg
-                      className="animate-spin h-6 w-6 text-primary-600 mr-2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      ></path>
-                    </svg>
-                    {t('favourite.loading')}
-                  </div>
+                  <AccountSectionLoader message={t('favourite.loading')} />
                 ) : favDetails.length === 0 ? (
                   <div className="text-gray-600">{t('favourite.noFavourites')}</div>
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="min-w-full border text-sm text-gray-700">
-                      <thead className="bg-gray-100">
+                    <table className="min-w-full text-sm text-gray-700">
+                      <thead className="bg-gray-50 border-b">
                         <tr>
-                          <th className="border p-2 text-left">{t('favourite.image')}</th>
-                          <th className="border p-2 text-left">{t('favourite.propertyRef')}</th>
-                          <th className="border p-2 text-left">{t('favourite.propertyAddress')}</th>
-                          <th className="border p-2 text-left">{t('favourite.bedrooms')}</th>
-                          <th className="border p-2 text-left">{t('favourite.bathrooms')}</th>
-                          <th className="border p-2 text-left">{t('favourite.publicPrice')}</th>
-                          <th className="border p-2 text-left">{t('favourite.dateAdded')}</th>
-                          <th className="border p-2 text-left">{t('favourite.action')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.photo')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.propertyInfo')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.addedOn')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.price')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.action')}</th>
                         </tr>
                       </thead>
 
                       <tbody>
                         {favDetails.map((f) => {
                           const ref = f.Property_Ref || f.Property_ID;
+                          const propertyName = f.Property_Name || f.Property_Title || f.Property_Type_Name || f.Property_Type || "";
+                          const displayName = propertyName ? `${propertyName} (${ref})` : ref;
                           const img = ref
                             ? `https://www.inlandandalucia.com/images/photos/properties/${ref}/${ref}_1.jpg`
                             : "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                          const description = f.Property_Description || f.Short_Description || f.Property_Short_Description || "";
+                          const bedrooms = f.Bedrooms || f.Property_Bedrooms || 0;
+                          const bathrooms = f.Bathrooms || f.Property_Bathrooms || 0;
+                          const area = f.Build_Size || f.Property_Build_Size || f.Square_Meters || 0;
 
                           return (
-                            <tr key={ref} className="hover:bg-gray-50">
-                              <td className="border p-2">
+                            <tr key={ref} className="border-b hover:bg-gray-50 transition-colors">
+                              <td className="p-4">
                                 <img
                                   src={img}
                                   alt={`Property ${ref}`}
-                                  className="w-20 h-20 min-w-20 object-cover rounded-md"
+                                  className="w-32 h-24 min-w-32 object-cover rounded-lg"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       "https://www.inlandandalucia.com/images/no-image-available.jpg";
                                   }}
                                 />
                               </td>
-                              <td className="border p-2 font-medium">{ref}</td>
-                              <td className="border p-2">{f.Property_Address || "-"}</td>
-                              <td className="border p-2">{f.Bedrooms || "-"}</td>
-                              <td className="border p-2">{f.Bathrooms || "-"}</td>
-                              <td className="border p-2">
-                                €{f.Public_Price ? f.Public_Price.toLocaleString() : "-"}
+                              <td className="p-4">
+                                <div className="space-y-2">
+                                  <h3 className="font-semibold text-gray-900 text-base">
+                                    {displayName}
+                                  </h3>
+                                  {description && (
+                                    <p className="text-gray-600 text-sm line-clamp-2">
+                                      {description.length > 100 ? `${description.substring(0, 100)}...` : description}
+                                    </p>
+                                  )}
+                                  {area > 0 && (
+                                    <div className="flex items-center gap-1 text-gray-600 text-sm">
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                      </svg>
+                                      <span>{area} {t('favourite.sqFt') || 'Sq Ft'}</span>
+                                    </div>
+                                  )}
+                                </div>
                               </td>
-                              <td className="border p-2">
-                                {new Date(f.DateCreated).toLocaleDateString()}
+                              <td className="p-4 text-gray-600">
+                                {new Date(f.DateCreated).toLocaleDateString('en-US', { 
+                                  year: 'numeric', 
+                                  month: 'long', 
+                                  day: 'numeric' 
+                                })}
                               </td>
-                              <td className="border p-2 text-center">
-                                <Link
-                                  href={`/properties/${encodeURIComponent(f.Property_ID)}`}
-                                  className="text-primary-700 hover:underline"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  {t('favourite.viewProperty')}
-                                </Link>
-                                <button
-                                  onClick={() => { setPendingRemoveId(f.Property_ID); setConfirmOpen(true); }}
-                                  className="ml-3 text-sm text-red-600 hover:underline"
-                                >
-                                  {t('favourite.remove')}
-                                </button>
+                              <td className="p-4">
+                                <span className="font-semibold text-gray-900 text-base">
+                                  {f.Public_Price ? `€${f.Public_Price.toLocaleString()}` : "-"}
+                                </span>
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-2">
+                                  <Link
+                                    href={`/properties/${encodeURIComponent(f.Property_ID)}`}
+                                    className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-sm font-medium"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {t('favourite.viewProperty')}
+                                  </Link>
+                                  <button
+                                    onClick={() => { setPendingRemoveId(f.Property_ID); setConfirmOpen(true); }}
+                                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm font-medium"
+                                  >
+                                    {t('favourite.remove')}
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           );
@@ -797,73 +896,85 @@ export default function AccountPage() {
                 <h2 className="text-xl font-semibold mb-4">{t('reservations.title')}</h2>
 
                 {reservationsLoading ? (
-                  <div className="flex flex-col items-center justify-center py-12">
-                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent mb-4" />
-                    <p className="text-gray-600">{t('loading')}</p>
-                  </div>
+                  <AccountSectionLoader message={t('loading')} />
                 ) : reservations.length === 0 ? (
                   <div className="text-gray-600">{t('reservations.noReservations')}</div>
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="min-w-full border text-sm text-gray-700">
-                      <thead className="bg-gray-100">
+                    <table className="min-w-full text-sm text-gray-700">
+                      <thead className="bg-gray-50 border-b">
                         <tr>
-
-                          <th className="border p-2 text-left">{t('reservations.image')}</th>
-                          <th className="border p-2 text-left">{t('reservations.propertyRef')}</th>
-                          <th className="border p-2 text-left">{t('reservations.propertyAddress')}</th>
-                          <th className="border p-2 text-left">{t('reservations.bedrooms')}</th>
-                          <th className="border p-2 text-left">{t('reservations.bathrooms')}</th>
-                          <th className="border p-2 text-left">{t('reservations.reservedAmount')}</th>
-                          <th className="border p-2 text-left">{t('reservations.reservationDate')}</th>
-                          <th className="border p-2 text-left">{t('reservations.action')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.photo')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.propertyInfo')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.reservedDate')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.reservedAmount')}</th>
+                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.action')}</th>
                         </tr>
                       </thead>
 
                       <tbody>
                         {reservations.map((r) => {
-                          const property = r.property;
+                          const property = (r.property || {}) as Record<string, any>;
                           const propertyId = property?.Property_ID || null;
                           const propertyRef = property?.Property_Ref || "N/A";
-
-                          const featuredImage = propertyRef
-                            ? `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_1.jpg`
-                            : null;
+                          const propertyName = property?.Property_Name || property?.Property_Title || property?.Property_Type_Name || property?.Property_Type || "";
+                          const displayName = propertyName ? `${propertyName} (${propertyRef})` : propertyRef;
+                          const img =
+                            propertyRef && propertyRef !== "N/A"
+                              ? `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_1.jpg`
+                              : "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                          const description = property?.Property_Description || property?.Short_Description || property?.Property_Short_Description || "";
+                          const area = property?.SQM_Built || property?.Build_Size || property?.Property_Build_Size || property?.Square_Meters || 0;
 
                           return (
-                            <tr key={r.PaypalTransactionId} className="hover:bg-gray-50">
-                              <td className="border p-2">
-                                {featuredImage ? (
-                                  <img
-                                    src={featuredImage}
-                                    alt={`${propertyRef} ${t('reservations.imageAlt')}`}
-                                    className="w-20 h-20 min-w-20 object-cover rounded-md"
-                                    onError={(e) => {
-                                      (e.target as HTMLImageElement).src =
-                                        "https://www.inlandandalucia.com/images/no-image-available.jpg";
-                                    }}
-                                  />
-                                ) : (
-                                  <div className="w-20 h-20 bg-gray-200 rounded-md flex items-center justify-center text-gray-500">
-                                    N/A
-                                  </div>
-                                )}
+                            <tr key={r.PaypalTransactionId} className="border-b hover:bg-gray-50 transition-colors">
+                              <td className="p-4">
+                                <img
+                                  src={img}
+                                  alt={`Property ${propertyRef}`}
+                                  className="w-32 h-24 min-w-32 object-cover rounded-lg"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src =
+                                      "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                                  }}
+                                />
                               </td>
-
-                              <td className="border p-2 font-medium">{propertyRef}</td>
-                              <td className="border p-2">{property?.Property_Address || "-"}</td>
-                              <td className="border p-2">{property?.Bedrooms || "-"}</td>
-                              <td className="border p-2">{property?.Bathrooms || "-"}</td>
-                              <td className="border p-2 font-medium">
-                                {r.ReservedAmount?.toLocaleString() || "-"}
+                              <td className="p-4">
+                                <div className="space-y-2">
+                                  <h3 className="font-semibold text-gray-900 text-base">
+                                    {displayName}
+                                  </h3>
+                                  {description && (
+                                    <p className="text-gray-600 text-sm line-clamp-2">
+                                      {description.length > 100 ? `${description.substring(0, 100)}...` : description}
+                                    </p>
+                                  )}
+                                  {area > 0 && (
+                                    <div className="flex items-center gap-1 text-gray-600 text-sm">
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                      </svg>
+                                      <span>{area} {t('reservations.sqFt') || 'Sq Ft'}</span>
+                                    </div>
+                                  )}
+                                </div>
                               </td>
-                              <td className="border p-2">
-                                {new Date(r.ReservedDate).toLocaleDateString()}
+                              <td className="p-4 text-gray-600">
+                                {new Date(r.ReservedDate).toLocaleDateString('en-US', { 
+                                  year: 'numeric', 
+                                  month: 'long', 
+                                  day: 'numeric' 
+                                })}
                               </td>
-                              <td className="border p-2 text-center">
+                              <td className="p-4">
+                                <span className="font-semibold text-gray-900 text-base">
+                                  {r.ReservedAmount ? `€${r.ReservedAmount.toLocaleString()}` : "-"}
+                                </span>
+                              </td>
+                              <td className="p-4">
                                 <Link
                                   href={`/properties/${propertyId}`}
-                                  className="text-primary-700 hover:underline"
+                                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-sm font-medium inline-block"
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
@@ -883,11 +994,7 @@ export default function AccountPage() {
             {tab === "criterias" && (
               <div className="relative bg-white border rounded-lg shadow-sm p-6">
                 {/* Overlay loader */}
-                {criteriaLoading && (
-                  <div className="absolute inset-0 bg-white/70 flex justify-center items-center z-10">
-                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
-                  </div>
-                )}
+                {criteriaLoading && <AccountSectionLoader overlay message={t('loading')} />}
 
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-semibold">Buyer Criterias</h2>
@@ -974,7 +1081,6 @@ export default function AccountPage() {
 
 
 
-          </div>
         </div>
       </div>
 
@@ -1028,9 +1134,7 @@ export default function AccountPage() {
         cancelKey="favourites.removeCancel"
         confirmButtonClassName="bg-red-600 hover:bg-red-700"
       />
-
-
-    </>
+    </div>
   );
 }
 
@@ -1092,8 +1196,7 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm, pwdLoading }: an
       nextErrors.newPassword = t('password.newPasswordRequired');
     }
 
-    const strong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(pwdForm.newPassword || '');
-    if (pwdForm.newPassword && !strong) {
+    if (pwdForm.newPassword && pwdForm.newPassword.length < 8) {
       nextErrors.newPassword = t('password.passwordStrengthError');
     }
 
@@ -1130,8 +1233,9 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm, pwdLoading }: an
             onClick={() => setShow({ ...show, current: !show.current })}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
             disabled={pwdLoading}
+            aria-label={show.current ? "Hide password" : "Show password"}
           >
-            {show.current ? '🙈' : '👁️'}
+            {show.current ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>
         </div>
         {errors.currentPassword && <p className="text-xs text-red-600 mt-1">{errors.currentPassword}</p>}
@@ -1155,11 +1259,11 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm, pwdLoading }: an
             onClick={() => setShow({ ...show, new: !show.new })}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
             disabled={pwdLoading}
+            aria-label={show.new ? "Hide password" : "Show password"}
           >
-            {show.new ? '🙈' : '👁️'}
+            {show.new ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>
         </div>
-        <p className="text-xs text-gray-500 mt-1">{t('password.passwordHint')}</p>
         {errors.newPassword && <p className="text-xs text-red-600 mt-1">{errors.newPassword}</p>}
       </div>
 
@@ -1181,8 +1285,9 @@ function FieldwisePasswordForm({ onSubmit, pwdForm, setPwdForm, pwdLoading }: an
             onClick={() => setShow({ ...show, confirm: !show.confirm })}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
             disabled={pwdLoading}
+            aria-label={show.confirm ? "Hide password" : "Show password"}
           >
-            {show.confirm ? '🙈' : '👁️'}
+            {show.confirm ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>
         </div>
         {errors.confirmPassword && <p className="text-xs text-red-600 mt-1">{errors.confirmPassword}</p>}
