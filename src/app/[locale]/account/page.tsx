@@ -532,7 +532,7 @@ export default function AccountPage() {
 
 
 
-  if (!mounted || loading) {
+  if (!mounted || (loading && !user)) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-10">
         <AccountSectionLoader message={t('loading')} />
