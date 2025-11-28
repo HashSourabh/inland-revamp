@@ -1234,6 +1234,7 @@
     "validation": {
       "firstNameRequired": "O nome é obrigatório.",
       "lastNameRequired": "O sobrenome é obrigatório.",
+      "usernameRequired": "O nome de usuário é obrigatório.",
       "usernameFormat": "De 4 a 50 caracteres, pelo menos 3 letras e 1 número.",
       "emailRequired": "O e-mail é obrigatório.",
       "email": "Digite um e-mail válido.",

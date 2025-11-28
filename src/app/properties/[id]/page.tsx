@@ -138,15 +138,15 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
   
   // **Handle Reserve For Viewing button click**
   const handleReserveForViewing = () => {
+    const propertyPayload = property ? JSON.stringify(property) : null;
+    if (propertyPayload) {
+      sessionStorage.setItem('propertyData', propertyPayload);
+    }
+
     if (user) {
-      // User is logged in - proceed to reservation page
-      if (property) {
-        sessionStorage.setItem('propertyData', JSON.stringify(property));
-        router.push(`/${locale}/properties/reserve-for-view`);
-      }
+      router.push(`/${locale}/properties/reserve-for-view`);
     } else {
-      // User is not logged in - show login/register modal
-      openAuth('login');
+      openAuth('login', { redirectTo: `/${locale}/properties/reserve-for-view` });
     }
   };
 

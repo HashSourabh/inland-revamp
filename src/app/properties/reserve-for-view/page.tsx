@@ -4,6 +4,7 @@ import { HomeIcon, EnvelopeIcon, MapPinIcon, HomeModernIcon, UserCircleIcon, Che
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 
 interface BuyerData {
@@ -30,6 +31,7 @@ const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : 
 export default function ReserveForView() {
   const { user, loading: authLoading, openAuth } = useAuth();
   const router = useRouter();
+  const locale = useLocale();
   const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
   const [amount, setAmount] = useState<string>("");
   const [amountError, setAmountError] = useState<string>("");
@@ -44,11 +46,10 @@ export default function ReserveForView() {
   }, []);
 
   useEffect(() => {
-    // Show login modal if not authenticated (after loading completes)
     if (!authLoading && !user) {
-      openAuth('login');
+      openAuth('login', { redirectTo: `/${locale}/properties/reserve-for-view` });
     }
-  }, [user, authLoading, openAuth]);
+  }, [user, authLoading, openAuth, locale]);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

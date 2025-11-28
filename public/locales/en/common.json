@@ -1120,6 +1120,7 @@
     "validation": {
       "firstNameRequired": "First name is required.",
       "lastNameRequired": "Last name is required.",
+      "usernameRequired": "Username is required.",
       "usernameFormat": "4–50 chars, at least 3 letters and 1 number.",
       "emailRequired": "Email is required.",
       "email": "Enter a valid email address.",

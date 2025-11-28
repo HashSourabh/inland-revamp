@@ -1234,6 +1234,7 @@
     "validation": {
       "firstNameRequired": "Le prénom est obligatoire.",
       "lastNameRequired": "Le nom est obligatoire.",
+      "usernameRequired": "Le nom d'utilisateur est obligatoire.",
       "usernameFormat": "4 à 50 caractères, au moins 3 lettres et 1 chiffre.",
       "emailRequired": "L’e-mail est obligatoire.",
       "email": "Entrez une adresse e-mail valide.",

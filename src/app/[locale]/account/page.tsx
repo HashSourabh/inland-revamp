@@ -8,7 +8,8 @@ import ConfirmDialog from "@/components/shared/ConfirmDialog";
 import AccountSectionLoader from "@/components/loader/AccountSectionLoader";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
@@ -107,6 +108,8 @@ function compressImage(
 
 export default function AccountPage() {
   const t = useTranslations('Profile_account');
+  const locale = useLocale();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const { user, loading, refresh } = useAuth();
   const [tab, setTab] = useState<"profile" | "favourites" | "reservations" | "criterias">("profile");
@@ -137,6 +140,12 @@ export default function AccountPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (mounted && !loading && !user) {
+      router.replace(`/${locale}`);
+    }
+  }, [mounted, loading, user, router, locale]);
 
   const showToast = (type: "success" | "error" | "info", message: string) => {
     const icon = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";
@@ -523,12 +532,16 @@ export default function AccountPage() {
 
 
 
-  if (!mounted) {
-    return null;
+  if (!mounted || loading) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-10">
+        <AccountSectionLoader message={t('loading')} />
+      </div>
+    );
   }
 
   if (!user) {
-    return <div className="max-w-5xl mx-auto px-4 py-10">{t('loginRequired')}</div>;
+    return null;
   }
 
   return (
@@ -679,22 +692,6 @@ export default function AccountPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-1">{t('profile.address')}</label>
-                    <input
-                      type="text"
-                      className={`w-full rounded-md border px-3 py-2 ${profileErrors.buyer_address ? 'border-red-500' : ''}`}
-                      value={profileForm.buyer_address}
-                      onChange={(e) => {
-                        setProfileForm({ ...profileForm, buyer_address: e.target.value });
-                        clearProfileError("buyer_address");
-                      }}
-                      placeholder={t('profile.addressPlaceholder')}
-                      aria-invalid={Boolean(profileErrors.buyer_address)}
-                    />
-                    {profileErrors.buyer_address && <p className="text-xs text-red-600 mt-1">{profileErrors.buyer_address}</p>}
-                  </div>
-
-                  <div>
                     <label className="block text-sm font-medium mb-1">{t('profile.phone')}</label>
                     <PhoneInput
                       international
@@ -712,6 +709,22 @@ export default function AccountPage() {
                       placeholder={t('profile.phonePlaceholder')}
                     />
                     {profileErrors.contactNumber && <p className="text-xs text-red-600 mt-1">{profileErrors.contactNumber}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">{t('profile.address')}</label>
+                    <input
+                      type="text"
+                      className={`w-full rounded-md border px-3 py-2 ${profileErrors.buyer_address ? 'border-red-500' : ''}`}
+                      value={profileForm.buyer_address}
+                      onChange={(e) => {
+                        setProfileForm({ ...profileForm, buyer_address: e.target.value });
+                        clearProfileError("buyer_address");
+                      }}
+                      placeholder={t('profile.addressPlaceholder')}
+                      aria-invalid={Boolean(profileErrors.buyer_address)}
+                    />
+                    {profileErrors.buyer_address && <p className="text-xs text-red-600 mt-1">{profileErrors.buyer_address}</p>}
                   </div>
 
                   <button

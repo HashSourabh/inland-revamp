@@ -1134,6 +1134,7 @@
     "validation": {
       "firstNameRequired": "Voornaam is verplicht.",
       "lastNameRequired": "Achternaam is verplicht.",
+      "usernameRequired": "Gebruikersnaam is verplicht.",
       "usernameFormat": "4–50 tekens, minimaal 3 letters en 1 cijfer.",
       "emailRequired": "E-mail is vereist.",
       "email": "Voer een geldig e-mailadres in.",

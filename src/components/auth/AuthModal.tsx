@@ -5,12 +5,13 @@ import { API_BASE_URL } from "@/utils/api";
 import { setToken } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context/AuthContext";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 export default function AuthModal() {
   const t = useTranslations("auth");
+  const locale = useLocale();
   const router = useRouter();
   const { isAuthOpen, closeAuth, authMode, refresh, authData, openAuth } = useAuth();
   const [mode, setMode] = useState<"login" | "register" | "forgot" | "reset">("login");
@@ -58,7 +59,7 @@ export default function AuthModal() {
     };
 
     if (mode === "register") {
-      validateFields(["firstName", "lastName", "email", "password", "confirmPassword"]);
+      validateFields(["firstName", "lastName", "username", "email", "password", "confirmPassword"]);
     } else if (mode === "login") {
       if (!form.email.trim()) {
         nextErrors.email = t("validation.emailRequired");
@@ -125,6 +126,7 @@ export default function AuthModal() {
       case "lastName":
         return value.trim() ? null : t("validation.lastNameRequired");
       case "username": {
+        if (!value.trim()) return t("validation.usernameRequired");
         const ok = /^(?=(?:.*[A-Za-z]){3,})(?=.*\d)[A-Za-z\d]{4,50}$/.test(value);
         return ok ? null : t("validation.usernameFormat");
       }
@@ -261,9 +263,10 @@ export default function AuthModal() {
       }
 
       if (mode === "reset") {
+        const redirectAfterReset = authData?.redirectTo;
         showToast("success", data?.message || t("messages.passwordReset"));
         closeAuth();
-        setTimeout(() => openAuth("login"), 100);
+        setTimeout(() => openAuth("login", redirectAfterReset ? { redirectTo: redirectAfterReset } : undefined), 100);
         return;
       }
 
@@ -273,7 +276,8 @@ export default function AuthModal() {
         const successMessage = data?.message || (mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated"));
         showToast("success", successMessage);
         closeAuth();
-        router.push("/account");
+        const redirectPath = authData?.redirectTo || `/${locale}/account`;
+        router.push(redirectPath);
         return;
       }
       closeAuth();
@@ -366,6 +370,19 @@ export default function AuthModal() {
                     />
                     {fieldErrors.lastName && <p className="mt-1 text-xs text-red-600">{fieldErrors.lastName}</p>}
                   </div>
+                </div>
+              )}
+
+              {mode === "register" && (
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.username")}</label>
+                  <input
+                    className={getInputClassName("username")}
+                    value={form.username}
+                    onChange={handleInputChange("username")}
+                    aria-invalid={Boolean(fieldErrors.username)}
+                  />
+                  {fieldErrors.username && <p className="mt-1 text-xs text-red-600">{fieldErrors.username}</p>}
                 </div>
               )}
 

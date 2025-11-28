@@ -23,6 +23,7 @@ type AuthData = {
   token?: string;
   email?: string;
   resetCode?: string;
+  redirectTo?: string;
 };
 
 type AuthContextValue = {
