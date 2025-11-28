@@ -111,7 +111,7 @@ export default function LanguageSwitcher() {
         <span className="text-base font-normal text-gray-700 text-white ">{languages[isFlag].code.toUpperCase()}</span>
       </button>
       {isOpen && (
-        <div className='language-switcher absolute top-full mt-1 right-0 bg-white rounded-lg shadow-lg p-3 space-y-2'>
+        <div className='language-switcher absolute top-full mt-1 right-0 bg-white rounded-lg shadow-lg p-3 space-y-2 z-[9999]'>
         {languages.map((l) => (
           <button
             key={l.code}
