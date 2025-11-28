@@ -1211,7 +1211,11 @@
       "register": "Créer un compte",
       "sendResetLink": "Envoyer le lien de réinitialisation",
       "resetPassword": "Réinitialiser le mot de passe",
-      "backToLogin": "Retour à la connexion"
+      "backToLogin": "Retour à la connexion",
+      "processingLogin": "Connexion en cours...",
+      "processingRegister": "Création du compte...",
+      "processingSend": "Envoi du lien...",
+      "processingReset": "Mise à jour du mot de passe..."
     },
     "links": {
       "forgotPassword": "Mot de passe oublié ?",

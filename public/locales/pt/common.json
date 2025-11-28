@@ -1211,7 +1211,11 @@
       "register": "Criar conta",
       "sendResetLink": "Enviar link de redefinição",
       "resetPassword": "Redefinir senha",
-      "backToLogin": "Voltar para login"
+      "backToLogin": "Voltar para login",
+      "processingLogin": "Entrando...",
+      "processingRegister": "Criando sua conta...",
+      "processingSend": "Enviando link...",
+      "processingReset": "Atualizando senha..."
     },
     "links": {
       "forgotPassword": "Esqueceu a senha?",

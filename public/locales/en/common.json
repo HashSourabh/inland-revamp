@@ -1097,6 +1097,10 @@
       "register": "Create Account",
       "sendResetLink": "Send Reset Link",
       "resetPassword": "Reset Password",
+      "processingLogin": "Signing you in…",
+      "processingRegister": "Creating your account…",
+      "processingSend": "Sending link…",
+      "processingReset": "Updating password…",
       "backToLogin": "Back to Login"
     },
     "links": {

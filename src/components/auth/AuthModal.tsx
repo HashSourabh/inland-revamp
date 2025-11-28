@@ -200,7 +200,7 @@ export default function AuthModal() {
     }
 
     setFieldErrors({});
-    setLoading(true);
+    // setLoading(true);
 
     try {
       const apiBase = API_BASE_URL;
@@ -313,8 +313,17 @@ export default function AuthModal() {
 
         <form onSubmit={submit} className="space-y-4 px-8 pt-5 pb-10 relative">
           {loading && (
-            <div className="absolute inset-0 z-20 flex items-center justify-center rounded-b-xl bg-white/70">
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 rounded-b-xl bg-white/70">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
+              <p className="text-sm font-medium text-gray-600">
+                {mode === "login"
+                  ? t("buttons.processingLogin")
+                  : mode === "register"
+                  ? t("buttons.processingRegister")
+                  : mode === "forgot"
+                  ? t("buttons.processingSend")
+                  : t("buttons.processingReset")}
+              </p>
             </div>
           )}
 
@@ -458,14 +467,100 @@ export default function AuthModal() {
             </div>
           )}
 
-          <button type="submit" disabled={loading} className="w-full rounded-md min-h-[50px] bg-primary-600 text-white py-2 hover:bg-primary-700 disabled:opacity-60">
-            {mode === "login"
-              ? t("buttons.login")
-              : mode === "register"
-                ? t("buttons.register")
-                : mode === "forgot"
+          {/* Reset Password */}
+          {mode === "reset" && (
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.email")}</label>
+                <input
+                  type="email"
+                  className={`${getInputClassName("email")} bg-gray-100`}
+                  value={form.email}
+                  onChange={handleInputChange("email")}
+                  disabled
+                  readOnly
+                  aria-invalid={Boolean(fieldErrors.email)}
+                />
+                {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.password")}</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className={`${getInputClassName("password")} pr-10`}
+                    value={form.password}
+                    onChange={handleInputChange("password")}
+                    aria-invalid={Boolean(fieldErrors.password)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                    disabled={loading}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                  </button>
+                </div>
+                {fieldErrors.password && <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">{t("fields.confirmPassword")}</label>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    className={`${getInputClassName("confirmPassword")} pr-10`}
+                    value={form.confirmPassword}
+                    onChange={handleInputChange("confirmPassword")}
+                    aria-invalid={Boolean(fieldErrors.confirmPassword)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                    disabled={loading}
+                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                  >
+                    {showConfirmPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                  </button>
+                </div>
+                {fieldErrors.confirmPassword && <p className="mt-1 text-xs text-red-600">{fieldErrors.confirmPassword}</p>}
+              </div>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-md min-h-[50px] bg-primary-600 text-white py-3 hover:bg-primary-700 disabled:opacity-70 flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                <span>
+                  {mode === "login"
+                    ? t("buttons.processingLogin")
+                    : mode === "register"
+                    ? t("buttons.processingRegister")
+                    : mode === "forgot"
+                    ? t("buttons.processingSend")
+                    : t("buttons.processingReset")}
+                </span>
+              </>
+            ) : (
+              <span>
+                {mode === "login"
+                  ? t("buttons.login")
+                  : mode === "register"
+                  ? t("buttons.register")
+                  : mode === "forgot"
                   ? t("buttons.sendResetLink")
                   : t("buttons.resetPassword")}
+              </span>
+            )}
           </button>
 
           <div className="text-center text-sm text-gray-600 pt-2">

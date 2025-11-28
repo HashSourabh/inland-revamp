@@ -1111,7 +1111,11 @@
       "register": "Account aanmaken",
       "sendResetLink": "Herstel-link verzenden",
       "resetPassword": "Wachtwoord herstellen",
-      "backToLogin": "Terug naar inloggen"
+      "backToLogin": "Terug naar inloggen",
+      "processingLogin": "Bezig met inloggen...",
+      "processingRegister": "Account wordt aangemaakt...",
+      "processingSend": "Link verzenden...",
+      "processingReset": "Wachtwoord bijwerken..."
     },
     "links": {
       "forgotPassword": "Wachtwoord vergeten?",
