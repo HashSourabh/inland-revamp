@@ -200,7 +200,7 @@ export default function AuthModal() {
     }
 
     setFieldErrors({});
-    // setLoading(true);
+    setLoading(true); // Set loading immediately when button is clicked
 
     try {
       const apiBase = API_BASE_URL;
@@ -250,6 +250,7 @@ export default function AuthModal() {
       const data = await res.json();
 
       if (!res.ok) {
+        setLoading(false); // Reset loading state on error
         const fallbackMessage = data?.message || data?.error || t("messages.fixErrors");
         const handled = applyServerValidationErrors(data?.details, fallbackMessage);
         if (handled) return;
@@ -257,12 +258,14 @@ export default function AuthModal() {
       }
 
       if (mode === "forgot") {
+        setLoading(false); // Reset loading state on success
         setForgotEmailSent(true);
         showToast("success", data?.message || t("messages.resetLinkSent"));
         return;
       }
 
       if (mode === "reset") {
+        setLoading(false); // Reset loading state before closing modal
         const redirectAfterReset = authData?.redirectTo;
         showToast("success", data?.message || t("messages.passwordReset"));
         closeAuth();
@@ -273,6 +276,7 @@ export default function AuthModal() {
       if (data?.token) setToken(data.token);
       await refresh();
       if (mode === "login" || mode === "register") {
+        setLoading(false); // Reset loading state before navigation
         const successMessage = data?.message || (mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated"));
         showToast("success", successMessage);
         closeAuth();
@@ -280,13 +284,13 @@ export default function AuthModal() {
         router.push(redirectPath);
         return;
       }
+      setLoading(false); // Reset loading state
       closeAuth();
       console.log("data", data);
       showToast("success", data?.message || (mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated")));
     } catch (err: any) {
+      setLoading(false); // Reset loading state immediately on error
       showToast("error", err?.message || t("messages.genericError"));
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -312,20 +316,6 @@ export default function AuthModal() {
         </div>
 
         <form onSubmit={submit} className="space-y-4 px-8 pt-5 pb-10 relative">
-          {loading && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 rounded-b-xl bg-white/70">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
-              <p className="text-sm font-medium text-gray-600">
-                {mode === "login"
-                  ? t("buttons.processingLogin")
-                  : mode === "register"
-                  ? t("buttons.processingRegister")
-                  : mode === "forgot"
-                  ? t("buttons.processingSend")
-                  : t("buttons.processingReset")}
-              </p>
-            </div>
-          )}
 
           {/* Forgot Password */}
           {mode === "forgot" && (
@@ -535,31 +525,24 @@ export default function AuthModal() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md min-h-[50px] bg-primary-600 text-white py-3 hover:bg-primary-700 disabled:opacity-70 flex items-center justify-center gap-2"
+            className="w-full rounded-md min-h-[50px] bg-primary-600 text-white py-3 hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? (
-              <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                <span>
-                  {mode === "login"
-                    ? t("buttons.processingLogin")
-                    : mode === "register"
-                    ? t("buttons.processingRegister")
-                    : mode === "forgot"
-                    ? t("buttons.processingSend")
-                    : t("buttons.processingReset")}
-                </span>
-              </>
+              mode === "login"
+                ? "Logging in..."
+                : mode === "register"
+                ? "Registering..."
+                : mode === "forgot"
+                ? "Sending..."
+                : "Resetting..."
             ) : (
-              <span>
-                {mode === "login"
-                  ? t("buttons.login")
-                  : mode === "register"
-                  ? t("buttons.register")
-                  : mode === "forgot"
-                  ? t("buttons.sendResetLink")
-                  : t("buttons.resetPassword")}
-              </span>
+              mode === "login"
+                ? t("buttons.login")
+                : mode === "register"
+                ? t("buttons.register")
+                : mode === "forgot"
+                ? t("buttons.sendResetLink")
+                : t("buttons.resetPassword")
             )}
           </button>
 

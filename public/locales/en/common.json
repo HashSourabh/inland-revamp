@@ -1078,7 +1078,7 @@
   "auth": {
     "titles": {
       "login": "Log In to Your Account",
-      "register": "Create Account",
+      "register": "Register Your Account",
       "forgot": "Forgot Password",
       "reset": "Reset Password",
       "checkEmail": "Check your email"
@@ -1094,7 +1094,7 @@
     },
     "buttons": {
       "login": "Login",
-      "register": "Create Account",
+      "register": "Register",
       "sendResetLink": "Send Reset Link",
       "resetPassword": "Reset Password",
       "processingLogin": "Signing you in…",
