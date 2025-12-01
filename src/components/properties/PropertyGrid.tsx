@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropertyCard from './PropertyCard';
 import { Property } from '@/types/property';
-import { useAuth } from '@/context/AuthContext';
+import { useFavouriteIds } from '@/hooks/useFavouriteIds';
 
 interface PropertyGridProps {
   properties: Property[];
@@ -42,45 +42,7 @@ export default function PropertyGrid({
   featuredProperty,
   loading = false
 }: PropertyGridProps) {
-  const { user } = useAuth();
-  const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    const loadFavs = async () => {
-      if (!user) {
-        setFavouriteIds([]);
-        return;
-      }
-
-      // Correct base URL resolution
-      const isLocalhost =
-        typeof window !== "undefined" &&
-        (window.location.hostname === "localhost" ||
-          window.location.hostname === "127.0.0.1");
-
-      const apiBase =
-        process.env.NEXT_PUBLIC_API_BASE ||
-        (isLocalhost
-          ? `${window.location.protocol}//${window.location.hostname}:4000/api/v1`
-          : "https://inlandandalucia.onrender.com/api/v1");
-
-      try {
-        const res = await fetch(`${apiBase}/buyers/me/favourites`, {
-          credentials: "include",
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          setFavouriteIds((data.favourites || []).map((f: any) => String(f.Property_Ref)));
-        }
-      } catch (err) {
-        console.error("Failed to load favourites", err);
-      }
-    };
-
-    loadFavs();
-  }, [user]);
+  const favouriteIds = useFavouriteIds();
 
   if (loading) {
     return (

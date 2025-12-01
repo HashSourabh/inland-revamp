@@ -9,6 +9,7 @@ import AreaFilter from '@/components/properties/AreaFilter';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import { useTranslations } from 'next-intl';
 import { useRegionData } from '@/hooks/useRegionData';
+import { useFavouriteIds } from '@/hooks/useFavouriteIds';
 
 const transformPropertyForCard = (property: any) => {
   const propertyType =
@@ -144,6 +145,9 @@ export default function PropertiesLayout({
   const [minBaths, setMinBaths] = useState<string | null>(null);
   const [minPrice, setminPrice] = useState<string | null>(null);
   const [maxPrice, setmaxPrice] = useState<string | null>(null);
+
+  // Favourite property IDs for the logged-in user
+  const favouriteIds = useFavouriteIds();
 
   // Ref to prevent race conditions
   const fetchPropertiesRef = useRef(0);
@@ -537,12 +541,13 @@ export default function PropertiesLayout({
                   <PropertyCardSkeleton key={`loading-${i}`} />
                 ))
                 : displayedProperties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    card={layout === 'list' ? 'list' : 'grid'}
-                    property={transformPropertyForCard(property)}
-                  />
-                ))}
+                    <PropertyCard
+                      key={property.id}
+                      card={layout === 'list' ? 'list' : 'grid'}
+                      property={transformPropertyForCard(property)}
+                      favouriteIds={favouriteIds}
+                    />
+                  ))}
             </div>
 
             {/* Pagination */}

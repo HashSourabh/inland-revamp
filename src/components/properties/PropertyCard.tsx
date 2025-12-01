@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeartIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getToken, useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
@@ -43,6 +43,11 @@ export default function PropertyCard({ property, card = 'grid', featured = false
   const [isFavorite, setIsFavorite] = useState<boolean>(favouriteIds.includes(property.id));
   const { openAuth, user } = useAuth();
   const t = useTranslations('properties');
+
+  // Keep local favourite state in sync when the list of favourite IDs changes
+  useEffect(() => {
+    setIsFavorite(favouriteIds.includes(property.id));
+  }, [favouriteIds, property.id]);
 
   // Find the featured image or fallback to the first image
   const mainImage = property.images.find(img => img.isFeatured) || property.images[0];

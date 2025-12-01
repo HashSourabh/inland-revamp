@@ -16,6 +16,7 @@ import { useKeenSlider } from "keen-slider/react";
 import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
 import { usePropertyData } from '@/hooks/usePropertyData';
 import { useRegionData } from '@/hooks/useRegionData';
+import { useFavouriteIds } from '@/hooks/useFavouriteIds';
 
 // API base
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
@@ -240,6 +241,9 @@ export default function Home() {
   const [searchRef, setSearchRef] = useState('');
   const [searching, setSearching] = useState(false);
   const [featuredPage, setFeaturedPage] = useState(1);
+
+  // Favourite property IDs for the logged-in user
+  const favouriteIds = useFavouriteIds();
 
   // Add timeout to prevent infinite loading
   useEffect(() => {
@@ -527,7 +531,7 @@ export default function Home() {
           ) : exclusiveProperties.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {exclusiveProperties.slice(0, 3).map((property) => (
-                <PropertyCard key={property.id} property={property} />
+                <PropertyCard key={property.id} property={property} favouriteIds={favouriteIds} />
               ))}
             </div>
           ) : (
@@ -624,7 +628,7 @@ export default function Home() {
               <div ref={sliderRef} className="keen-slider flex py-[20px] overflow-hidden mt-12">
                 {featuredProperties.slice(0, 9).map((p) => (
                   <div key={p.id} className="keen-slider__slide">
-                    <PropertyCard property={p} />
+                    <PropertyCard property={p} favouriteIds={favouriteIds} />
                   </div>
                 ))}
               </div>
