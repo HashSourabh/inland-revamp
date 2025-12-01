@@ -530,18 +530,18 @@ export default function AuthModal() {
             {loading ? (
               mode === "login"
                 ? "Logging in..."
-                : mode === "register"
+                    : mode === "register"
                 ? "Registering..."
-                : mode === "forgot"
+                    : mode === "forgot"
                 ? "Sending..."
                 : "Resetting..."
             ) : (
               mode === "login"
-                ? t("buttons.login")
-                : mode === "register"
-                ? t("buttons.register")
-                : mode === "forgot"
-                ? t("buttons.sendResetLink")
+                  ? t("buttons.login")
+                  : mode === "register"
+                  ? t("buttons.register")
+                  : mode === "forgot"
+                  ? t("buttons.sendResetLink")
                 : t("buttons.resetPassword")
             )}
           </button>
