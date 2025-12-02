@@ -349,71 +349,40 @@ export default function Home() {
     loadPropertyTypes();
   }, [hasData, needsRefresh, setPropertyTypesMap, updateLastFetchTime]);
 
-  // Load featured properties (only if not cached)
+  // Load featured and exclusive properties in parallel (only if not cached)
   useEffect(() => {
-    const loadFeaturedProperties = async () => {
-      if (typesLoading) return; // Wait for types to load first
-
+    const loadProperties = async () => {
       // Skip if already loaded and not stale
       if (hasData && !needsRefresh) {
         setFeaturedLoading(false);
-        return;
-      }
-
-      try {
-        setFeaturedLoading(true);
-        const featuredDb = await propertyService.getFeaturedProperties(featuredPage);
-        setFeaturedProperties(featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
-        updateLastFetchTime();
-      } catch (err) {
-        console.error("Error loading featured properties:", err);
-        // Set loading to false even on error to prevent infinite loading
-        setFeaturedLoading(false);
-      } finally {
-        setFeaturedLoading(false);
-      }
-    };
-
-    loadFeaturedProperties();
-  }, [featuredPage, propertyTypesMap, typesLoading, hasData, needsRefresh, setFeaturedProperties, updateLastFetchTime]);
-
-  // Load exclusive properties (only if not cached)
-  useEffect(() => {
-    const loadExclusiveProperties = async () => {
-      console.log('Loading exclusive properties...', { typesLoading, hasData, needsRefresh, exclusiveLoading });
-      
-      if (typesLoading) {
-        console.log('Waiting for types to load first');
-        return; // Wait for types to load first
-      }
-
-      // Skip if already loaded and not stale
-      if (hasData && !needsRefresh) {
-        console.log('Exclusive properties already loaded, skipping');
         setExclusiveLoading(false);
         return;
       }
 
       try {
+        // Load both in parallel - don't wait for types
+        setFeaturedLoading(true);
         setExclusiveLoading(true);
-        console.log('Fetching exclusive properties from API...');
-        const exclusiveDb = await propertyService.getExclusiveProperties();
-        console.log('Exclusive properties fetched:', exclusiveDb);
         
+        const [featuredDb, exclusiveDb] = await Promise.all([
+          propertyService.getFeaturedProperties(featuredPage),
+          propertyService.getExclusiveProperties()
+        ]);
+        
+        // Transform with types map (may be empty initially, will update when types load)
+        setFeaturedProperties(featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
         setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
         updateLastFetchTime();
       } catch (err) {
-        console.error("Error loading exclusive properties:", err);
-        // Set loading to false even on error to prevent infinite loading
-        setExclusiveLoading(false);
+        console.error("Error loading properties:", err);
       } finally {
-        console.log('Exclusive properties loading finished');
+        setFeaturedLoading(false);
         setExclusiveLoading(false);
       }
     };
 
-    loadExclusiveProperties();
-  }, [propertyTypesMap, typesLoading, hasData, needsRefresh, setExclusiveProperties, updateLastFetchTime]);
+    loadProperties();
+  }, [featuredPage, propertyTypesMap, hasData, needsRefresh, setFeaturedProperties, setExclusiveProperties, updateLastFetchTime]);
 
   // Load regions with cache-aware hook
   useEffect(() => {

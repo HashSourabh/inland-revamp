@@ -6,7 +6,7 @@ import Link from "next/link";
 import { API_BASE_URL } from "@/utils/api";
 import ConfirmDialog from "@/components/shared/ConfirmDialog";
 import AccountSectionLoader from "@/components/loader/AccountSectionLoader";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, EyeSlashIcon, XMarkIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -128,6 +128,32 @@ export default function AccountPage() {
   const [criteriaLoading, setCriteriaLoading] = useState(false);
   const [criteriaSaving, setCriteriaSaving] = useState(false);
 
+  // Need Help modal state
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<any | null>(null);
+  const [helpForm, setHelpForm] = useState({ subject: "", message: "" });
+  const [helpLoading, setHelpLoading] = useState(false);
+  const [helpFormErrors, setHelpFormErrors] = useState<Record<string, string>>({});
+
+  // Validate help form field
+  const validateHelpField = (field: 'subject' | 'message', value: string): string | null => {
+    if (field === 'subject') {
+      if (!value.trim()) {
+        return t('favourite.subjectRequired') || 'Subject is required';
+      }
+      if (value.length > 252) {
+        return t('favourite.subjectMaxLength') || 'Subject must not exceed 252 characters';
+      }
+    } else if (field === 'message') {
+      if (!value.trim()) {
+        return t('favourite.messageRequired') || 'Message is required';
+      }
+      if (value.length > 5000) {
+        return t('favourite.messageMaxLength') || 'Message must not exceed 5000 characters';
+      }
+    }
+    return null;
+  };
 
   const [profileForm, setProfileForm] = useState({
     firstName: "",
@@ -875,20 +901,33 @@ export default function AccountPage() {
                                 </span>
                               </td>
                               <td className="p-4">
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 justify-end">
                                   <Link
                                     href={`/properties/${encodeURIComponent(f.Property_ID)}`}
-                                    className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-sm font-medium"
+                                    className="p-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    title={t('favourite.viewProperty') || 'View Property'}
                                   >
-                                    {t('favourite.viewProperty')}
+                                    <EyeIcon className="w-5 h-5" />
                                   </Link>
                                   <button
                                     onClick={() => { setPendingRemoveId(f.Property_ID); setConfirmOpen(true); }}
-                                    className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm font-medium"
+                                    className="p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                                    title={t('favourite.remove') || 'Remove'}
                                   >
-                                    {t('favourite.remove')}
+                                    <XMarkIcon className="w-5 h-5" />
+                                  </button>
+                                  <button
+                    onClick={() => {
+                      setSelectedProperty(f);
+                      setHelpForm({ subject: "", message: "" });
+                      setHelpFormErrors({});
+                      setHelpModalOpen(true);
+                    }}
+                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
+                                  >
+                                    {t('favourite.needHelp') || 'Need Help'}
                                   </button>
                                 </div>
                               </td>
@@ -1147,6 +1186,247 @@ export default function AccountPage() {
         cancelKey="favourites.removeCancel"
         confirmButtonClassName="bg-red-600 hover:bg-red-700"
       />
+
+      {/* Need Help Modal */}
+      {helpModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  {t('favourite.needHelpTitle') || 'Need Help with Property'}
+                </h2>
+                <button
+                  onClick={() => {
+                    setHelpModalOpen(false);
+                    setSelectedProperty(null);
+                    setHelpForm({ subject: "", message: "" });
+                    setHelpFormErrors({});
+                  }}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {selectedProperty && (
+                <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600 mb-1">
+                    <span className="font-semibold">{t('favourite.property') || 'Property'}:</span>{' '}
+                    {selectedProperty.Property_Ref || selectedProperty.Property_ID}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">{t('favourite.propertyName') || 'Name'}:</span>{' '}
+                    {selectedProperty.Property_Name || selectedProperty.Property_Title || selectedProperty.Property_Type_Name || 'N/A'}
+                  </p>
+                </div>
+              )}
+
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  
+                  // Validate form
+                  const errors: Record<string, string> = {};
+                  if (!helpForm.subject.trim()) {
+                    errors.subject = t('favourite.subjectRequired') || 'Subject is required';
+                  } else if (helpForm.subject.length > 252) {
+                    errors.subject = t('favourite.subjectMaxLength') || 'Subject must not exceed 252 characters';
+                  }
+                  
+                  if (!helpForm.message.trim()) {
+                    errors.message = t('favourite.messageRequired') || 'Message is required';
+                  } else if (helpForm.message.length > 5000) {
+                    errors.message = t('favourite.messageMaxLength') || 'Message must not exceed 5000 characters';
+                  }
+                  
+                  if (Object.keys(errors).length > 0) {
+                    setHelpFormErrors(errors);
+                    return;
+                  }
+                  
+                  setHelpFormErrors({});
+                  setHelpLoading(true);
+                  const apiBase = API_BASE_URL;
+                  const token = getToken();
+
+                  if (!token) {
+                    toast.error(t('favourite.authRequired') || 'Please log in to send a message');
+                    setHelpLoading(false);
+                    return;
+                  }
+
+                  try {
+                    const res = await fetch(`${apiBase}/buyers/property-inquiry`, {
+                      method: "POST",
+                      headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        propertyId: selectedProperty.Property_ID,
+                        propertyRef: selectedProperty.Property_Ref || selectedProperty.Property_ID,
+                        subject: helpForm.subject,
+                        message: helpForm.message,
+                      }),
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok && data.success) {
+                      toast.success(t('favourite.messageSent') || 'Your message has been sent successfully!');
+                      setHelpModalOpen(false);
+                      setSelectedProperty(null);
+                      setHelpForm({ subject: "", message: "" });
+                      setHelpFormErrors({});
+                    } else {
+                      // Handle server validation errors
+                      if (data.details && Array.isArray(data.details)) {
+                        const serverErrors: Record<string, string> = {};
+                        data.details.forEach((detail: any) => {
+                          const field = detail.field || detail.path || detail.param;
+                          const message = detail.message || detail.msg;
+                          if (field && message) {
+                            serverErrors[field] = message;
+                          }
+                        });
+                        if (Object.keys(serverErrors).length > 0) {
+                          setHelpFormErrors(serverErrors);
+                          return;
+                        }
+                      }
+                      toast.error(data.message || t('favourite.messageFailed') || 'Failed to send message. Please try again.');
+                    }
+                  } catch (err) {
+                    console.error("❌ Send message failed:", err);
+                    toast.error(t('favourite.messageFailed') || 'Failed to send message. Please try again.');
+                  } finally {
+                    setHelpLoading(false);
+                  }
+                }}
+              >
+                <div className="mb-4">
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                    {t('favourite.subject') || 'Subject'} <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    value={helpForm.subject}
+                    onChange={(e) => {
+                      // Enforce limit on frontend
+                      const value = e.target.value.length <= 252 ? e.target.value : e.target.value.substring(0, 252);
+                      setHelpForm({ ...helpForm, subject: value });
+                      // Clear error when user starts typing
+                      if (helpFormErrors.subject) {
+                        const error = validateHelpField('subject', value);
+                        setHelpFormErrors({ ...helpFormErrors, subject: error || '' });
+                      }
+                    }}
+                    onBlur={(e) => {
+                      // Validate on blur
+                      const error = validateHelpField('subject', e.target.value);
+                      if (error) {
+                        setHelpFormErrors({ ...helpFormErrors, subject: error });
+                      } else {
+                        const newErrors = { ...helpFormErrors };
+                        delete newErrors.subject;
+                        setHelpFormErrors(newErrors);
+                      }
+                    }}
+                    maxLength={252}
+                    className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:outline-none ${
+                      helpFormErrors.subject 
+                        ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                        : 'border-gray-300 focus:border-primary-500 focus:ring-primary-200'
+                    }`}
+                    placeholder={t('favourite.subjectPlaceholder') || 'Enter subject'}
+                    disabled={helpLoading}
+                  />
+                  {helpFormErrors.subject && (
+                    <p className="mt-1 text-sm text-red-600">{helpFormErrors.subject}</p>
+                  )}
+                </div>
+
+                <div className="mb-6">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                    {t('favourite.message') || 'Message'} <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    value={helpForm.message}
+                    onChange={(e) => {
+                      // Enforce limit on frontend
+                      const value = e.target.value.length <= 5000 ? e.target.value : e.target.value.substring(0, 5000);
+                      setHelpForm({ ...helpForm, message: value });
+                      // Clear error when user starts typing
+                      if (helpFormErrors.message) {
+                        const error = validateHelpField('message', value);
+                        setHelpFormErrors({ ...helpFormErrors, message: error || '' });
+                      }
+                    }}
+                    onBlur={(e) => {
+                      // Validate on blur
+                      const error = validateHelpField('message', e.target.value);
+                      if (error) {
+                        setHelpFormErrors({ ...helpFormErrors, message: error });
+                      } else {
+                        const newErrors = { ...helpFormErrors };
+                        delete newErrors.message;
+                        setHelpFormErrors(newErrors);
+                      }
+                    }}
+                    maxLength={5000}
+                    rows={6}
+                    className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:outline-none ${
+                      helpFormErrors.message 
+                        ? 'border-red-500 focus:border-red-500 focus:ring-red-200' 
+                        : 'border-gray-300 focus:border-primary-500 focus:ring-primary-200'
+                    }`}
+                    placeholder={t('favourite.messagePlaceholder') || 'Enter your message'}
+                    disabled={helpLoading}
+                  />
+                  {helpFormErrors.message && (
+                    <p className="mt-1 text-sm text-red-600">{helpFormErrors.message}</p>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setHelpModalOpen(false);
+                      setSelectedProperty(null);
+                      setHelpForm({ subject: "", message: "" });
+                      setHelpFormErrors({});
+                    }}
+                    className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                    disabled={helpLoading}
+                  >
+                    {t('favourite.cancel') || 'Cancel'}
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={helpLoading || !helpForm.subject.trim() || !helpForm.message.trim()}
+                    className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {helpLoading ? (
+                      <>
+                        <span className="inline-block animate-spin mr-2">⏳</span>
+                        {t('favourite.sending') || 'Sending...'}
+                      </>
+                    ) : (
+                      t('favourite.send') || 'Send'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
