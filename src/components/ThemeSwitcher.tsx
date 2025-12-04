@@ -52,10 +52,11 @@ export default function ThemeSwitcher() {
   }, [currentTheme]);
 
   return (
-    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50">
+    <div className="fixed left-4 top-1/2 -translate-y-1/2 z-40">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-white p-3 rounded-l-lg shadow-lg hover:bg-gray-50 transition-colors"
+        className="bg-white p-3 rounded-r-lg shadow-lg hover:bg-gray-50 transition-colors"
+        aria-label="Choose theme"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
@@ -63,7 +64,7 @@ export default function ThemeSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-0 mt-2 w-64 bg-white rounded-lg shadow-lg p-4">
+        <div className="absolute left-0 top-0 mt-2 w-64 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-lg p-4 z-50">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-sm font-medium text-gray-900">Choose Theme</h3>
             <button

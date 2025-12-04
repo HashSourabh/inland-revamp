@@ -16,3 +16,18 @@
   z-index: 9999 !important;
 }
 
+/* On small screens, ensure chat widget has enough space from theme switcher */
+@media (max-width: 768px) {
+  #tidio-chat-widget,
+  .tidio-chat-widget,
+  [data-tidio-widget] {
+    bottom: 20px !important;
+    right: 16px !important;
+  }
+  
+  .tidio-chat-widget iframe {
+    bottom: 20px !important;
+    right: 16px !important;
+  }
+}
+

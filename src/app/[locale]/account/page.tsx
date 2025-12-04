@@ -571,34 +571,34 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-semibold mb-6">{t('title')}</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+      <h1 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">{t('title')}</h1>
 
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         {/* Sidebar */}
-        <div className="w-64 flex-shrink-0">
+        <div className="w-full md:w-64 flex-shrink-0">
             <div className="bg-white border rounded-lg shadow-sm">
-              <nav className="p-2">
+              <nav className="p-2 grid grid-cols-2 md:grid-cols-1 gap-1 md:gap-0">
                 <button
-                className={`w-full text-left px-4 py-3 rounded-md transition-colors ${tab === "profile" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "profile" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("profile")}
                 >
                   {t('tabs.profile')}
                 </button>
                 <button
-                className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "favourites" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "favourites" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("favourites")}
                 >
                   {t('tabs.favourites')}
                 </button>
                 <button
-                className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "reservations" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "reservations" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("reservations")}
                 >
                   {t('tabs.reservations')}
                 </button>
                 <button
-                className={`w-full text-left px-4 py-3 rounded-md transition-colors mt-1 ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("criterias")}
                 >
                   Criterias
@@ -608,32 +608,32 @@ export default function AccountPage() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {tab === "profile" && (
-              <div className="bg-white border rounded-lg shadow-sm p-6">
-                <div className="flex items-center justify-between mb-4">
+              <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                   <div className="flex items-center gap-4">
                     {(profilePreview || user.profileImageUrl) ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={(profilePreview || user.profileImageUrl) as string}
                         alt="Profile"
-                        className="h-16 w-16 rounded-full object-cover border"
+                        className="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover border"
                       />
                     ) : (
-                      <div className="h-16 w-16 rounded-full bg-gray-200 grid place-items-center border">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-gray-500">
+                      <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gray-200 grid place-items-center border">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-gray-500 sm:w-7 sm:h-7">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                       </div>
                     )}
                     <div>
-                      <div className="text-xl font-semibold">{t('profile.title')}</div>
+                      <div className="text-lg sm:text-xl font-semibold">{t('profile.title')}</div>
                       <div>
                         <button
                           type="button"
                           onClick={startUpload}
-                          className="text-primary-600 hover:underline text-sm inline-flex items-center gap-1"
+                          className="text-primary-600 hover:underline text-xs sm:text-sm inline-flex items-center gap-1"
                           disabled={uploading}
                         >
                           <span>{uploading ? t('profile.uploading') : t('profile.uploadPhoto')}</span>
@@ -655,14 +655,14 @@ export default function AccountPage() {
                       setPwdMsg(null);
                       setPwdForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
                     }}
-                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50"
+                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50 text-sm sm:text-base w-full sm:w-auto"
                   >
                     {t('profile.changePassword')}
                   </button>
                 </div>
 
                 <form onSubmit={handleSaveProfile} className="max-w-xl space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">{t('profile.firstName')}</label>
                       <input
@@ -756,7 +756,7 @@ export default function AccountPage() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {saving ? t('profile.saving') : t('profile.saveChanges')}
                   </button>
@@ -821,8 +821,8 @@ export default function AccountPage() {
             )}
 
             {tab === "favourites" && (
-              <div className="bg-white border rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold mb-4">{t('favourite.title')}</h2>
+              <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('favourite.title')}</h2>
 
                 {/* 🔄 Loader while fetching */}
                 {isFavLoading ? (
@@ -830,17 +830,18 @@ export default function AccountPage() {
                 ) : favDetails.length === 0 ? (
                   <div className="text-gray-600">{t('favourite.noFavourites')}</div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full text-sm text-gray-700">
-                      <thead className="bg-gray-50 border-b">
-                        <tr>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.photo')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.propertyInfo')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.addedOn')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.price')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('favourite.action')}</th>
-                        </tr>
-                      </thead>
+                  <div className="overflow-x-auto -mx-4 sm:mx-0">
+                    <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                      <table className="min-w-full text-xs sm:text-sm text-gray-700">
+                        <thead className="bg-gray-50 border-b">
+                          <tr>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.photo')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.propertyInfo')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700 hidden sm:table-cell">{t('favourite.addedOn')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.price')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.action')}</th>
+                          </tr>
+                        </thead>
 
                       <tbody>
                         {favDetails.map((f) => {
@@ -857,30 +858,37 @@ export default function AccountPage() {
 
                           return (
                             <tr key={ref} className="border-b hover:bg-gray-50 transition-colors">
-                              <td className="p-4">
+                              <td className="p-2 sm:p-4">
                                 <img
                                   src={img}
                                   alt={`Property ${ref}`}
-                                  className="w-32 h-24 min-w-32 object-cover rounded-lg"
+                                  className="w-20 h-16 sm:w-32 sm:h-24 min-w-20 sm:min-w-32 object-cover rounded-lg"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       "https://www.inlandandalucia.com/images/no-image-available.jpg";
                                   }}
                                 />
                               </td>
-                              <td className="p-4">
-                                <div className="space-y-2">
-                                  <h3 className="font-semibold text-gray-900 text-base">
+                              <td className="p-2 sm:p-4">
+                                <div className="space-y-1 sm:space-y-2">
+                                  <h3 className="font-semibold text-gray-900 text-xs sm:text-base">
                                     {displayName}
                                   </h3>
                                   {description && (
-                                    <p className="text-gray-600 text-sm line-clamp-2">
+                                    <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 hidden sm:block">
                                       {description.length > 100 ? `${description.substring(0, 100)}...` : description}
                                     </p>
                                   )}
+                                  <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
+                                    {new Date(f.DateCreated).toLocaleDateString('en-US', { 
+                                      year: 'numeric', 
+                                      month: 'short', 
+                                      day: 'numeric' 
+                                    })}
+                                  </div>
                                   {area > 0 && (
-                                    <div className="flex items-center gap-1 text-gray-600 text-sm">
-                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="flex items-center gap-1 text-gray-600 text-xs sm:text-sm">
+                                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                                       </svg>
                                       <span>{area} {t('favourite.sqFt') || 'Sq Ft'}</span>
@@ -888,35 +896,35 @@ export default function AccountPage() {
                                   )}
                                 </div>
                               </td>
-                              <td className="p-4 text-gray-600">
+                              <td className="p-2 sm:p-4 text-gray-600 hidden sm:table-cell">
                                 {new Date(f.DateCreated).toLocaleDateString('en-US', { 
                                   year: 'numeric', 
                                   month: 'long', 
                                   day: 'numeric' 
                                 })}
                               </td>
-                              <td className="p-4">
-                                <span className="font-semibold text-gray-900 text-base">
+                              <td className="p-2 sm:p-4">
+                                <span className="font-semibold text-gray-900 text-xs sm:text-base">
                                   {f.Public_Price ? `€${f.Public_Price.toLocaleString()}` : "-"}
                                 </span>
                               </td>
-                              <td className="p-4">
-                                <div className="flex items-center gap-2 justify-end">
+                              <td className="p-2 sm:p-4">
+                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-2 justify-end">
                                   <Link
                                     href={`/properties/${encodeURIComponent(f.Property_ID)}`}
-                                    className="p-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+                                    className="p-1.5 sm:p-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors inline-flex items-center justify-center"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     title={t('favourite.viewProperty') || 'View Property'}
                                   >
-                                    <EyeIcon className="w-5 h-5" />
+                                    <EyeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                   </Link>
                                   <button
                                     onClick={() => { setPendingRemoveId(f.Property_ID); setConfirmOpen(true); }}
-                                    className="p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                                    className="p-1.5 sm:p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors inline-flex items-center justify-center"
                                     title={t('favourite.remove') || 'Remove'}
                                   >
-                                    <XMarkIcon className="w-5 h-5" />
+                                    <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                   </button>
                                   <button
                     onClick={() => {
@@ -925,7 +933,7 @@ export default function AccountPage() {
                       setHelpFormErrors({});
                       setHelpModalOpen(true);
                     }}
-                                    className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium whitespace-nowrap"
+                                    className="px-2 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm font-medium whitespace-nowrap"
                                   >
                                     {t('favourite.needHelp') || 'Need Help'}
                                   </button>
@@ -936,6 +944,7 @@ export default function AccountPage() {
                         })}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 )}
               </div>
@@ -944,25 +953,26 @@ export default function AccountPage() {
 
 
             {tab === "reservations" && (
-              <div className="bg-white border rounded-lg shadow-sm p-6">
-                <h2 className="text-xl font-semibold mb-4">{t('reservations.title')}</h2>
+              <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
+                <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('reservations.title')}</h2>
 
                 {reservationsLoading ? (
                   <AccountSectionLoader message={t('loading')} />
                 ) : reservations.length === 0 ? (
                   <div className="text-gray-600">{t('reservations.noReservations')}</div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full text-sm text-gray-700">
-                      <thead className="bg-gray-50 border-b">
-                        <tr>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.photo')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.propertyInfo')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.reservedDate')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.reservedAmount')}</th>
-                          <th className="p-4 text-left font-semibold text-gray-700">{t('reservations.action')}</th>
-                        </tr>
-                      </thead>
+                  <div className="overflow-x-auto -mx-4 sm:mx-0">
+                    <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                      <table className="min-w-full text-xs sm:text-sm text-gray-700">
+                        <thead className="bg-gray-50 border-b">
+                          <tr>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.photo')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.propertyInfo')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700 hidden sm:table-cell">{t('reservations.reservedDate')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.reservedAmount')}</th>
+                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.action')}</th>
+                          </tr>
+                        </thead>
 
                       <tbody>
                         {reservations.map((r) => {
@@ -980,30 +990,37 @@ export default function AccountPage() {
 
                           return (
                             <tr key={r.PaypalTransactionId} className="border-b hover:bg-gray-50 transition-colors">
-                              <td className="p-4">
+                              <td className="p-2 sm:p-4">
                                 <img
                                   src={img}
                                   alt={`Property ${propertyRef}`}
-                                  className="w-32 h-24 min-w-32 object-cover rounded-lg"
+                                  className="w-20 h-16 sm:w-32 sm:h-24 min-w-20 sm:min-w-32 object-cover rounded-lg"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       "https://www.inlandandalucia.com/images/no-image-available.jpg";
                                   }}
                                 />
                               </td>
-                              <td className="p-4">
-                                <div className="space-y-2">
-                                  <h3 className="font-semibold text-gray-900 text-base">
+                              <td className="p-2 sm:p-4">
+                                <div className="space-y-1 sm:space-y-2">
+                                  <h3 className="font-semibold text-gray-900 text-xs sm:text-base">
                                     {displayName}
                                   </h3>
                                   {description && (
-                                    <p className="text-gray-600 text-sm line-clamp-2">
+                                    <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 hidden sm:block">
                                       {description.length > 100 ? `${description.substring(0, 100)}...` : description}
                                     </p>
                                   )}
+                                  <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
+                                    {new Date(r.ReservedDate).toLocaleDateString('en-US', { 
+                                      year: 'numeric', 
+                                      month: 'short', 
+                                      day: 'numeric' 
+                                    })}
+                                  </div>
                                   {area > 0 && (
-                                    <div className="flex items-center gap-1 text-gray-600 text-sm">
-                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div className="flex items-center gap-1 text-gray-600 text-xs sm:text-sm">
+                                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                                       </svg>
                                       <span>{area} {t('reservations.sqFt') || 'Sq Ft'}</span>
@@ -1011,22 +1028,22 @@ export default function AccountPage() {
                                   )}
                                 </div>
                               </td>
-                              <td className="p-4 text-gray-600">
+                              <td className="p-2 sm:p-4 text-gray-600 hidden sm:table-cell">
                                 {new Date(r.ReservedDate).toLocaleDateString('en-US', { 
                                   year: 'numeric', 
                                   month: 'long', 
                                   day: 'numeric' 
                                 })}
                               </td>
-                              <td className="p-4">
-                                <span className="font-semibold text-gray-900 text-base">
+                              <td className="p-2 sm:p-4">
+                                <span className="font-semibold text-gray-900 text-xs sm:text-base">
                                   {r.ReservedAmount ? `€${r.ReservedAmount.toLocaleString()}` : "-"}
                                 </span>
                               </td>
-                              <td className="p-4">
+                              <td className="p-2 sm:p-4">
                                 <Link
                                   href={`/properties/${propertyId}`}
-                                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-sm font-medium inline-block"
+                                  className="px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs sm:text-sm font-medium inline-block w-full sm:w-auto text-center"
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
@@ -1038,22 +1055,23 @@ export default function AccountPage() {
                         })}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 )}
               </div>
             )}
 
             {tab === "criterias" && (
-              <div className="relative bg-white border rounded-lg shadow-sm p-6">
+              <div className="relative bg-white border rounded-lg shadow-sm p-4 sm:p-6">
                 {/* Overlay loader */}
                 {criteriaLoading && <AccountSectionLoader overlay message={t('loading')} />}
 
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-semibold">Buyer Criterias</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                  <h2 className="text-lg sm:text-xl font-semibold">Buyer Criterias</h2>
                   <button
                     onClick={handleSaveCriteria}
                     disabled={criteriaSaving || criteriaLoading}
-                    className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {criteriaSaving ? (
                       <>
@@ -1108,12 +1126,11 @@ export default function AccountPage() {
                     ))}
                   </div>
                 )}
-                <div className="flex items-right justify-between mb-6">
-
+                <div className="flex justify-end mb-6">
                   <button
                     onClick={handleSaveCriteria}
                     disabled={criteriaSaving || criteriaLoading}
-                    className="px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {criteriaSaving ? (
                       <>
@@ -1189,11 +1206,11 @@ export default function AccountPage() {
 
       {/* Need Help Modal */}
       {helpModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-semibold text-gray-900">
+                <h2 className="text-lg sm:text-2xl font-semibold text-gray-900">
                   {t('favourite.needHelpTitle') || 'Need Help with Property'}
                 </h2>
                 <button
@@ -1203,9 +1220,9 @@ export default function AccountPage() {
                     setHelpForm({ subject: "", message: "" });
                     setHelpFormErrors({});
                   }}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -1393,7 +1410,7 @@ export default function AccountPage() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-end gap-3">
+                <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => {
@@ -1402,7 +1419,7 @@ export default function AccountPage() {
                       setHelpForm({ subject: "", message: "" });
                       setHelpFormErrors({});
                     }}
-                    className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                    className="w-full sm:w-auto px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
                     disabled={helpLoading}
                   >
                     {t('favourite.cancel') || 'Cancel'}
