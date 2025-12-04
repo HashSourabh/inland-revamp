@@ -63,8 +63,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refresh = async () => {
     try {
-      setLoading(true);
       const token = getToken();
+      // Only show loading for authenticated users (with token)
+      // Anonymous users should not see loading state
+      if (token) {
+        setLoading(true);
+      }
       const res = await fetch(`${API_BASE_URL}/auth/me`, {
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
@@ -158,7 +162,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{ user, loading, openAuth, closeAuth, isAuthOpen, authMode, authData, refresh, logout }}>
       {children}
-      <GlobalLoader active={loading} />
+      {/* Only show global loader for authenticated users, not for anonymous visitors */}
+      <GlobalLoader active={loading && user !== null} />
     </AuthContext.Provider>
   );
 }

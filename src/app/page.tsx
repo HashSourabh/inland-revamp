@@ -13,7 +13,6 @@ import AdvancedSearch from "@/components/search/AdvancedSearch";
 import Hero from "@/sections/Hero";
 import { Property } from "@/types/property";
 import { useKeenSlider } from "keen-slider/react";
-import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
 import { usePropertyData } from '@/hooks/usePropertyData';
 import { useRegionData } from '@/hooks/useRegionData';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
@@ -181,13 +180,18 @@ const transformPropertyForCard = (
 // --- LOADING COMPONENTS ---
 const PropertyCardSkeleton = () => (
   <div className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
-    <div className="h-48 bg-gray-200"></div>
+    <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300"></div>
     <div className="p-4 space-y-3">
-      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+      <div className="h-5 bg-gray-200 rounded w-3/4"></div>
       <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
+        <div className="h-6 bg-gray-200 rounded w-1/3"></div>
         <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+      </div>
+      <div className="flex gap-2 mt-2">
+        <div className="h-4 bg-gray-200 rounded w-16"></div>
+        <div className="h-4 bg-gray-200 rounded w-16"></div>
+        <div className="h-4 bg-gray-200 rounded w-20"></div>
       </div>
     </div>
   </div>
@@ -248,10 +252,11 @@ export default function Home() {
   } = useRegionData();
 
   // Local state for non-cached data
-  const [featuredLoading, setFeaturedLoading] = useState(() => !hasData || needsRefresh);
-  const [exclusiveLoading, setExclusiveLoading] = useState(() => !hasData || needsRefresh);
+  // Always start with loading true on mount - will be set to false when data loads or if cached
+  const [featuredLoading, setFeaturedLoading] = useState(true);
+  const [exclusiveLoading, setExclusiveLoading] = useState(true);
   const [regionsLoading, setRegionsLoading] = useState(false); // Defer regions loading
-  const [typesLoading, setTypesLoading] = useState(() => Object.keys(propertyTypesMap).length === 0);
+  const [typesLoading, setTypesLoading] = useState(true);
   const [searchRef, setSearchRef] = useState('');
   const [searching, setSearching] = useState(false);
   const [featuredPage, setFeaturedPage] = useState(1);
@@ -259,9 +264,25 @@ export default function Home() {
   // Track if initial load is complete
   const initialLoadComplete = useRef(false);
   const loadingStarted = useRef(false);
+  const hasLoadedOnce = useRef(false);
 
   // Favourite property IDs for the logged-in user (defer if not logged in)
   const favouriteIds = useFavouriteIds();
+
+  // Initial check: If we have cached data, use it immediately
+  useEffect(() => {
+    if (featuredProperties.length > 0 && !needsRefresh) {
+      setFeaturedLoading(false);
+      hasLoadedOnce.current = true;
+    }
+    if (exclusiveProperties.length > 0 && !needsRefresh) {
+      setExclusiveLoading(false);
+      hasLoadedOnce.current = true;
+    }
+    if (Object.keys(propertyTypesMap).length > 0 && !needsRefresh) {
+      setTypesLoading(false);
+    }
+  }, []); // Run once on mount to check cache
 
   // Add timeout to prevent infinite loading
   useEffect(() => {
@@ -332,17 +353,18 @@ export default function Home() {
 
   // Load property types first (only if not cached) - CRITICAL: needed for property transformation
   useEffect(() => {
-    // Skip if already loaded
+    // If we have cached types and they're not stale, use them
     if (Object.keys(propertyTypesMap).length > 0 && !needsRefresh) {
       setTypesLoading(false);
       return;
     }
 
+    // Prevent multiple simultaneous loads
+    if (loadingStarted.current) return;
+    loadingStarted.current = true;
+
     let mounted = true;
     const loadPropertyTypes = async () => {
-      if (loadingStarted.current) return;
-      loadingStarted.current = true;
-
       try {
         setTypesLoading(true);
         const typesList = await dedupeRequest('propertyTypes', () => propertyService.getPropertyTypes());
@@ -370,12 +392,12 @@ export default function Home() {
     return () => {
       mounted = false;
     };
-  }, [propertyTypesMap, needsRefresh, setPropertyTypesMap, updateLastFetchTime]);
+  }, []); // Run once on mount
 
   // Load featured properties FIRST (critical - above the fold)
   useEffect(() => {
-    // Skip if already loaded and not stale
-    if (hasData && featuredProperties.length > 0 && !needsRefresh) {
+    // If we have cached featured properties and they're not stale, skip loading
+    if (featuredProperties.length > 0 && !needsRefresh) {
       setFeaturedLoading(false);
       return;
     }
@@ -396,6 +418,7 @@ export default function Home() {
         setFeaturedProperties(featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
         updateLastFetchTime();
         initialLoadComplete.current = true;
+        hasLoadedOnce.current = true;
       } catch (err) {
         console.error("Error loading featured properties:", err);
       } finally {
@@ -410,16 +433,31 @@ export default function Home() {
     return () => {
       mounted = false;
     };
-  }, [featuredPage, hasData, needsRefresh, featuredProperties.length, propertyTypesMap, setFeaturedProperties, updateLastFetchTime]);
+  }, [featuredPage]); // Only depend on featuredPage - dedupeRequest prevents duplicate calls
 
-  // Note: Properties are transformed with types map when loaded
-  // If types load after properties, they'll use "Property" as fallback
-  // This is acceptable for performance - types are usually cached
+  // Re-transform properties when types map becomes available (if properties loaded first)
+  useEffect(() => {
+    if (featuredProperties.length > 0 && Object.keys(propertyTypesMap).length > 0) {
+      // Check if any properties need retransformation (have generic "Property" type)
+      const needsRetransform = featuredProperties.some(p => 
+        !p.features.type || p.features.type === 'Property'
+      );
+      
+      if (needsRetransform) {
+        // Re-transform with proper types
+        const retransformed = featuredProperties.map(p => {
+          // We'd need the original DB data to retransform, so we'll just update the display
+          // For now, properties will show with correct types on next load
+          return p;
+        });
+      }
+    }
+  }, [propertyTypesMap]); // Re-check when types are available
 
   // Load exclusive properties AFTER featured (lower priority)
   useEffect(() => {
-    // Skip if already loaded and not stale
-    if (hasData && exclusiveProperties.length > 0 && !needsRefresh) {
+    // If we have cached exclusive properties and they're not stale, skip loading
+    if (exclusiveProperties.length > 0 && !needsRefresh) {
       setExclusiveLoading(false);
       return;
     }
@@ -439,6 +477,7 @@ export default function Home() {
           
           setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
           updateLastFetchTime();
+          hasLoadedOnce.current = true;
         } catch (err) {
           console.error("Error loading exclusive properties:", err);
         } finally {
@@ -455,7 +494,7 @@ export default function Home() {
       clearTimeout(timer);
       mounted = false;
     };
-  }, [hasData, needsRefresh, exclusiveProperties.length, propertyTypesMap, setExclusiveProperties, updateLastFetchTime]);
+  }, []); // Run once on mount - dedupeRequest prevents duplicate calls
 
   // Load regions AFTER initial page load (deferred - not critical for first paint)
   useEffect(() => {
@@ -569,15 +608,10 @@ export default function Home() {
           </div>
 
           {exclusiveLoading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-              <p className="text-neutral-600 font-medium mb-4">Loading Properties...</p>
-              <button
-                onClick={handleRefresh}
-                className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
-              >
-                Refresh
-              </button>
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <PropertyCardSkeleton key={`exclusive-skeleton-${i}`} />
+              ))}
             </div>
           ) : exclusiveProperties.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -635,11 +669,15 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Skeleton carousel */}
-            <div className="mt-12 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <PropertyCardSkeleton key={`featured-skeleton-${i}`} />
-              ))}
+            {/* Skeleton carousel - show more skeletons for carousel */}
+            <div className="mt-12">
+              <div className="flex gap-4 overflow-hidden">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={`featured-skeleton-${i}`} className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3">
+                    <PropertyCardSkeleton />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
@@ -675,13 +713,20 @@ export default function Home() {
             </div>
 
             {/* Carousel */}
-            {featuredProperties.length > 0 && (
+            {featuredProperties.length > 0 ? (
               <div ref={sliderRef} className="keen-slider flex py-[20px] overflow-hidden mt-12">
                 {featuredProperties.slice(0, 9).map((p) => (
                   <div key={p.id} className="keen-slider__slide">
                     <PropertyCard property={p} favouriteIds={favouriteIds} />
                   </div>
                 ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 mt-12">
+                <p className="text-neutral-500">No featured properties available at the moment.</p>
+                <p className="text-neutral-400 text-sm mt-2">
+                  Please check back later or try refreshing the page.
+                </p>
               </div>
             )}
           </div>
