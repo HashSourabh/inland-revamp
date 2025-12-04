@@ -14,12 +14,14 @@ export function useFavouriteIds() {
   const [favouriteIds, setFavouriteIds] = useState<string[]>([]);
 
   useEffect(() => {
-    const loadFavs = async () => {
-      if (!user) {
-        setFavouriteIds([]);
-        return;
-      }
+    if (!user) {
+      setFavouriteIds([]);
+      return;
+    }
 
+    let mounted = true;
+    // Defer favourites loading slightly to not block initial page render
+    const timer = setTimeout(async () => {
       try {
         const token = getToken();
         const headers: HeadersInit = {};
@@ -31,7 +33,9 @@ export function useFavouriteIds() {
 
         if (!res.ok) {
           console.error('Failed to load favourites, status:', res.status);
-          setFavouriteIds([]);
+          if (mounted) {
+            setFavouriteIds([]);
+          }
           return;
         }
 
@@ -41,14 +45,21 @@ export function useFavouriteIds() {
           String(f.Property_ID ?? f.Property_Id ?? f.Property_Ref ?? '')
         );
 
-        setFavouriteIds(ids.filter(Boolean));
+        if (mounted) {
+          setFavouriteIds(ids.filter(Boolean));
+        }
       } catch (err) {
         console.error('Failed to load favourites', err);
-        setFavouriteIds([]);
+        if (mounted) {
+          setFavouriteIds([]);
+        }
       }
-    };
+    }, 500); // Small delay to not block initial render
 
-    loadFavs();
+    return () => {
+      clearTimeout(timer);
+      mounted = false;
+    };
   }, [user]);
 
   return favouriteIds;

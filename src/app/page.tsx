@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from 'next-intl';
@@ -211,6 +211,20 @@ const SectionLoader = ({ title, subtitle }: { title: string; subtitle?: string }
   </div>
 );
 
+// --- REQUEST DEDUPLICATION ---
+const pendingRequests = new Map<string, Promise<any>>();
+
+function dedupeRequest<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  if (pendingRequests.has(key)) {
+    return pendingRequests.get(key)!;
+  }
+  const promise = fn().finally(() => {
+    pendingRequests.delete(key);
+  });
+  pendingRequests.set(key, promise);
+  return promise;
+}
+
 // --- COMPONENT ---
 export default function Home() {
   const t = useTranslations('home');
@@ -234,15 +248,19 @@ export default function Home() {
   } = useRegionData();
 
   // Local state for non-cached data
-  const [featuredLoading, setFeaturedLoading] = useState(true);
-  const [exclusiveLoading, setExclusiveLoading] = useState(true);
-  const [regionsLoading, setRegionsLoading] = useState(() => regionCounts.length === 0);
-  const [typesLoading, setTypesLoading] = useState(true);
+  const [featuredLoading, setFeaturedLoading] = useState(() => !hasData || needsRefresh);
+  const [exclusiveLoading, setExclusiveLoading] = useState(() => !hasData || needsRefresh);
+  const [regionsLoading, setRegionsLoading] = useState(false); // Defer regions loading
+  const [typesLoading, setTypesLoading] = useState(() => Object.keys(propertyTypesMap).length === 0);
   const [searchRef, setSearchRef] = useState('');
   const [searching, setSearching] = useState(false);
   const [featuredPage, setFeaturedPage] = useState(1);
 
-  // Favourite property IDs for the logged-in user
+  // Track if initial load is complete
+  const initialLoadComplete = useRef(false);
+  const loadingStarted = useRef(false);
+
+  // Favourite property IDs for the logged-in user (defer if not logged in)
   const favouriteIds = useFavouriteIds();
 
   // Add timeout to prevent infinite loading
@@ -260,7 +278,7 @@ export default function Home() {
         console.warn('Property types loading timeout - setting to false');
         setTypesLoading(false);
       }
-    }, 10000); // 10 second timeout
+    }, 8000); // Reduced to 8 seconds
 
     return () => clearTimeout(timeout);
   }, [featuredLoading, exclusiveLoading, typesLoading]);
@@ -312,23 +330,24 @@ export default function Home() {
     [Autoplay]
   )
 
-  // Load property types first (only if not cached)
+  // Load property types first (only if not cached) - CRITICAL: needed for property transformation
   useEffect(() => {
+    // Skip if already loaded
+    if (Object.keys(propertyTypesMap).length > 0 && !needsRefresh) {
+      setTypesLoading(false);
+      return;
+    }
+
+    let mounted = true;
     const loadPropertyTypes = async () => {
-      console.log('Loading property types...', { hasData, needsRefresh, typesLoading });
-      
-      // Skip if already loaded and not stale
-      if (hasData && !needsRefresh) {
-        console.log('Property types already loaded, skipping');
-        setTypesLoading(false);
-        return;
-      }
+      if (loadingStarted.current) return;
+      loadingStarted.current = true;
 
       try {
         setTypesLoading(true);
-        console.log('Fetching property types from API...');
-        const typesList = await propertyService.getPropertyTypes();
-        console.log('Property types fetched:', typesList);
+        const typesList = await dedupeRequest('propertyTypes', () => propertyService.getPropertyTypes());
+        
+        if (!mounted) return;
         
         const typesMap: Record<number, string> = {};
         typesList.forEach((t) => {
@@ -338,75 +357,138 @@ export default function Home() {
         updateLastFetchTime();
       } catch (err) {
         console.error("Error loading property types:", err);
-        // Set loading to false even on error to prevent infinite loading
-        setTypesLoading(false);
       } finally {
-        console.log('Property types loading finished');
-        setTypesLoading(false);
+        if (mounted) {
+          setTypesLoading(false);
+        }
+        loadingStarted.current = false;
       }
     };
 
     loadPropertyTypes();
-  }, [hasData, needsRefresh, setPropertyTypesMap, updateLastFetchTime]);
+    
+    return () => {
+      mounted = false;
+    };
+  }, [propertyTypesMap, needsRefresh, setPropertyTypesMap, updateLastFetchTime]);
 
-  // Load featured and exclusive properties in parallel (only if not cached)
+  // Load featured properties FIRST (critical - above the fold)
   useEffect(() => {
-    const loadProperties = async () => {
-      // Skip if already loaded and not stale
-      if (hasData && !needsRefresh) {
-        setFeaturedLoading(false);
-        setExclusiveLoading(false);
-        return;
-      }
+    // Skip if already loaded and not stale
+    if (hasData && featuredProperties.length > 0 && !needsRefresh) {
+      setFeaturedLoading(false);
+      return;
+    }
 
+    let mounted = true;
+    const loadFeatured = async () => {
       try {
-        // Load both in parallel - don't wait for types
         setFeaturedLoading(true);
-        setExclusiveLoading(true);
         
-        const [featuredDb, exclusiveDb] = await Promise.all([
-          propertyService.getFeaturedProperties(featuredPage),
-          propertyService.getExclusiveProperties()
-        ]);
+        // Priority: Load featured properties first (most important)
+        const featuredDb = await dedupeRequest(`featured-${featuredPage}`, () => 
+          propertyService.getFeaturedProperties(featuredPage)
+        );
         
-        // Transform with types map (may be empty initially, will update when types load)
+        if (!mounted) return;
+        
+        // Transform with current types map (will re-transform when types load if needed)
         setFeaturedProperties(featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
-        setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
         updateLastFetchTime();
+        initialLoadComplete.current = true;
       } catch (err) {
-        console.error("Error loading properties:", err);
+        console.error("Error loading featured properties:", err);
       } finally {
-        setFeaturedLoading(false);
-        setExclusiveLoading(false);
+        if (mounted) {
+          setFeaturedLoading(false);
+        }
       }
     };
 
-    loadProperties();
-  }, [featuredPage, propertyTypesMap, hasData, needsRefresh, setFeaturedProperties, setExclusiveProperties, updateLastFetchTime]);
+    loadFeatured();
+    
+    return () => {
+      mounted = false;
+    };
+  }, [featuredPage, hasData, needsRefresh, featuredProperties.length, propertyTypesMap, setFeaturedProperties, updateLastFetchTime]);
 
-  // Load regions with cache-aware hook
+  // Note: Properties are transformed with types map when loaded
+  // If types load after properties, they'll use "Property" as fallback
+  // This is acceptable for performance - types are usually cached
+
+  // Load exclusive properties AFTER featured (lower priority)
   useEffect(() => {
-    let isMounted = true;
+    // Skip if already loaded and not stale
+    if (hasData && exclusiveProperties.length > 0 && !needsRefresh) {
+      setExclusiveLoading(false);
+      return;
+    }
 
-    const loadRegions = async () => {
-      if (regionCounts.length > 0 && !isRegionCountsStale()) {
-        setRegionsLoading(false);
-        return;
-      }
+    let mounted = true;
+    // Defer exclusive properties slightly to prioritize featured
+    const timer = setTimeout(() => {
+      const loadExclusive = async () => {
+        try {
+          setExclusiveLoading(true);
+          
+          const exclusiveDb = await dedupeRequest('exclusive', () => 
+            propertyService.getExclusiveProperties()
+          );
+          
+          if (!mounted) return;
+          
+          setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
+          updateLastFetchTime();
+        } catch (err) {
+          console.error("Error loading exclusive properties:", err);
+        } finally {
+          if (mounted) {
+            setExclusiveLoading(false);
+          }
+        }
+      };
 
-      setRegionsLoading(true);
-      await fetchRegionCounts();
-      if (isMounted) {
-        setRegionsLoading(false);
-      }
-    };
-
-    loadRegions();
+      loadExclusive();
+    }, 200); // Small delay to prioritize featured properties
 
     return () => {
-      isMounted = false;
+      clearTimeout(timer);
+      mounted = false;
     };
-  }, [fetchRegionCounts, isRegionCountsStale, regionCounts.length]);
+  }, [hasData, needsRefresh, exclusiveProperties.length, propertyTypesMap, setExclusiveProperties, updateLastFetchTime]);
+
+  // Load regions AFTER initial page load (deferred - not critical for first paint)
+  useEffect(() => {
+    // Skip if already loaded
+    if (regionCounts.length > 0 && !isRegionCountsStale()) {
+      return;
+    }
+
+    let mounted = true;
+    // Defer regions loading until after critical content is loaded
+    const timer = setTimeout(() => {
+      const loadRegions = async () => {
+        if (!mounted) return;
+        setRegionsLoading(true);
+        try {
+          await fetchRegionCounts();
+        } catch (err) {
+          console.error("Error loading regions:", err);
+        } finally {
+          if (mounted) {
+            setRegionsLoading(false);
+          }
+        }
+      };
+
+      loadRegions();
+    }, 2000); // Load regions 2 seconds after page load (non-blocking)
+
+    return () => {
+      clearTimeout(timer);
+      mounted = false;
+    };
+  }, [regionCounts.length, isRegionCountsStale, fetchRegionCounts]);
 
   // --- QUICK SEARCH ---
   const handleQuickSearch = async () => {
