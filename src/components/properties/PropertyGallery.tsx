@@ -121,97 +121,6 @@ export default function PropertyGallery({
         )}
       </div>
       <div className="mt-8 space-y-6">
-        {/* Key Features Grid */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-          <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-            <HomeModernIcon className="h-5 w-5 text-primary-600" />
-            <div>
-              <p className="bg-white text-sm text-neutral-600 dark:text-neutral-400">Beds</p>
-              <p className="font-semibold">{beds}</p>
-            </div>
-          </div>
-          <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-            <BeakerIcon className="h-5 w-5 text-primary-600" />
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Baths</p>
-              <p className="font-semibold">{baths}</p>
-            </div>
-          </div>
-          <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-            <EyeIcon className="h-5 w-5 text-primary-600" />
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Views</p>
-              <p className="font-semibold">{views}</p>
-            </div>
-          </div>
-          <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-            <BuildingOfficeIcon className="h-5 w-5 text-primary-600" />
-            <div>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">Built</p>
-              <p className="font-semibold">{built}</p>
-            </div>
-          </div>
-          <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-            <MapIcon className="h-5 w-5 text-primary-600" />
-            <div>
-              <p className="bg-white text-sm text-neutral-600 dark:text-neutral-400">Plot</p>
-              <p className="font-semibold">{plot}</p>
-            </div>
-          </div>
-          <div className="bg-white flex items-start gap-2 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-            <MapPinIcon className="h-5 w-5 text-primary-600" />
-            <div>
-              <p className="bg-white text-sm text-neutral-600 dark:text-neutral-400">Location</p>
-              <p className="font-semibold">{location}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Features */}
-        {/* {features.length > 0 && (
-          <div>
-            <h2 className="mb-4 text-xl font-semibold">Features</h2>
-            <div className="flex flex-wrap gap-2">
-              {features.map((feature, index) => (
-                <span
-                  key={index}
-                  className="rounded-full bg-primary-50 px-4 py-1 text-sm text-primary-700 dark:bg-primary-900/10 dark:text-primary-400"
-                >
-                  {feature}
-                </span>
-              ))}
-            </div>
-          </div>
-        )} */}
-
-        {/* Description */}
-        {description && (
-          <div>
-            <h2 className="mb-4 text-xl font-semibold">{t('details.description')}</h2>
-            <p className="text-neutral-700 dark:text-neutral-300">
-              {description}
-            </p>
-          </div>
-        )}
-
-        {/* Google Map */}
-        {/* <div>
-          <h2 className="mb-4 text-xl font-semibold">Location</h2>
-          <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12614.440973994461!2d-4.598844!3d37.559482!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDMzJzM0LjEiTiA0wrAzNSc1NS44Ilc!5e0!3m2!1sen!2ses!4v1620000000000!5m2!1sen!2ses"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div> */}
-        {/* Google Map */}
-        {/* Google Map */}
-
         <div>
           <h2 className="mb-4 text-xl font-semibold">Location</h2>
           <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
@@ -226,8 +135,6 @@ export default function PropertyGallery({
             ></iframe>
           </div>
         </div>
-
-
       </div>
       <style jsx global>{`
         .no-scrollbar {
