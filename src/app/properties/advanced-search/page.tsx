@@ -188,7 +188,7 @@ export default function AdvancedSearchPage() {
             {/* Min Beds */}
             <div>
               <label className="block font-medium text-neutral-800 mb-1">
-                Min. Beds:
+                {tFilters('min_bed')}:
               </label>
               <select
                 value={filters.minBeds}
@@ -197,7 +197,7 @@ export default function AdvancedSearchPage() {
                 }
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
-                <option value="">Any</option>
+                <option value="">{tFilters('any')}</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -209,7 +209,7 @@ export default function AdvancedSearchPage() {
             {/* Min Baths */}
             <div>
               <label className="block font-medium text-neutral-800 mb-1">
-                Min. Baths:
+                {tFilters('min_bathrooms')}:
               </label>
               <select
                 value={filters.minBaths}
@@ -218,7 +218,7 @@ export default function AdvancedSearchPage() {
                 }
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
-                <option value="">Any</option>
+                <option value="">{tFilters('any')}</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -230,7 +230,7 @@ export default function AdvancedSearchPage() {
             {/* Price From */}
             <div>
               <label className="block font-medium text-neutral-800 mb-1">
-                Price from:
+                {tFilters('min_price')}:
               </label>
               <select
                 value={filters.minPrice}
@@ -239,7 +239,7 @@ export default function AdvancedSearchPage() {
                 }
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
-                <option value="">Any</option>
+                <option value="">{tFilters('any')}</option>
                 <option value="50000">€50,000</option>
                 <option value="100000">€100,000</option>
                 <option value="150000">€150,000</option>
@@ -253,7 +253,7 @@ export default function AdvancedSearchPage() {
             {/* Price To */}
             <div>
               <label className="block font-medium text-neutral-800 mb-1">
-                to:
+                {tFilters('max_price')}:
               </label>
               <select
                 value={filters.priceTo}
@@ -262,7 +262,7 @@ export default function AdvancedSearchPage() {
                 }
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
-                <option value="">Any</option>
+                <option value="">{tFilters('any')}</option>
                 <option value="100000">€100,000</option>
                 <option value="150000">€150,000</option>
                 <option value="200000">€200,000</option>
@@ -279,7 +279,7 @@ export default function AdvancedSearchPage() {
               type="submit"
               className="bg-primary-600 text-white font-semibold px-8 py-3 rounded-md shadow hover:bg-primary-700 transition"
             >
-              Search
+              {tCommon('search')}
             </button>
           </div>
         </form>
@@ -294,7 +294,7 @@ export default function AdvancedSearchPage() {
           className="bg-neutral-50 rounded-lg p-6 flex flex-col md:flex-row gap-4 items-center"
           onSubmit={handleReferenceSearch}
         >
-          <label className="font-medium text-neutral-800">Reference number</label>
+          <label className="font-medium text-neutral-800">{tCommon('propertyReference')}</label>
           <input
             ref={refInput}
             type="text"
@@ -305,7 +305,7 @@ export default function AdvancedSearchPage() {
             type="submit"
             className="bg-primary-600 text-white font-semibold px-8 py-2 rounded-md shadow hover:bg-primary-700 transition"
           >
-            Search
+            {tCommon('search')}
           </button>
         </form>
 
