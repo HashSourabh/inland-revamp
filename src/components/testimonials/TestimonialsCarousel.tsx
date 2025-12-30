@@ -137,7 +137,7 @@ export default function TestimonialsCarousel() {
       <button 
         onClick={handlePrevious}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:bg-neutral-50 transition-colors"
-        aria-label={tCommon('previousTestimonial')}
+        aria-label={t('previousTestimonial')}
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-primary-600">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
