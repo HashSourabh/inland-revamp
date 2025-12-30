@@ -19,7 +19,8 @@ const transformPropertyForCard = (property: any, propertyTypesMap: Record<number
   // 1. Look up by Property_Type_ID using the types map (this has the correct language)
   // 2. PropertyType from API (always use this if available, even if map lookup fails)
   // 3. Only use generic "Property" as last resort if nothing else is available
-  let propertyType: string | undefined;
+  // Ensure propertyType is always a string (never undefined)
+  let propertyType: string = tCommon?.('property') || 'Property'; // Default fallback
   
   // First priority: Look up by Property_Type_ID in the types map (translated to current language)
   if (property.Property_Type_ID && propertyTypesMap && propertyTypesMap[property.Property_Type_ID]) {
@@ -33,10 +34,6 @@ const transformPropertyForCard = (property: any, propertyTypesMap: Record<number
   // Third priority: Try propertyTypeName
   else if (property.propertyTypeName && property.propertyTypeName.trim() !== '') {
     propertyType = property.propertyTypeName;
-  }
-  // Last resort: Generic "Property" translation (only if absolutely nothing is available)
-  else {
-    propertyType = tCommon?.('property') || 'Property';
   }
 
   const propertyRef = property.propertyRef || property.Property_Ref;
