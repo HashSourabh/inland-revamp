@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
-interface PropertyForCard {
+export interface PropertyForCard {
   id: string;
   title: string;
   price: number;
@@ -10,8 +10,8 @@ interface PropertyForCard {
   currency: string;
   shortDescription: string;
   location: {
-    province: string;
-    town: string;
+    province: string | null;
+    town: string | null;
   };
   features: {
     bedrooms: number;

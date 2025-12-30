@@ -7,33 +7,10 @@ import { getToken, useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '@/utils/api';
+import type { PropertyForCard } from '@/context/PropertyCacheContext';
 
 interface PropertyCardProps {
-  property: {
-    id: string;
-    title: string;
-    price: number;
-    originalPrice?: number;
-    currency: string;
-    shortDescription: string;
-    location: {
-      province: string;
-      town: string;
-    };
-    features: {
-      bedrooms: number;
-      bathrooms: number;
-      buildSize: number;
-      type: string;
-    };
-    images: {
-      url: string;
-      alt: string;
-      isFeatured: boolean;
-    }[];
-    isReduced?: boolean;
-    savingsAmount?: number;
-  };
+  property: PropertyForCard;
   card?: 'list' | 'grid';
   featured?: boolean;
   favouriteIds?: string[];
@@ -43,6 +20,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
   const [isFavorite, setIsFavorite] = useState<boolean>(favouriteIds.includes(property.id));
   const { openAuth, user } = useAuth();
   const t = useTranslations('properties');
+  const tCommon = useTranslations('common');
 
   // Keep local favourite state in sync when the list of favourite IDs changes
   useEffect(() => {
@@ -115,12 +93,12 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         });
         setIsFavorite(true);
       } else if (newState) {
-        toast.success("Property added to favourites! ❤️", {
+        toast.success(tCommon('propertyAddedToFavourites'), {
           duration: 3000,
           position: "top-right",
         });
       } else {
-        toast.success("Property removed from favourites", {
+        toast.success(tCommon('propertyRemovedFromFavourites'), {
           duration: 3000,
           position: "top-right",
         });
@@ -129,7 +107,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
       console.error("❌ Favourite toggle failed:", err);
       setIsFavorite(!newState); // rollback optimistic update
 
-      toast.error("Failed to update favourites. Please try again.", {
+      toast.error(tCommon('failedToUpdateFavourites'), {
         duration: 4000,
         position: "top-right",
       });
@@ -177,7 +155,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         {/* Favorite button */}
         <button
           onClick={handleFavoriteClick}
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          aria-label={isFavorite ? tCommon('removeFromFavorites') : tCommon('addToFavorites')}
           className="absolute right-3 top-3 rounded-full bg-white/80 p-2 backdrop-blur-sm transition-all hover:bg-white"
           type="button"
         >
@@ -198,14 +176,20 @@ export default function PropertyCard({ property, card = 'grid', featured = false
                 {property.title}
               </h3>
             </Link>
-            {/* Location */}
-            <div className="mt-1 flex items-center text-sm text-neutral-500">
-              <MapPinIcon className="mr-1 h-4 w-4 flex-[0_0_auto]" />
-              <span className='block flex-auto'>{property.location.town}, {property.location.province}</span>
-            </div>
+            {/* Location - Only show if we have valid location data */}
+            {(property.location.town || property.location.province) && (
+              <div className="mt-1 flex items-center text-sm text-neutral-500">
+                <MapPinIcon className="mr-1 h-4 w-4 flex-[0_0_auto]" />
+                <span className='block flex-auto'>
+                  {[property.location.town, property.location.province].filter(Boolean).join(', ')}
+                </span>
+              </div>
+            )}
           </div>
           <div className="flex flex-col items-end">
-            {property.originalPrice && property.isReduced && (
+            {property.originalPrice && 
+             property.originalPrice > 0 && 
+             property.isReduced && (
               <h6 className="text-sm text-neutral-500 line-through">
                 {formatPrice(property.originalPrice, property.currency)}
               </h6>
@@ -213,9 +197,11 @@ export default function PropertyCard({ property, card = 'grid', featured = false
             <h4 className={`font-bold ${property.isReduced ? 'text-red-500' : 'text-neutral-900'} ${card === 'list' ? 'text-2xl' : 'text-xl'}`}>
               {formatPrice(property.price, property.currency)}
             </h4>
-            {property.isReduced && property.savingsAmount && (
+            {property.isReduced && 
+             property.savingsAmount && 
+             property.savingsAmount > 0 && (
               <h6 className="text-sm text-green-600 font-medium mt-1">
-                Save {formatPrice(property.savingsAmount, property.currency)}
+                {tCommon('save')} {formatPrice(property.savingsAmount, property.currency)}
               </h6>
             )}
           </div>

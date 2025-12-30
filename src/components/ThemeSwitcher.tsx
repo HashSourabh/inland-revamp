@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 type Theme = {
   name: string;
@@ -42,6 +43,7 @@ const themes: Theme[] = [
 ];
 
 export default function ThemeSwitcher() {
+  const t = useTranslations('common');
   const [currentTheme, setCurrentTheme] = useState<Theme>(themes[0]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -56,7 +58,7 @@ export default function ThemeSwitcher() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-white p-3 rounded-r-lg shadow-lg hover:bg-gray-50 transition-colors"
-        aria-label="Choose theme"
+        aria-label={t('chooseTheme')}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
@@ -66,7 +68,7 @@ export default function ThemeSwitcher() {
       {isOpen && (
         <div className="absolute left-0 top-0 mt-2 w-64 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-lg p-4 z-50">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-sm font-medium text-gray-900">Choose Theme</h3>
+            <h3 className="text-sm font-medium text-gray-900">{t('chooseTheme')}</h3>
             <button
               onClick={() => setIsOpen(false)}
               className="text-gray-400 hover:text-gray-500"

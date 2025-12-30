@@ -8,6 +8,8 @@ import { useTranslations } from "next-intl";
 
 export default function AdvancedSearchPage() {
   const t = useTranslations('advance_search');
+  const tFilters = useTranslations('home.filters');
+  const tCommon = useTranslations('common');
   const [filters, setFilters] = React.useState({
     regionId: "",
     propertyType: "",
@@ -103,11 +105,11 @@ export default function AdvancedSearchPage() {
         const property = data.data; // assuming data.data is the property object
         router.push(`/properties/${property.Property_ID}`);
       } else {
-        alert("Property not found. Please check the reference.");
+        alert(tCommon('propertyNotFoundCheckRefPlease'));
       }
     } catch (err) {
       console.error("Error searching property by reference:", err);
-      alert("Error fetching property. Try again later.");
+      alert(tCommon('errorFetchingProperty'));
     }
   };
 
@@ -144,7 +146,7 @@ export default function AdvancedSearchPage() {
             {/* Area */}
             <div>
               <label className="block font-medium text-neutral-800 mb-1">
-                Area:
+                {tFilters('area')}:
               </label>
               <select
                 value={filters.regionId}
@@ -153,7 +155,7 @@ export default function AdvancedSearchPage() {
                 }
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
-                <option value="">All</option>
+                <option value="">{tFilters('all')}</option>
                 {regionCounts.map((r) => (
                   <option key={r.regionId} value={r.regionId}>
                     {r.region} ({r.count})
@@ -165,7 +167,7 @@ export default function AdvancedSearchPage() {
             {/* PropertyType */}
             <div>
               <label className="block font-medium text-neutral-800 mb-1">
-                Property Type:
+                {tFilters('propertyTypeLabel')}:
               </label>
               <select
                 value={filters.propertyType}
@@ -174,7 +176,7 @@ export default function AdvancedSearchPage() {
                 }
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
-                <option value="">All</option>
+                <option value="">{tFilters('all')}</option>
                 {propertyTypes.map((t) => (
                   <option key={t.id} value={t.code}>
                     {t.name}
@@ -297,7 +299,7 @@ export default function AdvancedSearchPage() {
             ref={refInput}
             type="text"
             className="flex-1 rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-4 py-2"
-            placeholder="Enter reference..."
+            placeholder={tCommon('enterReference')}
           />
           <button
             type="submit"

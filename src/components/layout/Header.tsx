@@ -20,6 +20,7 @@ export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const tCta = useTranslations('cta');
+  const tCommon = useTranslations('common');
   const { user, openAuth, logout } = useAuth();
   console.log('Header user:', user);
 
@@ -78,7 +79,7 @@ export default function Header() {
                   {user?.profileImageUrl ? (
                     <img
                       src={user.profileImageUrl}
-                      alt="Profile"
+                      alt={tCommon('profile')}
                       className="h-7 w-7 rounded-full border border-white/60 object-contain"
                     />
                   ) : (

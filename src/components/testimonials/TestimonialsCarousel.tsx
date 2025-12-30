@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { StarIcon } from '@heroicons/react/24/solid';
+import { useTranslations } from 'next-intl';
 
 // Testimonial type definition
 interface Testimonial {
@@ -39,6 +40,7 @@ const testimonials: Testimonial[] = [
 ];
 
 export default function TestimonialsCarousel() {
+  const t = useTranslations('common');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -135,7 +137,7 @@ export default function TestimonialsCarousel() {
       <button 
         onClick={handlePrevious}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:bg-neutral-50 transition-colors"
-        aria-label="Previous testimonial"
+        aria-label={tCommon('previousTestimonial')}
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-primary-600">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -144,7 +146,7 @@ export default function TestimonialsCarousel() {
       <button 
         onClick={handleNext}
         className="absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full p-3 shadow-lg hover:bg-neutral-50 transition-colors"
-        aria-label="Next testimonial"
+        aria-label={t('nextTestimonial')}
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-primary-600">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />

@@ -4,7 +4,7 @@ import { HomeIcon, EnvelopeIcon, MapPinIcon, HomeModernIcon, UserCircleIcon, Che
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 
 interface BuyerData {
@@ -32,6 +32,7 @@ export default function ReserveForView() {
   const { user, loading: authLoading, openAuth } = useAuth();
   const router = useRouter();
   const locale = useLocale();
+  const tCommon = useTranslations('common');
   const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
   const [amount, setAmount] = useState<string>("");
   const [amountError, setAmountError] = useState<string>("");
@@ -56,7 +57,7 @@ export default function ReserveForView() {
     setAmount(value);
     const numValue = parseFloat(value);
     if (value && (isNaN(numValue) || numValue < 1000)) {
-      setAmountError('Please enter amount above 1000');
+      setAmountError(tCommon('pleaseEnterAmountAbove1000'));
     } else {
       setAmountError('');
     }
@@ -87,9 +88,9 @@ export default function ReserveForView() {
     return (
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h2 className="text-red-800 font-semibold mb-2">Configuration Error</h2>
+          <h2 className="text-red-800 font-semibold mb-2">{tCommon('configurationError')}</h2>
           <p className="text-red-600">
-            Stripe publishable key is missing. Please add NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY to your .env file.
+            {tCommon('stripeKeyMissing')}
           </p>
         </div>
       </div>
@@ -103,26 +104,26 @@ export default function ReserveForView() {
       {/* Customer & Property Details */}
       <section className="bg-white rounded-xl p-8 border border-black/10 space-y-6 mb-6 grid grid-cols-2 gap-6">
         <div>
-          <h2 className="font-semibold text-gray-600 mb-4">Customer Details</h2>
+          <h2 className="font-semibold text-gray-600 mb-4">{tCommon('customerDetails')}</h2>
           <div className="flex items-center mb-2">
             <UserCircleIcon className="w-6 h-6 text-secondary-600 mr-2" />
-            <span className="text-gray-600">{fullName || user?.username || "User"}</span>
+            <span className="text-gray-600">{fullName || user?.username || tCommon('user')}</span>
           </div>
           <div className="flex items-center">
             <EnvelopeIcon className="w-6 h-6 text-secondary-600 mr-2" />
-            <span className="text-gray-600">{buyerEmail || "No email"}</span>
+            <span className="text-gray-600">{buyerEmail || tCommon('noEmail')}</span>
           </div>
         </div>
         <div>
-          <h2 className="font-semibold text-gray-600 mb-4">Property Reference</h2>
+          <h2 className="font-semibold text-gray-600 mb-4">{tCommon('propertyReference')}</h2>
           <div className="flex items-center mb-2">
             <HomeModernIcon className="w-6 h-6 text-secondary-600 mr-2" />
-            <span className="text-gray-600">{propertyData?.title || "Loading..."}</span>
+            <span className="text-gray-600">{propertyData?.title || tCommon('loading')}</span>
           </div>
           <div className="flex items-center">
             <MapPinIcon className="w-6 h-6 text-secondary-600 mr-2" />
             <span className="text-gray-600">
-              {propertyData ? `${propertyData.location.town} / ${propertyData.location.province}` : "Loading..."}
+              {propertyData ? `${propertyData.location.town} / ${propertyData.location.province}` : tCommon('loading')}
             </span>
           </div>
         </div>
@@ -132,24 +133,24 @@ export default function ReserveForView() {
       <section className="bg-white rounded-xl p-8 border border-black/10 space-y-4 mb-6">
         <h2 className="font-semibold text-gray-600 mb-4">Payment Details</h2>
         <label className="block text-gray-600 font-medium mb-2">
-          Amount (In Euro) <span className="text-red-500">*</span>
+          {tCommon('amountInEuro')} <span className="text-red-500">*</span>
         </label>
         <input
           type="number"
           value={amount}
           onChange={handleAmountChange}
-          placeholder="Booking amount in euro"
+          placeholder={tCommon('bookingAmountInEuro')}
           className="block w-full border border-neutral-300 rounded-md px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
         <p className={`text-sm ${amountError ? "text-red-500" : "text-gray-500"}`}>
-          {amountError || 'Please enter amount above 1000'}
+          {amountError || tCommon('pleaseEnterAmountAbove1000')}
         </p>
       </section>
 
       {/* Card Payment Section */}
       {amount && !amountError && (
         <section className="bg-white rounded-xl p-8 border border-black/10 space-y-4">
-          <h2 className="font-semibold text-gray-600 mb-4">Card Payment</h2>
+          <h2 className="font-semibold text-gray-600 mb-4">{tCommon('cardPayment')}</h2>
           <Elements stripe={stripePromise}>
             <CheckoutForm
               amount={parseFloat(amount)}
@@ -214,7 +215,7 @@ function CheckoutForm({
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to create payment intent');
+        throw new Error(errorData.message || tCommon('failedToCreatePaymentIntent'));
       }
 
       const data = await res.json();
@@ -265,7 +266,7 @@ function CheckoutForm({
           } else {
             const errorData = await successResponse.json();
             console.error('❌ Backend success failed:', errorData);
-            setError("Payment succeeded but failed to save to database. Please contact support.");
+            setError(tCommon('paymentSucceededButFailed'));
           }
         } catch (backendError) {
           console.error('❌ Backend call failed:', backendError);

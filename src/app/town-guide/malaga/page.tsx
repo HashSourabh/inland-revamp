@@ -14,7 +14,8 @@ import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
 import { useTranslations } from 'next-intl';
 
 export default function MalagaPage() {
-  const t=useTranslations('town-guide')
+  const t=useTranslations('town-guide');
+  const tCommon = useTranslations('common');
   const [regionName, setRegionName] = useState<string>('')
   const [regionId, setRegionId] = useState<number | null>(null)
   const [areas, setAreas] = useState<Area[]>([])
@@ -52,7 +53,7 @@ export default function MalagaPage() {
         setAreas(fetchedAreas)
       } catch (err) {
         console.error('Error loading region data:', err)
-        setError(err instanceof Error ? err.message : 'Failed to load data')
+        setError(err instanceof Error ? err.message : tCommon('failedToLoadData'))
       } finally {
         setLoading(false)
       }
@@ -106,14 +107,14 @@ export default function MalagaPage() {
                   <div className="flex justify-between items-center">
                     <span className="text-primary-900 font-medium">{area.areaName}</span>
                     <span className="text-secondary-600">
-                      {area.count} {area.count === 1 ? 'property' : 'properties'}
+                      {area.count} {area.count === 1 ? tCommon('property') : tCommon('properties')}
                     </span>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">No areas found.</p>
+            <p className="text-gray-500">{tCommon('noAreasFound')}</p>
           )}
 
 
@@ -128,7 +129,7 @@ export default function MalagaPage() {
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
                     src={Malaga1}
-                    alt={`${displayRegionName} City View`}
+                    alt={`${displayRegionName} ${tCommon('cityView')}`}
 
                     className="rounded-lg   object-cover"
                   />
@@ -140,7 +141,7 @@ export default function MalagaPage() {
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
                     src={Malaga2}
-                    alt={`${displayRegionName} City View`}
+                    alt={`${displayRegionName} ${tCommon('cityView')}`}
 
                     className="rounded-lg object-cover w-full"
                   />
@@ -160,7 +161,7 @@ export default function MalagaPage() {
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
                     src={Malaga3}
-                    alt={`${displayRegionName} City View`}
+                    alt={`${displayRegionName} ${tCommon('cityView')}`}
 
                     className="rounded-lg object-cover w-full"
                   />
@@ -172,7 +173,7 @@ export default function MalagaPage() {
                 <div className="relative h-[300px] rounded-lg overflow-hidden">
                   <Image
                     src={Malaga4}
-                    alt={`${displayRegionName} City View`}
+                    alt={`${displayRegionName} ${tCommon('cityView')}`}
                     className="rounded-lg object-cover w-full"
                   />
                 </div>
@@ -191,7 +192,7 @@ export default function MalagaPage() {
                 <div className="relative h-[300px] overflow-hidden">
                   <Image
                     src={Malaga5}
-                    alt={`${displayRegionName} City View`}
+                    alt={`${displayRegionName} ${tCommon('cityView')}`}
 
                     className="rounded-lg object-cover w-full "
                   />

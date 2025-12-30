@@ -43,6 +43,7 @@ interface AreaWithCoordinates extends Area {
 
 export default function MapSearchPage() {
     const t = useTranslations('advance_search');
+    const tCommon = useTranslations('common');
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyA5h3ZfC3rhIC2ow1VlVC_J6sprxC1Rbns",
   });
@@ -64,7 +65,7 @@ export default function MapSearchPage() {
         setRegions(regionsData);
       } catch (err) {
         console.error(err);
-        setError("Failed to load regions");
+        setError(tCommon('failedToLoadRegions'));
       } finally {
         setLoading(false);
       }
@@ -85,7 +86,7 @@ export default function MapSearchPage() {
               result.areas.map(area => ({
                 ...area,
                 regionId: result.regionId,
-                regionName: regions.find(r => r.regionId === result.regionId)?.region || "Unknown"
+                regionName: regions.find(r => r.regionId === result.regionId)?.region || tCommon('unknown')
               }))
             );
 
@@ -165,8 +166,8 @@ export default function MapSearchPage() {
   };
 
   if (!isLoaded) return <div className="text-center py-20"><PageOverlayLoader/></div>;
-  if (loading) return <div className="text-center py-20">Loading regions and areas...</div>;
-  if (error) return <div className="text-center py-20 text-red-600">Error: {error}</div>;
+  if (loading) return <div className="text-center py-20">{tCommon('loadingRegionsAndAreas')}</div>;
+  if (error) return <div className="text-center py-20 text-red-600">{tCommon('error')}: {error}</div>;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
@@ -267,14 +268,14 @@ export default function MapSearchPage() {
                   <div className="p-4">
                     <h2 className="text-xl font-bold text-primary-900 mb-2">{selectedArea.areaName}</h2>
                     <p className="text-neutral-600 mb-4">
-                      There {selectedArea.count === 1 ? 'is' : 'are'} <span className="font-semibold text-primary-700">{selectedArea.count}</span> {selectedArea.count === 1 ? 'property' : 'properties'} available
+                      {selectedArea.count === 1 ? tCommon('thereIs') : tCommon('thereAre')} <span className="font-semibold text-primary-700">{selectedArea.count}</span> {selectedArea.count === 1 ? tCommon('property') : tCommon('properties')} {tCommon('available')}
                     </p>
                     <div className="mb-4">
                       <span
                         className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
                         style={{ backgroundColor: getRegionColors(selectedArea.regionName || 'default').hex }}
                       >
-                        {selectedArea.regionName || 'Unknown'}
+                        {selectedArea.regionName || tCommon('unknown')}
                       </span>
                     </div>
                     <a

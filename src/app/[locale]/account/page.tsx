@@ -70,7 +70,7 @@ function compressImage(
         const ctx = canvas.getContext('2d');
 
         if (!ctx) {
-          reject(new Error('Failed to get canvas context'));
+          reject(new Error('Failed to get canvas context')); // Internal error, not shown to user
           return;
         }
 
@@ -97,11 +97,11 @@ function compressImage(
         resolve(compressedBase64);
       };
 
-      img.onerror = () => reject(new Error('Failed to load image'));
+      img.onerror = () => reject(new Error('Failed to load image')); // Internal error, not shown to user
       img.src = e.target?.result as string;
     };
 
-    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.onerror = () => reject(new Error('Failed to read file')); // Internal error, not shown to user
     reader.readAsDataURL(file);
   });
 }
@@ -365,7 +365,7 @@ export default function AccountPage() {
 
       } catch (error) {
         console.error("Failed to load criteria:", error);
-        showToast("error", "Failed to load criteria");
+        showToast("error", t('account.criteria.loadError'));
       } finally {
         setCriteriaLoading(false);
       }
@@ -528,7 +528,7 @@ export default function AccountPage() {
 
       // Only send request if there are criteria to save
       if (Object.keys(criteriaToSave).length === 0) {
-        showToast("info", "No criteria selected");
+        showToast("info", t('account.criteria.noCriteriaSelected'));
         setCriteriaSaving(false);
         return;
       }
@@ -544,11 +544,11 @@ export default function AccountPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data?.message || "Failed to save criteria");
+      if (!res.ok) throw new Error(data?.message || tCommon('failedToSaveCriteria'));
 
-      showToast("success", "Criteria saved successfully");
+      showToast("success", t('account.criteria.saveSuccess'));
     } catch (error: any) {
-      showToast("error", error.message || "Failed to save criteria");
+      showToast("error", error.message || t('account.criteria.saveError'));
     } finally {
       setCriteriaSaving(false);
     }
@@ -617,7 +617,7 @@ export default function AccountPage() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={(profilePreview || user.profileImageUrl) as string}
-                        alt="Profile"
+                        alt={tCommon('profile')}
                         className="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover border"
                       />
                     ) : (
@@ -1079,16 +1079,16 @@ export default function AccountPage() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                         </svg>
-                        Saving...
+                        {tCommon('saving')}
                       </>
                     ) : (
-                      "Save"
+                      tCommon('save')
                     )}
                   </button>
                 </div>
 
                 {criteriaCategories.length === 0 ? (
-                  <div className="text-center py-8 text-gray-600">No criteria available</div>
+                  <div className="text-center py-8 text-gray-600">{tCommon('noCriteriaAvailable')}</div>
                 ) : (
                   <div className="space-y-6">
                     {criteriaCategories.map((category) => (
@@ -1138,10 +1138,10 @@ export default function AccountPage() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                         </svg>
-                        Saving...
+                        {tCommon('saving')}
                       </>
                     ) : (
-                      "Save"
+                      tCommon('save')
                     )}
                   </button>
                 </div>
@@ -1231,7 +1231,7 @@ export default function AccountPage() {
               {selectedProperty && (
                 <div className="mb-4 p-3 bg-gray-50 rounded-lg">
                   <p className="text-sm text-gray-600 mb-1">
-                    <span className="font-semibold">{t('favourite.property') || 'Property'}:</span>{' '}
+                    <span className="font-semibold">{t('favourite.property') || tCommon('property')}:</span>{' '}
                     {selectedProperty.Property_Ref || selectedProperty.Property_ID}
                   </p>
                   <p className="text-sm text-gray-600">
@@ -1314,11 +1314,11 @@ export default function AccountPage() {
                           return;
                         }
                       }
-                      toast.error(data.message || t('favourite.messageFailed') || 'Failed to send message. Please try again.');
+                      toast.error(data.message || t('favourite.messageFailed') || tCommon('failedToSendMessage'));
                     }
                   } catch (err) {
                     console.error("❌ Send message failed:", err);
-                    toast.error(t('favourite.messageFailed') || 'Failed to send message. Please try again.');
+                    toast.error(t('favourite.messageFailed') || tCommon('failedToSendMessage'));
                   } finally {
                     setHelpLoading(false);
                   }

@@ -1,6 +1,7 @@
 'use client';
 
 import { Squares2X2Icon, ListBulletIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 type Layout = 'grid' | 'list';
 
@@ -10,6 +11,7 @@ interface LayoutSwitcherProps {
 }
 
 export default function LayoutSwitcher({ currentLayout, onLayoutChange }: LayoutSwitcherProps) {
+  const t = useTranslations('common');
   return (
     <div className="flex items-center gap-3">
       <div className="flex  bg-white dark:border-neutral-700 dark:bg-neutral-800">
@@ -20,7 +22,7 @@ export default function LayoutSwitcher({ currentLayout, onLayoutChange }: Layout
               ? 'bg-primary-600 text-white'
               : 'text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-700'
           }`}
-          aria-label="Grid view"
+          aria-label={t('gridView')}
         >
           <Squares2X2Icon className="h-6 w-6" />
         </button>
@@ -31,7 +33,7 @@ export default function LayoutSwitcher({ currentLayout, onLayoutChange }: Layout
               ? 'bg-primary-600 text-white'
               : 'text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-700'
           }`}
-          aria-label="List view"
+          aria-label={t('listView')}
         >
           <ListBulletIcon className="h-6 w-6" />
         </button>

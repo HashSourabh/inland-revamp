@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeftIcon, PrinterIcon, PhoneIcon } from '@heroicons/react/24/outline';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
+import { useTranslations, useLocale } from 'next-intl';
 
 import EnFlag from '@/../public/flags/en.svg';
 import EsFlag from '@/../public/flags/es.svg';
@@ -38,12 +39,12 @@ interface PrintPageProps {
 }
 
 
-const languages = [
-  { code: 'en', name: 'English', flag: EnFlag, id: 1 },
-  { code: 'es', name: 'Español', flag: EsFlag, id: 2 },
-  { code: 'fr', name: 'Français', flag: FrFlag, id: 3 },
-  { code: 'pt', name: 'Português', flag: PtFlag, id: 8 },
-  { code: 'de', name: 'German', flag: DeFlag, id: 4 },
+const languageCodes = [
+  { code: 'en', flag: EnFlag, id: 1 },
+  { code: 'es', flag: EsFlag, id: 2 },
+  { code: 'fr', flag: FrFlag, id: 3 },
+  { code: 'pt', flag: PtFlag, id: 8 },
+  { code: 'de', flag: DeFlag, id: 4 },
 ];
 
 const LANGUAGE_FLAGS: { [key: string]: string } = {
@@ -60,13 +61,16 @@ const API_LANGUAGE_MAP: { [key: string]: string } = {
 };
 
 export default function PrintPage({ params }: PrintPageProps) {
+  const t = useTranslations('printPage');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   
   const propertyId = params.id;
   const findFlag = (flagID : any) =>{
-    const currentLangIndex = languages.findIndex(lang => lang.code === flagID);
+    const currentLangIndex = languageCodes.findIndex(lang => lang.code === flagID);
     return currentLangIndex;
   }
 
@@ -81,8 +85,8 @@ export default function PrintPage({ params }: PrintPageProps) {
 
           const locationParts = db.Property_Address?.split(",") || [];
           const location = {
-            town: locationParts[0]?.trim() || 'Unknown',
-            province: locationParts[1]?.trim() || 'Andalucia',
+            town: locationParts[0]?.trim() || tCommon('unknown'),
+            province: locationParts[1]?.trim() || tCommon('andalucia'),
           };
 
           const numPhotos = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
@@ -95,14 +99,14 @@ export default function PrintPage({ params }: PrintPageProps) {
           setProperty({
             id: db.Property_ID.toString(),
             ref: db.Property_Ref || '',
-            type: db.Property_Type || 'Property',
+            type: db.Property_Type || tCommon('property'),
             price: { current: db.Public_Price, original: db.Original_Price },
             location,
             bedrooms: db.Bedrooms || 0,
             bathrooms: db.Bathrooms || 0,
             buildSize: db.SQM_Built || 0,
             plotSize: db.SQM_Plot || 0,
-            views: db.Viewed || 'Village',
+            views: db.Viewed || tCommon('village'),
             description: db.translations
               ? db.translations.reduce((acc: any, t: any) => {
                 const lang = t.languageId === 1 ? 'EN' : t.languageId === 2 ? 'ES' : `LANG_${t.languageId}`;
@@ -130,18 +134,18 @@ export default function PrintPage({ params }: PrintPageProps) {
   const formatPrice = (price: number) =>
     new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(price);
 
-  if (loading) return <p className="p-8 text-center">Loading property for print...</p>;
-  if (!property) return <p className="p-8 text-center">Property not found</p>;
+  if (loading) return <p className="p-8 text-center">{t('loading')}</p>;
+  if (!property) return <p className="p-8 text-center">{t('notFound')}</p>;
   console.log("propertypropertypropertyproperty",property);
   return (
     <div className="min-h-screen bg-white text-black p-8 print:p-0">
       {/* Buttons (hidden in print) */}
       <div className="mx-auto max-w-4xl px-8 flex gap-4 mb-5 print:hidden">
-        <Link href={`/properties/${property.id}`} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
-          <ArrowLeftIcon className="h-4 w-4" /> Back
+        <Link href={`/${locale}/properties/${property.id}`} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
+          <ArrowLeftIcon className="h-4 w-4" /> {t('back')}
         </Link>
         <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
-          <PrinterIcon className="h-4 w-4" /> Print
+          <PrinterIcon className="h-4 w-4" /> {t('print')}
         </button>
       </div>
       <style jsx global>{`
@@ -185,10 +189,10 @@ export default function PrintPage({ params }: PrintPageProps) {
             </div>
           </div>
           <div className="text-sm text-neutral-500 w-2/3 pl-7">
-            <h2 className='text-4xl font-normal font-yellowtail text-primary-600 mb-6 text-center'>You're in Safe Hands</h2>
+            <h2 className='text-4xl font-normal font-yellowtail text-primary-600 mb-6 text-center'>{t('safeHandsTitle')}</h2>
             <div className='flex justify-between w-full'>
               <div className="text-sm text-neutral-600">
-                <h4 className='text-2xl font-bold font-heading text-primary-600 mb-1'>Molina Office</h4>
+                <h4 className='text-2xl font-bold font-heading text-primary-600 mb-1'>{t('molinaOffice')}</h4>
                 <div className='text-base font-medium mb-1.5 text-primary-600'>info@inlandandalucia.com</div>
                 <div className='text-base font-medium text-primary-600'>www.inlandandalucia.com</div>
               </div>
@@ -220,11 +224,11 @@ export default function PrintPage({ params }: PrintPageProps) {
         {/* Title */}
         <h1 className="text-2xl font-bold mb-3">{property.ref} - {property.type}</h1>
         <div className="grid grid-cols-3 items-baseline mb-1">
-          <p>Ref: <strong className='text-xl'>{property.ref}</strong></p>
-          <p className="text-center"><strong>Town House</strong></p>
-          <p className="mb-1 text-right">Price / Precio: <strong className='text-xl'>{formatPrice(property.price.current)}</strong></p>
+          <p>{t('ref')}: <strong className='text-xl'>{property.ref}</strong></p>
+          <p className="text-center"><strong>{t('townHouse')}</strong></p>
+          <p className="mb-1 text-right">{t('price')} <strong className='text-xl'>{formatPrice(property.price.current)}</strong></p>
         </div>
-        <p className="mb-3">Location / Localidad: {property.location.town} - {property.location.province}</p>
+        <p className="mb-3">{t('locationLabel')} {property.location.town} - {property.location.province}</p>
 
         {/* Images */}
         {property.images.length > 0 && (
@@ -253,19 +257,19 @@ export default function PrintPage({ params }: PrintPageProps) {
 
         {/* Property Specs */}
         <div className="grid grid-cols-3 gap-2 mb-5 text-sm font-medium">
-          <div>Beds: <strong> {property.bedrooms}</strong></div>
-          <div>Built : <strong>{property.buildSize} m²</strong></div>
-          <div>Baths : <strong>{property.bathrooms}</strong></div>
-          <div>Plot : <strong>{property.plotSize} m²</strong></div>
-          <div>Views : <strong>{property.views}</strong></div>
-          <div>Location : <strong>{property.location.town}</strong></div>
+          <div>{t('beds')}: <strong> {property.bedrooms}</strong></div>
+          <div>{t('built')} : <strong>{property.buildSize} m²</strong></div>
+          <div>{t('baths')} : <strong>{property.bathrooms}</strong></div>
+          <div>{t('plot')} : <strong>{property.plotSize} m²</strong></div>
+          <div>{t('views')} : <strong>{property.views}</strong></div>
+          <div>{t('location')} : <strong>{property.location.town}</strong></div>
         </div>
 
-        <h2 className="text-lg font-semibold">Description</h2>
+        <h2 className="text-lg font-semibold">{t('description')}</h2>
         {Object.entries(property.description).map(([lang, text]) => (
           <div key={lang} className="py-2">
             <p className='text-sm'> 
-                <Image src={languages.find(l => l.code === lang.toLowerCase())?.flag || languages[0].flag} alt={`${lang} flag`} width={40} height={40}  className='w-7 h-auto object-cover object-center inline-block mr-2' />
+                <Image src={languageCodes.find(l => l.code === lang.toLowerCase())?.flag || languageCodes[0].flag} alt={`${lang} flag`} width={40} height={40}  className='w-7 h-auto object-cover object-center inline-block mr-2' />
                 {text}
               </p>
           </div>
@@ -275,7 +279,7 @@ export default function PrintPage({ params }: PrintPageProps) {
         {/* Features */}
         {/* Features */}
         <div>
-          <h2 className="text-lg font-semibold mb-2">Features / Características:</h2>
+          <h2 className="text-lg font-semibold mb-2">{t('featuresTitle')}</h2>
           {Object.entries(property.property_features).length > 0 ? (
             Object.entries(property.property_features).map(([lang, feats]) => {
               const flagKey = API_LANGUAGE_MAP[lang] || lang;
@@ -285,12 +289,12 @@ export default function PrintPage({ params }: PrintPageProps) {
 
               return (
                 <div key={lang} className="mb-2 text-sm">
-                  <strong className='capitalize'>{LANGUAGE_FLAGS[flagKey] || flagKey}:</strong> {featuresText || 'No features'}
+                  <strong className='capitalize'>{LANGUAGE_FLAGS[flagKey] || flagKey}:</strong> {featuresText || t('noFeatures')}
                 </div>
               );
             })
           ) : (
-            <p>No features available</p>
+            <p>{t('noFeatures')}</p>
           )}
         </div>
 

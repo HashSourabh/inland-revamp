@@ -117,7 +117,7 @@ export default function AdvancedSearch() {
             onChange={handleChange}
             className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
           >
-            <option value="">All Locations</option>
+            <option value="">{t('filters.allLocations')}</option>
             {regions.map((region) => (
               <option key={region.regionId} value={region.regionId}>
                 {region.region} ({region.count})
@@ -137,7 +137,7 @@ export default function AdvancedSearch() {
             onChange={handleChange}
             className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
           >
-            <option value="">All Types</option>
+            <option value="">{t('filters.allTypes')}</option>
             {propertyTypes.map((type) => (
               <option key={type.id} value={type.code}>
                 {type.name}
@@ -157,7 +157,7 @@ export default function AdvancedSearch() {
             onChange={handleChange}
             className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
           >
-            <option value="">Any Price</option>
+            <option value="">{t('filters.anyPrice')}</option>
             <option value="0-100000">Up to €100,000</option>
             <option value="100000-200000">€100,000 - €200,000</option>
             <option value="200000-300000">€200,000 - €300,000</option>
@@ -207,7 +207,7 @@ export default function AdvancedSearch() {
             type="button"
             onClick={() => setShowAdvancedSearch(true)}
             className="flex items-center justify-center w-12 min-h-[50px] bg-secondary-500 rounded-md hover:bg-primary-600 transition-colors "
-            aria-label="Advanced Search"
+            aria-label={t('filters.advance_search')}
           >
             <AdjustmentsHorizontalIcon className="h-6 w-6 text-white" />
           </button>
@@ -255,7 +255,7 @@ export default function AdvancedSearch() {
                         className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
                         onChange={handleChange}
                       >
-                        <option value="">Any Region</option>
+                        <option value="">{t('filters.anyRegion')}</option>
                         {regions.map((region) => (
                           <option key={region.regionId} value={region.regionId}>
                             {region.region}

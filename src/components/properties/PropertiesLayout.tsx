@@ -11,25 +11,25 @@ import { useTranslations } from 'next-intl';
 import { useRegionData } from '@/hooks/useRegionData';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
 
-const transformPropertyForCard = (property: any) => {
+const transformPropertyForCard = (property: any, tCommon?: any) => {
   const propertyType =
     property.propertyTypeName ||
     property.PropertyType ||
-    (property.propertyTypeId ? `Type ${property.propertyTypeId}` : "Property");
+    (property.propertyTypeId ? `${tCommon?.('type') || 'Type'} ${property.propertyTypeId}` : (tCommon?.('property') || 'Property'));
 
   const propertyRef = property.propertyRef || property.Property_Ref;
 
   const title =
     propertyType && propertyRef
       ? `${propertyType} (${propertyRef})`
-      : propertyType || propertyRef || "Untitled Property";
+      : propertyType || propertyRef || (tCommon?.('untitledProperty') || 'Untitled Property');
 
   const imageCount =
     property.Num_Photos && property.Num_Photos > 0 ? property.Num_Photos : 1;
 
   const images = Array.from({ length: imageCount }, (_, i) => ({
     url: `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_${i + 1}.jpg`,
-    alt: `${propertyType} (${propertyRef}) image ${i + 1}`,
+    alt: `${propertyType} (${propertyRef}) ${tCommon?.('image') || 'image'} ${i + 1}`,
     isFeatured: i === 0,
   }));
 
@@ -43,12 +43,22 @@ const transformPropertyForCard = (property: any) => {
     id: property.id?.toString() || property.Property_ID?.toString() || "",
     title,
     price: property.price ?? property.Public_Price ?? 0,
-    originalPrice: property.originalPrice ?? property.Original_Price ?? null,
+    // Only set originalPrice if it exists and is greater than 0
+    originalPrice: (property.originalPrice && property.originalPrice > 0) 
+      ? property.originalPrice 
+      : ((property.Original_Price && property.Original_Price > 0) ? property.Original_Price : undefined),
     currency: "EUR",
     shortDescription: property.short_description || property.Property_Notes || "",
     location: {
-      province: property.Region_Name || property.province || (addressParts.length > 1 ? addressParts[addressParts.length - 1] : ''),
-      town: property.Area_Name || property.town || addressParts[0] || '',
+      // Priority 1: If Property_Address exists, use it (split by comma)
+      // Priority 2: Otherwise use Area_Name and Region_Name
+      // Priority 3: If neither exists, return null (don't display location)
+      town: property.Property_Address?.trim()
+            ? property.Property_Address.split(',')[0]?.trim() || null
+            : (property.Area_Name?.trim() || property.town?.trim() || (addressParts.length > 0 ? addressParts[0] : null)),
+      province: property.Property_Address?.trim()
+                ? property.Property_Address.split(',')[1]?.trim() || null
+                : (property.Region_Name?.trim() || property.province?.trim() || (addressParts.length > 1 ? addressParts[addressParts.length - 1] : null)),
     },
     features: {
       bedrooms: property.Bedrooms ?? property.bedrooms ?? 0,
@@ -61,11 +71,16 @@ const transformPropertyForCard = (property: any) => {
       type: propertyType,
     },
     images,
+    // Only consider reduced if Original_Price exists, is greater than 0, and is greater than Public_Price
     isReduced:
-      property.Original_Price && property.Original_Price > property.Public_Price,
+      property.Original_Price && 
+      property.Original_Price > 0 && 
+      property.Original_Price > (property.Public_Price || property.price || 0),
     savingsAmount:
-      property.Original_Price && property.Public_Price
-        ? property.Original_Price - property.Public_Price
+      property.Original_Price && 
+      property.Original_Price > 0 && 
+      property.Public_Price
+        ? property.Original_Price - (property.Public_Price || property.price || 0)
         : 0,
   };
 };
@@ -113,6 +128,7 @@ export default function PropertiesLayout({
   totalPages: initialTotalPages = 1,
 }: PropertiesLayoutProps) {
   const t = useTranslations('properties');
+  const tCommon = useTranslations('common');
   const searchParams = useSearchParams();
   const { regionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
   
@@ -287,7 +303,7 @@ export default function PropertiesLayout({
         }
       } catch (err) {
         if (currentFetch === fetchPropertiesRef.current) {
-          setError(err instanceof Error ? err.message : 'Failed to load properties');
+          setError(err instanceof Error ? err.message : tCommon('failedToLoadProperties'));
           setProperties([]);
           setTotalProperties(0);
           setTotalPages(1);
@@ -369,7 +385,7 @@ export default function PropertiesLayout({
           <h1 className="font-heading text-3xl font-bold text-primary-600">
             {t('properties_for_sale')}
           </h1>
-          <p className="mt-2 text-neutral-600 text-xl">Loading properties...</p>
+          <p className="mt-2 text-neutral-600 text-xl">{tCommon('loadingProperties')}</p>
         </header>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: PROPERTIES_PER_PAGE }).map((_, i) => (
@@ -544,7 +560,7 @@ export default function PropertiesLayout({
                     <PropertyCard
                       key={property.id}
                       card={layout === 'list' ? 'list' : 'grid'}
-                      property={transformPropertyForCard(property)}
+                      property={transformPropertyForCard(property, tCommon)}
                       favouriteIds={favouriteIds}
                     />
                   ))}
@@ -553,7 +569,7 @@ export default function PropertiesLayout({
             {/* Pagination */}
             {displayedTotalPages > 1 && (
               <div className="mt-8 flex justify-center">
-                <nav className="flex items-center gap-1" aria-label="Pagination">
+                <nav className="flex items-center gap-1" aria-label={tCommon('pagination')}>
                   {/* Prev */}
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}

@@ -22,6 +22,7 @@ interface Province {
 
 export default function AboutPage() {
   const t = useTranslations('aboutPage');
+  const tCommon = useTranslations('common');
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [loadingRegions, setLoadingRegions] = useState<boolean>(true);
   const API_BASE_URL =
@@ -110,7 +111,7 @@ export default function AboutPage() {
               <div className="h-full w-full bg-neutral-200"></div>
               <Image
                 src={mollina}
-                alt="Inland Andalucia team working in Mollina office"
+                alt={tCommon('inlandAndaluciaTeam')}
                 width={600}
                 height={400}
                 className="object-cover h-[400px]"

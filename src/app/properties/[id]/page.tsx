@@ -40,6 +40,7 @@ interface Property {
 
 export default function PropertyDetails({ params }: PropertyDetailsProps) {
   const t = useTranslations('properties');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   const router = useRouter();
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
@@ -69,8 +70,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           const db = data.data;
           const addressParts = db.Property_Address?.split(",") || [];
           const location = {
-            town: addressParts[0]?.trim() || "Unknown",
-            province: addressParts[1]?.trim() || "Andalucia",
+            town: addressParts[0]?.trim() || tCommon('unknown'),
+            province: addressParts[1]?.trim() || tCommon('andalucia'),
           };
 
           const numPhotos = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
@@ -83,7 +84,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           setProperty({
             id: db.Property_ID.toString(),
             propertyRef: db.Property_Ref || "",
-            title: `${db.PropertyType ?? 'Property'}(${db.Property_Ref})`,
+            title: `${db.PropertyType ?? tCommon('property')}(${db.Property_Ref})`,
             price: { current: db.Public_Price, original: db.Original_Price },
             location,
             description: db.description || "",
@@ -93,7 +94,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               bathrooms: db.Bathrooms || 0,
               buildSize: db.SQM_Built || 0,
               plotSize: db.SQM_Plot || 0,
-              type: "Property",
+              type: tCommon('property'),
             },
             images,
             lat: db.GPS_Latitude,
@@ -129,7 +130,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
   if (!property)
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-neutral-600">Property not found</p>
+        <p className="text-neutral-600">{tCommon('propertyNotFound')}</p>
       </div>
     );
 
@@ -274,14 +275,14 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           setEmail('');
           setEmailExists(null);
         }}
-        title="Reserve For Viewing"
-        description="On receipt, we will reserve this property for you to view within 2 weeks."
+        title={tCommon('reserveForViewing')}
+        description={tCommon('reserveForViewingDescription')}
       >
         <div className="space-y-4">
-          <p>Please enter your email to reserve this property for viewing.</p>
+          <p>{tCommon('pleaseEnterEmail')}</p>
           <input
             type="email"
-            placeholder="Your email"
+            placeholder={tCommon('yourEmail')}
             className="w-full border rounded px-3 py-2"
             value={email}
             onChange={(e) => {
@@ -329,7 +330,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           <div className="w-full h-[400px] max-w-5xl mx-auto">
             <iframe
               src={`https://www.youtube.com/embed/${property.videoUrl}?rel=0&wmode=transparent&autoplay=0&iv_load_policy=3`}
-              title="Property Video"
+              title={tCommon('propertyVideo')}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full h-full rounded"

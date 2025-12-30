@@ -4,13 +4,14 @@ import { useTranslations } from 'next-intl';
 
 export default function Home() {
  const t = useTranslations('banner');
+ const tCommon = useTranslations('common');
 
   return (
     <section className="relative min-h-[650px] h-[75vh]">
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero_bg.jpg"
-          alt="Andalucian countryside landscape"
+          alt={tCommon('andalucianCountryside')}
           fill
           className="object-cover brightness-75"
           priority

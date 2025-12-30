@@ -16,6 +16,7 @@ import { useKeenSlider } from "keen-slider/react";
 import { usePropertyData } from '@/hooks/usePropertyData';
 import { useRegionData } from '@/hooks/useRegionData';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
+import type { PropertyForCard } from '@/context/PropertyCacheContext';
 
 // API base
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
@@ -24,7 +25,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia
 interface DatabaseProperty {
   Property_ID: number;
   Property_Ref: string | string[];
-  Property_Address: string;
+  Property_Address?: string;
   Public_Price: number;
   Bedrooms: number;
   Bathrooms: number;
@@ -43,6 +44,9 @@ interface DatabaseProperty {
   Original_Price?: number;
   Num_Photos?: number;
   SQM_Built?: number;
+  Area_Name?: string;
+  Region_Name?: string;
+  PropertyAddress?: string; // Backend may provide merged address
 }
 
 interface ApiResponse<T> {
@@ -64,8 +68,21 @@ const propertyService = {
   async getFeaturedProperties(page = 1, pageSize = 9): Promise<DatabaseProperty[]> {
     try {
       const res = await fetch(`${API_BASE_URL}/properties/featured?page=${page}&pageSize=${pageSize}`);
+      if (!res.ok) {
+        console.error(`Featured properties API error: ${res.status} ${res.statusText}`);
+        return [];
+      }
       const data: ApiResponse<DatabaseProperty[]> = await res.json();
-      return data.success ? data.data : [];
+      if (!data.success) {
+        console.error("Featured properties API returned success: false", data);
+        return [];
+      }
+      if (!data.data || !Array.isArray(data.data)) {
+        console.error("Featured properties API returned invalid data format", data);
+        return [];
+      }
+      console.log(`Loaded ${data.data.length} featured properties`);
+      return data.data;
     } catch (err) {
       console.error("Error fetching featured properties:", err);
       return [];
@@ -74,9 +91,52 @@ const propertyService = {
 
   async getExclusiveProperties(): Promise<DatabaseProperty[]> {
     try {
-      const res = await fetch(`${API_BASE_URL}/properties?pageSize=3&includeHidden=false`);
+      // Try to fetch exclusive properties - use a larger page size to get more options
+      const res = await fetch(`${API_BASE_URL}/properties?pageSize=100&includeHidden=false`);
+      if (!res.ok) {
+        console.error(`Exclusive properties API error: ${res.status} ${res.statusText}`);
+        return [];
+      }
       const data: ApiResponse<DatabaseProperty[]> = await res.json();
-      return data.success ? data.data : [];
+      if (!data.success) {
+        console.error("Exclusive properties API returned success: false", data);
+        return [];
+      }
+      if (!data.data || !Array.isArray(data.data)) {
+        console.error("Exclusive properties API returned invalid data format", data);
+        return [];
+      }
+      
+      console.log(`Total properties from API: ${data.data.length}`);
+      console.log('Sample property:', data.data[0]);
+      
+      // Filter for exclusive properties - check multiple conditions
+      // 1. Explicit Exclusive field
+      // 2. Properties with price reductions (Original_Price > Public_Price)
+      // 3. If no exclusive found, use first 3 properties as fallback
+      let exclusive = data.data.filter(p => {
+        const hasExclusiveFlag = p.Exclusive === true || 
+                                 (typeof p.Exclusive === 'number' && p.Exclusive === 1) ||
+                                 (typeof p.Exclusive === 'string' && p.Exclusive === '1');
+        const hasPriceReduction = p.Original_Price && 
+                                  p.Public_Price && 
+                                  p.Original_Price > p.Public_Price;
+        return hasExclusiveFlag || hasPriceReduction;
+      });
+      
+      console.log(`Found ${exclusive.length} exclusive properties (filtered)`);
+      
+      // If no exclusive properties found by filter, use first 3 properties as fallback
+      if (exclusive.length === 0) {
+        console.log('No exclusive properties found by filter, using first 3 properties as fallback');
+        exclusive = data.data.slice(0, 3);
+      } else {
+        // Take first 3 exclusive properties
+        exclusive = exclusive.slice(0, 3);
+      }
+      
+      console.log(`Returning ${exclusive.length} exclusive properties`);
+      return exclusive;
     } catch (err) {
       console.error("Error fetching exclusive properties:", err);
       return [];
@@ -107,50 +167,29 @@ const propertyService = {
 };
 
 // --- PROPERTY CARD TRANSFORM ---
-interface PropertyForCard {
-  id: string;
-  title: string;
-  price: number;
-  originalPrice?: number;
-  currency: string;
-  shortDescription: string;
-  location: {
-    province: string;
-    town: string;
-  };
-  features: {
-    bedrooms: number;
-    bathrooms: number;
-    buildSize: number;
-    type: string;
-  };
-  images: {
-    url: string;
-    alt: string;
-    isFeatured: boolean;
-  }[];
-  isReduced?: boolean;
-  savingsAmount?: number;
-}
+// PropertyForCard is imported from context
 
 const transformPropertyForCard = (
   db: DatabaseProperty,
-  typesMap: Record<number, string>
+  typesMap: Record<number, string>,
+  tCommon?: any
 ): PropertyForCard => {
-  const isReduced = Boolean(db.Original_Price && db.Original_Price > db.Public_Price);
-  const savingsAmount = isReduced ? db.Original_Price! - db.Public_Price : 0;
+  // Only consider reduced if Original_Price exists, is greater than 0, and is greater than Public_Price
+  const hasValidOriginalPrice = db.Original_Price && db.Original_Price > 0;
+  const isReduced = Boolean(hasValidOriginalPrice && db.Original_Price && db.Original_Price > db.Public_Price);
+  const savingsAmount = isReduced && db.Original_Price ? db.Original_Price - db.Public_Price : 0;
 
   const refArray = Array.isArray(db.Property_Ref) ? db.Property_Ref : [db.Property_Ref];
   const uniqueRef = Array.from(new Set(refArray));
   const propertyRef = uniqueRef[0];
 
-  const propertyType = typesMap[db.Property_Type_ID] || "Property";
+  const propertyType = typesMap[db.Property_Type_ID] || (tCommon?.('property') || 'Property');
 
   // Generate image URLs dynamically based on Num_Photos
   const imageCount = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
   const images = Array.from({ length: imageCount }, (_, i) => ({
     url: `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_${i + 1}.jpg`,
-    alt: `${propertyType} (${propertyRef}) image ${i + 1}`,
+    alt: `${propertyType} (${propertyRef}) ${tCommon?.('image') || 'image'} ${i + 1}`,
     isFeatured: i === 0, // first image is featured
   }));
 
@@ -158,12 +197,20 @@ const transformPropertyForCard = (
     id: db.Property_ID.toString(),
     title: `${propertyType} (${propertyRef})`,
     price: db.Public_Price,
-    originalPrice: db.Original_Price,
+    // Only set originalPrice if it exists and is greater than 0
+    originalPrice: (db.Original_Price && db.Original_Price > 0) ? db.Original_Price : undefined,
     currency: 'EUR',
     shortDescription: db.Property_Notes || '',
     location: {
-      town: db.Property_Address?.split(',')[0]?.trim() || 'Unknown',
-      province: db.Property_Address?.split(',')[1]?.trim() || 'Andalucia',
+      // Priority 1: If Property_Address exists, use it (split by comma)
+      // Priority 2: Otherwise use Area_Name and Region_Name
+      // Priority 3: If neither exists, return null (don't display location)
+      town: db.Property_Address?.trim() 
+            ? db.Property_Address.split(',')[0]?.trim() || null
+            : (db.Area_Name?.trim() || null),
+      province: db.Property_Address?.trim()
+                ? db.Property_Address.split(',')[1]?.trim() || null
+                : (db.Region_Name?.trim() || null),
     },
     features: {
       bedrooms: db.Bedrooms || 0,
@@ -232,6 +279,7 @@ function dedupeRequest<T>(key: string, fn: () => Promise<T>): Promise<T> {
 // --- COMPONENT ---
 export default function Home() {
   const t = useTranslations('home');
+  const tCommon = useTranslations('common');
   // Use cached property data
   const {
     featuredProperties,
@@ -270,17 +318,32 @@ export default function Home() {
   const favouriteIds = useFavouriteIds();
 
   // Initial check: If we have cached data, use it immediately
+  // Priority: Exclusive first, then Featured
   useEffect(() => {
-    if (featuredProperties.length > 0 && !needsRefresh) {
-      setFeaturedLoading(false);
-      hasLoadedOnce.current = true;
-    }
+    // Check exclusive properties first (priority)
     if (exclusiveProperties.length > 0 && !needsRefresh) {
       setExclusiveLoading(false);
       hasLoadedOnce.current = true;
+    } else {
+      // If no cache or stale, ensure we load exclusive first
+      setExclusiveLoading(true);
     }
+    
+    // Check featured properties second (loads after exclusive)
+    if (featuredProperties.length > 0 && !needsRefresh) {
+      setFeaturedLoading(false);
+      hasLoadedOnce.current = true;
+    } else {
+      // If no cache or stale, will load after exclusive
+      setFeaturedLoading(true);
+    }
+    
+    // Property types can load in parallel
     if (Object.keys(propertyTypesMap).length > 0 && !needsRefresh) {
       setTypesLoading(false);
+    } else {
+      // If no cache or stale, ensure we load
+      setTypesLoading(true);
     }
   }, []); // Run once on mount to check cache
 
@@ -394,7 +457,77 @@ export default function Home() {
     };
   }, []); // Run once on mount
 
-  // Load featured properties FIRST (critical - above the fold)
+  // Load exclusive properties FIRST (priority)
+  useEffect(() => {
+    // If we have cached exclusive properties and they're not stale, skip loading
+    if (exclusiveProperties.length > 0 && !needsRefresh) {
+      setExclusiveLoading(false);
+      return;
+    }
+
+    let mounted = true;
+    const loadExclusive = async () => {
+      try {
+        console.log('Loading exclusive properties (priority)...');
+        setExclusiveLoading(true);
+        
+        const exclusiveDb = await dedupeRequest('exclusive', () => 
+          propertyService.getExclusiveProperties()
+        );
+        
+        if (!mounted) return;
+        
+        console.log(`Loaded ${exclusiveDb.length} exclusive properties from API`);
+        console.log('Exclusive DB data sample:', exclusiveDb[0]);
+        
+        if (exclusiveDb.length === 0) {
+          console.warn('No exclusive properties returned from API - check filter logic');
+          setExclusiveLoading(false);
+          return;
+        }
+        
+        // Transform with types map (use empty map if types not loaded yet, will retransform later)
+        const transformed = exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap, tCommon));
+        console.log(`Transformed ${transformed.length} exclusive properties`);
+        console.log('Transformed exclusive properties sample:', transformed[0]);
+        
+        setExclusiveProperties(transformed);
+        updateLastFetchTime();
+        hasLoadedOnce.current = true;
+      } catch (err) {
+        console.error("Error loading exclusive properties:", err);
+      } finally {
+        if (mounted) {
+          setExclusiveLoading(false);
+        }
+      }
+    };
+
+    // Load exclusive properties immediately
+    loadExclusive();
+    
+    return () => {
+      mounted = false;
+    };
+  }, [needsRefresh]); // Depend on needsRefresh to retrigger when cache is stale
+
+  // Re-transform properties when types map becomes available (if properties loaded first)
+  // Note: This would require storing original DB data, so we'll reload if types change
+  useEffect(() => {
+    // If types just loaded and we have properties with generic types, trigger a reload
+    if (!typesLoading && Object.keys(propertyTypesMap).length > 0) {
+      const hasGenericTypes = featuredProperties.some(p => 
+        !p.features.type || p.features.type === 'Property' || p.features.type === tCommon('property')
+      );
+      
+      if (hasGenericTypes && featuredProperties.length > 0 && !featuredLoading) {
+        console.log('Types loaded, retriggering featured properties load for proper types');
+        setFeaturedPage(prev => prev); // Trigger reload by updating page
+      }
+    }
+  }, [typesLoading, propertyTypesMap]); // Re-check when types are available
+
+  // Load featured properties AFTER exclusive properties are loaded
   useEffect(() => {
     // If we have cached featured properties and they're not stale, skip loading
     if (featuredProperties.length > 0 && !needsRefresh) {
@@ -402,23 +535,37 @@ export default function Home() {
       return;
     }
 
+    // Wait for exclusive properties to finish loading first
+    // This ensures exclusive loads first, then featured
+    // Check: if exclusive is still loading OR if exclusive hasn't loaded yet (and we're not using cache)
+    const exclusiveIsReady = exclusiveProperties.length > 0 || (!exclusiveLoading && !needsRefresh);
+    
+    if (!exclusiveIsReady && exclusiveLoading) {
+      console.log('Waiting for exclusive properties to load before loading featured...');
+      return; // Wait for exclusive to finish
+    }
+
     let mounted = true;
     const loadFeatured = async () => {
       try {
+        console.log('Loading featured properties (after exclusive)...');
         setFeaturedLoading(true);
         
-        // Priority: Load featured properties first (most important)
         const featuredDb = await dedupeRequest(`featured-${featuredPage}`, () => 
           propertyService.getFeaturedProperties(featuredPage)
         );
         
         if (!mounted) return;
         
-        // Transform with current types map (will re-transform when types load if needed)
-        setFeaturedProperties(featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
+        console.log(`Loaded ${featuredDb.length} featured properties from API`);
+        
+        // Transform with types map (use empty map if types not loaded yet, will retransform later)
+        const transformed = featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap, tCommon));
+        setFeaturedProperties(transformed);
         updateLastFetchTime();
         initialLoadComplete.current = true;
         hasLoadedOnce.current = true;
+        console.log(`Transformed ${transformed.length} featured properties`);
       } catch (err) {
         console.error("Error loading featured properties:", err);
       } finally {
@@ -428,73 +575,16 @@ export default function Home() {
       }
     };
 
-    loadFeatured();
-    
-    return () => {
-      mounted = false;
-    };
-  }, [featuredPage]); // Only depend on featuredPage - dedupeRequest prevents duplicate calls
-
-  // Re-transform properties when types map becomes available (if properties loaded first)
-  useEffect(() => {
-    if (featuredProperties.length > 0 && Object.keys(propertyTypesMap).length > 0) {
-      // Check if any properties need retransformation (have generic "Property" type)
-      const needsRetransform = featuredProperties.some(p => 
-        !p.features.type || p.features.type === 'Property'
-      );
-      
-      if (needsRetransform) {
-        // Re-transform with proper types
-        const retransformed = featuredProperties.map(p => {
-          // We'd need the original DB data to retransform, so we'll just update the display
-          // For now, properties will show with correct types on next load
-          return p;
-        });
-      }
-    }
-  }, [propertyTypesMap]); // Re-check when types are available
-
-  // Load exclusive properties AFTER featured (lower priority)
-  useEffect(() => {
-    // If we have cached exclusive properties and they're not stale, skip loading
-    if (exclusiveProperties.length > 0 && !needsRefresh) {
-      setExclusiveLoading(false);
-      return;
-    }
-
-    let mounted = true;
-    // Defer exclusive properties slightly to prioritize featured
+    // Small delay to ensure exclusive properties are processed first
     const timer = setTimeout(() => {
-      const loadExclusive = async () => {
-        try {
-          setExclusiveLoading(true);
-          
-          const exclusiveDb = await dedupeRequest('exclusive', () => 
-            propertyService.getExclusiveProperties()
-          );
-          
-          if (!mounted) return;
-          
-          setExclusiveProperties(exclusiveDb.map(p => transformPropertyForCard(p, propertyTypesMap)));
-          updateLastFetchTime();
-          hasLoadedOnce.current = true;
-        } catch (err) {
-          console.error("Error loading exclusive properties:", err);
-        } finally {
-          if (mounted) {
-            setExclusiveLoading(false);
-          }
-        }
-      };
-
-      loadExclusive();
-    }, 200); // Small delay to prioritize featured properties
+      loadFeatured();
+    }, 150); // Slightly longer delay to ensure exclusive is fully processed
 
     return () => {
       clearTimeout(timer);
       mounted = false;
     };
-  }, []); // Run once on mount - dedupeRequest prevents duplicate calls
+  }, [featuredPage, needsRefresh, exclusiveLoading, exclusiveProperties.length]); // Depend on exclusive loading state
 
   // Load regions AFTER initial page load (deferred - not critical for first paint)
   useEffect(() => {
@@ -540,7 +630,7 @@ export default function Home() {
     if (property) {
       window.location.href = `/properties/${property.Property_ID}`;
     } else {
-      alert("Property not found. Check the reference.");
+      alert(tCommon('propertyNotFoundCheckRef'));
     }
   };
 
@@ -623,7 +713,7 @@ export default function Home() {
             <div className="text-center py-12">
               <p className="text-neutral-500">{t('exclusive.none')}</p>
               <p className="text-neutral-400 text-sm mt-2">
-                Unable to load exclusive properties at this time. Please try refreshing the page.
+                {tCommon('unableToLoadExclusive')}
               </p>
             </div>
           )}
@@ -723,9 +813,9 @@ export default function Home() {
               </div>
             ) : (
               <div className="text-center py-12 mt-12">
-                <p className="text-neutral-500">No featured properties available at the moment.</p>
+                <p className="text-neutral-500">{tCommon('noFeaturedProperties')}</p>
                 <p className="text-neutral-400 text-sm mt-2">
-                  Please check back later or try refreshing the page.
+                  {tCommon('pleaseCheckBackLater')}
                 </p>
               </div>
             )}
@@ -776,7 +866,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1512753360435-329c4535a9a7?auto=format&fit=crop&q=80"
-            alt="Andalucian landscape"
+            alt={tCommon('andalucianLandscape')}
             fill
             className="object-cover brightness-50"
           />
