@@ -997,7 +997,13 @@
     "tabs": {
       "profile": "Mi Perfil",
       "favourites": "Favoritos",
-      "reservations": "Reservas"
+      "reservations": "Reservas",
+      "criterias": "Criterios"
+    },
+    "account": {
+      "criterias": {
+        "title": "Criterios del Comprador"
+      }
     },
     "profile": {
       "title": "Mi Perfil",
@@ -1055,7 +1061,8 @@
       "removeTitle": "Eliminar favorito",
       "removeDescription": "¿Estás seguro de que deseas eliminar este favorito?",
       "removeConfirm": "Eliminar",
-      "removeCancel": "Cancelar"
+      "removeCancel": "Cancelar",
+      "removeSuccess": "Propiedad eliminada de favoritos exitosamente"
     },
     "favourite": {
       "title": "Mis Favoritos",
@@ -1068,6 +1075,24 @@
       "propertyAddress": "Dirección de la Propiedad",
       "bedrooms": "Dormitorios",
       "bathrooms": "Baños",
+      "needHelp": "Necesito Ayuda",
+      "needHelpTitle": "Necesito Ayuda con la Propiedad",
+      "property": "Propiedad",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Ingrese el asunto",
+      "message": "Mensaje",
+      "messagePlaceholder": "Ingrese su mensaje",
+      "cancel": "Cancelar",
+      "send": "Enviar",
+      "sending": "Enviando...",
+      "messageSent": "¡Su mensaje ha sido enviado con éxito!",
+      "messageFailed": "Error al enviar el mensaje. Por favor, inténtelo de nuevo.",
+      "fillAllFields": "Por favor, complete todos los campos",
+      "authRequired": "Por favor, inicie sesión para enviar un mensaje",
+      "subjectRequired": "El asunto es obligatorio",
+      "subjectMaxLength": "El asunto no debe exceder 252 caracteres",
+      "messageRequired": "El mensaje es obligatorio",
+      "messageMaxLength": "El mensaje no debe exceder 5000 caracteres",
       "publicPrice": "Precio (EUR)",
       "price": "Precio",
       "dateAdded": "Fecha",
@@ -1233,6 +1258,13 @@
     "albaicinDistrict": "Distrito del Albaicín",
     "outdoorActivitiesGranada": "Actividades al Aire Libre en Granada",
     "paymentDetails": "Detalles de Pago",
+    "paymentSuccessful": "¡Pago Exitoso!",
+    "propertyReservedSuccessfully": "Su visita a la propiedad ha sido reservada con éxito. Será redirigido a la página de detalles de la propiedad en breve.",
+    "confirmationEmailSent": "Se le enviará un correo electrónico de confirmación en breve con los detalles de la visita.",
+    "goToPropertyDetails": "Ir a Detalles de la Propiedad",
+    "paymentFailed": "Pago fallido",
+    "cardElementNotFound": "Elemento de tarjeta no encontrado",
+    "paymentErrorOccurred": "Ocurrió un error durante el pago",
     "paymentSucceededButFailed": "El pago se realizó correctamente pero no se pudo guardar en la base de datos. Por favor, contacte con soporte.",
     "loadingRegionsAndAreas": "Cargando regiones y áreas...",
     "chooseTheme": "Elegir Tema",
@@ -1258,6 +1290,13 @@
     "untitledProperty": "Propiedad sin título",
     "image": "imagen",
     "loadingProperties": "Cargando propiedades...",
+    "loadingPropertyDetails": "Cargando detalles de la propiedad...",
+    "errorLoadingProperties": "Error al cargar propiedades",
+    "retry": "Reintentar",
+    "noPropertiesFoundForFilters": "No se encontraron propiedades para los filtros seleccionados",
+    "tryAdjustingSearchCriteria": "Intente ajustar sus criterios de búsqueda",
+    "noPropertiesFound": "No se encontraron propiedades",
+    "tryAdjustingSearchCriteriaToFindMore": "Intente ajustar sus criterios de búsqueda para encontrar más propiedades.",
     "pleaseEnterAmountAbove1000": "Por favor, ingrese un monto superior a 1000",
     "user": "Usuario",
     "noEmail": "Sin correo electrónico",
@@ -1271,7 +1310,21 @@
     "failedToSendMessage": "Error al enviar el mensaje. Por favor, inténtelo de nuevo.",
     "top5Properties": "Top 5 propiedades",
     "loadingTopProperties": "Cargando mejores propiedades…",
-    "noMatchingPropertiesFound": "No se encontraron propiedades que coincidan."
+    "noMatchingPropertiesFound": "No se encontraron propiedades que coincidan.",
+    "searching": "Buscando...",
+    "myProfile": "Mi Perfil",
+    "loginRegister": "Iniciar sesión / Registrarse",
+    "logout": "Cerrar sesión",
+    "logoutSuccess": "Sesión cerrada exitosamente",
+    "logoutFailed": "Error al cerrar sesión. Por favor, inténtalo de nuevo.",
+    "processing": "Procesando...",
+    "reserveNow": "Reservar Ahora",
+    "checking": "Verificando...",
+    "reserve": "Reservar",
+    "sending": "Enviando...",
+    "send": "Enviar",
+    "showing": "Mostrando",
+    "of": "de"
   },
   "contactPage": {
     "hero": {
@@ -1383,6 +1436,9 @@
     "townHouse": "Casa de Pueblo"
   },
   "account": {
+    "criterias": {
+      "title": "Criterios del Comprador"
+    },
     "criteria": {
       "loadError": "Error al cargar criterios",
       "saveSuccess": "Criterios guardados exitosamente",

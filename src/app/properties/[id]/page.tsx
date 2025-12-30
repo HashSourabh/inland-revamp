@@ -29,7 +29,7 @@ interface Property {
   title: string;
   propertyRef: string,
   price: { current: number; original?: number };
-  location: { town: string; province: string };
+  location: { town: string | null; province: string | null };
   description: string;
   viewed: number;
   features: { bedrooms: number; bathrooms: number; buildSize: number; plotSize: number; type: string };
@@ -70,10 +70,26 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
         if (data.success && data.data) {
           const db = data.data;
-          const addressParts = db.Property_Address?.split(",") || [];
+          // Priority 1: If Property_Address exists and is not empty, use it (split by comma)
+          // Priority 2: Otherwise use Area_Name and Region_Name from API
+          // Priority 3: If neither exists, return null (don't display location)
+          let town: string | null = null;
+          let province: string | null = null;
+          
+          if (db.Property_Address && db.Property_Address.trim()) {
+            // Use Property_Address if it exists
+            const addressParts = db.Property_Address.split(",").map((part: string) => part.trim()).filter(Boolean);
+            town = addressParts[0] || null;
+            province = addressParts[1] || null;
+          } else {
+            // Use Area_Name and Region_Name from API
+            town = db.Area_Name?.trim() || null;
+            province = db.Region_Name?.trim() || null;
+          }
+          
           const location = {
-            town: addressParts[0]?.trim() || tCommon('unknown'),
-            province: addressParts[1]?.trim() || tCommon('andalucia'),
+            town,
+            province,
           };
 
           const numPhotos = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
@@ -87,7 +103,10 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             id: db.Property_ID.toString(),
             propertyRef: db.Property_Ref || "",
             title: `${db.PropertyType ?? tCommon('property')}(${db.Property_Ref})`,
-            price: { current: db.Public_Price, original: db.Original_Price },
+            price: { 
+              current: db.Public_Price, 
+              original: (db.Original_Price && db.Original_Price > 0) ? db.Original_Price : undefined 
+            },
             location,
             description: db.description || "",
             viewed: db.Viewed || 0,
@@ -99,8 +118,9 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               type: tCommon('property'),
             },
             images,
-            lat: db.GPS_Latitude,
-            lng: db.GPS_Longitude,
+            // Only set lat/lng if they are valid (not 0 or null)
+            lat: (db.GPS_Latitude && db.GPS_Latitude !== 0) ? db.GPS_Latitude : undefined,
+            lng: (db.GPS_Longitude && db.GPS_Longitude !== 0) ? db.GPS_Longitude : undefined,
             videoUrl: db.Video_URL || null,
             short_description: db.short_description || null
           });
@@ -122,7 +142,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
     <div className="fixed inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center space-y-4">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-        <p className="text-neutral-600 font-medium">Loading property details...</p>
+        <p className="text-neutral-600 font-medium">{tCommon('loadingPropertyDetails')}</p>
       </div>
     </div>
   );
@@ -203,10 +223,16 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           <div className="flex justify-between">
             <div>
               <h1 className="text-2xl font-bold">{property.title}</h1>
-              <p className="mt-1 text-base text-neutral-600">{property.location.town} / {property.location.province}</p>
+              {(property.location.town || property.location.province) && (
+                <p className="mt-1 text-base text-neutral-600">
+                  {[property.location.town, property.location.province].filter(Boolean).join(' / ')}
+                </p>
+              )}
             </div>
             <div className="flex items-center gap-2">
-              {property.price.original && <span className="line-through text-neutral-500">{formatPrice(property.price.original)}</span>}
+              {property.price.original && property.price.original > 0 && (
+                <span className="line-through text-neutral-500">{formatPrice(property.price.original)}</span>
+              )}
               <span className="text-2xl font-bold text-primary-600">{formatPrice(property.price.current)}</span>
             </div>
           </div>
@@ -221,7 +247,9 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               images={property.images}
               title={property.title}
               description={property.description}
-              location={`${property.location.town}/${property.location.province}`}
+              location={(property.location.town || property.location.province) 
+                ? `${property.location.town || ''}/${property.location.province || ''}`.replace(/^\/|\/$/g, '')
+                : undefined}
               beds={property.features.bedrooms}
               baths={property.features.bathrooms}
               built={property.features.buildSize}
@@ -275,12 +303,11 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               beds={property.features.bedrooms}
               baths={property.features.bathrooms}
               built={property.features.buildSize}
-              plot={property.features.plotSize}
-              views={property.viewed}
-              features={["Some feature", "Another feature"]}
-              location={`${property.location.town}/${property.location.province}`}
-              lat={property.lat}
-              lng={property.lng}
+              plot={property.features.plotSize.toString()}
+              views={property.viewed.toString()}
+              location={(property.location.town || property.location.province) 
+                ? `${property.location.town || ''}/${property.location.province || ''}`.replace(/^\/|\/$/g, '')
+                : undefined}
             />
             {/* Description */}
             {property.description && (
@@ -292,8 +319,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               </div>
             )}
           </div>
-          {/* Location */}
-          {property.lat && property.lng && (
+          {/* Location - Only show if we have valid coordinates (not 0 or null) */}
+          {property.lat && property.lng && property.lat !== 0 && property.lng !== 0 && (
           <div className="lg:col-span-2">
             <h2 className="mb-3 text-xl font-semibold">Location</h2>
             <div className="aspect-[16/5] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
@@ -340,7 +367,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             onClick={handleReserve}
             disabled={isSubmitting || !email}
           >
-            {isSubmitting ? "Checking..." : "Reserve"}
+            {isSubmitting ? tCommon('checking') : tCommon('reserve')}
           </button>
 
           {emailExists !== null && (

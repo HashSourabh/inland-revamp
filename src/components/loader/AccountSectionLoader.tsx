@@ -1,4 +1,7 @@
+'use client';
+
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 type AccountSectionLoaderProps = {
   message?: React.ReactNode;
@@ -7,14 +10,16 @@ type AccountSectionLoaderProps = {
 };
 
 const AccountSectionLoader: React.FC<AccountSectionLoaderProps> = ({
-  message = "Loading...",
+  message,
   overlay = false,
   className = "",
 }) => {
+  const tCommon = useTranslations('common');
+  const defaultMessage = message || tCommon('loading');
   const loaderContent = (
     <div className={`flex flex-col items-center justify-center gap-3 text-gray-600 ${overlay ? "" : "py-10"} ${className}`}>
       <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary-600 border-t-transparent" />
-      {message && <p className="text-sm font-medium text-gray-600">{message}</p>}
+      {defaultMessage && <p className="text-sm font-medium text-gray-600">{defaultMessage}</p>}
     </div>
   );
 

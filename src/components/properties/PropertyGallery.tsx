@@ -120,22 +120,6 @@ export default function PropertyGallery({
           </>
         )}
       </div>
-      <div className="mt-8 space-y-6">
-        <div>
-          <h2 className="mb-4 text-xl font-semibold">Location</h2>
-          <div className="aspect-[16/9] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
-            <iframe
-              src={`https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-        </div>
-      </div>
       <style jsx global>{`
         .no-scrollbar {
           -ms-overflow-style: none;

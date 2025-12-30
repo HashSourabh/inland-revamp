@@ -27,6 +27,7 @@ interface Filters {
 
 export default function AdvancedSearch() {
   const t = useTranslations('home');
+  const tCommon = useTranslations('common');
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   const [regions, setRegions] = useState<Region[]>([]);
   const [propertyTypes, setPropertyTypes] = useState<PropertyType[]>([]);
@@ -196,7 +197,7 @@ export default function AdvancedSearch() {
                     d="M4 12a8 8 0 018-8v8H4z"
                   />
                 </svg>
-                Searching...
+                {tCommon('searching')}
               </span>
             ) : (
               t('filters.search')
@@ -369,7 +370,7 @@ export default function AdvancedSearch() {
                       }}
                       className="w-full bg-primary-600 text-white py-4 rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-md disabled:opacity-50"
                     >
-                      {loading ? "Searching..." : t('filters.button')}
+                      {loading ? tCommon('searching') : t('filters.button')}
                     </button>
                   </div>
                 </form>

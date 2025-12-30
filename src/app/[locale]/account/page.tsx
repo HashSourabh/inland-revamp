@@ -108,6 +108,7 @@ function compressImage(
 
 export default function AccountPage() {
   const t = useTranslations('Profile_account');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -231,7 +232,10 @@ export default function AccountPage() {
         const headers: HeadersInit = { "Content-Type": "application/json" };
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
-        const res = await fetch(`${API_BASE_URL}/buyers/me/profile-image`, {
+        const language_id = localStorage.getItem("LanguageId") || "1";
+        headers["X-Language-Id"] = language_id;
+
+        const res = await fetch(`${API_BASE_URL}/buyers/me/profile-image?language_id=${language_id}`, {
           method: 'PUT',
           credentials: 'include',
           headers,
@@ -247,6 +251,7 @@ export default function AccountPage() {
         console.log('✅ Upload successful:', data);
         await refresh();
         setProfilePreview(null);
+        // Always use frontend translation for consistency
         showToast('success', t('profile.uploadSuccess'));
 
       } catch (uploadError: any) {
@@ -458,7 +463,9 @@ export default function AccountPage() {
         payload.buyer_address = trimmedAddress;
       }
 
-      const res = await fetch(`${API_BASE_URL}/buyers/me`, {
+      const language_id = localStorage.getItem("LanguageId") || "1";
+
+      const res = await fetch(`${API_BASE_URL}/buyers/me?language_id=${language_id}`, {
         method: "PUT",
         headers,
         body: JSON.stringify(payload),
@@ -468,11 +475,12 @@ export default function AccountPage() {
       if (!res.ok) {
         const serverErrors = mapServerProfileErrors(data?.details);
         if (Object.keys(serverErrors).length) setProfileErrors(serverErrors);
-        throw new Error(data?.message || data?.error || "Profile update failed");
+        throw new Error(data?.message || data?.error || t('profile.updateError'));
       }
 
       await refresh();
-      showToast("success", data?.message || t('profile.updateSuccess'));
+      // Always use frontend translation for consistency, API message might be in wrong language
+      showToast("success", t('profile.updateSuccess'));
     } catch (err: any) {
       showToast("error", err.message || t('profile.updateError'));
     } finally {
@@ -537,7 +545,10 @@ export default function AccountPage() {
       const headers: HeadersInit = { "Content-Type": "application/json" };
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
-      const res = await fetch(`${API_BASE_URL}/criterias/update`, {
+      const language_id = localStorage.getItem("LanguageId") || "1";
+      headers["X-Language-Id"] = language_id;
+
+      const res = await fetch(`${API_BASE_URL}/criterias/update?language_id=${language_id}`, {
         method: "PUT",
         headers,
         body: JSON.stringify({ criteria: criteriaToSave }),
@@ -601,7 +612,7 @@ export default function AccountPage() {
                 className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
                   onClick={() => setTab("criterias")}
                 >
-                  Criterias
+                  {t('tabs.criterias')}
                 </button>
               </nav>
             </div>
@@ -787,12 +798,14 @@ export default function AccountPage() {
 
                     try {
                       const token = getToken();
-                      const res = await fetch(`${API_BASE_URL}/buyers/me/password`, {
+                      const language_id = localStorage.getItem("LanguageId") || "1";
+                      const headers: HeadersInit = { 'Content-Type': 'application/json', 'X-Language-Id': language_id };
+                      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                      const res = await fetch(`${API_BASE_URL}/buyers/me/password?language_id=${language_id}`, {
                         method: 'PUT',
                         credentials: 'include',
-                        headers: token
-                          ? { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
-                          : { 'Content-Type': 'application/json' },
+                        headers,
                         body: JSON.stringify({
                           currentPassword: pwdForm.currentPassword,
                           newPassword: pwdForm.newPassword
@@ -802,7 +815,8 @@ export default function AccountPage() {
                       const data = await res.json();
                       if (!res.ok) throw new Error(data?.message || data?.error || t('password.updateError'));
 
-                      setPwdMsg({ type: 'success', text: data?.message || t('password.success') });
+                      // Always use frontend translation for consistency
+                      setPwdMsg({ type: 'success', text: t('password.success') });
                       setPwdForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
                       setTimeout(() => setPwdOpen(false), 1200);
                     } catch (err: any) {
@@ -1067,7 +1081,7 @@ export default function AccountPage() {
                 {criteriaLoading && <AccountSectionLoader overlay message={t('loading')} />}
 
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                  <h2 className="text-lg sm:text-xl font-semibold">Buyer Criterias</h2>
+                  <h2 className="text-lg sm:text-xl font-semibold">{t('account.criterias.title')}</h2>
                   <button
                     onClick={handleSaveCriteria}
                     disabled={criteriaSaving || criteriaLoading}
@@ -1169,14 +1183,16 @@ export default function AccountPage() {
           if (!buyerId || !token) return;
 
           try {
+            const language_id = localStorage.getItem("LanguageId") || "1";
+            const headers: HeadersInit = {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+            };
             const res = await fetch(
-              `${apiBase}/buyers/${buyerId}/favourites/${pendingRemoveId}`, // Use Property_ID
+              `${apiBase}/buyers/${buyerId}/favourites/${pendingRemoveId}?language_id=${language_id}`, // Use Property_ID
               {
                 method: "DELETE",
-                headers: {
-                  "Authorization": `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
+                headers,
               }
             );
 
@@ -1184,8 +1200,7 @@ export default function AccountPage() {
               // Remove by Property_ID
               setFavourites((prev) => prev.filter((x) => x.Property_ID !== pendingRemoveId));
               setFavDetails((prev) => prev.filter((x) => x.Property_ID !== pendingRemoveId));
-              // showToast("success", t("favourites.removeSuccess"));
-              toast.error('Favourite removed successfully.');
+              showToast("success", t("favourites.removeSuccess"));
 
             } else {
               const errMsg = await res.text();
@@ -1270,17 +1285,19 @@ export default function AccountPage() {
                   const token = getToken();
 
                   if (!token) {
-                    toast.error(t('favourite.authRequired') || 'Please log in to send a message');
+                    toast.error(t('favourite.authRequired'));
                     setHelpLoading(false);
                     return;
                   }
 
                   try {
-                    const res = await fetch(`${apiBase}/buyers/property-inquiry`, {
+                    const language_id = localStorage.getItem("LanguageId") || "1";
+                    const res = await fetch(`${apiBase}/buyers/property-inquiry?language_id=${language_id}`, {
                       method: "POST",
                       headers: {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
+                        "X-Language-Id": language_id,
                       },
                       body: JSON.stringify({
                         propertyId: selectedProperty.Property_ID,
@@ -1293,7 +1310,8 @@ export default function AccountPage() {
                     const data = await res.json();
 
                     if (res.ok && data.success) {
-                      toast.success(t('favourite.messageSent') || 'Your message has been sent successfully!');
+                      // Always use frontend translation for consistency
+                      toast.success(t('favourite.messageSent'));
                       setHelpModalOpen(false);
                       setSelectedProperty(null);
                       setHelpForm({ subject: "", message: "" });
@@ -1314,7 +1332,8 @@ export default function AccountPage() {
                           return;
                         }
                       }
-                      toast.error(data.message || t('favourite.messageFailed') || tCommon('failedToSendMessage'));
+                      // Always use frontend translation for consistency
+                      toast.error(t('favourite.messageFailed') || tCommon('failedToSendMessage'));
                     }
                   } catch (err) {
                     console.error("❌ Send message failed:", err);
@@ -1432,10 +1451,10 @@ export default function AccountPage() {
                     {helpLoading ? (
                       <>
                         <span className="inline-block animate-spin mr-2">⏳</span>
-                        {t('favourite.sending') || 'Sending...'}
+                        {t('favourite.sending') || tCommon('sending')}
                       </>
                     ) : (
-                      t('favourite.send') || 'Send'
+                      t('favourite.send') || tCommon('send')
                     )}
                   </button>
                 </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef, ReactNode } from "react";
 import { API_BASE_URL } from "@/utils/api";
 import toast from "react-hot-toast";
 import GlobalLoader from "@/components/shared/GlobalLoader";
@@ -35,7 +35,7 @@ type AuthContextValue = {
   authMode: "login" | "register" | "forgot" | "reset"; // ✅ Added forgot & reset
   authData?: AuthData; // ✅ Added authData
   refresh: () => Promise<void>;
-  logout: () => Promise<void>;
+  logout: (messages?: { success?: string; error?: string }) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -60,42 +60,72 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "register" | "forgot" | "reset">("login"); // ✅ Updated
   const [authData, setAuthData] = useState<AuthData | undefined>(undefined); // ✅ Added
+  const refreshInProgress = useRef(false); // Prevent multiple simultaneous calls
 
   const refresh = async () => {
+    // Prevent multiple simultaneous calls
+    if (refreshInProgress.current) {
+      return;
+    }
+
+    const token = getToken();
+    
+    // If no token exists, don't make API call - just set user to null and loading to false
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+
+    // Only proceed if we have a token
+    refreshInProgress.current = true;
     try {
-      const token = getToken();
-      // Only show loading for authenticated users (with token)
-      // Anonymous users should not see loading state
-      if (token) {
-        setLoading(true);
-      }
-      const res = await fetch(`${API_BASE_URL}/auth/me`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      const language_id = typeof window !== "undefined" ? (localStorage.getItem("LanguageId") || "1") : "1";
+      setLoading(true);
+      const headers: HeadersInit = { 
+        "X-Language-Id": language_id,
+        "Authorization": `Bearer ${token}`
+      };
+      const res = await fetch(`${API_BASE_URL}/auth/me?language_id=${language_id}`, {
+        headers,
       });
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
-        localStorage.setItem("buyer_Id", data.user.id);
+        if (data.user?.id) {
+          localStorage.setItem("buyer_Id", data.user.id);
+        }
       } else {
+        // If 401 or other error, clear token and user
+        if (res.status === 401) {
+          setToken(null);
+        }
         setUser(null);
       }
     } catch {
       setUser(null);
     } finally {
       setLoading(false);
+      refreshInProgress.current = false;
     }
   };
 
-  const logout = async () => {
+  const logout = async (messages?: { success?: string; error?: string }) => {
     try {
       const token = getToken();
-      const res = await fetch(`${API_BASE_URL}/auth/logout`, {
+      const language_id = typeof window !== "undefined" ? (localStorage.getItem("LanguageId") || "1") : "1";
+      const headers: HeadersInit = { "Content-Type": "application/json", "X-Language-Id": language_id };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch(`${API_BASE_URL}/auth/logout?language_id=${language_id}`, {
         method: "POST",
-        headers: token ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` } : { "Content-Type": "application/json" },
+        headers,
       });
 
       const data = res.ok ? await res.json() : null;
-      const message = data?.message || (res.ok ? "Logged out successfully." : "Logout failed. Please try again.");
+      // Use provided messages or fallback to English
+      const successMessage = messages?.success || "Logged out successfully";
+      const errorMessage = messages?.error || "Logout failed. Please try again.";
 
       if (res.ok) {
         toast.custom((t) => (
@@ -105,7 +135,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             minWidth: '320px', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
           }}>
             <div style={{ fontSize: '18px' }}>✅</div>
-            <div style={{ flex: 1, fontWeight: 500 }}>{message}</div>
+            <div style={{ flex: 1, fontWeight: 500 }}>{successMessage}</div>
             <button onClick={() => toast.dismiss(t.id)} style={{ opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px' }}>✕</button>
           </div>
         ), { duration: 4000 });
@@ -117,12 +147,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             minWidth: '320px', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
           }}>
             <div style={{ fontSize: '18px' }}>❌</div>
-            <div style={{ flex: 1, fontWeight: 500 }}>{message}</div>
+            <div style={{ flex: 1, fontWeight: 500 }}>{errorMessage}</div>
             <button onClick={() => toast.dismiss(t.id)} style={{ opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px' }}>✕</button>
           </div>
         ), { duration: 4000 });
       }
     } catch (error: any) {
+      // Use provided messages or fallback to English
+      const errorMessage = messages?.error || "Logout failed. Please try again.";
       toast.custom((t) => (
         <div style={{
           display: 'flex', alignItems: 'center', gap: '10px',
@@ -130,7 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           minWidth: '320px', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'
         }}>
           <div style={{ fontSize: '18px' }}>❌</div>
-          <div style={{ flex: 1, fontWeight: 500 }}>Logout failed. Please try again.</div>
+          <div style={{ flex: 1, fontWeight: 500 }}>{errorMessage}</div>
           <button onClick={() => toast.dismiss(t.id)} style={{ opacity: 0.9, cursor: 'pointer', background: 'none', border: 'none', color: '#fff', fontSize: '16px' }}>✕</button>
         </div>
       ), { duration: 4000 });

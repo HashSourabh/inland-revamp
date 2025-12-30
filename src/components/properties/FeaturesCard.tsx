@@ -14,7 +14,7 @@ interface FeaturesCardProps {
   views: string;
   built: number | string;
   plot: string;
-  location: string;
+  location?: string | null;
 }
 
 export default function FeaturesCard({
@@ -28,35 +28,35 @@ export default function FeaturesCard({
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 bg-white p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg ">
 
-      {beds && (<div className="flex items-start gap-2">
+      {(beds !== undefined && beds !== null) && (<div className="flex items-start gap-2">
         <HomeModernIcon className="h-5 w-5 text-primary-600" />
         <div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">Beds</p>
           <p className="font-semibold">{beds}</p>
         </div>
       </div>)}
-      {baths && (<div className="flex items-start gap-2">
+      {(baths !== undefined && baths !== null) && (<div className="flex items-start gap-2">
         <BeakerIcon className="h-5 w-5 text-primary-600" />
         <div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">Baths</p>
           <p className="font-semibold">{baths}</p>
         </div>
       </div>)}
-      {views && (<div className="flex items-start gap-2">
+      {(views !== undefined && views !== null && views !== '') && (<div className="flex items-start gap-2">
         <EyeIcon className="h-5 w-5 text-primary-600" />
         <div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">Views</p>
           <p className="font-semibold">{views}</p>
         </div>
       </div>)}
-      {built && (<div className="flex items-start gap-2">
+      {(built !== undefined && built !== null) && (<div className="flex items-start gap-2">
         <BuildingOfficeIcon className="h-5 w-5 text-primary-600" />
         <div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">Built</p>
           <p className="font-semibold">{built}</p>
         </div>
       </div>)}
-      {plot && (<div className="flex items-start gap-2">
+      {(plot !== undefined && plot !== null && plot !== '') && (<div className="flex items-start gap-2">
         <MapIcon className="h-5 w-5 text-primary-600" />
         <div>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">Plot</p>

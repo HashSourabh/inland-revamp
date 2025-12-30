@@ -36,11 +36,11 @@ export default function LanguageSwitcher() {
   // Get language names from translations
   const getLanguageName = (code: string) => {
     const names: { [key: string]: string } = {
-      'en': t('english'),
-      'es': t('spanish'),
-      'fr': t('french'),
-      'pt': t('portuguese'),
-      'de': t('german'),
+      'en': t('english') || 'English',
+      'es': t('spanish') || 'Español',
+      'fr': t('french') || 'Français',
+      'pt': t('portuguese') || 'Português',
+      'de': t('german') || 'Deutsch', // Always show "Deutsch" for German
     };
     return names[code] || code.toUpperCase();
   };

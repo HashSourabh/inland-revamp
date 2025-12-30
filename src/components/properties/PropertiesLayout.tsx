@@ -113,11 +113,11 @@ const LoadingSpinner = () => (
   </div>
 );
 
-const PageOverlayLoader = () => (
+const PageOverlayLoader = ({ tCommon }: { tCommon: any }) => (
   <div className="fixed inset-0 bg-white/50 backdrop-blur-sm z-50 flex items-center justify-center">
     <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center space-y-4">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-      <p className="text-neutral-600 font-medium">Loading properties...</p>
+      <p className="text-neutral-600 font-medium">{tCommon('loadingProperties')}</p>
     </div>
   </div>
 );
@@ -147,10 +147,10 @@ export default function PropertiesLayout({
   // Get areas for selected region from cache
   const areas = selectedRegion ? areasCache.get(selectedRegion) || [] : [];
 
-  const [properties, setProperties] = useState<Property[]>(initialProperties);
-  const [totalProperties, setTotalProperties] = useState<number>(initialTotal);
-  const [totalPages, setTotalPages] = useState<number>(initialTotalPages);
-  const [loading, setLoading] = useState(false);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [totalProperties, setTotalProperties] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [pageLoading, setPageLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -312,6 +312,10 @@ export default function PropertiesLayout({
         if (currentFetch === fetchPropertiesRef.current) {
           setLoading(false);
           setPageLoading(false);
+          // Mark initial load as complete after first fetch
+          if (initialLoad) {
+            setInitialLoad(false);
+          }
         }
       }
     };
@@ -371,30 +375,6 @@ export default function PropertiesLayout({
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
-
-  useEffect(() => {
-    if (initialLoad) {
-      setInitialLoad(false);
-    }
-  }, [initialLoad]);
-
-  if (initialLoad && initialProperties.length === 0) {
-    return (
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        <header className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-primary-600">
-            {t('properties_for_sale')}
-          </h1>
-          <p className="mt-2 text-neutral-600 text-xl">{tCommon('loadingProperties')}</p>
-        </header>
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: PROPERTIES_PER_PAGE }).map((_, i) => (
-            <PropertyCardSkeleton key={`skeleton-${i}`} />
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   const displayedProperties = properties;
   const displayedTotal = totalProperties;
@@ -458,7 +438,7 @@ export default function PropertiesLayout({
   return (
     <>
       {/* Page overlay loader */}
-      {pageLoading && <PageOverlayLoader />}
+      {pageLoading && <PageOverlayLoader tCommon={tCommon} />}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
@@ -495,55 +475,76 @@ export default function PropertiesLayout({
             </div>
           </div>
 
-          {/* Results count + layout switcher - Only show when there are properties */}
-          {displayedProperties.length > 0 && (
+          {/* Results count + layout switcher - Show during loading or when there are properties */}
+          {(loading || displayedProperties.length > 0) && (
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2">
-                <p className="text-base text-neutral-600 dark:text-neutral-400">
-                  Showing{' '}
-                  <span className="font-medium text-neutral-900 dark:text-white">
-                    {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
-                  </span>{' '}
-                  -{' '}
-                  <span className="font-medium text-neutral-900 dark:text-white">
-                    {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
-                  </span>{' '}
-                  of{' '}
-                  <span className="font-medium text-neutral-900 dark:text-white">
-                    {displayedTotal}
-                  </span>{' '}
-                  properties
-                </p>
+                {loading ? (
+                  <p className="text-base text-neutral-600 dark:text-neutral-400">
+                    {tCommon('loadingProperties')}
+                  </p>
+                ) : (
+                  <p className="text-base text-neutral-600 dark:text-neutral-400">
+                    {tCommon('showing')}{' '}
+                    <span className="font-medium text-neutral-900 dark:text-white">
+                      {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
+                    </span>{' '}
+                    -{' '}
+                    <span className="font-medium text-neutral-900 dark:text-white">
+                      {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
+                    </span>{' '}
+                    {tCommon('of')}{' '}
+                    <span className="font-medium text-neutral-900 dark:text-white">
+                      {displayedTotal}
+                    </span>{' '}
+                    {displayedTotal === 1 ? tCommon('property') : tCommon('properties')}
+                  </p>
+                )}
                 {(loading || pageLoading) && <LoadingSpinner />}
               </div>
-              <LayoutSwitcher currentLayout={layout} onLayoutChange={setLayout} />
+              {!loading && <LayoutSwitcher currentLayout={layout} onLayoutChange={setLayout} />}
             </div>
           )}
         </div>
 
-        {/* Error state */}
-        {error && (
+        {/* Error state - Only show when not loading */}
+        {error && !loading && (
           <div className="text-center py-12">
-            <p className="text-red-600 mb-4">Error loading properties: {error}</p>
+            <p className="text-red-600 mb-4">{tCommon('errorLoadingProperties')}: {error}</p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700"
             >
-              Retry
+              {tCommon('retry')}
             </button>
           </div>
         )}
 
-        {/* No properties found */}
-        {displayedProperties.length === 0 && !loading && !error && (
-          <div className="text-center py-12">
-            <p className="text-neutral-600 text-lg">No properties found for the selected filters</p>
-            <p className="text-neutral-500 mt-2">Try adjusting your search criteria</p>
+        {/* Loading state - Show skeleton cards */}
+        {loading && !error && (
+          <div
+            className={`grid gap-6 ${
+              layout === 'grid'
+                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                : 'grid-cols-1'
+            }`}
+          >
+            {Array.from({ length: PROPERTIES_PER_PAGE }).map((_, i) => (
+              <PropertyCardSkeleton key={`loading-${i}`} />
+            ))}
           </div>
         )}
 
-        {/* Property Grid - Only show when there are properties */}
-        {displayedProperties.length > 0 && (
+        {/* No properties found - Only show after loading is complete and initial load is done */}
+        {displayedProperties.length === 0 && !loading && !error && !initialLoad && (
+          <div className="text-center py-12">
+            <p className="text-neutral-600 text-lg">{tCommon('noPropertiesFoundForFilters')}</p>
+            <p className="text-neutral-500 mt-2">{tCommon('tryAdjustingSearchCriteria')}</p>
+          </div>
+        )}
+
+        {/* Property Grid - Only show when there are properties and not loading */}
+        {displayedProperties.length > 0 && !loading && (
           <>
             <div
               className={`grid gap-6 transition-opacity duration-200 ${pageLoading ? 'opacity-50' : 'opacity-100'
@@ -552,18 +553,14 @@ export default function PropertiesLayout({
                   : 'grid-cols-1'
                 }`}
             >
-              {loading
-                ? Array.from({ length: PROPERTIES_PER_PAGE }).map((_, i) => (
-                  <PropertyCardSkeleton key={`loading-${i}`} />
-                ))
-                : displayedProperties.map((property) => (
-                    <PropertyCard
-                      key={property.id}
-                      card={layout === 'list' ? 'list' : 'grid'}
-                      property={transformPropertyForCard(property, tCommon)}
-                      favouriteIds={favouriteIds}
-                    />
-                  ))}
+              {displayedProperties.map((property) => (
+                <PropertyCard
+                  key={property.id}
+                  card={layout === 'list' ? 'list' : 'grid'}
+                  property={transformPropertyForCard(property, tCommon)}
+                  favouriteIds={favouriteIds}
+                />
+              ))}
             </div>
 
             {/* Pagination */}

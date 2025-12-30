@@ -2,6 +2,7 @@ import React from 'react';
 import PropertyCard from './PropertyCard';
 import { Property } from '@/types/property';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
+import { useTranslations } from 'next-intl';
 
 interface PropertyGridProps {
   properties: Property[];
@@ -43,6 +44,7 @@ export default function PropertyGrid({
   loading = false
 }: PropertyGridProps) {
   const favouriteIds = useFavouriteIds();
+  const tCommon = useTranslations('common');
 
   if (loading) {
     return (
@@ -101,9 +103,9 @@ export default function PropertyGrid({
       {/* No results message */}
       {properties.length === 0 && (
         <div className="my-16 text-center">
-          <h3 className="mb-2 text-xl font-semibold text-neutral-900">No properties found</h3>
+          <h3 className="mb-2 text-xl font-semibold text-neutral-900">{tCommon('noPropertiesFound')}</h3>
           <p className="text-neutral-600">
-            Try adjusting your search criteria to find more properties.
+            {tCommon('tryAdjustingSearchCriteriaToFindMore')}
           </p>
         </div>
       )}

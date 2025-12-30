@@ -23,7 +23,6 @@ export default function Header() {
   const tCta = useTranslations('cta');
   const tCommon = useTranslations('common');
   const { user, openAuth, logout } = useAuth();
-  console.log('Header user:', user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,7 +93,7 @@ export default function Header() {
                 onClick={(e) => { e.preventDefault(); openAuth('login'); }}
                 className="text-sm text-white/90 hover:text-white underline-offset-4 hover:underline"
               >
-                Login / Register
+                {tCommon('loginRegister')}
               </a>
             ) : (
               <div className="relative">
@@ -116,13 +115,13 @@ export default function Header() {
                 </button>
                 {profileOpen && (
                   <div className="profile-dropdown absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg z-50">
-                    <Link href="/account" className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">My Profile</Link>
+                    <Link href="/account" className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">{tCommon('myProfile')}</Link>
                     <a
                       href="#logout"
                       onClick={(e) => { e.preventDefault(); setProfileOpen(false); setLogoutConfirmOpen(true); }}
                       className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
                     >
-                      Logout
+                      {tCommon('logout')}
                     </a>
                   </div>
                 )}
@@ -267,7 +266,10 @@ export default function Header() {
         open={logoutConfirmOpen}
         onClose={() => setLogoutConfirmOpen(false)}
         onConfirm={() => {
-          logout();
+          logout({
+            success: tCommon('logoutSuccess'),
+            error: tCommon('logoutFailed')
+          });
         }}
         titleKey="logout.title"
         descriptionKey="logout.description"

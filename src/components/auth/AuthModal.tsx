@@ -241,10 +241,14 @@ export default function AuthModal() {
         };
       }
 
-      const res = await fetch(url, {
+      const language_id = typeof window !== "undefined" ? (localStorage.getItem("LanguageId") || "1") : "1";
+      const res = await fetch(`${url}?language_id=${language_id}`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Language-Id": language_id,
+        },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -260,14 +264,16 @@ export default function AuthModal() {
       if (mode === "forgot") {
         setLoading(false); // Reset loading state on success
         setForgotEmailSent(true);
-        showToast("success", data?.message || t("messages.resetLinkSent"));
+        // Always use frontend translation for consistency
+        showToast("success", t("messages.resetLinkSent"));
         return;
       }
 
       if (mode === "reset") {
         setLoading(false); // Reset loading state before closing modal
         const redirectAfterReset = authData?.redirectTo;
-        showToast("success", data?.message || t("messages.passwordReset"));
+        // Always use frontend translation for consistency
+        showToast("success", t("messages.passwordReset"));
         closeAuth();
         setTimeout(() => openAuth("login", redirectAfterReset ? { redirectTo: redirectAfterReset } : undefined), 100);
         return;
@@ -277,7 +283,8 @@ export default function AuthModal() {
       await refresh();
       if (mode === "login" || mode === "register") {
         setLoading(false); // Reset loading state before navigation
-        const successMessage = data?.message || (mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated"));
+        // Always use frontend translation for consistency
+        const successMessage = mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated");
         showToast("success", successMessage);
         closeAuth();
         const redirectPath = authData?.redirectTo || `/${locale}/account`;
@@ -287,7 +294,9 @@ export default function AuthModal() {
       setLoading(false); // Reset loading state
       closeAuth();
       console.log("data", data);
-      showToast("success", data?.message || (mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated")));
+      // Always use frontend translation for consistency
+      const successMessage = mode === "login" ? t("messages.loginSuccess") : t("messages.accountCreated");
+      showToast("success", successMessage);
     } catch (err: any) {
       setLoading(false); // Reset loading state immediately on error
       showToast("error", err?.message || t("messages.genericError"));
@@ -529,12 +538,12 @@ export default function AuthModal() {
           >
             {loading ? (
               mode === "login"
-                ? "Logging in..."
+                ? t("buttons.processingLogin")
                     : mode === "register"
-                ? "Registering..."
+                ? t("buttons.processingRegister")
                     : mode === "forgot"
-                ? "Sending..."
-                : "Resetting..."
+                ? t("buttons.processingSend")
+                : t("buttons.processingReset")
             ) : (
               mode === "login"
                   ? t("buttons.login")

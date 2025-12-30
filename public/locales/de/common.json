@@ -95,7 +95,7 @@
       "beds": "Slaapkamers",
       "baths": "Badkamers",
       "size": "Oppervlakte",
-      "type": "Type",
+      "type": "Typ",
       "areas_in_region": "Gebieden in {region}"
     }
   },
@@ -995,7 +995,13 @@
     "tabs": {
       "profile": "Mijn Profiel",
       "favourites": "Favorieten",
-      "reservations": "Reserveringen"
+      "reservations": "Reserveringen",
+      "criterias": "Kriterien"
+    },
+    "account": {
+      "criterias": {
+        "title": "Käuferkriterien"
+      }
     },
     "profile": {
       "title": "Mijn Profiel",
@@ -1053,7 +1059,8 @@
       "removeTitle": "Favoriet verwijderen",
       "removeDescription": "Weet u zeker dat u deze favoriet wilt verwijderen?",
       "removeConfirm": "Verwijderen",
-      "removeCancel": "Annuleren"
+      "removeCancel": "Annuleren",
+      "removeSuccess": "Woning succesvol verwijderd uit favorieten"
     },
     "favourite": {
       "title": "Mijn favorieten",
@@ -1066,6 +1073,24 @@
       "propertyAddress": "Adres van de woning",
       "bedrooms": "Slaapkamers",
       "bathrooms": "Badkamers",
+      "needHelp": "Hulp nodig",
+      "needHelpTitle": "Hulp nodig met woning",
+      "property": "Woning",
+      "subject": "Onderwerp",
+      "subjectPlaceholder": "Voer onderwerp in",
+      "message": "Bericht",
+      "messagePlaceholder": "Voer uw bericht in",
+      "cancel": "Annuleren",
+      "send": "Verzenden",
+      "sending": "Verzenden...",
+      "messageSent": "Uw bericht is succesvol verzonden!",
+      "messageFailed": "Bericht verzenden mislukt. Probeer het opnieuw.",
+      "fillAllFields": "Vul alle velden in",
+      "authRequired": "Log in om een bericht te verzenden",
+      "subjectRequired": "Onderwerp is verplicht",
+      "subjectMaxLength": "Onderwerp mag niet meer dan 252 tekens bevatten",
+      "messageRequired": "Bericht is verplicht",
+      "messageMaxLength": "Bericht mag niet meer dan 5000 tekens bevatten",
       "publicPrice": "Prijs (EUR)",
       "price": "Prijs",
       "dateAdded": "Datum",
@@ -1175,7 +1200,6 @@
     "reset": "Zurücksetzen",
     "unknown": "Unbekannt",
     "saving": "Wird gespeichert...",
-    "save": "Speichern",
     "noCriteriaAvailable": "Keine Kriterien verfügbar",
     "propertyNotFound": "Immobilie nicht gefunden",
     "propertyNotFoundCheckRef": "Immobilie nicht gefunden. Überprüfen Sie die Referenz.",
@@ -1195,7 +1219,6 @@
     "advancedSearch": "Erweiterte Suche",
     "andalucianLandscape": "Andalusische Landschaft",
     "andalucianCountryside": "Andalusische Landschaft",
-    "chooseTheme": "Thema wählen",
     "gridView": "Rasteransicht",
     "listView": "Listenansicht",
     "pagination": "Seitennummerierung",
@@ -1207,9 +1230,15 @@
     "albaicinDistrict": "Albaicín Viertel",
     "outdoorActivitiesGranada": "Outdoor-Aktivitäten in Granada",
     "paymentDetails": "Zahlungsdetails",
+    "paymentSuccessful": "Zahlung Erfolgreich!",
+    "propertyReservedSuccessfully": "Ihre Immobilienbesichtigung wurde erfolgreich reserviert. Sie werden in Kürze zur Immobiliendetailseite weitergeleitet.",
+    "confirmationEmailSent": "Eine Bestätigungs-E-Mail wird Ihnen in Kürze mit den Besichtigungsdetails zugesendet.",
+    "goToPropertyDetails": "Zu Immobiliendetails Gehen",
+    "paymentFailed": "Zahlung fehlgeschlagen",
+    "cardElementNotFound": "Kartenelement nicht gefunden",
+    "paymentErrorOccurred": "Während der Zahlung ist ein Fehler aufgetreten",
     "paymentSucceededButFailed": "Zahlung erfolgreich, aber Fehler beim Speichern in der Datenbank. Bitte kontaktieren Sie den Support.",
     "loadingRegionsAndAreas": "Regionen und Gebiete werden geladen...",
-    "chooseTheme": "Thema Wählen",
     "noFeaturedProperties": "Derzeit sind keine empfohlenen Immobilien verfügbar.",
     "failedToUpdateFavourites": "Fehler beim Aktualisieren der Favoriten. Bitte versuchen Sie es erneut.",
     "propertyAddedToFavourites": "Immobilie zu Favoriten hinzugefügt! ❤️",
@@ -1232,6 +1261,13 @@
     "untitledProperty": "Unbenannte Immobilie",
     "image": "Bild",
     "loadingProperties": "Eigenschaften werden geladen...",
+    "loadingPropertyDetails": "Immobiliendetails werden geladen...",
+    "errorLoadingProperties": "Fehler beim Laden der Eigenschaften",
+    "retry": "Wiederholen",
+    "noPropertiesFoundForFilters": "Keine Immobilien für die ausgewählten Filter gefunden",
+    "tryAdjustingSearchCriteria": "Versuchen Sie, Ihre Suchkriterien anzupassen",
+    "noPropertiesFound": "Keine Immobilien gefunden",
+    "tryAdjustingSearchCriteriaToFindMore": "Versuchen Sie, Ihre Suchkriterien anzupassen, um mehr Immobilien zu finden.",
     "pleaseEnterAmountAbove1000": "Bitte geben Sie einen Betrag über 1000 ein",
     "user": "Benutzer",
     "noEmail": "Keine E-Mail",
@@ -1245,7 +1281,21 @@
     "failedToSendMessage": "Fehler beim Senden der Nachricht. Bitte versuchen Sie es erneut.",
     "top5Properties": "Top 5 Immobilien",
     "loadingTopProperties": "Top-Immobilien werden geladen…",
-    "noMatchingPropertiesFound": "Keine passenden Immobilien gefunden."
+    "noMatchingPropertiesFound": "Keine passenden Immobilien gefunden.",
+    "searching": "Suche...",
+    "myProfile": "Mein Profil",
+    "loginRegister": "Anmelden / Registrieren",
+    "logout": "Abmelden",
+    "logoutSuccess": "Erfolgreich abgemeldet",
+    "logoutFailed": "Abmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "processing": "Verarbeitung...",
+    "reserveNow": "Jetzt reservieren",
+    "checking": "Prüfen...",
+    "reserve": "Reservieren",
+    "sending": "Senden...",
+    "send": "Senden",
+    "showing": "Zeige",
+    "of": "von"
   },
   "aboutPage": {
     "hero": {
@@ -1383,6 +1433,9 @@
     "townHouse": "Stadthaus"
   },
   "account": {
+    "criterias": {
+      "title": "Käuferkriterien"
+    },
     "criteria": {
       "loadError": "Fehler beim Laden der Kriterien",
       "saveSuccess": "Kriterien erfolgreich gespeichert",

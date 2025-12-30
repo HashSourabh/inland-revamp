@@ -250,6 +250,13 @@
     "albaicinDistrict": "Quartier de l'Albaicín",
     "outdoorActivitiesGranada": "Activités de Plein Air à Grenade",
     "paymentDetails": "Détails du Paiement",
+    "paymentSuccessful": "Paiement Réussi !",
+    "propertyReservedSuccessfully": "Votre visite de propriété a été réservée avec succès. Vous serez redirigé vers la page des détails de la propriété sous peu.",
+    "confirmationEmailSent": "Un e-mail de confirmation vous sera envoyé sous peu avec les détails de la visite.",
+    "goToPropertyDetails": "Aller aux Détails de la Propriété",
+    "paymentFailed": "Paiement échoué",
+    "cardElementNotFound": "Élément de carte introuvable",
+    "paymentErrorOccurred": "Une erreur s'est produite lors du paiement",
     "paymentSucceededButFailed": "Le paiement a réussi mais n'a pas pu être enregistré dans la base de données. Veuillez contacter le support.",
     "loadingRegionsAndAreas": "Chargement des régions et des zones...",
     "chooseTheme": "Choisir le Thème",
@@ -275,6 +282,13 @@
     "untitledProperty": "Propriété sans titre",
     "image": "image",
     "loadingProperties": "Chargement des propriétés...",
+    "loadingPropertyDetails": "Chargement des détails de la propriété...",
+    "errorLoadingProperties": "Erreur lors du chargement des propriétés",
+    "retry": "Réessayer",
+    "noPropertiesFoundForFilters": "Aucune propriété trouvée pour les filtres sélectionnés",
+    "tryAdjustingSearchCriteria": "Essayez d'ajuster vos critères de recherche",
+    "noPropertiesFound": "Aucune propriété trouvée",
+    "tryAdjustingSearchCriteriaToFindMore": "Essayez d'ajuster vos critères de recherche pour trouver plus de propriétés.",
     "pleaseEnterAmountAbove1000": "Veuillez entrer un montant supérieur à 1000",
     "user": "Utilisateur",
     "noEmail": "Aucun e-mail",
@@ -288,7 +302,21 @@
     "failedToSendMessage": "Échec de l'envoi du message. Veuillez réessayer.",
     "top5Properties": "Top 5 propriétés",
     "loadingTopProperties": "Chargement des meilleures propriétés…",
-    "noMatchingPropertiesFound": "Aucune propriété correspondante trouvée."
+    "noMatchingPropertiesFound": "Aucune propriété correspondante trouvée.",
+    "searching": "Recherche...",
+    "myProfile": "Mon Profil",
+    "loginRegister": "Connexion / Inscription",
+    "logout": "Déconnexion",
+    "logoutSuccess": "Déconnexion réussie",
+    "logoutFailed": "Échec de la déconnexion. Veuillez réessayer.",
+    "processing": "Traitement...",
+    "reserveNow": "Réserver Maintenant",
+    "checking": "Vérification...",
+    "reserve": "Réserver",
+    "sending": "Envoi...",
+    "send": "Envoyer",
+    "showing": "Affichage",
+    "of": "de"
   },
   "town-guide": {
     "description": "Inland Andalucia collabore avec LuvInland.com pour vous offrir les meilleures informations sur l'Andalousie et son art de vivre. Pour chaque ville où nous avons des propriétés à vendre, cliquez sur le nom de la ville pour obtenir toutes les informations nécessaires. Luvinland vous recontactera pour consulter les propriétés à vendre dans la ville sélectionnée.",
@@ -1168,7 +1196,13 @@
     "tabs": {
       "profile": "Mon Profil",
       "favourites": "Favoris",
-      "reservations": "Réservations"
+      "reservations": "Réservations",
+      "criterias": "Critères"
+    },
+    "account": {
+      "criterias": {
+        "title": "Critères de l'Acheteur"
+      }
     },
     "profile": {
       "title": "Mon Profil",
@@ -1226,7 +1260,8 @@
       "removeTitle": "Supprimer le favori",
       "removeDescription": "Êtes-vous sûr de vouloir supprimer ce favori ?",
       "removeConfirm": "Supprimer",
-      "removeCancel": "Annuler"
+      "removeCancel": "Annuler",
+      "removeSuccess": "Propriété retirée des favoris avec succès"
     },
     "favourite": {
       "title": "Mes favoris",
@@ -1239,6 +1274,24 @@
       "propertyAddress": "Adresse du bien",
       "bedrooms": "Chambres",
       "bathrooms": "Salles de bain",
+      "needHelp": "Besoin d'Aide",
+      "needHelpTitle": "Besoin d'Aide avec la Propriété",
+      "property": "Propriété",
+      "subject": "Sujet",
+      "subjectPlaceholder": "Entrez le sujet",
+      "message": "Message",
+      "messagePlaceholder": "Entrez votre message",
+      "cancel": "Annuler",
+      "send": "Envoyer",
+      "sending": "Envoi...",
+      "messageSent": "Votre message a été envoyé avec succès !",
+      "messageFailed": "Échec de l'envoi du message. Veuillez réessayer.",
+      "fillAllFields": "Veuillez remplir tous les champs",
+      "authRequired": "Veuillez vous connecter pour envoyer un message",
+      "subjectRequired": "Le sujet est obligatoire",
+      "subjectMaxLength": "Le sujet ne doit pas dépasser 252 caractères",
+      "messageRequired": "Le message est obligatoire",
+      "messageMaxLength": "Le message ne doit pas dépasser 5000 caractères",
       "publicPrice": "Prix (EUR)",
       "price": "Prix",
       "dateAdded": "Date",
@@ -1361,7 +1414,7 @@
     "spanish": "Español",
     "french": "Français",
     "portuguese": "Português",
-    "german": "Deutsch"
+    "german": "German"
   },
   "printPage": {
     "back": "Retour",
@@ -1383,6 +1436,9 @@
     "townHouse": "Maison de Ville"
   },
   "account": {
+    "criterias": {
+      "title": "Critères de l'Acheteur"
+    },
     "criteria": {
       "loadError": "Échec du chargement des critères",
       "saveSuccess": "Critères enregistrés avec succès",

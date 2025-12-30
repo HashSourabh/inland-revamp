@@ -1035,6 +1035,13 @@
     "albaicinDistrict": "Distrito do Albaicín",
     "outdoorActivitiesGranada": "Atividades ao Ar Livre em Granada",
     "paymentDetails": "Detalhes do Pagamento",
+    "paymentSuccessful": "Pagamento Bem-sucedido!",
+    "propertyReservedSuccessfully": "Sua visita à propriedade foi reservada com sucesso. Você será redirecionado para a página de detalhes da propriedade em breve.",
+    "confirmationEmailSent": "Um e-mail de confirmação será enviado a você em breve com os detalhes da visita.",
+    "goToPropertyDetails": "Ir para Detalhes da Propriedade",
+    "paymentFailed": "Pagamento falhou",
+    "cardElementNotFound": "Elemento de cartão não encontrado",
+    "paymentErrorOccurred": "Ocorreu um erro durante o pagamento",
     "paymentSucceededButFailed": "O pagamento foi bem-sucedido, mas falhou ao salvar no banco de dados. Por favor, entre em contato com o suporte.",
     "loadingRegionsAndAreas": "Carregando regiões e áreas...",
     "chooseTheme": "Escolher Tema",
@@ -1060,6 +1067,13 @@
     "untitledProperty": "Propriedade sem título",
     "image": "imagem",
     "loadingProperties": "Carregando propriedades...",
+    "loadingPropertyDetails": "Carregando detalhes da propriedade...",
+    "errorLoadingProperties": "Erro ao carregar propriedades",
+    "retry": "Tentar novamente",
+    "noPropertiesFoundForFilters": "Nenhuma propriedade encontrada para os filtros selecionados",
+    "tryAdjustingSearchCriteria": "Tente ajustar seus critérios de busca",
+    "noPropertiesFound": "Nenhuma propriedade encontrada",
+    "tryAdjustingSearchCriteriaToFindMore": "Tente ajustar seus critérios de busca para encontrar mais propriedades.",
     "pleaseEnterAmountAbove1000": "Por favor, insira um valor acima de 1000",
     "user": "Usuário",
     "noEmail": "Sem e-mail",
@@ -1073,7 +1087,21 @@
     "failedToSendMessage": "Falha ao enviar mensagem. Por favor, tente novamente.",
     "top5Properties": "Top 5 propriedades",
     "loadingTopProperties": "Carregando melhores propriedades…",
-    "noMatchingPropertiesFound": "Nenhuma propriedade correspondente encontrada."
+    "noMatchingPropertiesFound": "Nenhuma propriedade correspondente encontrada.",
+    "searching": "Pesquisando...",
+    "myProfile": "Meu Perfil",
+    "loginRegister": "Entrar / Registar",
+    "logout": "Sair",
+    "logoutSuccess": "Sessão encerrada com sucesso",
+    "logoutFailed": "Falha ao encerrar sessão. Por favor, tente novamente.",
+    "processing": "Processando...",
+    "reserveNow": "Reservar Agora",
+    "checking": "Verificando...",
+    "reserve": "Reservar",
+    "sending": "Enviando...",
+    "send": "Enviar",
+    "showing": "Mostrando",
+    "of": "de"
   },
   "aboutPage": {
     "hero": {
@@ -1168,7 +1196,13 @@
     "tabs": {
       "profile": "Meu Perfil",
       "favourites": "Favoritos",
-      "reservations": "Reservas"
+      "reservations": "Reservas",
+      "criterias": "Critérios"
+    },
+    "account": {
+      "criterias": {
+        "title": "Critérios do Comprador"
+      }
     },
     "profile": {
       "title": "Meu Perfil",
@@ -1226,7 +1260,8 @@
       "removeTitle": "Remover favorito",
       "removeDescription": "Tem certeza de que deseja remover este favorito?",
       "removeConfirm": "Remover",
-      "removeCancel": "Cancelar"
+      "removeCancel": "Cancelar",
+      "removeSuccess": "Propriedade removida dos favoritos com sucesso"
     },
     "favourite": {
       "title": "Meus Favoritos",
@@ -1239,6 +1274,24 @@
       "propertyAddress": "Endereço da Propriedade",
       "bedrooms": "Quartos",
       "bathrooms": "Casas de Banho",
+      "needHelp": "Preciso de Ajuda",
+      "needHelpTitle": "Preciso de Ajuda com a Propriedade",
+      "property": "Propriedade",
+      "subject": "Assunto",
+      "subjectPlaceholder": "Digite o assunto",
+      "message": "Mensagem",
+      "messagePlaceholder": "Digite sua mensagem",
+      "cancel": "Cancelar",
+      "send": "Enviar",
+      "sending": "Enviando...",
+      "messageSent": "Sua mensagem foi enviada com sucesso!",
+      "messageFailed": "Falha ao enviar mensagem. Por favor, tente novamente.",
+      "fillAllFields": "Por favor, preencha todos os campos",
+      "authRequired": "Por favor, faça login para enviar uma mensagem",
+      "subjectRequired": "O assunto é obrigatório",
+      "subjectMaxLength": "O assunto não deve exceder 252 caracteres",
+      "messageRequired": "A mensagem é obrigatória",
+      "messageMaxLength": "A mensagem não deve exceder 5000 caracteres",
       "publicPrice": "Preço (EUR)",
       "price": "Preço",
       "dateAdded": "Data",
@@ -1383,6 +1436,9 @@
     "townHouse": "Casa de Cidade"
   },
   "account": {
+    "criterias": {
+      "title": "Critérios do Comprador"
+    },
     "criteria": {
       "loadError": "Falha ao carregar critérios",
       "saveSuccess": "Critérios salvos com sucesso",

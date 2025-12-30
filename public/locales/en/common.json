@@ -1029,7 +1029,6 @@
     "reset": "Reset",
     "unknown": "Unknown",
     "saving": "Saving...",
-    "save": "Save",
     "noCriteriaAvailable": "No criteria available",
     "propertyNotFound": "Property not found",
     "propertyNotFoundCheckRef": "Property not found. Check the reference.",
@@ -1049,7 +1048,6 @@
     "advancedSearch": "Advanced Search",
     "andalucianLandscape": "Andalucian landscape",
     "andalucianCountryside": "Andalucian countryside landscape",
-    "chooseTheme": "Choose theme",
     "gridView": "Grid view",
     "listView": "List view",
     "pagination": "Pagination",
@@ -1061,9 +1059,15 @@
     "albaicinDistrict": "Albaicin District",
     "outdoorActivitiesGranada": "Outdoor Activities in Granada",
     "paymentDetails": "Payment Details",
+    "paymentSuccessful": "Payment Successful!",
+    "propertyReservedSuccessfully": "Your property viewing has been reserved successfully. You will be redirected to the property details page shortly.",
+    "confirmationEmailSent": "A confirmation email will be sent to you shortly with viewing details.",
+    "goToPropertyDetails": "Go to Property Details",
+    "paymentFailed": "Payment failed",
+    "cardElementNotFound": "Card element not found",
+    "paymentErrorOccurred": "An error occurred during payment",
     "paymentSucceededButFailed": "Payment succeeded but failed to save to database. Please contact support.",
     "loadingRegionsAndAreas": "Loading regions and areas...",
-    "chooseTheme": "Choose Theme",
     "noFeaturedProperties": "No featured properties available at the moment.",
     "failedToUpdateFavourites": "Failed to update favourites. Please try again.",
     "propertyAddedToFavourites": "Property added to favourites! ❤️",
@@ -1086,6 +1090,13 @@
     "untitledProperty": "Untitled Property",
     "image": "image",
     "loadingProperties": "Loading properties...",
+    "loadingPropertyDetails": "Loading property details...",
+    "errorLoadingProperties": "Error loading properties",
+    "retry": "Retry",
+    "noPropertiesFoundForFilters": "No properties found for the selected filters",
+    "tryAdjustingSearchCriteria": "Try adjusting your search criteria",
+    "noPropertiesFound": "No properties found",
+    "tryAdjustingSearchCriteriaToFindMore": "Try adjusting your search criteria to find more properties.",
     "pleaseEnterAmountAbove1000": "Please enter amount above 1000",
     "user": "User",
     "noEmail": "No email",
@@ -1099,7 +1110,21 @@
     "failedToSendMessage": "Failed to send message. Please try again.",
     "top5Properties": "Top 5 properties",
     "loadingTopProperties": "Loading top properties…",
-    "noMatchingPropertiesFound": "No matching properties found."
+    "noMatchingPropertiesFound": "No matching properties found.",
+    "searching": "Searching...",
+    "myProfile": "My Profile",
+    "loginRegister": "Login / Register",
+    "logout": "Logout",
+    "logoutSuccess": "Logged out successfully",
+    "logoutFailed": "Logout failed. Please try again.",
+    "processing": "Processing...",
+    "reserveNow": "Reserve Now",
+    "checking": "Checking...",
+    "reserve": "Reserve",
+    "sending": "Sending...",
+    "send": "Send",
+    "showing": "Showing",
+    "of": "of"
   },
   "contactPage": {
     "hero": {
@@ -1226,7 +1251,13 @@
     "tabs": {
       "profile": "My Profile",
       "favourites": "Favourites",
-      "reservations": "Reservations"
+      "reservations": "Reservations",
+      "criterias": "Criterias"
+    },
+    "account": {
+      "criterias": {
+        "title": "Buyer Criterias"
+      }
     },
     "profile": {
       "title": "My Profile",
@@ -1284,7 +1315,8 @@
       "removeTitle": "Remove favourite",
       "removeDescription": "Are you sure you want to remove this favourite?",
       "removeConfirm": "Remove",
-      "removeCancel": "Cancel"
+      "removeCancel": "Cancel",
+      "removeSuccess": "Property removed from favourites successfully"
     },
     "reservations": {
       "title": "My Reservations",
@@ -1401,6 +1433,9 @@
     "townHouse": "Town House"
   },
   "account": {
+    "criterias": {
+      "title": "Buyer Criterias"
+    },
     "criteria": {
       "loadError": "Failed to load criteria",
       "saveSuccess": "Criteria saved successfully",

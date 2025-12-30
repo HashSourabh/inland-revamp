@@ -99,7 +99,7 @@ export default function ReserveForView() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
-      <h1 className="font-heading text-3xl font-bold text-primary-600 mb-6">Reserve For Viewing</h1>
+      <h1 className="font-heading text-3xl font-bold text-primary-600 mb-6">{tCommon('reserveForViewing')}</h1>
 
       {/* Customer & Property Details */}
       <section className="bg-white rounded-xl p-8 border border-black/10 space-y-6 mb-6 grid grid-cols-2 gap-6">
@@ -131,7 +131,7 @@ export default function ReserveForView() {
 
       {/* Amount Section */}
       <section className="bg-white rounded-xl p-8 border border-black/10 space-y-4 mb-6">
-        <h2 className="font-semibold text-gray-600 mb-4">Payment Details</h2>
+        <h2 className="font-semibold text-gray-600 mb-4">{tCommon('paymentDetails')}</h2>
         <label className="block text-gray-600 font-medium mb-2">
           {tCommon('amountInEuro')} <span className="text-red-500">*</span>
         </label>
@@ -183,6 +183,7 @@ function CheckoutForm({
   onPaymentSuccess: () => void;
 }) {
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
+  const tCommon = useTranslations('common');
 
   const stripe = useStripe();
   const elements = useElements();
@@ -222,14 +223,14 @@ function CheckoutForm({
       console.log('Payment intent created:', data);
 
       if (!data.clientSecret) {
-        setError(data.error || "Payment failed");
+        setError(data.error || tCommon('paymentFailed'));
         setLoading(false);
         return;
       }
 
       const card = elements.getElement(CardElement);
       if (!card) {
-        setError("Card element not found");
+        setError(tCommon('cardElementNotFound'));
         setLoading(false);
         return;
       }
@@ -243,7 +244,7 @@ function CheckoutForm({
       });
 
       if (result.error) {
-        setError(result.error.message || "Payment failed");
+        setError(result.error.message || tCommon('paymentFailed'));
       } else if (result.paymentIntent?.status === "succeeded") {
         console.log('✅ Stripe payment succeeded, calling backend success endpoint');
 
@@ -270,12 +271,12 @@ function CheckoutForm({
           }
         } catch (backendError) {
           console.error('❌ Backend call failed:', backendError);
-          setError("Payment succeeded but failed to save to database. Please contact support.");
+          setError(tCommon('paymentSucceededButFailed'));
         }
       }
     } catch (err) {
       console.error('❌ Payment error:', err);
-      setError("An error occurred during payment");
+      setError(tCommon('paymentErrorOccurred'));
     } finally {
       setLoading(false);
     }
@@ -290,7 +291,7 @@ function CheckoutForm({
         disabled={!stripe || loading}
         className="px-5 py-2 bg-secondary-500 text-white rounded-md disabled:opacity-50"
       >
-        {loading ? "Processing..." : "Reserve Now"}
+        {loading ? tCommon('processing') : tCommon('reserveNow')}
       </button>
     </form>
   );
@@ -305,6 +306,7 @@ function PaymentSuccessModal({
   propertyId?: string;
 }) {
   const router = useRouter();
+  const tCommon = useTranslations('common');
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
@@ -332,13 +334,13 @@ function PaymentSuccessModal({
         }`}>
         <div className="mb-6">
           <CheckCircleIcon className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-green-800 mb-2">Payment Successful!</h2>
+          <h2 className="text-2xl font-bold text-green-800 mb-2">{tCommon('paymentSuccessful')}</h2>
           <p className="text-gray-600 mb-4">
-            Your property viewing has been reserved successfully. You will be redirected to the property details page shortly.
+            {tCommon('propertyReservedSuccessfully')}
           </p>
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <p className="text-sm text-green-700">
-              A confirmation email will be sent to you shortly with viewing details.
+              {tCommon('confirmationEmailSent')}
             </p>
           </div>
         </div>
@@ -357,7 +359,7 @@ function PaymentSuccessModal({
             }}
             className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
-            Go to Property Details
+            {tCommon('goToPropertyDetails')}
           </button>
           {/* <button
             onClick={() => {
