@@ -147,7 +147,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
           property.price > 0 && (
             <div className="absolute top-4 left-4 z-10">
               <span className="inline-block bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-md">
-                Price Reduced
+                {tCommon('priceReduced')}
               </span>
             </div>
           )}
@@ -178,12 +178,12 @@ export default function PropertyCard({ property, card = 'grid', featured = false
             </Link>
             {/* Location - Only show if we have valid location data */}
             {(property.location.town || property.location.province) && (
-              <div className="mt-1 flex items-center text-sm text-neutral-500">
-                <MapPinIcon className="mr-1 h-4 w-4 flex-[0_0_auto]" />
+            <div className="mt-1 flex items-center text-sm text-neutral-500">
+              <MapPinIcon className="mr-1 h-4 w-4 flex-[0_0_auto]" />
                 <span className='block flex-auto'>
                   {[property.location.town, property.location.province].filter(Boolean).join(', ')}
                 </span>
-              </div>
+            </div>
             )}
           </div>
           <div className="flex flex-col items-end">

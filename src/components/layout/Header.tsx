@@ -164,7 +164,7 @@ export default function Header() {
 
           {/* Main Navigation */}
           <div className="hidden lg:block">
-            <Navigation />
+          <Navigation />
           </div>
           
           {/* Mobile Menu Backdrop */}
@@ -234,13 +234,13 @@ export default function Header() {
 
           {/* CTA Button only */}
           <div className="flex items-center gap-2">
-            <div className="hidden md:block">
-              <Link
-                href="/sell-with-us"
-                className="rounded-md bg-secondary-500 px-4 py-2 min-h-[38px] inline-flex font-normal text-white shadow-md hover:bg-primary-600 transition-colors text-[15px]"
-                >
-                {tCta('sellWithUs')}
-              </Link>
+          <div className="hidden md:block">
+            <Link
+              href="/sell-with-us"
+              className="rounded-md bg-secondary-500 px-4 py-2 min-h-[38px] inline-flex font-normal text-white shadow-md hover:bg-primary-600 transition-colors text-[15px]"
+            >
+              {tCta('sellWithUs')}
+            </Link>
             </div>
             <div className="block lg:hidden">
               <button 

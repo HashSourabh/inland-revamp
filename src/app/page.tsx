@@ -30,6 +30,7 @@ interface DatabaseProperty {
   Bedrooms: number;
   Bathrooms: number;
   Property_Type_ID: number;
+  PropertyType?: string; // Property type name from API (may be in different language)
   Area_ID: number;
   SubArea_ID: number;
   GPS_Latitude?: number;
@@ -183,7 +184,18 @@ const transformPropertyForCard = (
   const uniqueRef = Array.from(new Set(refArray));
   const propertyRef = uniqueRef[0];
 
-  const propertyType = typesMap[db.Property_Type_ID] || (tCommon?.('property') || 'Property');
+  // Get property type with priority:
+  // 1. Look up by Property_Type_ID in types map (translated to current language)
+  // 2. Use PropertyType from API (may be in different language, but better than generic)
+  // 3. Fallback to generic "Property" only if nothing else available
+  let propertyType: string;
+  if (db.Property_Type_ID && typesMap && typesMap[db.Property_Type_ID]) {
+    propertyType = typesMap[db.Property_Type_ID];
+  } else if (db.PropertyType && db.PropertyType.trim() !== '') {
+    propertyType = db.PropertyType;
+  } else {
+    propertyType = tCommon?.('property') || 'Property';
+  }
 
   // Generate image URLs dynamically based on Num_Photos
   const imageCount = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;

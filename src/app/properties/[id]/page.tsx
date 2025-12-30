@@ -99,10 +99,15 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             isFeatured: i === 0,
           }));
 
+          // Get property type from API response, fallback to generic only if not available
+          const propertyType = db.PropertyType && db.PropertyType.trim() !== '' 
+            ? db.PropertyType 
+            : tCommon('property');
+
           setProperty({
             id: db.Property_ID.toString(),
             propertyRef: db.Property_Ref || "",
-            title: `${db.PropertyType ?? tCommon('property')}(${db.Property_Ref})`,
+            title: `${propertyType}(${db.Property_Ref})`,
             price: { 
               current: db.Public_Price, 
               original: (db.Original_Price && db.Original_Price > 0) ? db.Original_Price : undefined 
@@ -115,7 +120,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               bathrooms: db.Bathrooms || 0,
               buildSize: db.SQM_Built || 0,
               plotSize: db.SQM_Plot || 0,
-              type: tCommon('property'),
+              type: propertyType, // Use actual property type from API
             },
             images,
             // Only set lat/lng if they are valid (not 0 or null)

@@ -13,28 +13,46 @@ interface PropertyGridProps {
 }
 
 // Helper function to transform Property to PropertyCard format
-const transformPropertyForCard = (property: Property) => ({
-  id: property.id,
-  title: property.title,
-  price: property.price.current,
-  currency: 'EUR', // Default currency for the region
-  shortDescription: property.description,
-  location: {
-    province: property.location.province,
-    town: property.location.town,
-  },
-  features: {
-    bedrooms: property.specs.beds,
-    bathrooms: property.specs.baths,
-    buildSize: property.specs.built,
-    type: property.title,
-  },
-  images: property.images.map((url, index) => ({
-    url,
-    alt: `${property.title} - Image ${index + 1}`,
-    isFeatured: index === 0, // First image is featured
-  })),
-});
+const transformPropertyForCard = (property: Property) => {
+  // Extract property type from title (format: "PropertyType (Ref)")
+  // If title is "Property (TH1234)", extract "Property"
+  // If title is "Apartment (AP1234)", extract "Apartment"
+  let propertyType = 'Property';
+  if (property.title) {
+    const match = property.title.match(/^([^(]+)\s*\(/);
+    if (match && match[1]) {
+      propertyType = match[1].trim();
+    } else {
+      // If no parentheses, try to extract from title or use location_type
+      propertyType = property.location_type || property.title.split(' ')[0] || 'Property';
+    }
+  }
+
+  return {
+    id: property.id,
+    title: property.title,
+    price: property.price.current,
+    originalPrice: property.price.original,
+    currency: 'EUR', // Default currency for the region
+    shortDescription: property.description,
+    location: {
+      province: property.location.province,
+      town: property.location.town,
+    },
+    features: {
+      bedrooms: property.specs.beds,
+      bathrooms: property.specs.baths,
+      buildSize: property.specs.built,
+      type: propertyType, // Use extracted type instead of full title
+    },
+    images: property.images.map((url, index) => ({
+      url,
+      alt: `${property.title} - Image ${index + 1}`,
+      isFeatured: index === 0, // First image is featured
+    })),
+    isReduced: property.isReduced,
+  };
+};
 
 export default function PropertyGrid({
   properties,

@@ -4,6 +4,7 @@ import React, { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, ChevronDownIcon, MapPinIcon, SunIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { useTranslations } from 'next-intl';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ interface MobileMenuProps {
 
 export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const t = useTranslations('navigation');
+  const tCommon = useTranslations('common');
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -45,7 +48,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                     <div className="px-4 sm:px-6">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="font-heading text-lg font-semibold text-primary-900">
-                          Menu
+                          {tCommon('menu')}
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -53,7 +56,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                             className="rounded-md bg-white text-neutral-500 hover:text-neutral-700"
                             onClick={() => setIsOpen(false)}
                           >
-                            <span className="sr-only">Close panel</span>
+                            <span className="sr-only">{tCommon('closePanel')}</span>
                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                           </button>
                         </div>
@@ -66,28 +69,28 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                           onClick={() => setIsOpen(false)}
                         >
-                          Home
+                          {t('home')}
                         </Link>
                         <Link 
                           href="/properties" 
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                           onClick={() => setIsOpen(false)}
                         >
-                          Properties
+                          {t('properties')}
                         </Link>
                         <Link 
                           href="/town-guide" 
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                           onClick={() => setIsOpen(false)}
                         >
-                          Town Guide
+                          {t('townGuide')}
                         </Link>
                         <Link 
                           href="/buyers-guide" 
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                           onClick={() => setIsOpen(false)}
                         >
-                          Buyer's Guide
+                          {t('buyersGuide')}
                         </Link>
                         <a 
                           href="https://luvinland.com" 
@@ -95,14 +98,14 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                           rel="nofollow noreferrer"
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                         >
-                          Blog
+                          {t('links.blog')}
                         </a>
                         <div>
                           <button
                             onClick={() => setIsAboutOpen(!isAboutOpen)}
                             className="flex w-full items-center justify-between py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                           >
-                            About Us
+                            {t('about')}
                             <ChevronDownIcon className={`h-5 w-5 transition-transform duration-200 ${isAboutOpen ? 'rotate-180' : ''}`} />
                           </button>
                           {isAboutOpen && (
@@ -113,7 +116,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                                 onClick={() => setIsOpen(false)}
                               >
                                 <MapPinIcon className="h-5 w-5" />
-                                Location
+                                {t('links.location')}
                               </Link>
                               <Link
                                 href="/about/weather"
@@ -121,7 +124,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                                 onClick={() => setIsOpen(false)}
                               >
                                 <SunIcon className="h-5 w-5" />
-                                Weather
+                                {t('links.weather')}
                               </Link>
                               <Link
                                 href="/about/airports"
@@ -129,7 +132,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                                 onClick={() => setIsOpen(false)}
                               >
                                 <PaperAirplaneIcon className="h-5 w-5" />
-                                Airports
+                                {t('links.airports')}
                               </Link>
                             </div>
                           )}
@@ -139,7 +142,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                           onClick={() => setIsOpen(false)}
                         >
-                          Contact
+                          {t('contact')}
                         </Link>
 
                         <div className="mt-6 pt-6 border-t border-neutral-200">
@@ -148,7 +151,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                             className="inline-flex w-full items-center justify-center rounded-md bg-secondary-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-secondary-600"
                             onClick={() => setIsOpen(false)}
                           >
-                            Contact Us
+                            {tCommon('contactUs')}
                           </Link>
                         </div>
                       </nav>

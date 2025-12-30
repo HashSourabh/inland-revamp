@@ -10,12 +10,34 @@ import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
 import { useTranslations } from 'next-intl';
 import { useRegionData } from '@/hooks/useRegionData';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
+import { usePropertyCache } from '@/context/PropertyCacheContext';
+import { fetchPropertyTypes } from '@/utils/api';
+import { useLocale } from 'next-intl';
 
-const transformPropertyForCard = (property: any, tCommon?: any) => {
-  const propertyType =
-    property.propertyTypeName ||
-    property.PropertyType ||
-    (property.propertyTypeId ? `${tCommon?.('type') || 'Type'} ${property.propertyTypeId}` : (tCommon?.('property') || 'Property'));
+const transformPropertyForCard = (property: any, propertyTypesMap: Record<number, string>, tCommon?: any) => {
+  // Try to get property type from various sources, with priority order:
+  // 1. Look up by Property_Type_ID using the types map (this has the correct language)
+  // 2. PropertyType from API (always use this if available, even if map lookup fails)
+  // 3. Only use generic "Property" as last resort if nothing else is available
+  let propertyType: string | undefined;
+  
+  // First priority: Look up by Property_Type_ID in the types map (translated to current language)
+  if (property.Property_Type_ID && propertyTypesMap && propertyTypesMap[property.Property_Type_ID]) {
+    propertyType = propertyTypesMap[property.Property_Type_ID];
+  }
+  // Second priority: Use PropertyType from API (always prefer this over generic "Property")
+  // This ensures we show "Apartment" instead of "Propriété" if map lookup fails
+  else if (property.PropertyType && property.PropertyType.trim() !== '') {
+    propertyType = property.PropertyType;
+  }
+  // Third priority: Try propertyTypeName
+  else if (property.propertyTypeName && property.propertyTypeName.trim() !== '') {
+    propertyType = property.propertyTypeName;
+  }
+  // Last resort: Generic "Property" translation (only if absolutely nothing is available)
+  else {
+    propertyType = tCommon?.('property') || 'Property';
+  }
 
   const propertyRef = property.propertyRef || property.Property_Ref;
 
@@ -129,8 +151,20 @@ export default function PropertiesLayout({
 }: PropertiesLayoutProps) {
   const t = useTranslations('properties');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
   const searchParams = useSearchParams();
   const { regionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
+  const { propertyTypesMap, setPropertyTypesMap } = usePropertyCache();
+
+  // Map locale to language ID
+  const localeToLanguageId: Record<string, number> = {
+    'en': 1,
+    'es': 2,
+    'fr': 3,
+    'pt': 8,
+    'de': 4,
+  };
+  const languageId = localeToLanguageId[locale] || 1;
   
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
@@ -167,6 +201,33 @@ export default function PropertiesLayout({
 
   // Ref to prevent race conditions
   const fetchPropertiesRef = useRef(0);
+
+  // Load property types with current language ID (reload when language changes)
+  useEffect(() => {
+    const loadPropertyTypes = async () => {
+      try {
+        // Fetch property types with current language ID
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
+        const res = await fetch(`${API_BASE_URL}/properties/types?languageId=${languageId}`);
+        if (!res.ok) throw new Error(`Failed: ${res.status}`);
+
+        const data = await res.json();
+        if (data?.success && data.data) {
+          const typesMap: Record<number, string> = {};
+          data.data.forEach((type: any) => {
+            typesMap[type.id] = type.name;
+          });
+          // Always update the map when language changes to ensure correct translations
+          setPropertyTypesMap(typesMap);
+        }
+      } catch (err) {
+        console.error("Error loading property types:", err);
+      }
+    };
+
+    // Always reload when language changes to get correct translations
+    loadPropertyTypes();
+  }, [languageId, setPropertyTypesMap]);
 
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
@@ -557,7 +618,7 @@ export default function PropertiesLayout({
                 <PropertyCard
                   key={property.id}
                   card={layout === 'list' ? 'list' : 'grid'}
-                  property={transformPropertyForCard(property, tCommon)}
+                  property={transformPropertyForCard(property, propertyTypesMap, tCommon)}
                   favouriteIds={favouriteIds}
                 />
               ))}

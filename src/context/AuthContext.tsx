@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const token = getToken();
+      const token = getToken();
     
     // If no token exists, don't make API call - just set user to null and loading to false
     if (!token) {
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshInProgress.current = true;
     try {
       const language_id = typeof window !== "undefined" ? (localStorage.getItem("LanguageId") || "1") : "1";
-      setLoading(true);
+        setLoading(true);
       const headers: HeadersInit = { 
         "X-Language-Id": language_id,
         "Authorization": `Bearer ${token}`
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const data = await res.json();
         setUser(data.user);
         if (data.user?.id) {
-          localStorage.setItem("buyer_Id", data.user.id);
+        localStorage.setItem("buyer_Id", data.user.id);
         }
       } else {
         // If 401 or other error, clear token and user
