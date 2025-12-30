@@ -12,11 +12,13 @@ import {
   EnvelopeIcon,
   UserGroupIcon,
   PlayIcon,
+  PhoneIcon,
 } from '@heroicons/react/24/outline';
 import { useTranslations, useLocale } from 'next-intl';
 import Cookies from 'js-cookie';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import FeaturesCard from '@/components/properties/FeaturesCard';
 
 interface PropertyDetailsProps {
   params: { id: string };
@@ -188,20 +190,20 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
   return (
     <div className="min-h-screen bg-neutral-50 pb-16 dark:bg-neutral-900">
-      <div className="mx-auto max-w-7xl px-4 pt-8">
+      <div className="mx-auto max-w-7xl px-4 pt-7">
         {/* Header */}
-        <div className="mb-6">
-          <Link href="/properties" className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
+        <div className="mb-5">
+          <Link href="/properties" className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-1 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
             <ArrowLeftIcon className="h-4 w-4" /> Back
           </Link>
         </div>
 
         {/* Property Info */}
-        <div className="mb-8 flex flex-col gap-4 sm:justify-between">
+        <div className="mb-8 flex flex-col gap-2.5 sm:justify-between">
           <div className="flex justify-between">
             <div>
               <h1 className="text-2xl font-bold">{property.title}</h1>
-              <p className="mt-2 text-lg text-neutral-600">{property.location.town} / {property.location.province}</p>
+              <p className="mt-1 text-base text-neutral-600">{property.location.town} / {property.location.province}</p>
             </div>
             <div className="flex items-center gap-2">
               {property.price.original && <span className="line-through text-neutral-500">{formatPrice(property.price.original)}</span>}
@@ -209,42 +211,12 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <button className="rounded-md bg-primary-600 px-4 py-2 text-sm text-white" onClick={handleReserveForViewing}>{t('details.reserve_viewing')}</button>
-            {property.videoUrl && (
-              <button
-                className="inline-flex items-center gap-2 rounded-md bg-yellow-400 px-4 py-2 text-sm text-neutral-900"
-                onClick={() => setIsVideoOpen(true)}
-              >
-                <PlayIcon className="h-4 w-4" /> {t('details.watch_video')}
-              </button>
-            )}
-            <Link
-              href={`/properties/${property.id}/print`}
-              className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
-            >
-              <PrinterIcon className="h-4 w-4" /> {t('details.print_preview')}
-            </Link>
-            <button
-              onClick={() => window.location.href = 'mailto:someone@example.com'}
-              className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
-            >
-              <EnvelopeIcon className="h-4 w-4" /> {t('details.email')}
-            </button>
-
-            <Link
-              href={`/contact`}
-              className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
-            >
-              <UserGroupIcon className="h-4 w-4" /> {t('details.contact_us')}
-            </Link>
-
-          </div>
+          
         </div>
 
         {/* Main Content */}
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className='space-y-6'>
             <PropertyGallery
               images={property.images}
               title={property.title}
@@ -259,11 +231,84 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               lat={property.lat}
               lng={property.lng}
             />
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <button className="rounded-md bg-primary-600 px-4 py-2 text-sm text-white" onClick={handleReserveForViewing}>{t('details.reserve_viewing')}</button>
+              {property.videoUrl && (
+                <button
+                  title={t('details.watch_video')}
+                  className="inline-flex items-center gap-2 rounded-md bg-yellow-400 px-4 py-2 text-sm text-neutral-900"
+                  onClick={() => setIsVideoOpen(true)}
+                >
+                  <PlayIcon className="h-4 w-4" /> 
+                  {/* {t('details.watch_video')} */}
+                </button>
+              )}
+              <Link
+                title={t('details.print_preview')}
+                href={`/properties/${property.id}/print`}
+                className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
+              >
+                <PrinterIcon className="h-4 w-4" /> 
+                {/* {t('details.print_preview')} */}
+              </Link>
+              <button
+                title={t('details.email')}
+                onClick={() => window.location.href = 'mailto:someone@example.com'}
+                className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
+              >
+                <EnvelopeIcon className="h-4 w-4" /> 
+                {/* {t('details.email')} */}
+              </button>
+
+              <Link
+                href={`/contact`}
+                className="inline-flex items-center gap-2 rounded-md border bg-white px-4 py-2 text-sm text-neutral-700"
+              >
+                <UserGroupIcon className="h-4 w-4" /> {t('details.contact_us')}
+              </Link>
+
+            </div>
           </div>
 
           <div className="space-y-6">
-            <PromoSidebar />
+            <FeaturesCard
+              beds={property.features.bedrooms}
+              baths={property.features.bathrooms}
+              built={property.features.buildSize}
+              plot={property.features.plotSize}
+              views={property.viewed}
+              features={["Some feature", "Another feature"]}
+              location={`${property.location.town}/${property.location.province}`}
+              lat={property.lat}
+              lng={property.lng}
+            />
+            {/* Description */}
+            {property.description && (
+              <div>
+                <h2 className="mb-4 text-xl font-semibold">{t('details.description')}</h2>
+                <p className="text-neutral-700 dark:text-neutral-300">
+                  {property.description}
+                </p>
+              </div>
+            )}
           </div>
+          {/* Location */}
+          {property.lat && property.lng && (
+          <div className="lg:col-span-2">
+            <h2 className="mb-3 text-xl font-semibold">Location</h2>
+            <div className="aspect-[16/5] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+              <iframe
+                src={`https://www.google.com/maps?q=${property.lat},${property.lng}&z=15&output=embed`}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
+          )}
         </div>
       </div>
 

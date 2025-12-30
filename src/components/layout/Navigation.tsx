@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { ChevronDownIcon, HomeIcon } from '@heroicons/react/24/outline';
@@ -70,8 +71,13 @@ const contactLinks: NavLinkConfig[] = [
 ];
 
 export default function Navigation({ isRtl = false }: NavigationProps) {
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownPositionClass = isRtl ? 'right-0 left-auto' : 'left-0';
   const t = useTranslations('navigation');
+
+  const toggleDropdown = (dropdown: string) => {
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
+  };
 
   const renderDropdown = (links: NavLinkConfig[]) =>
     links.map((link) => {
@@ -85,7 +91,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 px-6 py-2.5 text-sm text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
+            className="flex items-center gap-3 px-6 py-2.5 text-sm text-neutral-900 lg:text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
           >
             <Icon className="h-5 w-5 text-secondary-400" />
             {t(link.labelKey)}
@@ -97,7 +103,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
         <Link
           key={link.href}
           href={link.href}
-          className="flex items-center gap-3 px-6 py-2.5 text-sm text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
+          className="flex items-center gap-3 px-6 py-2.5 text-sm text-neutral-900 lg:text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
         >
           <Icon className="h-5 w-5 text-secondary-400" />
           {t(link.labelKey)}
@@ -106,51 +112,60 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
     });
 
   return (
-    <nav className={`hidden md:flex items-center gap-5 ${isRtl ? 'flex-row-reverse' : ''}`}>
-      <Link href="/" className="text-neutral-900 hover:text-primary-600 transition-colors">
-        <HomeIcon className="h-5 w-5 text-secondary-400" />
+    <nav className={`flex flex-col lg:flex-row items-start lg:items-center lg:gap-5 gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
+      <Link href="/" className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto">
+        <HomeIcon className="h-5 w-5 text-secondary-400 hidden lg:inline-block" /> <span className="text-[15px] inline-block lg:hidden font-medium">Home</span>
       </Link>
 
       {/* Property Search Dropdown */}
-      <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
+      <div className="relative group w-full lg:w-auto">
+        <button 
+          onClick={() => toggleDropdown('properties')}
+          className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto font-medium"
+        >
           {t('properties')}
-          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+          <ChevronDownIcon className={`h-4 w-4 transition-transform duration-200 ${openDropdown === 'properties' ? 'rotate-180' : ''} lg:group-hover:rotate-180`} />
         </button>
         <div
-          className={`absolute top-full pt-2 opacity-0 -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ${dropdownPositionClass}`}
+          className={`lg:absolute lg:top-full pt-2 ${openDropdown === 'properties' ? 'block' : 'hidden'} lg:opacity-0 -translate-y-1 lg:pointer-events-none lg:group-hover:block group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:pointer-events-auto lg:group-hover:translate-y-0 transition-all duration-200 ${dropdownPositionClass}`}
         >
-          <div className="bg-primary-900 rounded-lg shadow-lg py-3 w-72 border border-primary-800">
+          <div className="bg-gray-100 lg:bg-primary-900 rounded-lg lg:shadow-lg py-3 w-full lg:w-72 lg:border lg:border-primary-800">
             {renderDropdown(propertySearchLinks)}
           </div>
         </div>
       </div>
 
       {/* Town Guide Dropdown */}
-      <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
+      <div className="relative group w-full lg:w-auto">
+        <button 
+          onClick={() => toggleDropdown('townGuide')}
+          className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto font-medium"
+        >
           {t('townGuide')}
-          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+          <ChevronDownIcon className={`h-4 w-4 transition-transform duration-200 ${openDropdown === 'townGuide' ? 'rotate-180' : ''} lg:group-hover:rotate-180`} />
         </button>
         <div
-          className={`absolute top-full pt-2 opacity-0 -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ${dropdownPositionClass}`}
+          className={`lg:absolute lg:top-full pt-2 ${openDropdown === 'townGuide' ? 'block' : 'hidden'} lg:opacity-0 -translate-y-1 lg:pointer-events-none lg:group-hover:block group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:pointer-events-auto lg:group-hover:translate-y-0 transition-all duration-200 ${dropdownPositionClass}`}
         >
-          <div className="bg-primary-900 rounded-lg shadow-lg py-3 w-72 border border-primary-800">
+          <div className="bg-gray-100 lg:bg-primary-900 rounded-lg lg:shadow-lg py-3 w-full lg:w-72 lg:border lg:border-primary-800">
             {renderDropdown(townGuideLinks)}
           </div>
         </div>
       </div>
 
       {/* Buyer's Guide Dropdown */}
-      <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
+      <div className="relative group w-full lg:w-auto">
+        <button 
+          onClick={() => toggleDropdown('buyersGuide')}
+          className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto font-medium"
+        >
           {t('buyersGuide')}
-          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+          <ChevronDownIcon className={`h-4 w-4 transition-transform duration-200 ${openDropdown === 'buyersGuide' ? 'rotate-180' : ''} lg:group-hover:rotate-180`} />
         </button>
         <div
-          className={`absolute top-full pt-2 opacity-0 -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ${dropdownPositionClass}`}
+          className={`lg:absolute lg:top-full pt-2 ${openDropdown === 'buyersGuide' ? 'block' : 'hidden'} lg:opacity-0 -translate-y-1 lg:pointer-events-none lg:group-hover:block group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:pointer-events-auto lg:group-hover:translate-y-0 transition-all duration-200 ${dropdownPositionClass}`}
         >
-          <div className="bg-primary-900 rounded-lg shadow-lg py-3 w-72 border border-primary-800">
+          <div className="bg-gray-100 lg:bg-primary-900 rounded-lg lg:shadow-lg py-3 w-full lg:w-72 lg:border lg:border-primary-800">
             {renderDropdown(buyersGuideLinks)}
           </div>
         </div>
@@ -160,36 +175,42 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
         href="https://luvinland.com"
         target="_blank"
         rel="nofollow noreferrer"
-        className="text-neutral-900 hover:text-primary-600 transition-colors"
+        className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto"
       >
         {t('links.blog')}
       </a>
 
       {/* About Us Dropdown */}
-      <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
+      <div className="relative group w-full lg:w-auto">
+        <button 
+          onClick={() => toggleDropdown('about')}
+          className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto font-medium"
+        >
           {t('about')}
-          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+          <ChevronDownIcon className={`h-4 w-4 transition-transform duration-200 ${openDropdown === 'about' ? 'rotate-180' : ''} lg:group-hover:rotate-180`} />
         </button>
         <div
-          className={`absolute top-full pt-2 opacity-0 -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ${dropdownPositionClass}`}
+          className={`lg:absolute lg:top-full pt-2 ${openDropdown === 'about' ? 'block' : 'hidden'} lg:opacity-0 -translate-y-1 lg:pointer-events-none lg:group-hover:block group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:pointer-events-auto lg:group-hover:translate-y-0 transition-all duration-200 ${dropdownPositionClass}`}
         >
-          <div className="bg-primary-900 rounded-lg shadow-lg py-3 w-72 border border-primary-800">
+          <div className="bg-gray-100 lg:bg-primary-900 rounded-lg lg:shadow-lg py-3 w-full lg:w-72 lg:border lg:border-primary-800">
             {renderDropdown(aboutUsLinks)}
           </div>
         </div>
       </div>
 
       {/* Contact Us Dropdown */}
-      <div className="relative group">
-        <button className="flex items-center gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px]">
+      <div className="relative group w-full lg:w-auto">
+        <button 
+          onClick={() => toggleDropdown('contact')}
+          className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto font-medium"
+        >
           {t('contact')}
-          <ChevronDownIcon className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+          <ChevronDownIcon className={`h-4 w-4 transition-transform duration-200 ${openDropdown === 'contact' ? 'rotate-180' : ''} lg:group-hover:rotate-180`} />
         </button>
         <div
-          className={`absolute top-full pt-2 opacity-0 -translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ${dropdownPositionClass}`}
+          className={`lg:absolute lg:top-full pt-2 ${openDropdown === 'contact' ? 'block' : 'hidden'} lg:opacity-0 -translate-y-1 lg:pointer-events-none lg:group-hover:block group-hover:opacity-100 group-hover:translate-y-0 lg:group-hover:pointer-events-auto lg:group-hover:translate-y-0 transition-all duration-200 ${dropdownPositionClass}`}
         >
-          <div className="bg-primary-900 rounded-lg shadow-lg py-3 w-72 border border-primary-800">
+          <div className="bg-gray-100 lg:bg-primary-900 rounded-lg lg:shadow-lg py-3 w-full lg:w-72 lg:border lg:border-primary-800">
             {renderDropdown(contactLinks)}
           </div>
         </div>
