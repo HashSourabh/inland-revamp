@@ -43,14 +43,17 @@ export default function AdvancedSearchPage() {
 
   // Convert property types map to array format for select
   const propertyTypes = React.useMemo(() => {
-    return Object.entries(propertyTypesMap).map(([id, name]) => {
-      // Try to get code from cache or use a default
-      return {
-        id: Number(id),
-        name,
-        code: name.toLowerCase().replace(/\s+/g, '-'), // Generate code from name
-      };
-    });
+    return Object.entries(propertyTypesMap)
+      .filter(([id, name]) => name != null && name.trim() !== '') // Filter out null/undefined/empty names
+      .map(([id, name]) => {
+        // Performance: Safely handle null/undefined names (especially for PT locale)
+        const safeName = name || `Property Type ${id}`;
+        return {
+          id: Number(id),
+          name: safeName,
+          code: safeName.toLowerCase().replace(/\s+/g, '-'), // Generate code from name
+        };
+      });
   }, [propertyTypesMap]);
 
   // Convert region counts to format needed for select
