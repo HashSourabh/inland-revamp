@@ -12,7 +12,7 @@ export default function AboutLocationPage() {
     <div className="mx-auto max-w-7xl px-5 my-10 grid grid-cols-1 md:grid-cols-3 gap-8">
       {/* Left: Location Content */}
       <section className="md:col-span-2 bg-white rounded-xl p-8 border border-black/10">
-        <h1 className="text-3xl font-bold text-primary-600 mb-6">{t("location.header.title")}</h1>
+        <h1 className="text-3xl  font-bold text-primary-600 mb-6">{t("location.header.title")}</h1>
 
         <p className="mb-4 text-neutral-600 text-base">{t("location.content.paragraph1")}</p>
         <p className="mb-4 text-neutral-600 text-base">{t("location.content.paragraph2")}</p>
