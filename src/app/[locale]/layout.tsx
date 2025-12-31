@@ -38,6 +38,16 @@ export const metadata: Metadata = {
   title: 'Inland Andalucia | Properties for Sale in Rural Spain',
   description:
     'Discover authentic Spanish countryside living with our exclusive selection of properties across Andalucia. Find your dream home in inland Spain.',
+  metadataBase: new URL('https://inland-revamp.vercel.app'),
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'Inland Andalucia',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export const dynamic = 'force-dynamic';
@@ -57,6 +67,21 @@ export default async function RootLayout({
       lang={locale}
       className={`${workSans.variable} ${playfairDisplay.variable} ${openSans.variable} ${dmSans.variable}`}
     >
+      <head>
+        {/* Preconnect to external domains for faster resource loading */}
+        <link rel="preconnect" href="https://www.inlandandalucia.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://inlandandalucia.onrender.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.inlandandalucia.com" />
+        <link rel="dns-prefetch" href="https://inlandandalucia.onrender.com" />
+        {/* Preload critical fonts */}
+        <link
+          rel="preload"
+          href="/_next/static/media/work-sans-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={`${workSans.className} min-h-screen`}>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <AuthProvider>

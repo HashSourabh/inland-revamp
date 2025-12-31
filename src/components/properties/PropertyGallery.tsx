@@ -81,6 +81,8 @@ export default function PropertyGallery({
           fill
           className="object-cover"
           priority
+          sizes="100vw"
+          quality={90}
         />
       </div>
 
@@ -96,12 +98,15 @@ export default function PropertyGallery({
                 : 'ring-1 ring-neutral-200 hover:ring-primary-400 dark:ring-neutral-700'
                 }`}
             >
-              <div className="relative aspect-[4/3] w-20 sm:w-24">
+              <div className="relative aspect-[4/3] w-20 sm:w-24 bg-neutral-200">
                 <Image
                   src={image.url}
                   alt={image.alt}
                   fill
                   className="object-cover"
+                  loading="lazy"
+                  sizes="80px"
+                  quality={75}
                 />
               </div>
             </button>

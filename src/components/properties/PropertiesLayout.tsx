@@ -196,38 +196,60 @@ export default function PropertiesLayout({
   // Favourite property IDs for the logged-in user
   const favouriteIds = useFavouriteIds();
 
-  // Ref to prevent race conditions
+  // Refs to prevent race conditions and manage API calls
   const fetchPropertiesRef = useRef(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const propertyTypesLoadedRef = useRef(false);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastFetchParamsRef = useRef<string>(''); // Track last fetch params to prevent duplicate calls
 
-  // Load property types with current language ID (reload when language changes)
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
+
+  // Load property types FIRST (priority) - must complete before properties load
   useEffect(() => {
+    let mounted = true;
     const loadPropertyTypes = async () => {
       try {
+        // Check cache first - if we already have types for this language, skip
+        if (Object.keys(propertyTypesMap).length > 0) {
+          propertyTypesLoadedRef.current = true;
+          return;
+        }
+
         // Fetch property types with current language ID
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
         const res = await fetch(`${API_BASE_URL}/properties/types?languageId=${languageId}`);
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
 
         const data = await res.json();
-        if (data?.success && data.data) {
+        if (data?.success && data.data && mounted) {
           const typesMap: Record<number, string> = {};
           data.data.forEach((type: any) => {
             typesMap[type.id] = type.name;
           });
           // Always update the map when language changes to ensure correct translations
           setPropertyTypesMap(typesMap);
+          propertyTypesLoadedRef.current = true;
         }
       } catch (err) {
         console.error("Error loading property types:", err);
+        // Even on error, mark as loaded to prevent blocking
+        propertyTypesLoadedRef.current = true;
       }
     };
 
-    // Always reload when language changes to get correct translations
-    loadPropertyTypes();
-  }, [languageId, setPropertyTypesMap]);
-
-  const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
+    // Always try to load (will check cache inside)
+    // If cache exists, mark as loaded immediately
+    if (Object.keys(propertyTypesMap).length > 0) {
+      propertyTypesLoadedRef.current = true;
+    } else {
+      loadPropertyTypes();
+    }
+    
+    return () => {
+      mounted = false;
+    };
+  }, [languageId, setPropertyTypesMap, API_BASE_URL]); // Removed propertyTypesMap to prevent loops
 
   // Consolidated useEffect for search parameters
   useEffect(() => {
@@ -245,7 +267,8 @@ export default function PropertiesLayout({
     const maxPriceParam = searchParams.get('maxPrice');
     const locationParam = searchParams.get('location');
 
-    // Set all states in a batch
+    // Set all states in a batch - React 18 will batch these updates
+    // This ensures the properties fetch only runs once after all states are updated
     setSelectedRegion(regionIdParam ? Number(regionIdParam) : null);
     setSelectedArea(areaIdParam ? Number(areaIdParam) : null);
     setSelectedProvince(provinceParam || null);
@@ -269,10 +292,17 @@ export default function PropertiesLayout({
 
     // Reset to page 1 when filters change
     setCurrentPage(1);
-  }, [searchParams]);
+  }, [searchParams, properties]);
 
   // Fetch region counts using cache (only for sidebar - don't override filtered results)
+  // Load after property types are ready (only once on mount)
+  const regionCountsLoadedRef = useRef(false);
   useEffect(() => {
+    // Don't wait for property types - region counts can load independently
+    if (regionCountsLoadedRef.current) {
+      return; // Skip if already loaded
+    }
+
     const loadRegionCounts = async () => {
       try {
         const counts = await fetchRegionCounts();
@@ -280,9 +310,11 @@ export default function PropertiesLayout({
         // Calculate total properties count from region counts
         const totalCount = counts.reduce((sum: number, region: any) => sum + region.count, 0);
         setTotalPropertiesCount(totalCount);
+        regionCountsLoadedRef.current = true;
       } catch (err) {
         console.error("Error loading region counts:", err);
         setTotalPropertiesCount(0);
+        regionCountsLoadedRef.current = true; // Mark as attempted even on error
       }
     };
 
@@ -290,32 +322,66 @@ export default function PropertiesLayout({
   }, [fetchRegionCounts]);
 
   // Fetch areas when a region is selected (using cache)
+  // This is non-blocking and can run in parallel with properties fetch
   useEffect(() => {
     if (!selectedRegion) {
       return;
     }
 
+    let mounted = true;
     const loadAreas = async () => {
       try {
         await fetchAreas(selectedRegion);
       } catch (err) {
-        console.error("Error loading areas:", err);
+        if (mounted) {
+          console.error("Error loading areas:", err);
+        }
       }
     };
 
     loadAreas();
+    
+    return () => {
+      mounted = false;
+    };
   }, [selectedRegion, fetchAreas]);
 
-  // Main properties fetch effect with race condition prevention
+  // Main properties fetch effect with race condition prevention, debouncing, and sequencing
   useEffect(() => {
-    const fetchProperties = async () => {
-      // Increment fetch counter
-      const currentFetch = ++fetchPropertiesRef.current;
+    // Don't block properties fetch - it can load independently
+    // Property types are used for transformation, not blocking
 
-      setError(null);
+    // Cancel any pending debounce timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Cancel any in-flight request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Clear old properties and show loading immediately when filters change
+    // This prevents showing stale data (glitch) before new data loads
+    if (!initialLoad) {
+      setProperties([]);
       setLoading(true);
+      setError(null);
+      // Reset last fetch params to allow new fetch (prevents duplicate detection)
+      lastFetchParamsRef.current = '';
+    }
 
-      try {
+    // Create new AbortController for this request
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    // Debounce filter changes (but not page changes or initial load)
+    const shouldDebounce = initialLoad === false;
+    const delay = shouldDebounce ? 300 : 0;
+
+    debounceTimerRef.current = setTimeout(() => {
+      const fetchProperties = async () => {
+        // Build query params
         const queryParams = {
           page: String(currentPage),
           limit: String(PROPERTIES_PER_PAGE),
@@ -331,54 +397,108 @@ export default function PropertiesLayout({
         };
 
         const query = new URLSearchParams(queryParams);
-        const url = `${API_BASE_URL}/properties?${query.toString()}`;
+        const queryString = query.toString();
+        
+        // Prevent duplicate fetches with the same parameters (only for subsequent loads)
+        // Allow initial load and page changes even if params are the same
+        const isPageChange = lastFetchParamsRef.current !== '' && 
+                            lastFetchParamsRef.current.split('&').find(p => p.startsWith('page=')) !== 
+                            queryString.split('&').find(p => p.startsWith('page='));
+        
+        // Only skip if it's the exact same query AND not initial load AND not a page change
+        if (lastFetchParamsRef.current === queryString && !initialLoad && !isPageChange) {
+          console.log('Skipping duplicate properties fetch:', queryString);
+          return; // Skip duplicate fetch
+        }
+        
+        console.log('Fetching properties with params:', queryString);
+        // Update last fetch params before making the request
+        lastFetchParamsRef.current = queryString;
 
+        // Increment fetch counter
+        const currentFetch = ++fetchPropertiesRef.current;
 
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-
-        const data = await res.json();
-
-        // Check if this is still the latest fetch
-        if (currentFetch !== fetchPropertiesRef.current) {
+        // Check if request was aborted
+        if (abortController.signal.aborted) {
           return;
         }
 
-
-        if (data.success) {
-          const newProperties = data.data ? [...data.data] : [];
-          const total = data.pagination?.total ?? data.total ?? (data.data?.length || 0);
-          const pages = data.pagination?.totalPages ?? data.totalPages ?? Math.ceil(total / PROPERTIES_PER_PAGE);
-
-
-          setProperties(newProperties);
-          setTotalProperties(total); // This should be the filtered count
-          setTotalPages(pages);
+        // Loading state is already set above for filter changes
+        // Only set it here for initial load
+        if (initialLoad) {
+          setError(null);
+          setLoading(true);
         } else {
-          setProperties([]);
-          setTotalProperties(0);
-          setTotalPages(1);
+          setError(null);
+          // Loading already set when filters changed
         }
-      } catch (err) {
-        if (currentFetch === fetchPropertiesRef.current) {
-          setError(err instanceof Error ? err.message : tCommon('failedToLoadProperties'));
-          setProperties([]);
-          setTotalProperties(0);
-          setTotalPages(1);
-        }
-      } finally {
-        if (currentFetch === fetchPropertiesRef.current) {
-          setLoading(false);
-          setPageLoading(false);
-          // Mark initial load as complete after first fetch
-          if (initialLoad) {
-            setInitialLoad(false);
+
+        try {
+          const url = `${API_BASE_URL}/properties?${queryString}`;
+
+          const res = await fetch(url, {
+            signal: abortController.signal,
+          });
+
+          if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+
+          const data = await res.json();
+
+          // Check if this is still the latest fetch and not aborted
+          if (currentFetch !== fetchPropertiesRef.current || abortController.signal.aborted) {
+            return;
+          }
+
+          if (data.success) {
+            const newProperties = data.data ? [...data.data] : [];
+            const total = data.pagination?.total ?? data.total ?? (data.data?.length || 0);
+            const pages = data.pagination?.totalPages ?? data.totalPages ?? Math.ceil(total / PROPERTIES_PER_PAGE);
+
+            setProperties(newProperties);
+            setTotalProperties(total); // This should be the filtered count
+            setTotalPages(pages);
+          } else {
+            setProperties([]);
+            setTotalProperties(0);
+            setTotalPages(1);
+          }
+        } catch (err) {
+          // Ignore abort errors
+          if (err instanceof Error && err.name === 'AbortError') {
+            return;
+          }
+
+          if (currentFetch === fetchPropertiesRef.current && !abortController.signal.aborted) {
+            setError(err instanceof Error ? err.message : tCommon('failedToLoadProperties'));
+            setProperties([]);
+            setTotalProperties(0);
+            setTotalPages(1);
+          }
+        } finally {
+          if (currentFetch === fetchPropertiesRef.current && !abortController.signal.aborted) {
+            setLoading(false);
+            setPageLoading(false);
+            // Mark initial load as complete after first fetch
+            if (initialLoad) {
+              setInitialLoad(false);
+            }
           }
         }
+      };
+
+      // Always call fetchProperties - don't skip
+      fetchProperties();
+    }, delay);
+
+    // Cleanup function
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
       }
     };
-
-    fetchProperties();
   }, [
     currentPage,
     selectedProvince,
@@ -391,7 +511,9 @@ export default function PropertiesLayout({
     minPrice,
     maxPrice,
     API_BASE_URL,
-  ]);
+    initialLoad,
+    tCommon,
+  ]); // Removed propertyTypesMap from deps - we only check the ref
 
   const handlePageChange = (page: number) => {
     if (page !== currentPage && page >= 1 && page <= displayedTotalPages) {
@@ -400,6 +522,12 @@ export default function PropertiesLayout({
   };
 
   const handleRegionChange = (regionId: number | null) => {
+    // Clear old properties and show loading immediately to prevent glitch
+    setProperties([]);
+    setLoading(true);
+    setError(null);
+    lastFetchParamsRef.current = ''; // Reset to allow new fetch
+    
     setSelectedRegion(regionId);
     setSelectedArea(null);
 
@@ -416,6 +544,12 @@ export default function PropertiesLayout({
   };
 
   const handleAreaChange = (areaId: number | null) => {
+    // Clear old properties and show loading immediately to prevent glitch
+    setProperties([]);
+    setLoading(true);
+    setError(null);
+    lastFetchParamsRef.current = ''; // Reset to allow new fetch
+    
     setSelectedArea(areaId);
 
     // Clear advanced search filters
@@ -430,9 +564,13 @@ export default function PropertiesLayout({
     setSelectedTown(null);
   };
 
+  // Reset page to 1 when filters change (but don't trigger fetch here - the main useEffect will handle it)
   useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
+    // Only reset if we're not on page 1 already to avoid unnecessary state updates
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]); // currentPage removed from deps to prevent loop
 
   const displayedProperties = properties;
   const displayedTotal = totalProperties;
@@ -524,8 +662,20 @@ export default function PropertiesLayout({
                 selectedArea={selectedArea}
                 regions={regionCounts}
                 areas={areas}
-                onProvinceChange={setSelectedProvince}
-                onTownChange={setSelectedTown}
+                onProvinceChange={(province) => {
+                  setProperties([]);
+                  setLoading(true);
+                  setError(null);
+                  lastFetchParamsRef.current = '';
+                  setSelectedProvince(province);
+                }}
+                onTownChange={(town) => {
+                  setProperties([]);
+                  setLoading(true);
+                  setError(null);
+                  lastFetchParamsRef.current = '';
+                  setSelectedTown(town);
+                }}
                 onRegionChange={handleRegionChange}
                 onAreaChange={handleAreaChange}
                 allCount={totalPropertiesCount}
