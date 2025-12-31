@@ -112,7 +112,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
     });
 
   return (
-    <nav className={`flex flex-col lg:flex-row items-start lg:items-center lg:gap-5 gap-2 ${isRtl ? 'flex-row-reverse' : ''}`}>
+    <nav className={`flex flex-col lg:flex-row items-start lg:items-center gap-2 lg:gap-3 xl:gap-5   ${isRtl ? 'flex-row-reverse' : ''}`}>
       <Link href="/" className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto">
         <HomeIcon className="h-5 w-5 text-secondary-400 hidden lg:inline-block" /> <span className="text-[15px] inline-block lg:hidden font-medium">Home</span>
       </Link>

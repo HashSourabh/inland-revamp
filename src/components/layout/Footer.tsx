@@ -21,12 +21,12 @@ export default function Footer() {
 
   return (
     <footer className="bg-primary-600 text-white">
-      <div className="mx-auto max-w-7xl px-4 pt-16 pb-8 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-4 pt-10 sm:pt-16 pb-8 sm:px-6 lg:px-8">
+        <div className="grid gap-6 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Company Information */}
           <div>
-            <h3 className="mb-4 text-xl font-bold">{t('about_title')}</h3>
-            <p className="mb-6 text-primary-100/90">{t('about_text')}</p>
+            <h3 className="sm:mb-4 mb-2 text-lg sm:text-xl font-bold">{t('about_title')}</h3>
+            <p className="mb-6 text-primary-100/90 text-sm sm:text-base">{t('about_text')}</p>
             <div className="flex space-x-4">
               {/* Social Icons */}
               <SocialIcon href="https://www.facebook.com/inlandandaluciahomes">
@@ -94,40 +94,40 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="mb-4 text-xl font-bold">{t('quick_links_title')}</h3>
-            <ul className="space-y-3">
+            <h3 className="sm:mb-4 mb-2 text-lg sm:text-xl font-bold">{t('quick_links_title')}</h3>
+            <ul className="sm:space-y-3 space-y-2">
               <li>
-                <Link href="/properties" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="/properties" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   {t('quick_links.properties')}
                 </Link>
               </li>
               <li>
-                <Link href="/town-guide/cordoba" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="/town-guide/cordoba" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   {t('quick_links.town_guide')}
                 </Link>
               </li>
               <li>
-                <Link href="/buyers-guide/buying-property" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="/buyers-guide/buying-property" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   {t('quick_links.buyers_guide')}
                 </Link>
               </li>
               <li>
-                <Link href="https://luvinland.com" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="https://luvinland.com" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   {t('quick_links.blog')}
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="/about" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   {t('quick_links.about_us')}
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center">
+                <Link href="/contact" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   {t('quick_links.contact')}
                 </Link>
@@ -137,27 +137,27 @@ export default function Footer() {
 
           {/* Contact Information */}
           <div>
-            <h3 className="mb-4 text-xl font-bold">{t('contact_title')}</h3>
-            <ul className="space-y-4">
+            <h3 className="sm:mb-4 mb-2 text-lg sm:text-xl font-bold">{t('contact_title')}</h3>
+            <ul className="sm:space-y-4 space-y-2">
               <li className="flex items-start">
                 <MapPinIcon className="mt-1 h-5 w-5 flex-shrink-0 text-primary-300" />
-                <span className="ml-3 text-primary-100/90">{t('contact_address')}</span>
+                <span className="ml-3 text-primary-100/90 text-sm sm:text-base">{t('contact_address')}</span>
               </li>
               <li className="flex items-start">
                 <PhoneIcon className="mt-1 h-5 w-5 flex-shrink-0 text-primary-300" />
-                <span className="ml-3 text-primary-100/90">{t('contact_phone')}</span>
+                <span className="ml-3 text-primary-100/90 text-sm sm:text-base">{t('contact_phone')}</span>
               </li>
               <li className="flex items-start">
                 <EnvelopeIcon className="mt-1 h-5 w-5 flex-shrink-0 text-primary-300" />
-                <span className="ml-3 text-primary-100/90">{t('contact_email')}</span>
+                <span className="ml-3 text-primary-100/90 text-sm sm:text-base">{t('contact_email')}</span>
               </li>
             </ul>
           </div>
 
           {/* Newsletter */}
           <div>
-            <h3 className="mb-4 text-xl font-bold">{t('newsletter_title')}</h3>
-            <p className="mb-4 text-primary-100/90">{t('newsletter_text')}</p>
+            <h3 className="sm:mb-4 mb-2 text-lg sm:text-xl font-bold">{t('newsletter_title')}</h3>
+            <p className="mb-4 text-primary-100/90 text-sm sm:text-base">{t('newsletter_text')}</p>
             <form className="mt-4">
               <div className="flex flex-col space-y-3">
                 <input
@@ -177,7 +177,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-primary-800 pt-8">
+        <div className="sm:mt-12 mt-6 border-t border-primary-800 sm:pt-8 pt-6">
           <div className="flex flex-col md:flex-row md:justify-between">
             <p className="text-sm text-primary-100/70">{t('copyright')}</p>
             <div className="mt-4 flex space-x-6 md:mt-0">

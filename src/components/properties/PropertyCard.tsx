@@ -170,18 +170,18 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         </button>
       </div>
 
-      <div className={`p-4 ${card === 'list' ? 'col-span-10 flex flex-col' : ' flex flex-col flex-auto'}`}>
+      <div className={`sm:p-4 p-3  ${card === 'list' ? 'col-span-10 flex flex-col' : ' flex flex-col flex-auto'}`}>
         {/* Property title */}
-        <div className={`flex justify-between items-start mb-4 ${card === 'list' ? 'flex-auto' : 'flex-auto'}`}>
-          <div>
+        <div className={`flex flex-col sm:flex-row justify-between items-start sm:mb-4 mb-3 ${card === 'list' ? 'flex-auto' : 'flex-auto'}`}>
+          <div className="w-full sm:w-auto mb-2 sm:mb-0">
             <Link href={`/properties/${property.id}`}>
-              <h3 className="text-xl font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
+              <h3 className="md:text-xl text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
                 {property.title}
               </h3>
             </Link>
             {/* Location - Only show if we have valid location data */}
             {(property.location.town || property.location.province) && (
-            <div className="mt-1 flex items-center text-sm text-neutral-500">
+            <div className="sm:mt-1 mt-0.5 flex items-center text-sm text-neutral-500">
               <MapPinIcon className="mr-1 h-4 w-4 flex-[0_0_auto]" />
                 <span className='block flex-auto'>
                   {[property.location.town, property.location.province].filter(Boolean).join(', ')}
@@ -189,7 +189,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
             </div>
             )}
           </div>
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col sm:items-end items-start sm:w-auto w-full">
             {property.originalPrice && 
              property.originalPrice > 0 && 
              property.isReduced && (
@@ -231,28 +231,28 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         {/* Features */}
         <div className={`flex justify-start ${card === 'list' ? 'items-center flex-row' : 'flex-col'}`}>
           <div className="flex-auto">
-            <div className={`flex  ${card === 'list' ? 'justify-start gap-10' : 'justify-between pt-3s'}`}>
+            <div className={`flex  ${card === 'list' ? 'justify-start gap-10' : 'justify-between sm:pt-3 pt-1'}`}>
 
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">{t('filter_titles.beds')}</span>
-                <span className="font-medium text-neutral-900">{property.features.bedrooms}</span>
+                <span className="font-medium text-neutral-900 text-sm sm:text-base">{property.features.bedrooms}</span>
               </div>
 
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">{t('filter_titles.baths')}</span>
-                <span className="font-medium text-neutral-900">{property.features.bathrooms}</span>
+                <span className="font-medium text-neutral-900 text-sm sm:text-base">{property.features.bathrooms}</span>
               </div>
 
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">{t('filter_titles.size')}</span>
-                <span className="font-medium text-neutral-900">
+                <span className="font-medium text-neutral-900 text-sm sm:text-base">
                   {property.features.buildSize > 0 ? `${property.features.buildSize} m²` : 'N/A'}
                 </span>
               </div>
 
               <div className="flex flex-col items-center">
                 <span className="text-sm text-neutral-500">{t('filter_titles.type')}</span>
-                <span className="font-medium text-neutral-900">{property.features.type}</span>
+                <span className="font-medium text-neutral-900 text-sm sm:text-base">{property.features.type}</span>
               </div>
 
             </div>
@@ -262,7 +262,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
           <div className={`flex-initial ${card === 'list' ? 'mt-0' : 'mt-4'}`}>
             <Link
               href={`/properties/${property.id}`}
-              className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600"
+              className="inline-block w-full rounded-md bg-secondary-500 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-secondary-600 text-sm sm:text-base"
             >
               {t('viewDetails')}
             </Link>

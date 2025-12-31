@@ -141,13 +141,13 @@ export default function AdvancedSearchPage() {
 
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 lg:gap-8 gap-4">
       {/* Left: Advanced Search Form */}
-      <section className="md:col-span-2 bg-white rounded-xl  p-8 border border-black/10 ">
-        <h1 className="font-heading text-3xl font-bold text-primary-600 mb-6">
+      <section className="md:col-span-3 lg:col-span-4 bg-white rounded-xl md:p-8 sm:p-6 p-4 border border-black/10 ">
+        <h1 className="font-heading lg:text-3xl sm:text-2xl text-xl font-bold text-primary-600 lg:mb-6 sm:mb-4 mb-3">
           {t('title')}
         </h1>
-        <p className="mb-8 text-neutral-600">
+        <p className="mb-8 text-neutral-600 text-sm sm:text-base lg:text-lg">
           {t('text')}{" "}
           <Link
             href="/contact"
@@ -159,16 +159,16 @@ export default function AdvancedSearchPage() {
         </p>
 
         <div className="bg-primary-600 rounded-lg mb-6">
-          <h2 className="text-lg font-medium text-white px-6 py-3">
+          <h2 className="md:text-lg text-base font-medium text-white px-4 md:px-6 md:py-3 py-2">
            {t('search_advance')}
           </h2>
         </div>
 
         <form
-          className="bg-neutral-50 rounded-lg p-6 mb-8"
+          className="bg-neutral-50 rounded-lg md:p-6 sm:p-5 p-4 mb-8"
           onSubmit={handleSubmit}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:gap-6 sm:gap-5 gap-4">
             {/* Area */}
             <div>
               <label className="block font-medium text-neutral-800 mb-1">
@@ -303,7 +303,7 @@ export default function AdvancedSearchPage() {
           <div className="mt-8 flex justify-end">
             <button
               type="submit"
-              className="bg-primary-600 text-white font-semibold px-8 py-3 rounded-md shadow hover:bg-primary-700 transition"
+              className="bg-primary-600 text-white font-semibold md:px-8 px-6 md:py-3 py-2 rounded-md shadow hover:bg-primary-700 transition"
             >
               {tCommon('search')}
             </button>
@@ -312,33 +312,35 @@ export default function AdvancedSearchPage() {
 
         {/* Search by reference */}
         <div className="bg-primary-600 rounded-lg mb-4">
-          <h2 className="text-lg font-medium text-white px-6 py-3">
+          <h2 className="md:text-lg text-base font-medium text-white px-4 md:px-6 md:py-3 py-2">
              {t('search_ref')}
           </h2>
         </div>
         <form
-          className="bg-neutral-50 rounded-lg p-6 flex flex-col md:flex-row gap-4 items-center"
+          className="bg-neutral-50 rounded-lg p-6 flex flex-col lg:flex-row gap-4 items-start lg:items-center"
           onSubmit={handleReferenceSearch}
         >
           <label className="font-medium text-neutral-800">{tCommon('propertyReference')}</label>
-          <input
-            ref={refInput}
-            type="text"
-            className="flex-1 rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-4 py-2"
-            placeholder={tCommon('enterReference')}
-          />
-          <button
-            type="submit"
-            className="bg-primary-600 text-white font-semibold px-8 py-2 rounded-md shadow hover:bg-primary-700 transition"
-          >
-            {tCommon('search')}
-          </button>
+          <div className="flex-1 flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4 w-full">
+            <input
+              ref={refInput}
+              type="text"
+              className="flex-1 rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500 px-4 py-2 w-full"
+              placeholder={tCommon('enterReference')}
+            />
+            <button
+              type="submit"
+              className="bg-primary-600 text-white font-semibold px-8 py-2 rounded-md shadow hover:bg-primary-700 transition"
+            >
+              {tCommon('search')}
+            </button>
+          </div>
         </form>
 
       </section>
 
       {/* Right: Sidebar */}
-      <div>
+      <div className="md:col-span-2 lg:col-span-2">
         <PromoSidebar />
       </div>
     </div>

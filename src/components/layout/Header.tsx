@@ -74,8 +74,8 @@ export default function Header() {
     <header className={`w-full fixed top-0 left-0 right-0 z-50 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
       {/* Top bar with contact info and language selector */}
       <div className="transition-all duration-300 py-2 bg-primary-600">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 flex-col sm:flex-row">
+          <div className="flex items-center space-x-4 mb-2 sm:mb-0 flex-col xs:flex-row gap-2 sm:gap-4">
             <a href="tel:+34952741525" className="flex items-center text-sm text-white hover:text-primary-200 transition-colors">
               <PhoneIcon className="mr-1 h-4 w-4" />
               <span>+34 952 741 525</span>
@@ -132,12 +132,12 @@ export default function Header() {
       </div>
 
       {/* Main navigation */}
-      <div className="transition-all duration-300 py-3 bg-white/95">
+      <div className="transition-all duration-300 py-3 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="relative h-10 w-48">
-              <svg width="150" height="40" viewBox="0 0 1220 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="relative h-[32px] xl:h-[40px] w-[128px] xl:w-[150px]">
+              <svg width="100%" height="100%" viewBox="0 0 1220 328" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M144.656 1.03472L145.437 0.999869C150.98 0.765779 156.439 1.40998 161.86 2.55809C171.474 4.59521 181.03 7.54902 190.516 10.1419L239.934 23.7923C248.811 26.3304 257.713 28.7767 266.641 31.1313C272.577 32.7083 278.808 34.0378 284.571 36.1723C286.839 37.0122 288.732 38.2782 290.471 39.9624C293.065 42.4749 294.372 44.8854 295.157 48.3977C296.829 55.8895 295.866 64.9788 295.848 72.7019L295.822 111.228C284.38 112.184 273.009 113.214 261.691 115.221C257.395 116.014 253.121 116.913 248.871 117.921C244.619 118.928 240.397 120.041 236.202 121.26C232.007 122.48 227.845 123.804 223.717 125.233C219.588 126.661 215.498 128.192 211.447 129.826C207.395 131.461 203.387 133.195 199.423 135.031C195.458 136.866 191.543 138.8 187.676 140.832C183.809 142.864 179.995 144.992 176.235 147.217C172.474 149.44 168.773 151.757 165.129 154.167L157.254 150.103C127.558 133.519 90.0192 120.245 56.4416 115.323C38.0709 112.63 19.4616 111.991 0.927429 111.393L0.816645 71.6307C0.797882 64.5544 0.173361 56.8294 1.19639 49.8407C1.63866 46.8189 2.47047 43.6775 4.46917 41.2982C6.24361 39.1851 8.70871 37.3052 11.2828 36.2956C17.2306 33.9619 23.7843 32.6199 29.9546 30.9482L62.1509 22.1144L103.637 10.6288C117.072 6.83781 130.686 2.08901 144.656 1.03472Z" fill="rgb(var(--color-primary))" />
                 <path d="M0.950707 141.12C48.2976 139.127 97.5405 151.819 138.573 175.389C118.205 192.478 102.118 214.04 88.4565 236.69C86.1085 240.636 83.8703 244.644 81.7421 248.713C79.6144 252.783 77.5997 256.907 75.6978 261.087C73.7964 265.267 72.0113 269.496 70.3423 273.774C68.6727 278.052 67.1219 282.372 65.69 286.736C51.9001 279.666 37.5804 272.832 26.4924 261.742C2.57237 237.817 0.915861 211.067 0.877441 179.361L0.950707 141.12Z" fill="rgb(var(--color-secondary))" />
                 <path d="M291.169 140.409C292.601 140.168 294.229 140.269 295.684 140.229C295.794 151.279 295.821 162.328 295.766 173.378C292.677 173.71 289.598 174.117 286.529 174.6C283.459 175.083 280.404 175.64 277.362 176.273C274.32 176.906 271.295 177.613 268.287 178.394C265.28 179.175 262.294 180.029 259.329 180.957C256.363 181.884 253.423 182.884 250.506 183.956C247.59 185.028 244.702 186.17 241.842 187.384C238.981 188.598 236.152 189.881 233.354 191.233C230.557 192.585 227.795 194.006 225.068 195.493C191.016 213.74 160.492 243.007 142.429 277.36C135.386 290.756 130.219 304.953 125.845 319.413C119.71 316.211 113.596 312.967 107.505 309.682L92.7898 301.846C100.959 273.551 116.394 245.764 135.1 223.089C169.057 181.928 215.303 153.2 267.995 143.32C275.675 141.88 283.399 141.157 291.169 140.409Z" fill="rgb(var(--color-secondary))" />
@@ -164,7 +164,7 @@ export default function Header() {
 
           {/* Main Navigation */}
           <div className="hidden lg:block">
-          <Navigation />
+            <Navigation />
           </div>
           
           {/* Mobile Menu Backdrop */}
@@ -234,10 +234,10 @@ export default function Header() {
 
           {/* CTA Button only */}
           <div className="flex items-center gap-2">
-          <div className="hidden md:block">
+          <div className="block">
             <Link
               href="/sell-with-us"
-              className="rounded-md bg-secondary-500 px-4 py-2 min-h-[38px] inline-flex font-normal text-white shadow-md hover:bg-primary-600 transition-colors text-[15px]"
+              className="rounded-md bg-secondary-500 px-3 xs:px-4 py-2 min-h-[38px] inline-flex font-normal text-white shadow-md hover:bg-primary-600 transition-colors text-sm xs:text-[15px]"
             >
               {tCta('sellWithUs')}
             </Link>

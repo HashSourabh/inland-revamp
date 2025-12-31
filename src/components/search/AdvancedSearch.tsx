@@ -62,6 +62,13 @@ export default function AdvancedSearch() {
 
     loadFilters();
   }, []);
+  useEffect(() => {
+    if (showAdvancedSearch) { 
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [showAdvancedSearch]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -106,9 +113,9 @@ export default function AdvancedSearch() {
 
   return (
     <>
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-7">
+      <div className="flex gap-4 flex-col md:flex-row">
         {/* Regions */}
-        <div className="col-span-2">
+        <div className="flex-1">
           <label htmlFor="regionId" className="block text-sm font-medium text-neutral-700 mb-1">
             {t('filters.region')}
           </label>
@@ -128,7 +135,7 @@ export default function AdvancedSearch() {
         </div>
 
         {/* Property Type */}
-        <div className="col-span-2">
+        <div className="flex-1">
           <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
             {t('filters.property_type')}
           </label>
@@ -148,7 +155,7 @@ export default function AdvancedSearch() {
         </div>
 
         {/* Price Range */}
-        <div className="col-span-2">
+        <div className="flex-1">
           <label htmlFor="priceRange" className="block text-sm font-medium text-neutral-700 mb-1">
             {t('filters.price_range')}
           </label>
@@ -168,7 +175,7 @@ export default function AdvancedSearch() {
         </div>
 
         {/* Buttons */}
-        <div className="flex items-end gap-2">
+        <div className="flex items-end gap-2 flex-initial">
           <button
             type="button"
             disabled={loading}
@@ -207,7 +214,7 @@ export default function AdvancedSearch() {
           <button
             type="button"
             onClick={() => setShowAdvancedSearch(true)}
-            className="flex items-center justify-center w-12 min-h-[50px] bg-secondary-500 rounded-md hover:bg-primary-600 transition-colors "
+            className="flex items-center justify-center w-12 min-w-[50px] min-h-[50px] bg-secondary-500 rounded-md hover:bg-primary-600 transition-colors "
             aria-label={t('filters.advance_search')}
           >
             <AdjustmentsHorizontalIcon className="h-6 w-6 text-white" />
@@ -215,18 +222,18 @@ export default function AdvancedSearch() {
         </div>
       </div>
       {showAdvancedSearch && (
-        <div className="fixed inset-0 z-[9999] overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 z-[9999] overflow-y-auto h-full">
+          <div className="flex items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div className="fixed inset-0 transition-opacity" onClick={() => setShowAdvancedSearch(false)}>
               <div className="absolute inset-0 bg-neutral-900 opacity-75"></div>
             </div>
             <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
               &#8203;
             </span>
-            <div className="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full relative">
-              <div className="bg-white p-6 sm:p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-neutral-900" id="modal-headline">
+            <div className="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle xs:max-w-md md:max-w-5xl w-[95%] relative">
+              <div className="bg-white p-4 xs:p-6 sm:p-8">
+                <div className="flex items-center justify-between xs:mb-6 mb-4">
+                  <h3 className="md:text-2xl sm:text-xl text-lg font-bold text-neutral-900" id="modal-headline">
                     {t('filters.advance_search')}
                   </h3>
                   <button
@@ -245,7 +252,7 @@ export default function AdvancedSearch() {
                     handleSearch();
                   }}
                 >
-                  <div className="grid gap-6 md:grid-cols-3">
+                  <div className="grid xs:gap-6 gap-4 md:grid-cols-3">
                     {/* Province / Region */}
                     <div>
                       <label htmlFor="regionId" className="block text-sm font-medium text-neutral-700 mb-1">
@@ -253,7 +260,7 @@ export default function AdvancedSearch() {
                       </label>
                       <select
                         id="regionId"
-                        className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
+                        className="w-full rounded-md border-neutral-300 sm:py-3 py-2 focus:border-primary-500 focus:ring-primary-500"
                         onChange={handleChange}
                       >
                         <option value="">{t('filters.anyRegion')}</option>
@@ -273,7 +280,7 @@ export default function AdvancedSearch() {
                       </label>
                       <select
                         id="propertyType"
-                        className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
+                        className="w-full rounded-md border-neutral-300 sm:py-3 py-2 focus:border-primary-500 focus:ring-primary-500"
                         onChange={handleChange}
                       >
                         <option value="">Any Type</option>
@@ -292,7 +299,7 @@ export default function AdvancedSearch() {
                       </label>
                       <select
                         id="minBeds"
-                        className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
+                        className="w-full rounded-md border-neutral-300 sm:py-3 py-2 focus:border-primary-500 focus:ring-primary-500"
                         onChange={handleChange}
                       >
                         <option value="">Any</option>
@@ -311,7 +318,7 @@ export default function AdvancedSearch() {
                       </label>
                       <select
                         id="minBaths"
-                        className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
+                        className="w-full rounded-md border-neutral-300 sm:py-3 py-2 focus:border-primary-500 focus:ring-primary-500"
                         onChange={handleChange}
                       >
                         <option value="">Any</option>
@@ -332,7 +339,7 @@ export default function AdvancedSearch() {
                         id="minPrice"
                         value={filters.minPrice}
                         onChange={handleChange}
-                        className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
+                        className="w-full rounded-md border-neutral-300 sm:py-3 py-2 focus:border-primary-500 focus:ring-primary-500"
                       >
                         <option value="">No Min</option>
                         <option value="50000">€50,000</option>
@@ -350,7 +357,7 @@ export default function AdvancedSearch() {
                         id="maxPrice"
                         value={filters.maxPrice}
                         onChange={handleChange}
-                        className="w-full rounded-md border-neutral-300 py-3 focus:border-primary-500 focus:ring-primary-500"
+                        className="w-full rounded-md border-neutral-300 sm:py-3 py-2 focus:border-primary-500 focus:ring-primary-500"
                       >
                         <option value="">No Max</option>
                         <option value="200000">€200,000</option>
@@ -360,7 +367,7 @@ export default function AdvancedSearch() {
                     </div>
                   </div>
 
-                  <div className="mt-8">
+                  <div className="xs:mt-8 mt-6">
                     <button
                       type="submit"
                       disabled={loading}
@@ -368,7 +375,7 @@ export default function AdvancedSearch() {
                         e.preventDefault();
                         handleSearch();
                       }}
-                      className="w-full bg-primary-600 text-white py-4 rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-md disabled:opacity-50"
+                      className="w-full bg-primary-600 text-white xs:py-4 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors shadow-md disabled:opacity-50 text-sm xs:text-base"
                     >
                       {loading ? tCommon('searching') : t('filters.button')}
                     </button>

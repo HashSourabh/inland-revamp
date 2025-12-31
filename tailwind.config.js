@@ -92,6 +92,9 @@ module.exports = {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.5s ease-out',
       },
+      screens: {
+        xs: '380px',
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },

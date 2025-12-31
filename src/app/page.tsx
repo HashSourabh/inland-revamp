@@ -425,6 +425,20 @@ export default function Home() {
     },
     [Autoplay]
   )
+  const [exclusiveSliderRef] = useKeenSlider<HTMLDivElement>(
+    {
+      loop: true,
+      slides: {
+        perView: 3,
+        spacing: 16,
+      },
+      breakpoints: {
+        "(max-width: 1024px)": { slides: { perView: 2, spacing: 12 } },
+        "(max-width: 640px)": { slides: { perView: 1, spacing: 8 } },
+      },
+    },
+    [Autoplay]
+  )
 
   // Load property types first (only if not cached) - CRITICAL: needed for property transformation
   useEffect(() => {
@@ -670,9 +684,10 @@ export default function Home() {
       {/* Advanced Search - Always visible */}
       <section className="pt-16 bg-gradient-to-b from-white to-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-xl shadow-xl p-8 pt-6 -mt-32 relative z-30 border border-neutral-100">
+          <div className="bg-white rounded-xl shadow-xl sm:p-8 p-4 xs:p-6 pt-4 xs:pt-6 -mt-32 relative border border-neutral-100">
             <AdvancedSearch />
           </div>
+          
         </div>
       </section>
 
@@ -694,33 +709,36 @@ export default function Home() {
           </div>
         )}
       </section> */}
-      <section className="py-20 bg-neutral-50 relative overflow-hidden">
+      <section className="sm:py-20 xs:py-16 py-12 bg-neutral-50 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 pointer-events-none">
           <div className="absolute inset-0 pattern-dots pattern-neutral-800 pattern-bg-transparent pattern-size-4 pattern-opacity-10"></div>
         </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-4xl font-bold text-primary-600 md:text-5xl">
+          <div className="text-center sm:mb-12 xs:mb-8 mb-6">
+            <h2 className="font-heading text-2xl xs:text-3xl md:text-4xl font-bold text-primary-600 lg:text-5xl">
               {t('exclusive.title')}
             </h2>
-            <p className="mt-4 text-neutral-600 text-lg">
+            <p className="xs:mt-4 mt-2 text-neutral-600 text-sm xs:text-base sm:text-lg">
               {t('exclusive.subtitle')}
             </p>
           </div>
 
           {exclusiveLoading ? (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 3 }).map((_, i) => (
                 <PropertyCardSkeleton key={`exclusive-skeleton-${i}`} />
               ))}
             </div>
           ) : exclusiveProperties.length > 0 ? (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {exclusiveProperties.slice(0, 3).map((property) => (
-                <PropertyCard key={property.id} property={property} favouriteIds={favouriteIds} />
-              ))}
-            </div>
+            <>
+              <div className="grid gap-5 lg:gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {exclusiveProperties.slice(0, 3).map((property) => (
+                  <PropertyCard key={property.id} property={property} favouriteIds={favouriteIds} />
+                ))}
+              </div>
+            
+            </>
           ) : (
             <div className="text-center py-12">
               <p className="text-neutral-500">{t('exclusive.none')}</p>
@@ -733,21 +751,21 @@ export default function Home() {
 
 
           {/* View All Button */}
-          <div className="mt-16 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto">
+          <div className="sm:mt-16 xs:mt-14 mt-12 relative overflow-hidden bg-gradient-to-br from-[#1d3557] to-[#457b9d] rounded-xl shadow-xl mx-auto">
             <div className="absolute top-0 left-0 w-full h-full opacity-10">
               <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-white/30 blur-3xl"></div>
               <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-white/20 blur-3xl"></div>
             </div>
-            <div className="relative z-10 px-8 py-16 text-center">
-              <h3 className="text-4xl font-bold text-white mb-3">
+            <div className="relative z-10 sm:px-8 xs:px-6 px-4 sm:py-16 xs:py-10 py-8 text-center">
+              <h3 className="xs:mt-4 mt-2 text-white font-bold text-2xl xs:text-3xl md:text-4xl text-primary-600 lg:text-5xl mb-4">
                 {t('exclusive.moreTitle')}
               </h3>
-              <p className="text-white/80 mb-8">
+              <p className="text-white/80 sm:mb-8 mb-6 text-sm xs:text-base sm:text-lg">
                 {t('exclusive.moreSubtitle')}
               </p>
               <Link
                 href="/properties?exclusive=true"
-                className="inline-flex items-center bg-white hover:bg-gray-100 text-[#1d3557] px-10 py-1 min-h-[56px] hover:bg-secondary-600 hover:text-white rounded-lg font-medium transition-colors shadow-md text-lg"
+                className="inline-flex items-center bg-white hover:bg-gray-100 text-[#1d3557] xs:px-6 px-4 sm:px-10 py-1 sm:min-h-[56px] min-h-[42px] hover:bg-secondary-600 hover:text-white rounded-lg font-medium transition-colors shadow-md sm:text-lg xs:text-base text-sm"
               >
                 {t('exclusive.viewAllExclusive')}
               </Link>
@@ -759,13 +777,13 @@ export default function Home() {
 
 
       {/* Featured Properties */}
-      <section className="pb-16 bg-neutral-50">
+      <section className="sm:pb-16 xs:pb-10 pb-8 bg-neutral-50">
         {featuredLoading ? (
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-primary-600">{t('featured.title')}</h2>
-                <p className="mt-2 text-neutral-600 max-w-2xl">
+                <h2 className="font-heading text-2xl xs:text-3xl md:text-4xl font-bold text-primary-600 lg:text-5xl">{t('featured.title')}</h2>
+                <p className="xs:mt-4 mt-2 text-neutral-600 text-sm xs:text-base sm:text-lg">
                   {t('featured.loading')}
                 </p>
               </div>
@@ -785,10 +803,10 @@ export default function Home() {
         ) : (
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             {/* Header with title and link */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
               <div>
-                <h2 className="text-3xl font-bold text-primary-600">{t('featured.title')}</h2>
-                <p className="mt-2 text-neutral-600 max-w-2xl">
+                <h2 className="font-heading text-2xl xs:text-3xl md:text-4xl font-bold text-primary-600 lg:text-5xl">{t('featured.title')}</h2>
+                <p className="xs:mt-4 mt-2 text-neutral-600 text-sm xs:text-base sm:text-lg">
                   {t('featured.subtitle')}
                 </p>
               </div>
@@ -797,7 +815,7 @@ export default function Home() {
               <div className="hidden sm:block mt-4 sm:mt-0">
                 <Link
                   href="/properties"
-                  className="inline-flex items-center text-primary-600 font-medium hover:underline"
+                  className="inline-flex items-center text-primary-600 font-medium hover:underline text-sm xs:text-base whitespace-nowrap "
                 >
                   {t('featured.viewAllLink')}
                 </Link>
@@ -805,10 +823,10 @@ export default function Home() {
             </div>
 
             {/* Mobile button */}
-            <div className="mt-6 sm:hidden">
+            <div className="xs:mt-6 mt-4 sm:hidden">
               <Link
                 href="/properties"
-                className="inline-block w-full rounded-md border border-primary-600 px-6 py-3 text-center font-medium text-primary-600 hover:bg-primary-50 transition-colors"
+                className="inline-block w-full rounded-md border border-primary-600 px-4 sm:px-6 py-2 sm:py-3 text-center font-medium text-primary-600 hover:bg-primary-50 transition-colors text-sm xs:text-base"
               >
                 {t('featured.viewAllButton')}
               </Link>
@@ -816,7 +834,7 @@ export default function Home() {
 
             {/* Carousel */}
             {featuredProperties.length > 0 ? (
-              <div ref={sliderRef} className="keen-slider flex py-[20px] overflow-hidden mt-12">
+              <div ref={sliderRef} className="keen-slider flex py-[20px] overflow-hidden sm:mt-12 xs:mt-8 mt-5">
                 {featuredProperties.slice(0, 9).map((p) => (
                   <div key={p.id} className="keen-slider__slide">
                     <PropertyCard property={p} favouriteIds={favouriteIds} />
@@ -874,7 +892,7 @@ export default function Home() {
       </section> */}
 
       {/* CTA Section - Always visible */}
-      <section className="relative py-20">
+      <section className="relative py-14 sm:py-20">
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1512753360435-329c4535a9a7?auto=format&fit=crop&q=80"
@@ -884,16 +902,16 @@ export default function Home() {
           />
         </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-heading text-4xl font-bold text-white md:text-5xl">
+          <h2 className="font-heading text-2xl sm:text-4xl font-bold text-white md:text-5xl">
             {t('cta.title')}
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-xl text-white/90">
+          <p className="mx-auto mt-4 sm:mt-6 max-w-2xl text-basesm:text-xl text-white/90">
             {t('cta.subtitle')}
           </p>
-          <div className="mt-10">
+          <div className="mt-7 sm:mt-10">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center rounded-md bg-white px-8 py-1 min-h-[50px] font-medium text-primary-800 shadow-md hover:bg-secondary-500 hover:text-white transition-colors"
+              className="inline-flex items-center justify-center rounded-md bg-white px-8 py-1 sm:min-h-[50px] min-h-[40px] font-medium text-primary-800 shadow-md hover:bg-secondary-500 hover:text-white transition-colors"
             >
               {t('cta.button')}
             </Link>
