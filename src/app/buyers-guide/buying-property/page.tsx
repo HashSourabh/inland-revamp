@@ -12,7 +12,7 @@ export default function BuyingPropertyPage() {
   const t = useTranslations('buying-property');
 
   return (
-    <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-6 py-10 grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 lg:gap-8 gap-4">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 lg:gap-8 gap-4">
       <section className="md:col-span-3 lg:col-span-4 bg-white rounded-xl md:p-8 sm:p-6 xs:p-5 p-4 border border-black/10">
         <article className="space-y-8">
           <header>
@@ -97,8 +97,8 @@ export default function BuyingPropertyPage() {
           </section>
 
 
-          <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-lg bg-neutral-50 md:p-6 sm:p-5 p-4 dark:border-slate-700 dark:bg-slate-800 sm:gap-4 gap-2">
-            <div>
+          <div className="mt-8 flex flex-col lg:flex-row items-start lg:items-center justify-between rounded-lg bg-neutral-50 md:p-6 sm:p-5 p-4 dark:border-slate-700 dark:bg-slate-800">
+            <div className='lg:flex-1 sm:pr-[20px] pr-[10px] mb-4 lg:mb-0'>
               <h3 className="lg:text-2xl sm:text-xl text-lg font-semibold text-primary-900 mt-0 mb-2 dark:text-white">
                 {t('cta.heading')}
               </h3>
@@ -106,12 +106,14 @@ export default function BuyingPropertyPage() {
                 {t('cta.text')}
               </p>
             </div>
+            <div className="flex lg:justify-end gap-4 md:w-auto w-full flex-col xs:flex-row lg:flex-col">
             <a
               href="/properties"
-              className="rounded-md bg-primary-600 md:px-8 px-6 md:py-3 py-2 min-h-[40px] inline-flex items-center no-underline text-base font-semibold text-white transition-colors hover:bg-primary-900 dark:bg-blue-500 dark:hover:bg-blue-600 text-sm sm:text-base sm:whitespace-nowrap"
+              className="justify-center rounded-md bg-primary-600 lg:px-8 md:px-6 sm:px-4 px-3 md:py-3 py-2 min-h-[40px] inline-flex items-center no-underline text-base font-semibold text-white transition-colors hover:bg-primary-900 dark:bg-blue-500 dark:hover:bg-blue-600 text-sm lg:text-base sm:whitespace-nowrap"
             >
-              {t('cta.buttons.properties')}
-            </a>
+                {t('cta.buttons.properties')}
+              </a>
+            </div>
           </div>
         </article>
       </section>

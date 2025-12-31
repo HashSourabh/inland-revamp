@@ -18,7 +18,7 @@ interface FAQSectionProps {
 function FAQSection({ title, questions }: FAQSectionProps) {
   return (
     <div className="">
-      <h2 className="text-2xl mt-10 mb-4 font-semibold text-primary-900 dark:text-white">
+      <h2 className="lg:text-2xl sm:text-xl text-lg md:mt-10 sm:mt-8 xs:mt-6 mt-4 mb-4 font-semibold text-primary-900 dark:text-white">
         {title}
       </h2>
       <div className="mt-4 space-y-3">
@@ -27,13 +27,13 @@ function FAQSection({ title, questions }: FAQSectionProps) {
             {({ open }) => (
               <>
                 <Disclosure.Button
-                  className={`flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-colors ${
+                  className={`flex w-full items-center justify-between rounded-lg md:px-4 sm:px-3 xs:px-2 px-1 md:py-3 py-2 text-left transition-colors ${
                     open
                       ? 'bg-slate-200 dark:bg-slate-900/30'
                       : 'bg-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <span className="font-medium text-slate-900 dark:text-white">
+                  <span className="text-sm sm:text-base font-medium text-slate-900 dark:text-white">
                     {item.q}
                   </span>
                   <ChevronDownIcon
@@ -53,7 +53,7 @@ function FAQSection({ title, questions }: FAQSectionProps) {
                   leaveFrom="transform scale-100 opacity-100"
                   leaveTo="transform scale-95 opacity-0"
                 >
-                  <Disclosure.Panel static className="px-4 py-5 rounded-lg mt-1 bg-slate-100 dark:bg-slate-900/30">
+                  <Disclosure.Panel static className="px-4 py-5 rounded-lg mt-1 bg-slate-100 dark:bg-slate-900/30 text-sm sm:text-base">
                     {item.a}
                   </Disclosure.Panel>
                 </Transition>
@@ -76,10 +76,10 @@ export default function FAQsContent() {
   return (
     <article className="space-y-8">
       <header>
-        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-6">
+        <h1 className="font-heading lg:text-3xl sm:text-2xl text-xl font-bold text-primary-600 lg:mb-6 sm:mb-4 mb-3">
           {t('title')}
         </h1>
-        <p className="mb-8 mt-0 text-base text-neutral-600 dark:text-slate-300">
+        <p className="md:mb-8 sm:mb-6 xs:mb-4 text-neutral-600 text-sm sm:text-base lg:text-lg">
           {t('description')}
         </p>
       </header>
@@ -104,19 +104,19 @@ export default function FAQsContent() {
         />
       </motion.section>
 
-      <div className="mt-8 flex items-center justify-between rounded-lg bg-neutral-50 p-6 dark:border-slate-700 dark:bg-slate-800">
-        <div className="w-[60%]">
-          <h2 className="text-2xl font-semibold text-primary-900 mt-0 mb-2 dark:text-white">
+      <div className="mt-8 flex flex-col lg:flex-row items-start lg:items-center justify-between rounded-lg bg-neutral-50 md:p-6 sm:p-5 p-4 dark:border-slate-700 dark:bg-slate-800">
+        <div className="lg:flex-1 sm:pr-[20px] pr-[10px] mb-4 lg:mb-0">
+          <h2 className="lg:text-2xl sm:text-xl text-lg font-semibold text-primary-900 mt-0 mb-2 dark:text-white">
             {t('cta.heading')}
           </h2>
-          <p className="mt-0 mb-0 text-base text-neutral-600 dark:text-slate-300">
+          <p className="mt-0 mb-0 text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-slate-300">
             {t('cta.text')}
           </p>
         </div>
-        <div className="flex justify-end w-[40%]">
+        <div className="flex lg:justify-end gap-4 md:w-auto w-full flex-col xs:flex-row lg:flex-col">
           <a
             href="/contact"
-            className="rounded-md bg-primary-600 px-8 py-2 min-h-[40px] inline-flex items-center no-underline text-base font-semibold text-white transition-colors hover:bg-primary-900 dark:bg-blue-500 dark:hover:bg-blue-600"
+            className="justify-center rounded-md bg-primary-600 lg:px-8 md:px-6 sm:px-4 px-3 md:py-3 py-2 min-h-[40px] inline-flex items-center no-underline text-base font-semibold text-white transition-colors hover:bg-primary-900 dark:bg-blue-500 dark:hover:bg-blue-600 text-sm lg:text-base sm:whitespace-nowrap"
           >
             {t('cta.button')}
           </a>
