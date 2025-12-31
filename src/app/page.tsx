@@ -8,8 +8,15 @@ import {
   MagnifyingGlassIcon,
   ArrowRightIcon,
 } from "@heroicons/react/24/outline";
-import TestimonialsCarousel from "@/components/testimonials/TestimonialsCarousel";
-import AdvancedSearch from "@/components/search/AdvancedSearch";
+// Performance: Lazy load heavy components to reduce initial bundle size
+import dynamic from 'next/dynamic';
+const TestimonialsCarousel = dynamic(() => import("@/components/testimonials/TestimonialsCarousel"), {
+  loading: () => <div className="h-96 flex items-center justify-center"><div className="animate-pulse text-neutral-400">Loading testimonials...</div></div>,
+  ssr: false, // Disable SSR for carousel as it's not critical for SEO
+});
+const AdvancedSearch = dynamic(() => import("@/components/search/AdvancedSearch"), {
+  loading: () => <div className="h-64 animate-pulse bg-neutral-100 rounded-lg" />,
+});
 import Hero from "@/sections/Hero";
 import { Property } from "@/types/property";
 import { useKeenSlider } from "keen-slider/react";

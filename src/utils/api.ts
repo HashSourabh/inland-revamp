@@ -57,14 +57,25 @@ export interface AreasApiResponse {
   };
 }
 
+// Performance: Helper to create fetch options with caching
+// Note: Browser fetch cache is limited, but helps with duplicate requests
+const createFetchOptions = (): RequestInit => ({
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  // Performance: Use 'default' cache - browser will handle caching based on response headers
+  // The PropertyCacheContext provides application-level caching (5 minutes)
+  cache: 'default',
+});
+
 // Fetch all regions
 export async function fetchRegions(): Promise<Region[]> {
   try {
+    // Performance: Cache is handled by PropertyCacheContext (5 minutes)
+    // Browser cache helps with duplicate requests during the same session
     const res = await fetch(`${API_BASE_URL}/properties/regions/counts`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      ...createFetchOptions(),
     });
 
     if (!res.ok) {
@@ -106,11 +117,10 @@ export async function findRegionByName(regionName: string): Promise<Region | nul
 // Fetch areas by regionId
 export async function fetchAreas(regionId: number): Promise<{ areas: Area[], regionId: number }> {
   try {
+    // Performance: Cache is handled by PropertyCacheContext (5 minutes per region)
+    // Browser cache helps with duplicate requests during the same session
     const res = await fetch(`${API_BASE_URL}/properties/regions/${regionId}/areas`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      ...createFetchOptions(),
     });
 
     if (!res.ok) {

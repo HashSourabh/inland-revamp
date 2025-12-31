@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, memo } from 'react';
 import PropertyCard from './PropertyCard';
 import { Property } from '@/types/property';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
@@ -12,7 +12,8 @@ interface PropertyGridProps {
   loading?: boolean;
 }
 
-// Helper function to transform Property to PropertyCard format
+// Performance: Memoized helper function to transform Property to PropertyCard format
+// Prevents unnecessary recalculations when rendering property lists
 const transformPropertyForCard = (property: Property) => {
   // Extract property type from title (format: "PropertyType (Ref)")
   // If title is "Property (TH1234)", extract "Property"
@@ -54,7 +55,8 @@ const transformPropertyForCard = (property: Property) => {
   };
 };
 
-export default function PropertyGrid({
+// Performance: Memoized component to prevent unnecessary re-renders
+function PropertyGrid({
   properties,
   title,
   subtitle,
@@ -63,6 +65,18 @@ export default function PropertyGrid({
 }: PropertyGridProps) {
   const favouriteIds = useFavouriteIds();
   const tCommon = useTranslations('common');
+
+  // Performance: Memoize transformed featured property to avoid recalculation
+  const transformedFeaturedProperty = useMemo(() => 
+    featuredProperty ? transformPropertyForCard(featuredProperty) : null,
+    [featuredProperty]
+  );
+
+  // Performance: Memoize transformed properties list to avoid recalculation on every render
+  const transformedProperties = useMemo(() => 
+    properties.map(transformPropertyForCard),
+    [properties]
+  );
 
   if (loading) {
     return (
@@ -105,16 +119,16 @@ export default function PropertyGrid({
       )}
 
       {/* Featured property */}
-      {featuredProperty && (
+      {transformedFeaturedProperty && (
         <div className="mb-8">
-          <PropertyCard property={transformPropertyForCard(featuredProperty)} featured={true} favouriteIds={favouriteIds} />
+          <PropertyCard property={transformedFeaturedProperty} featured={true} favouriteIds={favouriteIds} />
         </div>
       )}
 
       {/* Property grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {properties.map((property) => (
-          <PropertyCard key={property.id} property={transformPropertyForCard(property)} favouriteIds={favouriteIds} />
+        {transformedProperties.map((property) => (
+          <PropertyCard key={property.id} property={property} favouriteIds={favouriteIds} />
         ))}
       </div>
 
@@ -129,4 +143,7 @@ export default function PropertyGrid({
       )}
     </div>
   );
-} 
+}
+
+// Performance: Export memoized component
+export default memo(PropertyGrid); 

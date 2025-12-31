@@ -9,29 +9,38 @@ import { PropertyCacheProvider } from '@/context/PropertyCacheContext';
 import { AuthProvider } from '@/context/AuthContext';
 import TidioLoader from '@/components/loader/TidioLoader';
 
-// Font configuration
+// Performance: Optimize font loading by specifying only required weights
+// This reduces font file sizes and improves initial load time
 const openSans = Open_Sans({
   subsets: ['latin'],
-  display: 'swap',
+  display: 'swap', // Prevents invisible text during font load
   variable: '--font-open-sans',
+  weight: ['400', '600', '700'], // Only load required weights
+  preload: false, // Defer non-critical font
 });
 
 const workSans = Work_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-work-sans',
+  weight: ['400', '500', '600', '700'], // Only load required weights
+  preload: true, // Preload primary font
 });
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-dm-sans',
+  weight: ['400', '500', '700'], // Only load required weights
+  preload: false, // Defer non-critical font
 });
 
 const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-playfair-display',
+  weight: ['400', '700'], // Only load required weights
+  preload: false, // Defer decorative font
 });
 
 export const metadata: Metadata = {

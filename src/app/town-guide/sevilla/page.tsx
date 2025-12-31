@@ -3,55 +3,73 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav';
+// Performance: Use cached region data hook instead of direct API calls
+import { useRegionData, type RegionCount } from '@/hooks/useRegionData';
 import Sevilla from '@/assets/images/sevilla/vista-sevilla.jpg';
 import Sevilla1 from '@/assets/images/sevilla/about.jpg';
 import Sevilla2 from '@/assets/images/sevilla/historic-towns.jpg';
 import Sevilla3 from '@/assets/images/sevilla/natural.jpg';
 import Sevilla4 from '@/assets/images/sevilla/festivals.jpg';
 import Sevilla5 from '@/assets/images/sevilla/garbanzos-scaled.jpg';
-import { useEffect, useState } from 'react';
-import { Area, fetchAreas, fetchRegions } from '@/utils/api';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import PageOverlayLoader from '@/components/loader/PageOverlayLoader';
 import { useTranslations } from 'next-intl';
 
 export default function SevillaPage() {
   const t = useTranslations('town-guide');
   const tCommon = useTranslations('common');
-  const [regionName, setRegionName] = useState<string>('')
+  // Performance: Use cached region data instead of fetching on every render
+  const { regionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
   const [regionId, setRegionId] = useState<number | null>(null)
-  const [areas, setAreas] = useState<Area[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // ✅ Extract region name from URL
-  useEffect(() => {
+  // Performance: Memoize region name extraction
+  const regionName = useMemo(() => {
+    if (typeof window === 'undefined') return 'sevilla';
     const params = window.location.pathname
-    const name = params.split('/').filter(Boolean).pop() || ''
-    setRegionName(name)
+    return params.split('/').filter(Boolean).pop() || 'sevilla'
   }, [])
 
-  // ✅ Fetch regions and areas
+  // Performance: Memoize format function
+  const formatRegionName = useCallback((name: string) =>
+    name
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' '), [])
+
+  const displayRegionName = useMemo(() => formatRegionName(regionName), [regionName, formatRegionName])
+
+  // Performance: Get areas from cache if available
+  const areas = useMemo(() => {
+    if (!regionId) return [];
+    return areasCache.get(regionId) || [];
+  }, [regionId, areasCache])
+
+  // ✅ Fetch regions and areas using cache
   useEffect(() => {
     async function loadRegionAndAreas() {
       try {
         setLoading(true)
         setError(null)
 
-        const regions = await fetchRegions()
+        // Use cached region counts
+        const regions = regionCounts.length > 0 
+          ? regionCounts 
+          : await fetchRegionCounts();
+        
         const matchingRegion = regions.find(
-          region => region.region.toLowerCase() === regionName.toLowerCase()
+          (region: RegionCount) => region.regionName.toLowerCase() === regionName.toLowerCase()
         )
 
         if (!matchingRegion) {
           throw new Error(`Region "${regionName}" not found`)
         }
-        console.log(matchingRegion, 'region id is this ')
 
-        // ✅ set regionId directly
         setRegionId(matchingRegion.regionId)
 
-        const { areas: fetchedAreas } = await fetchAreas(matchingRegion.regionId)
-        setAreas(fetchedAreas)
+        // Fetch areas (will use cache if available)
+        await fetchAreas(matchingRegion.regionId)
       } catch (err) {
         console.error('Error loading region data:', err)
         setError(err instanceof Error ? err.message : tCommon('failedToLoadData'))
@@ -63,15 +81,7 @@ export default function SevillaPage() {
     if (regionName) {
       loadRegionAndAreas()
     }
-  }, [regionName])
-
-  const formatRegionName = (name: string) =>
-    name
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-
-  const displayRegionName = formatRegionName(regionName)
+  }, [regionName, regionCounts, fetchRegionCounts, fetchAreas, tCommon])
   return (
     <div className="">
       {/* Hero Section */}
@@ -126,24 +136,29 @@ export default function SevillaPage() {
                   <h2 className="text-3xl font-semibold text-primary-900 mb-4"> {t('sevilla.section1.heading')}</h2>
                   <p className="text-base text-neutral-700">{t('sevilla.section1.text')}</p>
                 </div>
-                <div className="relative h-[300px] overflow-hidden">
+                <div className="relative h-[300px] rounded-lg overflow-hidden">
+                  {/* Performance: Fix Image component - use fill prop instead of className for sizing */}
                   <Image
                     src={Sevilla1}
                     alt={`${displayRegionName} ${tCommon('cityView')}`}
-
-                    className="rounded-lg object-cover w-full"
+                    fill
+                    className="object-cover rounded-lg"
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
               </div>
             </section>
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <div className="relative h-[300px] overflow-hidden">
+                <div className="relative h-[300px] rounded-lg overflow-hidden">
                   <Image
                     src={Sevilla2}
                     alt={`${displayRegionName} ${tCommon('cityView')}`}
-
-                    className="rounded-lg object-cover w-full"
+                    fill
+                    className="object-cover rounded-lg"
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
                 <div>
@@ -158,24 +173,28 @@ export default function SevillaPage() {
                   <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('sevilla.section3.heading')}</h2>
                   <p className="text-base text-neutral-700">{t('sevilla.section3.text')}</p>
                 </div>
-                <div className="relative h-[300px] overflow-hidden">
+                <div className="relative h-[300px] rounded-lg overflow-hidden">
                   <Image
                     src={Sevilla3}
                     alt={`${displayRegionName} ${tCommon('cityView')}`}
-
-                    className="rounded-lg object-cover w-full"
+                    fill
+                    className="object-cover rounded-lg"
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
               </div>
             </section>
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <div className="relative h-[300px] overflow-hidden">
+                <div className="relative h-[300px] rounded-lg overflow-hidden">
                   <Image
                     src={Sevilla5}
                     alt={`${displayRegionName} ${tCommon('cityView')}`}
-
-                    className="rounded-lg object-cover w-full"
+                    fill
+                    className="object-cover rounded-lg"
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
                 <div>
@@ -190,12 +209,14 @@ export default function SevillaPage() {
                   <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('sevilla.section5.heading')}</h2>
                   <p className="text-base text-neutral-700">{t('sevilla.section5.text')}</p>
                 </div>
-                <div className="relative h-[300px] overflow-hidden">
+                <div className="relative h-[300px] rounded-lg overflow-hidden">
                   <Image
                     src={Sevilla4}
                     alt={`${displayRegionName} ${tCommon('cityView')}`}
-
-                    className="rounded-lg object-cover w-full"
+                    fill
+                    className="object-cover rounded-lg"
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
               </div>

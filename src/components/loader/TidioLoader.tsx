@@ -29,10 +29,26 @@ export default function TidioLoader() {
   }, []);
 
   return (
+    // Performance: Use lazyOnload strategy to defer Tidio script until after page is fully loaded
+    // This prevents blocking critical rendering and improves initial page load time
     <Script
       id="tidio-script"
       src={`https://code.tidio.co/x5g840oxfzsld9z8dbskapfs2khgekyj.js`}
-      strategy="afterInteractive"
+      strategy="lazyOnload"
+      onLoad={() => {
+        // Ensure position after script loads
+        setTimeout(() => {
+          const widget = document.querySelector(
+            '[data-tidio-widget], .tidio-chat-widget, #tidio-chat-widget'
+          ) as HTMLElement | null;
+          if (widget) {
+            widget.style.position = 'fixed';
+            widget.style.bottom = '20px';
+            widget.style.right = '20px';
+            widget.style.zIndex = '9999';
+          }
+        }, 100);
+      }}
     />
   );
 }

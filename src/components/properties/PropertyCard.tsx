@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeartIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback, memo } from 'react';
 import { getToken, useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
@@ -16,7 +16,9 @@ interface PropertyCardProps {
   favouriteIds?: string[];
 }
 
-export default function PropertyCard({ property, card = 'grid', featured = false, favouriteIds = [] }: PropertyCardProps) {
+// Performance: Memoized component to prevent unnecessary re-renders
+// Only re-renders when property data, card type, featured status, or favouriteIds change
+function PropertyCard({ property, card = 'grid', featured = false, favouriteIds = [] }: PropertyCardProps) {
   const [isFavorite, setIsFavorite] = useState<boolean>(favouriteIds.includes(property.id));
   const { openAuth, user } = useAuth();
   const t = useTranslations('properties');
@@ -27,21 +29,24 @@ export default function PropertyCard({ property, card = 'grid', featured = false
     setIsFavorite(favouriteIds.includes(property.id));
   }, [favouriteIds, property.id]);
 
-  // Find the featured image or fallback to the first image
-  const mainImage = property.images.find(img => img.isFeatured) || property.images[0];
+  // Performance: Memoize main image lookup to avoid recalculation on every render
+  const mainImage = useMemo(() => 
+    property.images.find(img => img.isFeatured) || property.images[0],
+    [property.images]
+  );
 
-  // Format price with currency symbol
-  const formatPrice = (price: number, currency?: string) => {
+  // Performance: Memoize price formatter to avoid creating new function on every render
+  const formatPrice = useCallback((price: number, currency?: string) => {
     const validCurrency = currency || 'USD';
-
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: validCurrency,
       maximumFractionDigits: 0,
     }).format(price);
-  };
+  }, []);
 
-  const handleFavoriteClick = async () => {
+  // Performance: Memoize favorite click handler to prevent unnecessary re-renders
+  const handleFavoriteClick = useCallback(async () => {
     if (!user) {
       openAuth("login");
       return;
@@ -112,10 +117,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
         position: "top-right",
       });
     }
-  };
-
-
-
+  }, [user, isFavorite, property.id, openAuth, tCommon]);
 
   return (
     <div
@@ -273,3 +275,21 @@ export default function PropertyCard({ property, card = 'grid', featured = false
     </div>
   );
 }
+
+// Performance: Export memoized component to prevent re-renders when props haven't changed
+export default memo(PropertyCard, (prevProps, nextProps) => {
+  // Custom comparison function for better performance
+  // Handle optional favouriteIds prop (defaults to empty array)
+  const prevFavIds = prevProps.favouriteIds || [];
+  const nextFavIds = nextProps.favouriteIds || [];
+  
+  return (
+    prevProps.property.id === nextProps.property.id &&
+    prevProps.property.price === nextProps.property.price &&
+    prevProps.property.title === nextProps.property.title &&
+    prevProps.card === nextProps.card &&
+    prevProps.featured === nextProps.featured &&
+    prevFavIds.length === nextFavIds.length &&
+    prevFavIds.every((id, idx) => id === nextFavIds[idx])
+  );
+});
