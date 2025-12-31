@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import {
   ChevronLeftIcon,
@@ -43,11 +43,13 @@ export default function PropertyGallery({
   , lat, lng
 }: PropertyGalleryProps) {
   const t = useTranslations('properties')
-  const [mainImage, setMainImage] = useState(images[0]?.url || '');
+  // Performance: Initialize with first image URL to avoid unnecessary state updates
+  const [mainImage, setMainImage] = useState(() => images[0]?.url || '');
   const [isScrollable, setIsScrollable] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: 'left' | 'right') => {
+  // Performance: Memoize scroll handler to prevent unnecessary re-renders
+  const scroll = useCallback((direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const scrollAmount = container.clientWidth / 2;
@@ -56,14 +58,14 @@ export default function PropertyGallery({
         behavior: 'smooth',
       });
     }
-  };
+  }, []);
 
-  const checkScrollable = () => {
+  // Performance: Memoize checkScrollable to prevent unnecessary function recreations
+  const checkScrollable = useCallback(() => {
     if (scrollContainerRef.current) {
       setIsScrollable(scrollContainerRef.current.scrollWidth > scrollContainerRef.current.clientWidth);
     }
-  };
-  console.log('coordinates', lat, lng);
+  }, []);
 
   useEffect(() => {
     checkScrollable();

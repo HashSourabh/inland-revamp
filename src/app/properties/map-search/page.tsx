@@ -1,15 +1,41 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from "@react-google-maps/api";
+// Performance: Lazy load Google Maps components to reduce initial bundle size
+import dynamic from 'next/dynamic';
 import Image from "next/image";
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { fetchRegions, fetchAreas } from '@/utils/api';
 import { getRegionColors, getAreaColors } from '@/utils/colorUtils';
 import { areaImages, getIAMarkerIcon } from '@/utils/mapUtils';
-import PromoSidebar from "@/components/PromoSidebar";
 import PageOverlayLoader from "@/components/loader/PageOverlayLoader";
 import { useTranslations } from "next-intl";
+
+// Performance: Import useJsApiLoader normally as it's needed for initialization
+// This hook is lightweight and needed early in the component lifecycle
+import { useJsApiLoader } from "@react-google-maps/api";
+
+// Performance: Dynamically import Google Maps components with loading state
+// This reduces initial bundle size significantly as Google Maps is a large library
+const GoogleMap = dynamic(
+  () => import("@react-google-maps/api").then((mod) => ({ default: mod.GoogleMap })),
+  {
+    loading: () => (
+      <div className="h-[70vh] flex items-center justify-center bg-neutral-100">
+        <PageOverlayLoader />
+      </div>
+    ),
+    ssr: false, // Google Maps requires browser APIs, disable SSR
+  }
+);
+const Marker = dynamic(
+  () => import("@react-google-maps/api").then((mod) => ({ default: mod.Marker })),
+  { ssr: false }
+);
+const InfoWindow = dynamic(
+  () => import("@react-google-maps/api").then((mod) => ({ default: mod.InfoWindow })),
+  { ssr: false }
+);
 
 const containerStyle = {
   width: "100%",

@@ -1,8 +1,9 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { fetchRegions, fetchAreas, Region, Area } from '@/utils/api'
+import { useEffect, useState, useMemo, useCallback } from 'react'
+// Performance: Use cached region data hook instead of direct API calls
+import { useRegionData, type RegionCount } from '@/hooks/useRegionData'
 import { TownGuideNav } from '@/components/buyers-guide/TownGuideNav'
 import Granada from '@/assets/images/granada/granada.jpg'
 import Granada1 from '@/assets/images/granada/about.jpg'
@@ -15,41 +16,58 @@ import { useTranslations } from 'next-intl'
 export default function GranadaPage() {
   const t=useTranslations('town-guide');
   const tCommon = useTranslations('common');
-  const [regionName, setRegionName] = useState<string>('')
+  // Performance: Use cached region data instead of fetching on every render
+  const { regionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
   const [regionId, setRegionId] = useState<number | null>(null)
-  const [areas, setAreas] = useState<Area[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // ✅ Extract region name from URL
-  useEffect(() => {
+  // Performance: Memoize region name extraction
+  const regionName = useMemo(() => {
+    if (typeof window === 'undefined') return 'granada';
     const params = window.location.pathname
-    const name = params.split('/').filter(Boolean).pop() || ''
-    setRegionName(name)
+    return params.split('/').filter(Boolean).pop() || 'granada'
   }, [])
 
-  // ✅ Fetch regions and areas
+  // Performance: Memoize format function
+  const formatRegionName = useCallback((name: string) =>
+    name
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' '), [])
+
+  const displayRegionName = useMemo(() => formatRegionName(regionName), [regionName, formatRegionName])
+
+  // Performance: Get areas from cache if available
+  const areas = useMemo(() => {
+    if (!regionId) return [];
+    return areasCache.get(regionId) || [];
+  }, [regionId, areasCache])
+
+  // ✅ Fetch regions and areas using cache
   useEffect(() => {
     async function loadRegionAndAreas() {
       try {
         setLoading(true)
         setError(null)
 
-        const regions = await fetchRegions()
+        // Use cached region counts
+        const regions = regionCounts.length > 0 
+          ? regionCounts 
+          : await fetchRegionCounts();
+        
         const matchingRegion = regions.find(
-          region => region.region.toLowerCase() === regionName.toLowerCase()
+          (region: RegionCount) => region.regionName.toLowerCase() === regionName.toLowerCase()
         )
 
         if (!matchingRegion) {
           throw new Error(`Region "${regionName}" not found`)
         }
-        console.log(matchingRegion, 'region id is this ')
 
-        // ✅ set regionId directly
         setRegionId(matchingRegion.regionId)
 
-        const { areas: fetchedAreas } = await fetchAreas(matchingRegion.regionId)
-        setAreas(fetchedAreas)
+        // Fetch areas (will use cache if available)
+        await fetchAreas(matchingRegion.regionId)
       } catch (err) {
         console.error('Error loading region data:', err)
         setError(err instanceof Error ? err.message : tCommon('failedToLoadData'))
@@ -61,15 +79,7 @@ export default function GranadaPage() {
     if (regionName) {
       loadRegionAndAreas()
     }
-  }, [regionName])
-
-  const formatRegionName = (name: string) =>
-    name
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-
-  const displayRegionName = formatRegionName(regionName)
+  }, [regionName, regionCounts, fetchRegionCounts, fetchAreas, tCommon])
 
 
   return (
@@ -127,11 +137,14 @@ export default function GranadaPage() {
                     </p>
                   </div>
                   <div className="relative h-[300px] rounded-lg overflow-hidden">
+                    {/* Performance: Lazy load below-the-fold images */}
                     <Image
                       src={Granada1}
                       alt={`${displayRegionName} ${tCommon('cityView')}`}
                       fill
                       className="object-cover"
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                 </div>
@@ -145,6 +158,8 @@ export default function GranadaPage() {
                       alt={tCommon('sierraNevadaMountains')}
                       fill
                       className="object-cover"
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                   <div>
@@ -172,6 +187,8 @@ export default function GranadaPage() {
                       alt={tCommon('albaicinDistrict')}
                       fill
                       className="object-cover"
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                 </div>
@@ -185,6 +202,8 @@ export default function GranadaPage() {
                       alt={tCommon('outdoorActivitiesGranada')}
                       fill
                       className="object-cover"
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                   <div>

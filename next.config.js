@@ -31,14 +31,73 @@ const nextConfig = {
     dangerouslyAllowSVG: false,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  // Enable compression
+  // Performance: Enable compression for smaller response sizes
   compress: true,
-  // Optimize production builds
+  // Performance: Use SWC minification for faster builds and smaller bundles
   swcMinify: true,
-  // Enable React strict mode for better performance
+  // Performance: Enable React strict mode for better performance and error detection
   reactStrictMode: true,
-  // Optimize fonts
+  // Performance: Optimize fonts to reduce layout shift
   optimizeFonts: true,
+  // Performance: Enable experimental features for better code splitting
+  experimental: {
+    optimizePackageImports: ['@heroicons/react', 'framer-motion', 'keen-slider'],
+  },
+  // Performance: Configure webpack for better code splitting
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Performance: Optimize chunk splitting for better caching
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            // Performance: Separate vendor chunks for better caching
+            framework: {
+              name: 'framework',
+              chunks: 'all',
+              test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
+              priority: 40,
+              enforce: true,
+            },
+            lib: {
+              test(module) {
+                return module.size() > 160000 && /node_modules[/\\]/.test(module.identifier());
+              },
+              name(module) {
+                const hash = require('crypto').createHash('sha1');
+                hash.update(module.identifier());
+                return hash.digest('hex').substring(0, 8);
+              },
+              priority: 30,
+              minChunks: 1,
+              reuseExistingChunk: true,
+            },
+            commons: {
+              name: 'commons',
+              minChunks: 2,
+              priority: 20,
+            },
+            shared: {
+              name(module, chunks) {
+                return require('crypto')
+                  .createHash('sha1')
+                  .update(chunks.reduce((acc, chunk) => acc + chunk.name, ''))
+                  .digest('hex')
+                  .substring(0, 8);
+              },
+              priority: 10,
+              minChunks: 2,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
+    }
+    return config;
+  },
 };
 
 module.exports = withNextIntl(nextConfig); 

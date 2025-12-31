@@ -65,7 +65,9 @@ interface PropertyCacheContextType {
 
 const PropertyCacheContext = createContext<PropertyCacheContextType | undefined>(undefined);
 
-const CACHE_DURATION = 60 * 60 * 1000; //  minutes in milliseconds
+// Performance: Cache duration set to 5 minutes (300,000ms) for optimal balance
+// between fresh data and reduced API calls. This matches the documented behavior.
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 export function PropertyCacheProvider({ children }: { children: ReactNode }) {
   const [featuredProperties, setFeaturedProperties] = useState<PropertyForCard[]>([]);
