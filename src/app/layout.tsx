@@ -45,7 +45,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${workSans.variable} ${playfairDisplay.variable}`} suppressHydrationWarning>
-      <head></head>
+      <head>
+        {/* Preconnect to external domains for faster resource loading */}
+        <link rel="preconnect" href="https://www.inlandandalucia.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://inlandandalucia.onrender.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.inlandandalucia.com" />
+        <link rel="dns-prefetch" href="https://inlandandalucia.onrender.com" />
+      </head>
       <body className={`${workSans.className} min-h-screen`} suppressHydrationWarning>
         <AuthProvider>
           <PropertyCacheProvider>

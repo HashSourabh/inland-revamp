@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PromoSidebar from "@/components/PromoSidebar";
-import { useTranslations } from "next-intl"; 
+import { useTranslations } from "next-intl";
+import { useRegionData } from '@/hooks/useRegionData';
+import { usePropertyCache } from '@/context/PropertyCacheContext';
+import { useLocale } from 'next-intl'; 
 
 export default function AdvancedSearchPage() {
   const t = useTranslations('advance_search');
@@ -22,60 +25,83 @@ export default function AdvancedSearchPage() {
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://inlandandalucia.onrender.com/api/v1";
 
-  const [propertyTypes, setPropertyTypes] = React.useState<
-    { id: number; name: string; code: string }[]
-  >([]);
-  const [regionCounts, setRegionCounts] = React.useState<
-    { regionId: number; region: string; count: number }[]
-  >([]);
-
+  const locale = useLocale();
   const router = useRouter();
   const refInput = useRef<HTMLInputElement>(null);
+  const { regionCounts, fetchRegionCounts } = useRegionData();
+  const { propertyTypesMap, setPropertyTypesMap } = usePropertyCache();
 
-  // fetch property types and region counts
-  React.useEffect(() => {
-    const fetchPropertyTypes = async () => {
-      try {
-        const res = await fetch(
-          `${API_BASE_URL}/properties/types?languageId=1`
-        );
-        if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const data = await res.json();
-        if (data?.success && data.data) {
-          const formatted = data.data.map((r: any) => ({
-            id: r.id,
-            name: r.name,
-            code: r.code,
-          }));
-          setPropertyTypes(formatted);
+  // Map locale to language ID
+  const localeToLanguageId: Record<string, number> = {
+    'en': 1,
+    'es': 2,
+    'fr': 3,
+    'pt': 8,
+    'de': 4,
+  };
+  const languageId = localeToLanguageId[locale] || 1;
+
+  // Convert property types map to array format for select
+  const propertyTypes = React.useMemo(() => {
+    return Object.entries(propertyTypesMap).map(([id, name]) => {
+      // Try to get code from cache or use a default
+      return {
+        id: Number(id),
+        name,
+        code: name.toLowerCase().replace(/\s+/g, '-'), // Generate code from name
+      };
+    });
+  }, [propertyTypesMap]);
+
+  // Convert region counts to format needed for select
+  const regionCountsFormatted = React.useMemo(() => {
+    return regionCounts.map((r) => ({
+      regionId: r.regionId,
+      region: r.regionName,
+      count: r.count,
+    }));
+  }, [regionCounts]);
+
+  // Load property types first, then region counts (sequenced)
+  useEffect(() => {
+    let mounted = true;
+    const loadData = async () => {
+      // Load property types first if not cached
+      if (Object.keys(propertyTypesMap).length === 0) {
+        try {
+          const res = await fetch(
+            `${API_BASE_URL}/properties/types?languageId=${languageId}`
+          );
+          if (!res.ok) throw new Error(`Failed: ${res.status}`);
+          const data = await res.json();
+          if (data?.success && data.data && mounted) {
+            const typesMap: Record<number, string> = {};
+            data.data.forEach((type: any) => {
+              typesMap[type.id] = type.name;
+            });
+            setPropertyTypesMap(typesMap);
+          }
+        } catch (err) {
+          console.error("Error loading property types:", err);
         }
-      } catch (err) {
-        console.error("Error loading property types:", err);
+      }
+
+      // Then load region counts (can use cache)
+      if (mounted) {
+        try {
+          await fetchRegionCounts();
+        } catch (err) {
+          console.error("Error loading region counts:", err);
+        }
       }
     };
 
-    const fetchRegionCounts = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/properties/regions/counts`);
-        if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const data = await res.json();
-
-        if (data?.success && data.data?.regions) {
-          const formatted = data.data.regions.map((r: any) => ({
-            regionId: r.regionId,
-            region: r.region,
-            count: r.count,
-          }));
-          setRegionCounts(formatted);
-        }
-      } catch (err) {
-        console.error("Error loading region counts:", err);
-      }
+    loadData();
+    
+    return () => {
+      mounted = false;
     };
-
-    fetchPropertyTypes();
-    fetchRegionCounts();
-  }, [API_BASE_URL]);
+  }, [API_BASE_URL, languageId, propertyTypesMap, setPropertyTypesMap, fetchRegionCounts]);
 
   // handle form submit -> build query string
   const handleSubmit = (e: React.FormEvent) => {
@@ -156,7 +182,7 @@ export default function AdvancedSearchPage() {
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
                 <option value="">{tFilters('all')}</option>
-                {regionCounts.map((r) => (
+                {regionCountsFormatted.map((r) => (
                   <option key={r.regionId} value={r.regionId}>
                     {r.region} ({r.count})
                   </option>

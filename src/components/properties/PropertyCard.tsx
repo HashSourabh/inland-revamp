@@ -128,7 +128,7 @@ export default function PropertyCard({ property, card = 'grid', featured = false
       <div className={`relative ${card === 'list' ? 'col-span-2' : ''}`}>
         {/* Property image */}
         <Link href={`/properties/${property.id}`}>
-          <div className={`relative aspect-[4/3] overflow-hidden ${card === 'list' ? 'w-full' : 'w-full'}`}>
+          <div className={`relative aspect-[4/3] overflow-hidden bg-neutral-200 ${card === 'list' ? 'w-full' : 'w-full'}`}>
             <Image
               src={mainImage?.url || '/placeholder-property.jpg'}
               alt={mainImage?.alt || 'Property Image'}
@@ -136,6 +136,9 @@ export default function PropertyCard({ property, card = 'grid', featured = false
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-110"
               priority={featured}
+              loading={featured ? undefined : 'lazy'}
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
             />
           </div>
         </Link>
