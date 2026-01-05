@@ -217,19 +217,19 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
     <div className="min-h-screen bg-neutral-50 pb-16 dark:bg-neutral-900">
       <div className="mx-auto max-w-7xl px-4 pt-7">
         {/* Header */}
-        <div className="mb-5">
+        {/* <div className="mb-5">
           <Link href="/properties" className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-1 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
             <ArrowLeftIcon className="h-4 w-4" /> Back
           </Link>
-        </div>
+        </div> */}
 
         {/* Property Info */}
-        <div className="mb-8 flex flex-col gap-2.5 sm:justify-between">
-          <div className="flex justify-between">
+        <div className="mb-4 sm:mb-8 flex flex-col gap-2.5 sm:justify-between">
+          <div className="flex flex-col sm:flex-row justify-between gap-2.5">
             <div>
-              <h1 className="text-2xl font-bold">{property.title}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold">{property.title}</h1>
               {(property.location.town || property.location.province) && (
-                <p className="mt-1 text-base text-neutral-600">
+                <p className="mt-1 text-sm sm:text-base text-neutral-600">
                   {[property.location.town, property.location.province].filter(Boolean).join(' / ')}
                 </p>
               )}
@@ -246,7 +246,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
         </div>
 
         {/* Main Content */}
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className=" grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div className='space-y-6'>
             <PropertyGallery
               images={property.images}
@@ -317,8 +317,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
             {/* Description */}
             {property.description && (
               <div>
-                <h2 className="mb-4 text-xl font-semibold">{t('details.description')}</h2>
-                <p className="text-neutral-700 dark:text-neutral-300">
+                <h2 className="sm:mb-4 mb-2 text-lg sm:text-xl font-semibold">{t('details.description')}</h2>
+                <p className="text-neutral-700 dark:text-neutral-300 text-sm sm:text-base">
                   {property.description}
                 </p>
               </div>
@@ -327,8 +327,8 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           {/* Location - Only show if we have valid coordinates (not 0 or null) */}
           {property.lat && property.lng && property.lat !== 0 && property.lng !== 0 && (
           <div className="lg:col-span-2">
-            <h2 className="mb-3 text-xl font-semibold">Location</h2>
-            <div className="aspect-[16/5] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+            <h2 className="sm:mb-3 mb-2 text-lg sm:text-xl font-semibold">Location</h2>
+            <div className="sm:aspect-[16/5] aspect-[1/1] w-full overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
               <iframe
                 src={`https://www.google.com/maps?q=${property.lat},${property.lng}&z=15&output=embed`}
                 width="100%"

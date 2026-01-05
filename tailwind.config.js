@@ -94,6 +94,7 @@ module.exports = {
       },
       screens: {
         xs: '380px',
+        '2xs': '475px',
       },
       keyframes: {
         fadeIn: {

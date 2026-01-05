@@ -127,8 +127,8 @@ export default function UsefulLinksPage() {
   return (
     <div className="mx-auto max-w-7xl px-5 my-10">
       {/* Hero Section */}
-      <div className="mb-8 bg-white rounded-xl border border-black/10 p-6">
-        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-5">
+      <div className="lg:mb-8 sm:mb-6 mb-4 bg-white rounded-xl md:p-8 sm:p-6 xs:p-5 p-4 border border-black/10">
+        <h1 className="font-heading lg:text-3xl sm:text-2xl text-xl font-bold text-primary-600 lg:mb-6 sm:mb-4 mb-3">
           {t("header.title")}
         </h1>
         <p className="text-base text-neutral-600 m-0">
@@ -137,23 +137,23 @@ export default function UsefulLinksPage() {
       </div>
 
       {/* Links Grid */}
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-2 2xs:gap-4 sm:gap-6 lg:gap-8 md:grid-cols-2">
         {categories.map((category, index) => (
-          <div key={index} className="rounded-xl bg-white p-6 border border-black/10">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-600">
+          <div key={index} className="bg-white rounded-xl md:p-8 sm:p-6 xs:p-5 p-4 border border-black/10">
+            <div className="sm:mb-6 mb-4 flex items-center gap-3">
+              <div className="flex 2xs:h-12 2xs:w-12 h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-primary-600">
                 {category.icon}
               </div>
-              <h2 className="text-xl font-semibold text-primary-900">
+              <h2 className="sm:text-xl text-lg font-semibold text-primary-900">
                 {category.title}
               </h2>
             </div>
-            <div className="space-y-4">
+            <div className="2xs:space-y-4 space-y-2">
               {category.links.map((link, linkIndex) => (
                 <Link
                   key={linkIndex}
                   href={link.url}
-                  className="block rounded-lg border border-black/10 p-4 transition-colors hover:border-primary-500 hover:bg-primary-50"
+                  className="block rounded-lg border border-black/10 sm:p-4 p-3 transition-colors hover:border-primary-500 hover:bg-primary-50"
                 >
                   <h3 className="font-semibold text-neutral-900">
                     {link.title}

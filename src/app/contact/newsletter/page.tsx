@@ -10,30 +10,30 @@ export default function NewsletterPage() {
   const [captcha, setCaptcha] = useState("");
 
   return (
-    <div className="mx-auto max-w-7xl px-5 my-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 lg:gap-8 gap-4">
       {/* Left: Newsletter Content */}
-      <section className="md:col-span-2 bg-white rounded-xl p-8 border border-black/10">
-        <h1 className="text-3xl font-bold text-primary-600 dark:text-white mb-6">
+      <section className="md:col-span-3 lg:col-span-4 bg-white rounded-xl md:p-8 sm:p-6 xs:p-5 p-4 border border-black/10">
+        <h1 className="font-heading lg:text-3xl sm:text-2xl text-xl font-bold text-primary-600 lg:mb-6 sm:mb-4 mb-3">
           {t("header.title")}
         </h1>
 
-        <p className="mb-2 text-neutral-600 text-base">
+        <p className="sm:mb-10 mb-6 text-neutral-600 text-sm sm:text-base lg:text-lg">
           {t("intro.paragraph1")}
         </p>
-        <p className="mb-8 text-neutral-600 text-base">
+        <p className="sm:mb-10 mb-6 text-neutral-600 text-sm sm:text-base lg:text-lg">
           {t("intro.paragraph2")}
         </p>
 
-        <form className="bg-neutral-50 rounded-xl p-8 mx-auto">
-          <h2 className="text-2xl font-semibold text-primary-900 mb-8 text-center">
+        <form className="bg-neutral-50 rounded-xl lg:p-8 md:p-6 xs:p-5 p-4 mx-auto">
+          <h2 className="sm:text-2xl text-xl font-semibold text-primary-900 sm:mb-8 mb-6 text-center">
             {t("form.title")}
           </h2>
 
-          <div className="flex flex-col gap-6 mb-4 mx-auto max-w-[600px]">
+          <div className="flex flex-col sm:gap-6 gap-4 mb-4 mx-auto max-w-[600px]">
             <div>
               <label
                 htmlFor="name"
-                className="block font-medium text-neutral-900 mb-1"
+                className="block font-medium text-neutral-900 sm:mb-1 mb-0.5 text-sm sm:text-base"
               >
                 {t("form.fields.name.label")}
               </label>
@@ -49,7 +49,7 @@ export default function NewsletterPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block font-medium text-neutral-900 mb-1"
+                className="block font-medium text-neutral-900 sm:mb-1 mb-0.5 text-sm sm:text-base"
               >
                 {t("form.fields.email.label")}
               </label>
@@ -63,7 +63,7 @@ export default function NewsletterPage() {
             </div>
           </div>
 
-          <div className="flex items-center mb-6 mx-auto max-w-[600px]">
+          <div className="flex items-center sm:mb-6 mb-4 mx-auto max-w-[600px]">
             <input
               id="unsubscribe"
               name="unsubscribe"
@@ -74,16 +74,16 @@ export default function NewsletterPage() {
             />
             <label
               htmlFor="unsubscribe"
-              className="ml-2 text-neutral-600 text-sm"
+              className="ml-2 text-neutral-600 sm:text-base text-sm"
             >
               {t("form.fields.unsubscribe.label")}
             </label>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8 mx-auto max-w-[600px]">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:mb-8 mb-4 mx-auto max-w-[600px]">
             <label
               htmlFor="captcha"
-              className="font-medium text-base text-neutral-900 flex-shrink-0"
+              className="font-medium sm:text-base text-sm text-neutral-900 flex-shrink-0"
             >
               {t("form.fields.captcha.label")}
               <span className="ml-2">{t("form.fields.captcha.question")}</span>
@@ -109,7 +109,9 @@ export default function NewsletterPage() {
       </section>
 
       {/* Right: Sidebar (Promos) */}
-      <PromoSidebar />
+      <div className="md:col-span-2 lg:col-span-2">
+        <PromoSidebar />
+      </div>
 
       <style jsx global>{`
         .font-script {

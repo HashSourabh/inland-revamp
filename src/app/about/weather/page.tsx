@@ -574,40 +574,40 @@ export default function AboutWeatherPage() {
   const t = useTranslations("about-us");
 
   return (
-    <div className="mx-auto max-w-7xl px-5  my-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 lg:gap-8 gap-4">
       {/* Left: Weather Content */}
-      <section className="md:col-span-2 bg-white rounded-xl p-8 border border-black/10">
+      <section className="md:col-span-3 lg:col-span-4 bg-white rounded-xl md:p-8 sm:p-6 xs:p-5 p-4 border border-black/10">
         <div className="mb-4">
-          <h1 className="text-3xl font-bold text-primary-600 mb-6">{t("weather.title")}</h1>
-          <p className="mb-4 text-neutral-600 text-base">
+          <h1 className="font-heading lg:text-3xl sm:text-2xl text-xl font-bold text-primary-600 lg:mb-6 sm:mb-4 mb-3">{t("weather.title")}</h1>
+          <p className="mb-4 text-neutral-600 text-sm sm:text-base lg:text-lg">
             {t("weather.text1")}
           </p>
         </div>
         {/* Province Cards Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-4 gap-2 sm:mb-10 mb-5">
           {Object.entries(provinceWeatherLinks).map(([key, url]) => (
             <a
               key={key}
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center aspect-square rounded bg-secondary-500 hover:bg-secondary-500 transition text-white text-lg font-medium shadow hover:shadow-md text-center py-2.5"
+              className="flex items-center justify-center aspect-square rounded bg-secondary-500 hover:bg-secondary-500 transition text-white md:text-lg sm:text-base text-sm font-medium shadow hover:shadow-md text-center sm:py-2.5 py-2"
             >
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </a>
           ))}
         </div>
-        <p className="mb-4 text-neutral-600 text-base">{t("weather.text2")}
+        <p className="mb-4 text-neutral-600 text-sm sm:text-base lg:text-lg">{t("weather.text2")}
         </p>
         {/* Quick Towns Section */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-6 sm:mb-10 mb-5">
           {quickTowns.filter((prov) => prov.towns.length > 0).map((prov) => (
             <div key={prov.province}>
-              <h3 className="font-medium text-primary-900 mb-2 capitalize text-xl pb-3 border-b border-primary-600/10 mb-4">{prov.province}</h3>
-              <ul className="flex gap-3 flex-wrap">
+              <h3 className="font-medium text-primary-900 mb-2 capitalize sm:text-xl text-lg sm:pb-3 pb-2 border-b border-primary-600/10 sm:mb-4 mb-2s">{prov.province}</h3>
+              <ul className="flex sm:gap-3 gap-2 flex-wrap">
                 {prov.towns.map((town) => (
                   <li key={town.name} className="">
-                    <Link href={`${town.weather}`} className="inline-block bg-slate-100 hover:bg-primary-100 font-medium rounded px-5 text-sm py-2.5 text-primary-900 border border-primary-600/10 hover:shadow-md cursor-pointer">
+                    <Link href={`${town.weather}`} className="inline-block bg-slate-100 hover:bg-primary-100 font-medium rounded sm:px-5 px-2 text-sm py-1.5 sm:py-2.5 text-primary-900 border border-primary-600/10 hover:shadow-md cursor-pointer">
                       {town.name}
                     </Link>
                   </li>
@@ -619,8 +619,7 @@ export default function AboutWeatherPage() {
       </section>
 
       {/* Right: Sidebar (Promos) */}
-      <div>
-
+      <div className="md:col-span-2 lg:col-span-2">
         <PromoSidebar />
       </div>
       <style jsx global>{`
