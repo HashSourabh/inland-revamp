@@ -7,7 +7,6 @@ import Mapimage from "@/assets/images/AndaluciaMap.gif";
 
 export default function AboutLocationPage() {
   const t = useTranslations("about-us");
-
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-5 lg:grid-cols-6 lg:gap-8 gap-4">
       {/* Left: Location Content */}
@@ -27,7 +26,6 @@ export default function AboutLocationPage() {
             className=""
           />
         </div>
-
         <p className="mb-4 text-neutral-600 text-sm sm:text-base lg:text-lg">{t("location.content.paragraph4")}</p>
       </section>
 
