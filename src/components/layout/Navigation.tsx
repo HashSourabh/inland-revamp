@@ -31,6 +31,7 @@ interface NavLinkConfig {
 
 interface NavigationProps {
   isRtl?: boolean;
+  onLinkClick?: () => void;
 }
 
 const propertySearchLinks: NavLinkConfig[] = [
@@ -70,7 +71,7 @@ const contactLinks: NavLinkConfig[] = [
   { href: 'https://inlandandalucia.com/agentlogin.aspx', labelKey: 'links.agentsPrivateArea', icon: UserGroupIcon }
 ];
 
-export default function Navigation({ isRtl = false }: NavigationProps) {
+export default function Navigation({ isRtl = false, onLinkClick }: NavigationProps) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownPositionClass = isRtl ? 'right-0 left-auto' : 'left-0';
   const t = useTranslations('navigation');
@@ -92,6 +93,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 px-6 py-2.5 text-sm text-neutral-900 lg:text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
+            onClick={onLinkClick}
           >
             <Icon className="h-5 w-5 text-secondary-400" />
             {t(link.labelKey)}
@@ -104,6 +106,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
           key={link.href}
           href={link.href}
           className="flex items-center gap-3 px-6 py-2.5 text-sm text-neutral-900 lg:text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
+          onClick={onLinkClick}
         >
           <Icon className="h-5 w-5 text-secondary-400" />
           {t(link.labelKey)}
@@ -113,7 +116,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
 
   return (
     <nav className={`flex flex-col lg:flex-row items-start lg:items-center gap-2 lg:gap-3 xl:gap-5   ${isRtl ? 'flex-row-reverse' : ''}`}>
-      <Link href="/" className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto">
+      <Link href="/" className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto" onClick={onLinkClick}>
         <HomeIcon className="h-5 w-5 text-secondary-400 hidden lg:inline-block" /> <span className="text-[15px] inline-block lg:hidden font-medium">Home</span>
       </Link>
 
@@ -176,6 +179,7 @@ export default function Navigation({ isRtl = false }: NavigationProps) {
         target="_blank"
         rel="nofollow noreferrer"
         className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto"
+        onClick={onLinkClick}
       >
         {t('links.blog')}
       </a>

@@ -85,16 +85,16 @@ export default function GranadaPage() {
   return (
     <div className="">
       <div className="max-w-none">
-        <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden bg-black">
+        <div className="relative w-full h-[250px] md:h-[400px] mb-8 overflow-hidden bg-black">
           <Image src={Granada} alt={`${displayRegionName} Mezquita`} fill className="object-cover mt-0 opacity-45" priority />
           <div className="absolute top-0 left-0 w-full h-full flex items-center">
             <div className="mx-auto max-w-5xl px-5 text-center">
-              <h1 className="font-heading text-5xl font-bold text-white mb-2">  {t('granada.title')}</h1>
+              <h1 className="font-heading lg:text-5xl md:text-4xl text-3xl font-bold text-white mb-2">  {t('granada.title')}</h1>
             </div>
           </div>
         </div>
-        <div className="mx-auto max-w-7xl px-5 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
-          <div className="col-span-3">
+        <div className="mx-auto max-w-7xl px-5 grid grid-cols-6 lg:grid-cols-4 gap-6 xl:gap-10 mb-10">
+          <div className="col-span-6 md:col-span-4 lg:col-span-3">
             <p className="text-base mb-8 text-neutral-700">
                {t('description')}
             </p>
@@ -105,16 +105,16 @@ export default function GranadaPage() {
             ) : error ? (
               <p className="text-red-600">{error}</p>
             ) : areas.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 2xs:grid-cols-2 lg:grid-cols-3 gap-3">
                 {areas.map((area) => (
                   <Link
                     key={area.areaId}
                     href={`/properties?regionId=${regionId}&areaId=${area.areaId}`}
-                    className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                    className="block p-3 md:p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-primary-900 font-medium">{area.areaName}</span>
-                      <span className="text-secondary-600">
+                      <span className="text-primary-900 font-medium text-sm sm:text-base">{area.areaName}</span>
+                      <span className="text-secondary-600 text-sm sm:text-base">
                         {area.count} {area.count === 1 ? tCommon('property') : tCommon('properties')}
                       </span>
                     </div>
@@ -126,17 +126,17 @@ export default function GranadaPage() {
             )}
 
 
-            <div className="space-y-6">
+            <div className="md:space-y-6 space-y-4 mt-6">
               <section>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4"> {t('granada.section1.heading')}</h2>
-                    <p className="text-base text-neutral-700">
+                    <h2 className="lg:text-3xl md:text-2xl text-xl font-semibold text-primary-900 mb-2 sm:mb-4"> {t('granada.section1.heading')}</h2>
+                    <p className="md:text-base text-sm text-neutral-700">
                       {t('granada.section1.text')}
                     </p>
                   </div>
-                  <div className="relative h-[300px] rounded-lg overflow-hidden">
+                  <div className="relative h-[300px] rounded-lg overflow-hidden ">
                     {/* Performance: Lazy load below-the-fold images */}
                     <Image
                       src={Granada1}
@@ -151,8 +151,8 @@ export default function GranadaPage() {
               </section>
 
               <section>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                  <div className="relative h-[300px] rounded-lg overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+                  <div className="relative h-[300px] rounded-lg overflow-hidden row-start-2 lg:row-start-1 lg:col-start-1">
                     <Image
                       src={Granada2}
                       alt={tCommon('sierraNevadaMountains')}
@@ -164,8 +164,8 @@ export default function GranadaPage() {
                   </div>
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('granada.section2.heading')}</h2>
-                    <p className="text-base text-neutral-700">
+                    <h2 className="lg:text-3xl md:text-2xl text-xl font-semibold text-primary-900 mb-2 sm:mb-4">{t('granada.section2.heading')}</h2>
+                    <p className="md:text-base text-sm text-neutral-700">
                      {t('granada.section2.text')}
                     </p>
                   </div>
@@ -173,11 +173,11 @@ export default function GranadaPage() {
               </section>
 
               <section>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('granada.section3.heading')}</h2>
-                    <p className="text-base text-neutral-700">
+                    <h2 className="lg:text-3xl md:text-2xl text-xl font-semibold text-primary-900 mb-2 sm:mb-4">{t('granada.section3.heading')}</h2>
+                    <p className="md:text-base text-sm text-neutral-700">
                       {t('granada.section3.text')}
                     </p>
                   </div>
@@ -195,8 +195,8 @@ export default function GranadaPage() {
               </section>
 
               <section>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                  <div className="relative h-[300px] rounded-lg overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+                  <div className="relative h-[300px] rounded-lg overflow-hidden row-start-2 md:row-start-1 md:col-start-1">
                     <Image
                       src={Granada5}
                       alt={tCommon('outdoorActivitiesGranada')}
@@ -208,8 +208,8 @@ export default function GranadaPage() {
                   </div>
                   <div>
 
-                    <h2 className="text-3xl font-semibold text-primary-900 mb-4">{t('granada.section4.heading')}</h2>
-                    <p className="text-base text-neutral-700">
+                    <h2 className="lg:text-3xl md:text-2xl text-xl font-semibold text-primary-900 mb-2 sm:mb-4">{t('granada.section4.heading')}</h2>
+                    <p className="md:text-base text-sm text-neutral-700">
                       {t('granada.section4.text')}
                     </p>
                   </div>
@@ -217,12 +217,10 @@ export default function GranadaPage() {
               </section>
             </div>
           </div>
-          <div>
+          <div className="col-span-6 md:col-span-2 lg:col-span-1 md:block hidden">
             <TownGuideNav />
           </div>
         </div>
-
-
 
       </div>
     </div>

@@ -97,6 +97,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                           target="_blank" 
                           rel="nofollow noreferrer"
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
+                          onClick={() => setIsOpen(false)}
                         >
                           {t('links.blog')}
                         </a>

@@ -226,7 +226,7 @@ export default function Header() {
                   </button>
                 </div>
                 <div>
-                  <Navigation />
+                  <Navigation onLinkClick={() => setIsMobileMenuOpen(false)} />
                 </div>
               </motion.div>
             )}

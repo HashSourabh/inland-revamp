@@ -585,582 +585,582 @@ export default function AccountPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
       <h1 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">{t('title')}</h1>
 
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+      <div className="flex flex-col md:flex-row gap-4 lg:gap-6">
         {/* Sidebar */}
         <div className="w-full md:w-64 flex-shrink-0">
-            <div className="bg-white border rounded-lg shadow-sm">
-              <nav className="p-2 grid grid-cols-2 md:grid-cols-1 gap-1 md:gap-0">
-                <button
-                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "profile" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
-                  onClick={() => setTab("profile")}
-                >
-                  {t('tabs.profile')}
-                </button>
-                <button
-                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "favourites" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
-                  onClick={() => setTab("favourites")}
-                >
-                  {t('tabs.favourites')}
-                </button>
-                <button
-                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "reservations" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
-                  onClick={() => setTab("reservations")}
-                >
-                  {t('tabs.reservations')}
-                </button>
-                <button
-                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
-                  onClick={() => setTab("criterias")}
-                >
-                  {t('tabs.criterias')}
-                </button>
-              </nav>
-            </div>
+          <div className="bg-white border rounded-lg shadow-sm">
+            <nav className="p-2 grid grid-cols-2 md:grid-cols-1 gap-1 md:gap-0">
+              <button
+              className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "profile" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                onClick={() => setTab("profile")}
+              >
+                {t('tabs.profile')}
+              </button>
+              <button
+              className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "favourites" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                onClick={() => setTab("favourites")}
+              >
+                {t('tabs.favourites')}
+              </button>
+              <button
+              className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "reservations" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                onClick={() => setTab("reservations")}
+              >
+                {t('tabs.reservations')}
+              </button>
+              <button
+              className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-md transition-colors text-sm sm:text-base ${tab === "criterias" ? "bg-primary-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
+                onClick={() => setTab("criterias")}
+              >
+                {t('tabs.criterias')}
+              </button>
+            </nav>
           </div>
-
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
-            {tab === "profile" && (
-              <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-                  <div className="flex items-center gap-4">
-                    {(profilePreview || user.profileImageUrl) ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={(profilePreview || user.profileImageUrl) as string}
-                        alt={tCommon('profile')}
-                        className="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover border"
-                      />
-                    ) : (
-                      <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gray-200 grid place-items-center border">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-gray-500 sm:w-7 sm:h-7">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </div>
-                    )}
+        </div>
+        {/* Main Content */}
+        <div className="flex-1 min-w-0">
+          {tab === "profile" && (
+            <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                <div className="flex items-center gap-4">
+                  {(profilePreview || user.profileImageUrl) ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={(profilePreview || user.profileImageUrl) as string}
+                      alt={tCommon('profile')}
+                      className="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover border"
+                    />
+                  ) : (
+                    <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full bg-gray-200 grid place-items-center border">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-gray-500 sm:w-7 sm:h-7">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                  )}
+                  <div>
+                    <div className="text-lg sm:text-xl font-semibold">{t('profile.title')}</div>
                     <div>
-                      <div className="text-lg sm:text-xl font-semibold">{t('profile.title')}</div>
-                      <div>
-                        <button
-                          type="button"
-                          onClick={startUpload}
-                          className="text-primary-600 hover:underline text-xs sm:text-sm inline-flex items-center gap-1"
-                          disabled={uploading}
-                        >
-                          <span>{uploading ? t('profile.uploading') : t('profile.uploadPhoto')}</span>
-                        </button>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          onChange={onFileChange}
-                          hidden
-                        />
-                      </div>
+                      <button
+                        type="button"
+                        onClick={startUpload}
+                        className="text-primary-600 hover:underline text-xs sm:text-sm inline-flex items-center gap-1"
+                        disabled={uploading}
+                      >
+                        <span>{uploading ? t('profile.uploading') : t('profile.uploadPhoto')}</span>
+                      </button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={onFileChange}
+                        hidden
+                      />
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPwdOpen(true);
-                      setPwdMsg(null);
-                      setPwdForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
-                    }}
-                    className="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50 text-sm sm:text-base w-full sm:w-auto"
-                  >
-                    {t('profile.changePassword')}
-                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPwdOpen(true);
+                    setPwdMsg(null);
+                    setPwdForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+                  }}
+                  className="px-2 py-1.5 border rounded-md text-gray-700 hover:bg-gray-50 text-sm w-full sm:w-auto font-medium"
+                >
+                  {t('profile.changePassword')}
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveProfile} className="w-full space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">{t('profile.firstName')}</label>
+                    <input
+                      type="text"
+                      className={`w-full rounded-md border px-3 py-2 ${profileErrors.firstName ? 'border-red-500' : ''}`}
+                      value={profileForm.firstName}
+                      onChange={(e) => {
+                        setProfileForm({ ...profileForm, firstName: e.target.value });
+                        clearProfileError("firstName");
+                      }}
+                      aria-invalid={Boolean(profileErrors.firstName)}
+                      aria-required="true"
+                    />
+                    {profileErrors.firstName && <p className="text-xs text-red-600 mt-1">{profileErrors.firstName}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">{t('profile.lastName')}</label>
+                    <input
+                      type="text"
+                      className={`w-full rounded-md border px-3 py-2 ${profileErrors.lastName ? 'border-red-500' : ''}`}
+                      value={profileForm.lastName}
+                      onChange={(e) => {
+                        setProfileForm({ ...profileForm, lastName: e.target.value });
+                        clearProfileError("lastName");
+                      }}
+                      aria-invalid={Boolean(profileErrors.lastName)}
+                      aria-required="true"
+                    />
+                    {profileErrors.lastName && <p className="text-xs text-red-600 mt-1">{profileErrors.lastName}</p>}
+                  </div>
                 </div>
 
-                <form onSubmit={handleSaveProfile} className="max-w-xl space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">{t('profile.firstName')}</label>
-                      <input
-                        type="text"
-                        className={`w-full rounded-md border px-3 py-2 ${profileErrors.firstName ? 'border-red-500' : ''}`}
-                        value={profileForm.firstName}
-                        onChange={(e) => {
-                          setProfileForm({ ...profileForm, firstName: e.target.value });
-                          clearProfileError("firstName");
-                        }}
-                        aria-invalid={Boolean(profileErrors.firstName)}
-                        aria-required="true"
-                      />
-                      {profileErrors.firstName && <p className="text-xs text-red-600 mt-1">{profileErrors.firstName}</p>}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">{t('profile.lastName')}</label>
-                      <input
-                        type="text"
-                        className={`w-full rounded-md border px-3 py-2 ${profileErrors.lastName ? 'border-red-500' : ''}`}
-                        value={profileForm.lastName}
-                        onChange={(e) => {
-                          setProfileForm({ ...profileForm, lastName: e.target.value });
-                          clearProfileError("lastName");
-                        }}
-                        aria-invalid={Boolean(profileErrors.lastName)}
-                        aria-required="true"
-                      />
-                      {profileErrors.lastName && <p className="text-xs text-red-600 mt-1">{profileErrors.lastName}</p>}
-                    </div>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('profile.username')}</label>
+                  <input
+                    type="text"
+                    className="w-full rounded-md border px-3 py-2 bg-gray-50 text-gray-600 cursor-not-allowed"
+                    value={user.username || ""}
+                    disabled
+                    readOnly
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">{t('profile.username')}</label>
-                    <input
-                      type="text"
-                      className="w-full rounded-md border px-3 py-2 bg-gray-50 text-gray-600 cursor-not-allowed"
-                      value={user.username || ""}
-                      disabled
-                      readOnly
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('profile.email')}</label>
+                  <input
+                    type="email"
+                    className="w-full rounded-md border px-3 py-2 bg-gray-50 text-gray-600 cursor-not-allowed"
+                    value={user.email || ""}
+                    disabled
+                    readOnly
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">{t('profile.email')}</label>
-                    <input
-                      type="email"
-                      className="w-full rounded-md border px-3 py-2 bg-gray-50 text-gray-600 cursor-not-allowed"
-                      value={user.email || ""}
-                      disabled
-                      readOnly
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1">{t('profile.phone')}</label>
-                    <PhoneInput
-                      international
-                      defaultCountry="ES"
-                      value={profileForm.contactNumber || undefined}
-                      onChange={(value) => {
-                        setProfileForm({ ...profileForm, contactNumber: value || "" });
-                        clearProfileError("contactNumber");
-                      }}
-                      className={`phone-input-wrapper ${profileErrors.contactNumber ? 'phone-input-error' : ''}`}
-                      numberInputProps={{
-                        className: `w-full rounded-md border px-3 py-2 ${profileErrors.contactNumber ? 'border-red-500' : 'border-gray-300'}`,
-                        "aria-invalid": Boolean(profileErrors.contactNumber),
-                      }}
-                      placeholder={t('profile.phonePlaceholder')}
-                    />
-                    {profileErrors.contactNumber && <p className="text-xs text-red-600 mt-1">{profileErrors.contactNumber}</p>}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1">{t('profile.address')}</label>
-                    <input
-                      type="text"
-                      className={`w-full rounded-md border px-3 py-2 ${profileErrors.buyer_address ? 'border-red-500' : ''}`}
-                      value={profileForm.buyer_address}
-                      onChange={(e) => {
-                        setProfileForm({ ...profileForm, buyer_address: e.target.value });
-                        clearProfileError("buyer_address");
-                      }}
-                      placeholder={t('profile.addressPlaceholder')}
-                      aria-invalid={Boolean(profileErrors.buyer_address)}
-                    />
-                    {profileErrors.buyer_address && <p className="text-xs text-red-600 mt-1">{profileErrors.buyer_address}</p>}
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={saving}
-                    className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {saving ? t('profile.saving') : t('profile.saveChanges')}
-                  </button>
-                </form>
-
-                <PasswordModal
-                  open={pwdOpen}
-                  onClose={() => setPwdOpen(false)}
-                  onSubmit={async (e: React.FormEvent) => {
-                    e.preventDefault();
-                    setPwdMsg(null);
-                    setPwdLoading(true);
-
-                    if (!pwdForm.currentPassword.trim() || !pwdForm.newPassword.trim() || !pwdForm.confirmPassword.trim()) {
-                      setPwdLoading(false);
-                      return setPwdMsg({ type: 'error', text: t('password.allFieldsRequired') });
-                    }
-
-                    if (pwdForm.newPassword.length < 8) {
-                      setPwdLoading(false);
-                      return setPwdMsg({ type: 'error', text: t('password.weakPassword') });
-                    }
-
-                    if (pwdForm.newPassword !== pwdForm.confirmPassword) {
-                      setPwdLoading(false);
-                      return setPwdMsg({ type: 'error', text: t('password.passwordMismatch') });
-                    }
-
-                    try {
-                      const token = getToken();
-                      const language_id = localStorage.getItem("LanguageId") || "1";
-                      const headers: HeadersInit = { 'Content-Type': 'application/json', 'X-Language-Id': language_id };
-                      if (token) headers['Authorization'] = `Bearer ${token}`;
-
-                      const res = await fetch(`${API_BASE_URL}/buyers/me/password?language_id=${language_id}`, {
-                        method: 'PUT',
-                        credentials: 'include',
-                        headers,
-                        body: JSON.stringify({
-                          currentPassword: pwdForm.currentPassword,
-                          newPassword: pwdForm.newPassword
-                        })
-                      });
-
-                      const data = await res.json();
-                      if (!res.ok) throw new Error(data?.message || data?.error || t('password.updateError'));
-
-                      // Always use frontend translation for consistency
-                      setPwdMsg({ type: 'success', text: t('password.success') });
-                      setPwdForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
-                      setTimeout(() => setPwdOpen(false), 1200);
-                    } catch (err: any) {
-                      setPwdMsg({ type: 'error', text: err.message || t('password.updateError') });
-                    } finally {
-                      setPwdLoading(false);
-                    }
-                  }}
-                  pwdForm={pwdForm}
-                  setPwdForm={setPwdForm}
-                  pwdMsg={pwdMsg}
-                  setPwdMsg={setPwdMsg}
-                  pwdLoading={pwdLoading}
-                />
-              </div>
-            )}
-
-            {tab === "favourites" && (
-              <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
-                <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('favourite.title')}</h2>
-
-                {/* 🔄 Loader while fetching */}
-                {isFavLoading ? (
-                  <AccountSectionLoader message={t('favourite.loading')} />
-                ) : favDetails.length === 0 ? (
-                  <div className="text-gray-600">{t('favourite.noFavourites')}</div>
-                ) : (
-                  <div className="overflow-x-auto -mx-4 sm:mx-0">
-                    <div className="inline-block min-w-full align-middle px-4 sm:px-0">
-                      <table className="min-w-full text-xs sm:text-sm text-gray-700">
-                        <thead className="bg-gray-50 border-b">
-                          <tr>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.photo')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.propertyInfo')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700 hidden sm:table-cell">{t('favourite.addedOn')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.price')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('favourite.action')}</th>
-                          </tr>
-                        </thead>
-
-                      <tbody>
-                        {favDetails.map((f) => {
-                          const ref = f.Property_Ref || f.Property_ID;
-                          const propertyName = f.Property_Name || f.Property_Title || f.Property_Type_Name || f.Property_Type || "";
-                          const displayName = propertyName ? `${propertyName} (${ref})` : ref;
-                          const img = ref
-                            ? `https://www.inlandandalucia.com/images/photos/properties/${ref}/${ref}_1.jpg`
-                            : "https://www.inlandandalucia.com/images/no-image-available.jpg";
-                          const description = f.Property_Description || f.Short_Description || f.Property_Short_Description || "";
-                          const bedrooms = f.Bedrooms || f.Property_Bedrooms || 0;
-                          const bathrooms = f.Bathrooms || f.Property_Bathrooms || 0;
-                          const area = f.Build_Size || f.Property_Build_Size || f.Square_Meters || 0;
-
-                          return (
-                            <tr key={ref} className="border-b hover:bg-gray-50 transition-colors">
-                              <td className="p-2 sm:p-4">
-                                <img
-                                  src={img}
-                                  alt={`Property ${ref}`}
-                                  className="w-20 h-16 sm:w-32 sm:h-24 min-w-20 sm:min-w-32 object-cover rounded-lg"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src =
-                                      "https://www.inlandandalucia.com/images/no-image-available.jpg";
-                                  }}
-                                />
-                              </td>
-                              <td className="p-2 sm:p-4">
-                                <div className="space-y-1 sm:space-y-2">
-                                  <h3 className="font-semibold text-gray-900 text-xs sm:text-base">
-                                    {displayName}
-                                  </h3>
-                                  {description && (
-                                    <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 hidden sm:block">
-                                      {description.length > 100 ? `${description.substring(0, 100)}...` : description}
-                                    </p>
-                                  )}
-                                  <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
-                                    {new Date(f.DateCreated).toLocaleDateString('en-US', { 
-                                      year: 'numeric', 
-                                      month: 'short', 
-                                      day: 'numeric' 
-                                    })}
-                                  </div>
-                                  {area > 0 && (
-                                    <div className="flex items-center gap-1 text-gray-600 text-xs sm:text-sm">
-                                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                                      </svg>
-                                      <span>{area} {t('favourite.sqFt') || 'Sq Ft'}</span>
-                                    </div>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="p-2 sm:p-4 text-gray-600 hidden sm:table-cell">
-                                {new Date(f.DateCreated).toLocaleDateString('en-US', { 
-                                  year: 'numeric', 
-                                  month: 'long', 
-                                  day: 'numeric' 
-                                })}
-                              </td>
-                              <td className="p-2 sm:p-4">
-                                <span className="font-semibold text-gray-900 text-xs sm:text-base">
-                                  {f.Public_Price ? `€${f.Public_Price.toLocaleString()}` : "-"}
-                                </span>
-                              </td>
-                              <td className="p-2 sm:p-4">
-                                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-2 justify-end">
-                                  <Link
-                                    href={`/properties/${encodeURIComponent(f.Property_ID)}`}
-                                    className="p-1.5 sm:p-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors inline-flex items-center justify-center"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    title={t('favourite.viewProperty') || 'View Property'}
-                                  >
-                                    <EyeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                                  </Link>
-                                  <button
-                                    onClick={() => { setPendingRemoveId(f.Property_ID); setConfirmOpen(true); }}
-                                    className="p-1.5 sm:p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors inline-flex items-center justify-center"
-                                    title={t('favourite.remove') || 'Remove'}
-                                  >
-                                    <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                                  </button>
-                                  <button
-                    onClick={() => {
-                      setSelectedProperty(f);
-                      setHelpForm({ subject: "", message: "" });
-                      setHelpFormErrors({});
-                      setHelpModalOpen(true);
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('profile.phone')}</label>
+                  <PhoneInput
+                    international
+                    defaultCountry="ES"
+                    value={profileForm.contactNumber || undefined}
+                    onChange={(value) => {
+                      setProfileForm({ ...profileForm, contactNumber: value || "" });
+                      clearProfileError("contactNumber");
                     }}
-                                    className="px-2 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm font-medium whitespace-nowrap"
-                                  >
-                                    {t('favourite.needHelp') || 'Need Help'}
-                                  </button>
+                    className={`phone-input-wrapper ${profileErrors.contactNumber ? 'phone-input-error' : ''}`}
+                    numberInputProps={{
+                      className: `w-full rounded-md border px-3 py-2 ${profileErrors.contactNumber ? 'border-red-500' : 'border-gray-300'}`,
+                      "aria-invalid": Boolean(profileErrors.contactNumber),
+                    }}
+                    placeholder={t('profile.phonePlaceholder')}
+                  />
+                  {profileErrors.contactNumber && <p className="text-xs text-red-600 mt-1">{profileErrors.contactNumber}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('profile.address')}</label>
+                  <input
+                    type="text"
+                    className={`w-full rounded-md border px-3 py-2 ${profileErrors.buyer_address ? 'border-red-500' : ''}`}
+                    value={profileForm.buyer_address}
+                    onChange={(e) => {
+                      setProfileForm({ ...profileForm, buyer_address: e.target.value });
+                      clearProfileError("buyer_address");
+                    }}
+                    placeholder={t('profile.addressPlaceholder')}
+                    aria-invalid={Boolean(profileErrors.buyer_address)}
+                  />
+                  {profileErrors.buyer_address && <p className="text-xs text-red-600 mt-1">{profileErrors.buyer_address}</p>}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {saving ? t('profile.saving') : t('profile.saveChanges')}
+                </button>
+              </form>
+
+              <PasswordModal
+                open={pwdOpen}
+                onClose={() => setPwdOpen(false)}
+                onSubmit={async (e: React.FormEvent) => {
+                  e.preventDefault();
+                  setPwdMsg(null);
+                  setPwdLoading(true);
+
+                  if (!pwdForm.currentPassword.trim() || !pwdForm.newPassword.trim() || !pwdForm.confirmPassword.trim()) {
+                    setPwdLoading(false);
+                    return setPwdMsg({ type: 'error', text: t('password.allFieldsRequired') });
+                  }
+
+                  if (pwdForm.newPassword.length < 8) {
+                    setPwdLoading(false);
+                    return setPwdMsg({ type: 'error', text: t('password.weakPassword') });
+                  }
+
+                  if (pwdForm.newPassword !== pwdForm.confirmPassword) {
+                    setPwdLoading(false);
+                    return setPwdMsg({ type: 'error', text: t('password.passwordMismatch') });
+                  }
+
+                  try {
+                    const token = getToken();
+                    const language_id = localStorage.getItem("LanguageId") || "1";
+                    const headers: HeadersInit = { 'Content-Type': 'application/json', 'X-Language-Id': language_id };
+                    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                    const res = await fetch(`${API_BASE_URL}/buyers/me/password?language_id=${language_id}`, {
+                      method: 'PUT',
+                      credentials: 'include',
+                      headers,
+                      body: JSON.stringify({
+                        currentPassword: pwdForm.currentPassword,
+                        newPassword: pwdForm.newPassword
+                      })
+                    });
+
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data?.message || data?.error || t('password.updateError'));
+
+                    // Always use frontend translation for consistency
+                    setPwdMsg({ type: 'success', text: t('password.success') });
+                    setPwdForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                    setTimeout(() => setPwdOpen(false), 1200);
+                  } catch (err: any) {
+                    setPwdMsg({ type: 'error', text: err.message || t('password.updateError') });
+                  } finally {
+                    setPwdLoading(false);
+                  }
+                }}
+                pwdForm={pwdForm}
+                setPwdForm={setPwdForm}
+                pwdMsg={pwdMsg}
+                setPwdMsg={setPwdMsg}
+                pwdLoading={pwdLoading}
+              />
+            </div>
+          )}
+
+          {tab === "favourites" && (
+            <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('favourite.title')}</h2>
+
+              {/* 🔄 Loader while fetching */}
+              {isFavLoading ? (
+                <AccountSectionLoader message={t('favourite.loading')} />
+              ) : favDetails.length === 0 ? (
+                <div className="text-gray-600">{t('favourite.noFavourites')}</div>
+              ) : (
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                    <table className="min-w-[450px] sm:min-w-[800px] w-full text-xs sm:text-sm text-gray-700">
+                      <thead className="bg-gray-200">
+                        <tr>
+                          <th className="px-2 sm:px-2 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('favourite.photo')}</th>
+                          <th className="px-2 sm:px-2 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('favourite.propertyInfo')}</th>
+                          <th className="px-2 sm:px-2 py-2 sm:py-3 text-left font-semibold text-gray-700 hidden sm:table-cell">{t('favourite.addedOn')}</th>
+                          <th className="px-2 sm:px-2 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('favourite.price')}</th>
+                          <th className="px-2 sm:px-2 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('favourite.action')}</th>
+                        </tr>
+                      </thead>
+
+                    <tbody>
+                      {favDetails.map((f) => {
+                        const ref = f.Property_Ref || f.Property_ID;
+                        const propertyName = f.Property_Name || f.Property_Title || f.Property_Type_Name || f.Property_Type || "";
+                        const displayName = propertyName ? `${propertyName} (${ref})` : ref;
+                        const img = ref
+                          ? `https://www.inlandandalucia.com/images/photos/properties/${ref}/${ref}_1.jpg`
+                          : "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                        const description = f.Property_Description || f.Short_Description || f.Property_Short_Description || "";
+                        const bedrooms = f.Bedrooms || f.Property_Bedrooms || 0;
+                        const bathrooms = f.Bathrooms || f.Property_Bathrooms || 0;
+                        const area = f.Build_Size || f.Property_Build_Size || f.Square_Meters || 0;
+
+                        return (
+                          <tr key={ref} className="border-b hover:bg-gray-50 transition-colors">
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <img
+                                src={img}
+                                alt={`Property ${ref}`}
+                                className="w-24 h-20 min-h-20 min-w-24 object-cover rounded-lg"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src =
+                                    "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                                }}
+                              />
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <div className="space-y-1 sm:space-y-2">
+                                <h3 className="font-semibold text-gray-900 text-xs sm:text-base">
+                                  {displayName}
+                                </h3>
+                                {description && (
+                                  <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 hidden sm:block">
+                                    {description.length > 100 ? `${description.substring(0, 100)}...` : description}
+                                  </p>
+                                )}
+                                <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
+                                  {new Date(f.DateCreated).toLocaleDateString('en-US', { 
+                                    year: 'numeric', 
+                                    month: 'short', 
+                                    day: 'numeric' 
+                                  })}
                                 </div>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-
-
-            {tab === "reservations" && (
-              <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
-                <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('reservations.title')}</h2>
-
-                {reservationsLoading ? (
-                  <AccountSectionLoader message={t('loading')} />
-                ) : reservations.length === 0 ? (
-                  <div className="text-gray-600">{t('reservations.noReservations')}</div>
-                ) : (
-                  <div className="overflow-x-auto -mx-4 sm:mx-0">
-                    <div className="inline-block min-w-full align-middle px-4 sm:px-0">
-                      <table className="min-w-full text-xs sm:text-sm text-gray-700">
-                        <thead className="bg-gray-50 border-b">
-                          <tr>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.photo')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.propertyInfo')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700 hidden sm:table-cell">{t('reservations.reservedDate')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.reservedAmount')}</th>
-                            <th className="p-2 sm:p-4 text-left font-semibold text-gray-700">{t('reservations.action')}</th>
-                          </tr>
-                        </thead>
-
-                      <tbody>
-                        {reservations.map((r) => {
-                          const property = (r.property || {}) as Record<string, any>;
-                          const propertyId = property?.Property_ID || null;
-                          const propertyRef = property?.Property_Ref || "N/A";
-                          const propertyName = property?.Property_Name || property?.Property_Title || property?.Property_Type_Name || property?.Property_Type || "";
-                          const displayName = propertyName ? `${propertyName} (${propertyRef})` : propertyRef;
-                          const img =
-                            propertyRef && propertyRef !== "N/A"
-                              ? `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_1.jpg`
-                              : "https://www.inlandandalucia.com/images/no-image-available.jpg";
-                          const description = property?.Property_Description || property?.Short_Description || property?.Property_Short_Description || "";
-                          const area = property?.SQM_Built || property?.Build_Size || property?.Property_Build_Size || property?.Square_Meters || 0;
-
-                          return (
-                            <tr key={r.PaypalTransactionId} className="border-b hover:bg-gray-50 transition-colors">
-                              <td className="p-2 sm:p-4">
-                                <img
-                                  src={img}
-                                  alt={`Property ${propertyRef}`}
-                                  className="w-20 h-16 sm:w-32 sm:h-24 min-w-20 sm:min-w-32 object-cover rounded-lg"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src =
-                                      "https://www.inlandandalucia.com/images/no-image-available.jpg";
-                                  }}
-                                />
-                              </td>
-                              <td className="p-2 sm:p-4">
-                                <div className="space-y-1 sm:space-y-2">
-                                  <h3 className="font-semibold text-gray-900 text-xs sm:text-base">
-                                    {displayName}
-                                  </h3>
-                                  {description && (
-                                    <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 hidden sm:block">
-                                      {description.length > 100 ? `${description.substring(0, 100)}...` : description}
-                                    </p>
-                                  )}
-                                  <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
-                                    {new Date(r.ReservedDate).toLocaleDateString('en-US', { 
-                                      year: 'numeric', 
-                                      month: 'short', 
-                                      day: 'numeric' 
-                                    })}
+                                {area > 0 && (
+                                  <div className="flex items-center gap-1 text-gray-600 text-xs sm:text-sm">
+                                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                    </svg>
+                                    <span>{area} {t('favourite.sqFt') || 'Sq Ft'}</span>
                                   </div>
-                                  {area > 0 && (
-                                    <div className="flex items-center gap-1 text-gray-600 text-xs sm:text-sm">
-                                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                                      </svg>
-                                      <span>{area} {t('reservations.sqFt') || 'Sq Ft'}</span>
-                                    </div>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="p-2 sm:p-4 text-gray-600 hidden sm:table-cell">
-                                {new Date(r.ReservedDate).toLocaleDateString('en-US', { 
-                                  year: 'numeric', 
-                                  month: 'long', 
-                                  day: 'numeric' 
-                                })}
-                              </td>
-                              <td className="p-2 sm:p-4">
-                                <span className="font-semibold text-gray-900 text-xs sm:text-base">
-                                  {r.ReservedAmount ? `€${r.ReservedAmount.toLocaleString()}` : "-"}
-                                </span>
-                              </td>
-                              <td className="p-2 sm:p-4">
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3 text-gray-600 hidden sm:table-cell">
+                              {new Date(f.DateCreated).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                              })}
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <span className="font-semibold text-gray-900 text-xs sm:text-base">
+                                {f.Public_Price ? `€${f.Public_Price.toLocaleString()}` : "-"}
+                              </span>
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <div className="flex flex-row items-stretch sm:items-center gap-1 sm:gap-2 justify-end">
+                                <button
+                                  onClick={() => {
+                                    setSelectedProperty(f);
+                                    setHelpForm({ subject: "", message: "" });
+                                    setHelpFormErrors({});
+                                    setHelpModalOpen(true);
+                                  }}
+                                  className="px-2 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-xs sm:text-sm font-medium whitespace-nowrap"
+                                >
+                                  {t('favourite.needHelp') || 'Need Help'}
+                                </button>
                                 <Link
-                                  href={`/properties/${propertyId}`}
-                                  className="px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs sm:text-sm font-medium inline-block w-full sm:w-auto text-center"
+                                  href={`/properties/${encodeURIComponent(f.Property_ID)}`}
+                                  className="p-1.5 sm:p-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors inline-flex items-center justify-center"
                                   target="_blank"
                                   rel="noopener noreferrer"
+                                  title={t('favourite.viewProperty') || 'View Property'}
                                 >
-                                  {t('reservations.viewProperty')}
+                                  <EyeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </Link>
-                              </td>
-                            </tr>
+                                <button
+                                  onClick={() => { setPendingRemoveId(f.Property_ID); setConfirmOpen(true); }}
+                                  className="p-1.5 sm:p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors inline-flex items-center justify-center"
+                                  title={t('favourite.remove') || 'Remove'}
+                                >
+                                  <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                                </button>
+                                
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+
+
+          {tab === "reservations" && (
+            <div className="bg-white border rounded-lg shadow-sm p-4 sm:p-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('reservations.title')}</h2>
+
+              {reservationsLoading ? (
+                <AccountSectionLoader message={t('loading')} />
+              ) : reservations.length === 0 ? (
+                <div className="text-gray-600">{t('reservations.noReservations')}</div>
+              ) : (
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+                  <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                    <table className="min-w-[525px] sm:min-w-[800px] w-full text-xs sm:text-sm text-gray-700">
+                      <thead className="bg-gray-200">
+                        <tr>
+                          <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('reservations.photo')}</th>
+                          <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('reservations.propertyInfo')}</th>
+                          <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-gray-700 hidden sm:table-cell">{t('reservations.reservedDate')}</th>
+                          <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('reservations.reservedAmount')}</th>
+                          <th className="px-2 sm:px-4 py-2 sm:py-3 text-left font-semibold text-gray-700">{t('reservations.action')}</th>
+                        </tr>
+                      </thead>
+
+                    <tbody>
+                      {reservations.map((r) => {
+                        const property = (r.property || {}) as Record<string, any>;
+                        const propertyId = property?.Property_ID || null;
+                        const propertyRef = property?.Property_Ref || "N/A";
+                        const propertyName = property?.Property_Name || property?.Property_Title || property?.Property_Type_Name || property?.Property_Type || "";
+                        const displayName = propertyName ? `${propertyName} (${propertyRef})` : propertyRef;
+                        const img =
+                          propertyRef && propertyRef !== "N/A"
+                            ? `https://www.inlandandalucia.com/images/photos/properties/${propertyRef}/${propertyRef}_1.jpg`
+                            : "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                        const description = property?.Property_Description || property?.Short_Description || property?.Property_Short_Description || "";
+                        const area = property?.SQM_Built || property?.Build_Size || property?.Property_Build_Size || property?.Square_Meters || 0;
+
+                        return (
+                          <tr key={r.PaypalTransactionId} className="border-b hover:bg-gray-50 transition-colors">
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <img
+                                src={img}
+                                alt={`Property ${propertyRef}`}
+                                className="w-24 h-20 min-h-20 min-w-24 object-cover rounded-lg"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src =
+                                    "https://www.inlandandalucia.com/images/no-image-available.jpg";
+                                }}
+                              />
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <div className="space-y-1 sm:space-y-2">
+                                <h3 className="font-semibold text-gray-900 text-xs sm:text-base">
+                                  {displayName}
+                                </h3>
+                                {description && (
+                                  <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 hidden sm:block">
+                                    {description.length > 100 ? `${description.substring(0, 100)}...` : description}
+                                  </p>
+                                )}
+                                <div className="text-xs sm:text-sm text-gray-500 sm:hidden">
+                                  {new Date(r.ReservedDate).toLocaleDateString('en-US', { 
+                                    year: 'numeric', 
+                                    month: 'short', 
+                                    day: 'numeric' 
+                                  })}
+                                </div>
+                                {area > 0 && (
+                                  <div className="flex items-center gap-1 text-gray-600 text-xs sm:text-sm">
+                                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                                    </svg>
+                                    <span>{area} {t('reservations.sqFt') || 'Sq Ft'}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3 text-gray-600 hidden sm:table-cell">
+                              {new Date(r.ReservedDate).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                              })}
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <span className="font-semibold text-gray-900 text-xs sm:text-base">
+                                {r.ReservedAmount ? `€${r.ReservedAmount.toLocaleString()}` : "-"}
+                              </span>
+                            </td>
+                            <td className="px-2 sm:px-2 py-2 sm:py-3">
+                              <Link
+                                href={`/properties/${propertyId}`}
+                                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors text-xs sm:text-sm font-medium inline-block w-full sm:w-auto text-center"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {t('reservations.viewProperty')}
+                              </Link>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab === "criterias" && (
+            <div className="relative bg-white border rounded-lg shadow-sm p-4 sm:p-6">
+              {/* Overlay loader */}
+              {criteriaLoading && <AccountSectionLoader overlay message={t('loading')} />}
+
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <h2 className="text-lg sm:text-xl font-semibold">{t('account.criterias.title')}</h2>
+                <button
+                  onClick={handleSaveCriteria}
+                  disabled={criteriaSaving || criteriaLoading}
+                  className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {criteriaSaving ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                      </svg>
+                      {tCommon('saving')}
+                    </>
+                  ) : (
+                    tCommon('save')
+                  )}
+                </button>
+              </div>
+
+              {criteriaCategories.length === 0 ? (
+                <div className="text-center py-8 text-gray-600">{tCommon('noCriteriaAvailable')}</div>
+              ) : (
+                <div className="space-y-5">
+                  {criteriaCategories.map((category) => (
+                    <div key={category.id} className="border-b pb-4 last:border-b-0">
+                      <h3 className="text-base font-semibold text-gray-800 mb-3 inline-block">
+                        {category.title}
+                      </h3>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+                        {category.options.map((option) => {
+                          const isChecked = (buyerCriteria[category.key] || []).some(
+                            (item) => item.value === option.value
+                          );
+
+                          return (
+                            <label
+                              key={option.id}
+                              className="flex items-center gap-2 cursor-pointer p-1.5 pl-0 rounded group"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                disabled={criteriaLoading}
+                                onChange={(e) =>
+                                  handleCriteriaChange(category.key, option.value, e.target.checked)
+                                }
+                                className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 group-hover:border-primary-500"
+                              />
+                              <span className="text-sm text-gray-700">{option.label}</span>
+                            </label>
                           );
                         })}
-                      </tbody>
-                    </table>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {tab === "criterias" && (
-              <div className="relative bg-white border rounded-lg shadow-sm p-4 sm:p-6">
-                {/* Overlay loader */}
-                {criteriaLoading && <AccountSectionLoader overlay message={t('loading')} />}
-
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                  <h2 className="text-lg sm:text-xl font-semibold">{t('account.criterias.title')}</h2>
-                  <button
-                    onClick={handleSaveCriteria}
-                    disabled={criteriaSaving || criteriaLoading}
-                    className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {criteriaSaving ? (
-                      <>
-                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                        </svg>
-                        {tCommon('saving')}
-                      </>
-                    ) : (
-                      tCommon('save')
-                    )}
-                  </button>
-                </div>
-
-                {criteriaCategories.length === 0 ? (
-                  <div className="text-center py-8 text-gray-600">{tCommon('noCriteriaAvailable')}</div>
-                ) : (
-                  <div className="space-y-6">
-                    {criteriaCategories.map((category) => (
-                      <div key={category.id} className="border-b pb-6 last:border-b-0">
-                        <h3 className="text-base font-semibold text-gray-800 mb-4 px-4 py-2 inline-block">
-                          {category.title}
-                        </h3>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                          {category.options.map((option) => {
-                            const isChecked = (buyerCriteria[category.key] || []).some(
-                              (item) => item.value === option.value
-                            );
-
-                            return (
-                              <label
-                                key={option.id}
-                                className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={isChecked}
-                                  disabled={criteriaLoading}
-                                  onChange={(e) =>
-                                    handleCriteriaChange(category.key, option.value, e.target.checked)
-                                  }
-                                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                                />
-                                <span className="text-sm text-gray-700">{option.label}</span>
-                              </label>
-                            );
-                          })}
-                        </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-                <div className="flex justify-end mb-6">
-                  <button
-                    onClick={handleSaveCriteria}
-                    disabled={criteriaSaving || criteriaLoading}
-                    className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {criteriaSaving ? (
-                      <>
-                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                        </svg>
-                        {tCommon('saving')}
-                      </>
-                    ) : (
-                      tCommon('save')
-                    )}
-                  </button>
+                    </div>
+                  ))}
                 </div>
+              )}
+              <div className="flex justify-end">
+                <button
+                  onClick={handleSaveCriteria}
+                  disabled={criteriaSaving || criteriaLoading}
+                  className="w-full sm:w-auto px-6 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {criteriaSaving ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                      </svg>
+                      {tCommon('saving')}
+                    </>
+                  ) : (
+                    tCommon('save')
+                  )}
+                </button>
               </div>
-            )}
+            </div>
+          )}
 
 
 
