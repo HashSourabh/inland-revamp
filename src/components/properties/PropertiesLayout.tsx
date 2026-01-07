@@ -761,7 +761,7 @@ export default function PropertiesLayout({
                 <button
                   onClick={() => setIsSidebarOpen(false)}
                   className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
-                  aria-label="Close filters"
+                  aria-label={tCommon("closeFilters")}
                 >
                   <XMarkIcon className="h-5 w-5" />
                 </button>
@@ -806,7 +806,7 @@ export default function PropertiesLayout({
                 <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 className="lg:hidden flex items-center justify-center min-w-10 w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-                aria-label="Toggle filters"
+                aria-label={tCommon("toggleFilters")}
               >
                 <FunnelIcon className="h-6 w-6" />
               </button>

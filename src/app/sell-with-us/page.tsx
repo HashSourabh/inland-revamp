@@ -3,9 +3,12 @@
 import PromoSidebar from "@/components/PromoSidebar";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import toast from "react-hot-toast";
+import { API_BASE_URL } from "@/utils/api";
 
 export default function SellWithUsPage() {
   const t = useTranslations("sell-with-us");
+  const tCommon = useTranslations("common");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -14,16 +17,69 @@ export default function SellWithUsPage() {
     email: "",
     location: "",
     details: "",
+    captcha: "",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    // TODO: connect with API / send email
+    
+    // Simple captcha validation (40 + 5 = 45)
+    if (formData.captcha.trim() !== "45") {
+      toast.error(tCommon("captchaIncorrect"));
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/contact/sell-with-us`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          telephone: formData.telephone,
+          email: formData.email,
+          location: formData.location,
+          details: formData.details,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit form");
+      }
+
+      if (data.success) {
+        toast.success(tCommon("formSubmittedSuccessfully"));
+        // Reset form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          telephone: "",
+          email: "",
+          location: "",
+          details: "",
+          captcha: "",
+        });
+      } else {
+        throw new Error(data.error || "Failed to submit form");
+      }
+    } catch (error: any) {
+      console.error("Error submitting form:", error);
+      toast.error(error.message || tCommon("formSubmissionFailed"));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -140,6 +196,7 @@ export default function SellWithUsPage() {
                 <input
                   type="text"
                   name="captcha"
+                  value={formData.captcha}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                 />
@@ -148,9 +205,10 @@ export default function SellWithUsPage() {
 
             <button
               type="submit"
-              className="w-full md:w-auto float-end px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow hover:bg-primary-700 transition"
+              disabled={isSubmitting}
+              className="w-full md:w-auto float-end px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {t("form.button.submit")}
+              {isSubmitting ? tCommon("submitting") : t("form.button.submit")}
             </button>
           </form>
         </div>

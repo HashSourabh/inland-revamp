@@ -69,6 +69,7 @@ export default function AreaFilter({
   onRegionChange,
   onAreaChange,
 }: AreaFilterProps) {
+  const tCommon = useTranslations('common');
   const t=useTranslations('properties');
   const [expandedRegions, setExpandedRegions] = useState<Set<number>>(new Set());
   
@@ -124,7 +125,7 @@ export default function AreaFilter({
       >
         <div className="flex items-center gap-2">
           {isAllSelected && <CheckIcon className="h-5 w-5 text-white flex-shrink-0" />}
-          <span>All Regions</span>
+          <span>{tCommon("allRegions")}</span>
         </div>
         <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
           ${isAllSelected

@@ -257,7 +257,7 @@ export default function MapSearchPage() {
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-          aria-label="Toggle filters"
+          aria-label={tCommon("toggleFilters")}
         >
           <FunnelIcon className="h-6 w-6" />
         </button>
@@ -280,11 +280,11 @@ export default function MapSearchPage() {
         >
           <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-primary-900">Filters</h2>
+              <h2 className="text-lg font-semibold text-primary-900">{tCommon("filters")}</h2>
               <button
                 onClick={() => setIsSidebarOpen(false)}
                 className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
-                aria-label="Close filters"
+                aria-label={tCommon("closeFilters")}
               >
                 <XMarkIcon className="h-5 w-5" />
               </button>
@@ -302,7 +302,7 @@ export default function MapSearchPage() {
               >
                 <div className="flex items-center gap-2">
                   {selectedRegion === "ALL" && <CheckIcon className="h-5 w-5 text-white" />}
-                  <span>All Regions</span>
+                  <span>{tCommon("allRegions")}</span>
                 </div>
                 <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
                   ${selectedRegion === "ALL"
