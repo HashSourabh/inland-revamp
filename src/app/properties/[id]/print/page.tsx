@@ -138,13 +138,13 @@ export default function PrintPage({ params }: PrintPageProps) {
   if (!property) return <p className="p-8 text-center">{t('notFound')}</p>;
   console.log("propertypropertypropertyproperty",property);
   return (
-    <div className="min-h-screen bg-white text-black p-8 print:p-0">
+    <div className="min-h-screen bg-white text-black p-4 sm:p-6 md:p-8 print:p-0">
       {/* Buttons (hidden in print) */}
-      <div className="mx-auto max-w-4xl px-8 flex gap-4 mb-5 print:hidden">
-        <Link href={`/${locale}/properties/${property.id}`} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
+      <div className="mx-auto max-w-4xl flex gap-4 mb-5 print:hidden">
+        <Link href={`/${locale}/properties/${property.id}`} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-3 py-1.5 text-sm">
           <ArrowLeftIcon className="h-4 w-4" /> {t('back')}
         </Link>
-        <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-4 py-2 text-sm">
+        <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-md border bg-gray-200 px-3 py-1.5 text-sm">
           <PrinterIcon className="h-4 w-4" /> {t('print')}
         </button>
       </div>
@@ -162,8 +162,8 @@ export default function PrintPage({ params }: PrintPageProps) {
       <div className="max-w-[210mm] print-container mx-auto print:p-8 print:-mt-[104px]">
         
         {/* Print Header: Logo */}
-        <div className="flex items-stretch justify-between mb-6">
-          <div className="flex items-center gap-3 w-1/3 border-r-4 border-secondary-600">
+        <div className="flex flex-col md:flex-row items-stretch justify-between mb-6">
+          <div className="flex justify-center md:justify-start items-center gap-3 md:border-r-4 border-secondary-600 md:w-1/3 w-full">
             <div className="relative">
               <svg width="200" height="60" viewBox="0 0 1220 328" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M144.656 1.03472L145.437 0.999869C150.98 0.765779 156.439 1.40998 161.86 2.55809C171.474 4.59521 181.03 7.54902 190.516 10.1419L239.934 23.7923C248.811 26.3304 257.713 28.7767 266.641 31.1313C272.577 32.7083 278.808 34.0378 284.571 36.1723C286.839 37.0122 288.732 38.2782 290.471 39.9624C293.065 42.4749 294.372 44.8854 295.157 48.3977C296.829 55.8895 295.866 64.9788 295.848 72.7019L295.822 111.228C284.38 112.184 273.009 113.214 261.691 115.221C257.395 116.014 253.121 116.913 248.871 117.921C244.619 118.928 240.397 120.041 236.202 121.26C232.007 122.48 227.845 123.804 223.717 125.233C219.588 126.661 215.498 128.192 211.447 129.826C207.395 131.461 203.387 133.195 199.423 135.031C195.458 136.866 191.543 138.8 187.676 140.832C183.809 142.864 179.995 144.992 176.235 147.217C172.474 149.44 168.773 151.757 165.129 154.167L157.254 150.103C127.558 133.519 90.0192 120.245 56.4416 115.323C38.0709 112.63 19.4616 111.991 0.927429 111.393L0.816645 71.6307C0.797882 64.5544 0.173361 56.8294 1.19639 49.8407C1.63866 46.8189 2.47047 43.6775 4.46917 41.2982C6.24361 39.1851 8.70871 37.3052 11.2828 36.2956C17.2306 33.9619 23.7843 32.6199 29.9546 30.9482L62.1509 22.1144L103.637 10.6288C117.072 6.83781 130.686 2.08901 144.656 1.03472Z" fill="rgb(var(--color-primary))" />
@@ -188,33 +188,33 @@ export default function PrintPage({ params }: PrintPageProps) {
               </svg>
             </div>
           </div>
-          <div className="text-sm text-neutral-500 w-2/3 pl-7">
-            <h2 className='text-4xl font-normal font-yellowtail text-primary-600 mb-6 text-center'>{t('safeHandsTitle')}</h2>
-            <div className='flex justify-between w-full'>
+          <div className="text-sm text-neutral-500 md:w-2/3 w-full md:pl-7 mt-6 md:mt-0">
+            <h2 className='lg:text-4xl md:text-3xl sm:text-2xl text-xl font-normal font-yellowtail text-primary-600 mb-6 text-center'>{t('safeHandsTitle')}</h2>
+            <div className='flex flex-col 2xs:flex-row justify-between w-full gap-6'>
               <div className="text-sm text-neutral-600">
-                <h4 className='text-2xl font-bold font-heading text-primary-600 mb-1'>{t('molinaOffice')}</h4>
-                <div className='text-base font-medium mb-1.5 text-primary-600'>info@inlandandalucia.com</div>
-                <div className='text-base font-medium text-primary-600'>www.inlandandalucia.com</div>
+                <h4 className='lg:text-2xl text-xl font-bold font-heading text-primary-600 mb-1 text-center 2xs:text-left'>{t('molinaOffice')}</h4>
+                <div className='text-sm lg:text-base font-medium mb-1.5 text-primary-600 text-center 2xs:text-left'>info@inlandandalucia.com</div>
+                <div className='text-sm lg:text-base font-medium text-primary-600 text-center 2xs:text-left'>www.inlandandalucia.com</div>
               </div>
               <div>
-                <div className='flex gap-2'>
-                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
+                <div className='flex gap-2 justify-center 2xs:justify-start'>
+                  <div className='lg:w-8 w-6 lg:h-8 h-6 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={EnFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='lg:w-8 w-6 lg:h-8 h-6 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={EsFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='lg:w-8 w-6 lg:h-8 h-6 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={FrFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='lg:w-8 w-6 lg:h-8 h-6 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={PtFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
-                  <div className='w-8 h-8 rounded-full flex items-center justify-center overflow-hidden'>
+                  <div className='lg:w-8 w-6 lg:h-8 h-6 rounded-full flex items-center justify-center overflow-hidden'>
                     <Image src={DeFlag} alt={property.images[0].alt} width={40} height={40}  className='w-full h-full object-cover object-center' />
                   </div>
                 </div>
-                <h4 className='text-lg font-semibold text-primary-600 mt-2 tracking-[.22rem]'>+34 952 741 525</h4>
+                <h4 className='lg:text-lg text-base font-semibold text-primary-600 mt-2 lg:tracking-[.22rem] tracking-[.15rem] text-center 2xs:text-left'>+34 952 741 525</h4>
               </div>
             </div>
           </div>
@@ -222,13 +222,13 @@ export default function PrintPage({ params }: PrintPageProps) {
         
 
         {/* Title */}
-        <h1 className="text-2xl font-bold mb-3">{property.ref} - {property.type}</h1>
-        <div className="grid grid-cols-3 items-baseline mb-1">
-          <p>{t('ref')}: <strong className='text-xl'>{property.ref}</strong></p>
-          <p className="text-center"><strong>{t('townHouse')}</strong></p>
-          <p className="mb-1 text-right">{t('price')} <strong className='text-xl'>{formatPrice(property.price.current)}</strong></p>
+        <h1 className="md:text-2xl text-xl font-bold mb-3 text-center 2xs:text-left">{property.ref} - {property.type}</h1>
+        <div className="grid 2xs:grid-cols-2 sm:grid-cols-3 items-baseline mb-1">
+          <p className='text-center 2xs:text-left text-sm sm:text-base'>{t('ref')}: <strong className='text-lg sm:text-xl'>{property.ref}</strong></p>
+          <p className="text-lg sm:text-xl text-center"><strong>{t('townHouse')}</strong></p>
+          <p className="mb-1 text-center sm:text-right text-sm sm:text-base">{t('price')} <strong className='text-lg sm:text-xl'>{formatPrice(property.price.current)}</strong></p>
         </div>
-        <p className="mb-3">{t('locationLabel')} {property.location.town} - {property.location.province}</p>
+        <p className="mb-3 text-center 2xs:text-left text-sm sm:text-base">{t('locationLabel')} {property.location.town} - {property.location.province}</p>
 
         {/* Images */}
         {property.images.length > 0 && (
@@ -256,7 +256,7 @@ export default function PrintPage({ params }: PrintPageProps) {
         )}
 
         {/* Property Specs */}
-        <div className="grid grid-cols-3 gap-2 mb-5 text-sm font-medium">
+        <div className="grid grid-cols-2 2xs:grid-cols-3 gap-2 mb-5 text-sm font-medium">
           <div>{t('beds')}: <strong> {property.bedrooms}</strong></div>
           <div>{t('built')} : <strong>{property.buildSize} m²</strong></div>
           <div>{t('baths')} : <strong>{property.bathrooms}</strong></div>

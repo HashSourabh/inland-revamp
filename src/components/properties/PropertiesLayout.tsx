@@ -7,6 +7,7 @@ import PropertyCard from '@/components/properties/PropertyCard';
 import LayoutSwitcher from '@/components/properties/LayoutSwitcher';
 import AreaFilter from '@/components/properties/AreaFilter';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid';
+import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from 'next-intl';
 import { useRegionData } from '@/hooks/useRegionData';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
@@ -164,9 +165,39 @@ export default function PropertiesLayout({
   const languageId = localeToLanguageId[locale] || 1;
   
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const [isMobile, setIsMobile] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   const [selectedTown, setSelectedTown] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Track mobile state
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Wrapper for setLayout that prevents list view on mobile
+  const handleLayoutChange = (newLayout: 'grid' | 'list') => {
+    // Force grid layout on screens below 768px
+    if (isMobile) {
+      setLayout('grid');
+    } else {
+      setLayout(newLayout);
+    }
+  };
+
+  // Force grid layout on mobile (below 768px) when window resizes
+  useEffect(() => {
+    if (isMobile && layout === 'list') {
+      setLayout('grid');
+    }
+  }, [isMobile, layout]);
 
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [selectedArea, setSelectedArea] = useState<number | null>(null);
@@ -251,7 +282,7 @@ export default function PropertiesLayout({
     };
   }, [languageId, setPropertyTypesMap, API_BASE_URL]); // Removed propertyTypesMap to prevent loops
 
-  // Consolidated useEffect for search parameters
+  // Consolidated useEffect for search parameters - only on mount or when searchParams change
   useEffect(() => {
     if (!searchParams) return;
 
@@ -267,32 +298,52 @@ export default function PropertiesLayout({
     const maxPriceParam = searchParams.get('maxPrice');
     const locationParam = searchParams.get('location');
 
-    // Set all states in a batch - React 18 will batch these updates
-    // This ensures the properties fetch only runs once after all states are updated
-    setSelectedRegion(regionIdParam ? Number(regionIdParam) : null);
-    setSelectedArea(areaIdParam ? Number(areaIdParam) : null);
-    setSelectedProvince(provinceParam || null);
-    setSelectedTown(townParam || null);
-    setSelectedPropertyType(propertyTypeParam || null);
-    setMinBeds(minBedsParam || null);
-    setMinBaths(minBathsParam || null);
-    setminPrice(minPriceParam || null);
-    setmaxPrice(maxPriceParam || null);
+    // Only update state if params exist in URL (don't reset user selections)
+    if (regionIdParam !== null) {
+      setSelectedRegion(regionIdParam ? Number(regionIdParam) : null);
+    }
+    if (areaIdParam !== null) {
+      setSelectedArea(areaIdParam ? Number(areaIdParam) : null);
+    }
+    if (provinceParam !== null) {
+      setSelectedProvince(provinceParam || null);
+    }
+    if (townParam !== null) {
+      setSelectedTown(townParam || null);
+    }
+    if (propertyTypeParam !== null) {
+      setSelectedPropertyType(propertyTypeParam || null);
+    }
+    if (minBedsParam !== null) {
+      setMinBeds(minBedsParam || null);
+    }
+    if (minBathsParam !== null) {
+      setMinBaths(minBathsParam || null);
+    }
+    if (minPriceParam !== null) {
+      setminPrice(minPriceParam || null);
+    }
+    if (maxPriceParam !== null) {
+      setmaxPrice(maxPriceParam || null);
+    }
 
     // Handle location parameter
     if (locationParam && !provinceParam && !townParam) {
-      const property = properties.find(
-        (p) => p.location?.town === locationParam,
-      );
-      if (property) {
-        setSelectedProvince(property.location?.province ?? null);
-        setSelectedTown(property.location?.town ?? null);
+      // Only use location if we have properties loaded
+      if (properties.length > 0) {
+        const property = properties.find(
+          (p) => p.location?.town === locationParam,
+        );
+        if (property) {
+          setSelectedProvince(property.location?.province ?? null);
+          setSelectedTown(property.location?.town ?? null);
+        }
       }
     }
 
     // Reset to page 1 when filters change
     setCurrentPage(1);
-  }, [searchParams, properties]);
+  }, [searchParams]); // Only depend on searchParams, not properties
 
   // Fetch region counts using cache (only for sidebar - don't override filtered results)
   // Load after property types are ready (only once on mount)
@@ -531,16 +582,21 @@ export default function PropertiesLayout({
     setSelectedRegion(regionId);
     setSelectedArea(null);
 
+    // Set province name if region is selected
+    if (regionId) {
+      const region = regionCounts.find(r => r.regionId === regionId);
+      setSelectedProvince(region?.regionName || null);
+    } else {
+      setSelectedProvince(null);
+    }
+    setSelectedTown(null);
+
     // Clear advanced search filters so only area filter is used
     setSelectedPropertyType(null);
     setMinBeds(null);
     setMinBaths(null);
     setminPrice(null);
     setmaxPrice(null);
-
-    // Optionally clear province/town if you want strict region filtering
-    setSelectedProvince(null);
-    setSelectedTown(null);
   };
 
   const handleAreaChange = (areaId: number | null) => {
@@ -552,16 +608,20 @@ export default function PropertiesLayout({
     
     setSelectedArea(areaId);
 
+    // Preserve region and province when selecting an area
+    // Don't clear them - areas belong to regions
+    if (!areaId) {
+      // Only clear province/town if deselecting area
+      setSelectedProvince(null);
+      setSelectedTown(null);
+    }
+
     // Clear advanced search filters
     setSelectedPropertyType(null);
     setMinBeds(null);
     setMinBaths(null);
     setminPrice(null);
     setmaxPrice(null);
-
-    // Optionally clear province/town
-    setSelectedProvince(null);
-    setSelectedTown(null);
   };
 
   // Reset page to 1 when filters change (but don't trigger fetch here - the main useEffect will handle it)
@@ -572,9 +632,35 @@ export default function PropertiesLayout({
     }
   }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]); // currentPage removed from deps to prevent loop
 
+  // Handle body scroll lock when sidebar is open on mobile
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isSidebarOpen]);
+
+  // Close sidebar when window is resized to desktop size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const displayedProperties = properties;
   const displayedTotal = totalProperties;
   const displayedTotalPages = totalPages;
+
+  // Force grid layout on mobile (below 768px)
+  const effectiveLayout = isMobile ? 'grid' : layout;
 
   // Get display title for filter header
   const getFilterTitle = () => {
@@ -602,7 +688,7 @@ export default function PropertiesLayout({
 
   const getPageNumbers = () => {
     const pageNumbers: (number | string)[] = [];
-    const maxVisiblePages = 7;
+    const maxVisiblePages = 5;
     const sidePages = 2;
     const total = displayedTotalPages;
 
@@ -639,81 +725,119 @@ export default function PropertiesLayout({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <header className="mb-8">
-          <h1 className="font-heading text-3xl font-bold text-primary-600">
-            {t('properties_for_sale')}
-          </h1>
-          <p className="mt-2 text-neutral-600 text-xl">
-            {t('sub_text')}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="font-heading lg:text-3xl md:text-2xl text-xl font-bold text-primary-600">
+                {t('properties_for_sale')}
+              </h1>
+              <p className="mt-2 text-neutral-600 lg:text-xl md:text-lg sm:text-base text-sm">
+                {t('sub_text')}
+              </p>
+            </div>
+            {/* Mobile Toggle Button */}
+          </div>
         </header>
 
-        {/* Filters - Always visible */}
-        <div className="rounded-xl border border-neutral-200 bg-white p-4 mb-6">
-          <div className="mb-6 dark:border-neutral-800 dark:bg-neutral-900">
-            <div className="space-y-4">
-              <h2 className="text-base font-medium text-neutral-700 dark:text-neutral-300">
-                {getFilterTitle()}
-              </h2>
-              <AreaFilter
-                properties={displayedProperties}
-                selectedProvince={selectedProvince}
-                selectedTown={selectedTown}
-                selectedRegion={selectedRegion}
-                selectedArea={selectedArea}
-                regions={regionCounts}
-                areas={areas}
-                onProvinceChange={(province) => {
-                  setProperties([]);
-                  setLoading(true);
-                  setError(null);
-                  lastFetchParamsRef.current = '';
-                  setSelectedProvince(province);
-                }}
-                onTownChange={(town) => {
-                  setProperties([]);
-                  setLoading(true);
-                  setError(null);
-                  lastFetchParamsRef.current = '';
-                  setSelectedTown(town);
-                }}
-                onRegionChange={handleRegionChange}
-                onAreaChange={handleAreaChange}
-                allCount={totalPropertiesCount}
-              />
-            </div>
-          </div>
-
-          {/* Results count + layout switcher - Show during loading or when there are properties */}
-          {(loading || displayedProperties.length > 0) && (
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-2">
-                {loading ? (
-                  <p className="text-base text-neutral-600 dark:text-neutral-400">
-                    {tCommon('loadingProperties')}
-                  </p>
-                ) : (
-                  <p className="text-base text-neutral-600 dark:text-neutral-400">
-                    {tCommon('showing')}{' '}
-                    <span className="font-medium text-neutral-900 dark:text-white">
-                      {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
-                    </span>{' '}
-                    -{' '}
-                    <span className="font-medium text-neutral-900 dark:text-white">
-                      {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
-                    </span>{' '}
-                    {tCommon('of')}{' '}
-                    <span className="font-medium text-neutral-900 dark:text-white">
-                      {displayedTotal}
-                    </span>{' '}
-                    {displayedTotal === 1 ? tCommon('property') : tCommon('properties')}
-                  </p>
-                )}
-                {(loading || pageLoading) && <LoadingSpinner />}
-              </div>
-              {!loading && <LayoutSwitcher currentLayout={layout} onLayoutChange={setLayout} />}
-            </div>
+        <div className="flex flex-col lg:flex-row gap-6 relative">
+          {/* Mobile Overlay */}
+          {isSidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={() => setIsSidebarOpen(false)}
+            />
           )}
-        </div>
+
+          {/* Sidebar Filters */}
+          <aside
+            className={`fixed lg:static inset-y-0 left-0 z-50 lg:z-auto w-80 lg:w-80 flex-shrink-0 transform transition-transform duration-300 ease-in-out ${
+              isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+            }`}
+          >
+            <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-primary-900">
+                  {getFilterTitle()}
+                </h2>
+                <button
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
+                  aria-label="Close filters"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="space-y-4">
+                <AreaFilter
+                  properties={displayedProperties}
+                  selectedProvince={selectedProvince}
+                  selectedTown={selectedTown}
+                  selectedRegion={selectedRegion}
+                  selectedArea={selectedArea}
+                  regions={regionCounts}
+                  areas={areas}
+                  onProvinceChange={(province) => {
+                    setProperties([]);
+                    setLoading(true);
+                    setError(null);
+                    lastFetchParamsRef.current = '';
+                    setSelectedProvince(province);
+                  }}
+                  onTownChange={(town) => {
+                    setProperties([]);
+                    setLoading(true);
+                    setError(null);
+                    lastFetchParamsRef.current = '';
+                    setSelectedTown(town);
+                  }}
+                  onRegionChange={handleRegionChange}
+                  onAreaChange={handleAreaChange}
+                  allCount={totalPropertiesCount}
+                />
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <div className="flex-1 min-w-0">
+            {/* Results count + layout switcher - Show during loading or when there are properties */}
+            {(loading || displayedProperties.length > 0) && (
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+                <div className="flex items-center gap-2">
+                <button
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="lg:hidden flex items-center justify-center min-w-10 w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+                aria-label="Toggle filters"
+              >
+                <FunnelIcon className="h-6 w-6" />
+              </button>
+                <div className="flex items-center gap-2">
+                  {loading ? (
+                    <p className="text-base text-neutral-600 dark:text-neutral-400">
+                      {tCommon('loadingProperties')}
+                    </p>
+                  ) : (
+                    <p className="text-base text-neutral-600 dark:text-neutral-400">
+                      {tCommon('showing')}{' '}
+                      <span className="font-medium text-neutral-900 dark:text-white">
+                        {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
+                      </span>{' '}
+                      -{' '}
+                      <span className="font-medium text-neutral-900 dark:text-white">
+                        {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
+                      </span>{' '}
+                      {tCommon('of')}{' '}
+                      <span className="font-medium text-neutral-900 dark:text-white">
+                        {displayedTotal}
+                      </span>{' '}
+                      {displayedTotal === 1 ? tCommon('property') : tCommon('properties')}
+                    </p>
+                  )}
+                  {(loading || pageLoading) && <LoadingSpinner />}
+                </div>
+                </div>
+                {!loading && <LayoutSwitcher currentLayout={layout} onLayoutChange={handleLayoutChange} />}
+              </div>
+            )}
 
         {/* Error state - Only show when not loading */}
         {error && !loading && (
@@ -732,8 +856,8 @@ export default function PropertiesLayout({
         {loading && !error && (
           <div
             className={`grid gap-6 ${
-              layout === 'grid'
-                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+              effectiveLayout === 'grid'
+                ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2'
                 : 'grid-cols-1'
             }`}
           >
@@ -756,15 +880,15 @@ export default function PropertiesLayout({
           <>
             <div
               className={`grid gap-6 transition-opacity duration-200 ${pageLoading ? 'opacity-50' : 'opacity-100'
-                } ${layout === 'grid'
-                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                } ${effectiveLayout === 'grid'
+                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2'
                   : 'grid-cols-1'
                 }`}
             >
               {displayedProperties.map((property) => (
                 <PropertyCard
                   key={property.id}
-                  card={layout === 'list' ? 'list' : 'grid'}
+                  card={effectiveLayout === 'list' ? 'list' : 'grid'}
                   property={transformPropertyForCard(property, propertyTypesMap, tCommon)}
                   favouriteIds={favouriteIds}
                 />
@@ -779,7 +903,7 @@ export default function PropertiesLayout({
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1 || pageLoading}
-                    className="relative inline-flex items-center rounded-md px-2 py-2 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900 transition-colors"
+                    className="relative inline-flex items-center sm:px-2 px-1.5 sm:py-2 py-1.5 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900 transition-colors"
                   >
                     <span className="sr-only">Previous</span>
                     {pageLoading && currentPage > 1 ? (
@@ -814,7 +938,7 @@ export default function PropertiesLayout({
                         key={pageNumber}
                         onClick={() => handlePageChange(pageNumber as number)}
                         disabled={pageLoading}
-                        className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed ${currentPage === pageNumber
+                        className={`relative inline-flex items-center sm:px-4 px-3 sm:py-2 py-1.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed ${currentPage === pageNumber
                           ? 'z-10 bg-primary-600 text-white'
                           : pageLoading
                             ? 'text-neutral-400 ring-1 ring-inset ring-neutral-300 dark:text-neutral-500 dark:ring-neutral-700'
@@ -834,7 +958,7 @@ export default function PropertiesLayout({
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === displayedTotalPages || pageLoading}
-                    className="relative inline-flex items-center rounded-md px-2 py-2 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900 transition-colors"
+                    className="relative inline-flex items-center sm:px-2 px-1.5 sm:py-2 py-1.5 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900 transition-colors"
                   >
                     <span className="sr-only">Next</span>
                     {pageLoading && currentPage < displayedTotalPages ? (
@@ -859,6 +983,8 @@ export default function PropertiesLayout({
             )}
           </>
         )}
+          </div>
+        </div>
       </div>
     </>
   );

@@ -13,8 +13,8 @@ interface LayoutSwitcherProps {
 export default function LayoutSwitcher({ currentLayout, onLayoutChange }: LayoutSwitcherProps) {
   const t = useTranslations('common');
   return (
-    <div className="flex items-center gap-3">
-      <div className="flex  bg-white dark:border-neutral-700 dark:bg-neutral-800">
+    <div className="hidden md:flex items-center gap-3">
+      <div className="flex dark:border-neutral-700 dark:bg-neutral-800">
         <button
           onClick={() => onLayoutChange('grid')}
           className={`flex items-center rounded-lg gap-2 px-3 py-2 text-sm font-medium transition-colors ${

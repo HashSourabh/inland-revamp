@@ -130,7 +130,7 @@ function PropertyCard({ property, card = 'grid', featured = false, favouriteIds 
       <div className={`relative ${card === 'list' ? 'col-span-2' : ''}`}>
         {/* Property image */}
         <Link href={`/properties/${property.id}`}>
-          <div className={`relative aspect-[4/3] overflow-hidden bg-neutral-200 ${card === 'list' ? 'w-full' : 'w-full'}`}>
+          <div className={`relative aspect-[4/3] overflow-hidden bg-neutral-200 ${card === 'list' ? 'w-full h-full' : 'w-full'}`}>
             <Image
               src={mainImage?.url || '/placeholder-property.jpg'}
               alt={mainImage?.alt || 'Property Image'}
