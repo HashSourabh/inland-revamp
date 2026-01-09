@@ -105,7 +105,7 @@ const transformPropertyForCard = (property: any, propertyTypesMap: Record<number
   };
 };
 
-const PROPERTIES_PER_PAGE = 9;
+const PROPERTIES_PER_PAGE = 10;
 
 interface PropertiesLayoutProps {
   properties?: Property[];
