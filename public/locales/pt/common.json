@@ -49,7 +49,9 @@
       "all": "Todos",
       "anyRegion": "Qualquer região",
       "area": "Área",
-      "propertyTypeLabel": "Tipo de propriedade"
+      "propertyTypeLabel": "Tipo de propriedade",
+      "noMin": "Sem mínimo",
+      "noMax": "Sem máximo"
     }
   },
   "banner": {

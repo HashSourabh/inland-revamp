@@ -49,7 +49,9 @@
       "all": "Todos",
       "anyRegion": "Cualquier región",
       "area": "Área",
-      "propertyTypeLabel": "Tipo de propiedad"
+      "propertyTypeLabel": "Tipo de propiedad",
+      "noMin": "Sin mínimo",
+      "noMax": "Sin máximo"
     }
   },
   "hero": {

@@ -49,7 +49,9 @@
       "all": "Alle",
       "anyRegion": "Beliebige Region",
       "area": "Gebiet",
-      "propertyTypeLabel": "Immobilientyp"
+      "propertyTypeLabel": "Immobilientyp",
+      "noMin": "Kein Minimum",
+      "noMax": "Kein Maximum"
     }
   },
   "hero": {

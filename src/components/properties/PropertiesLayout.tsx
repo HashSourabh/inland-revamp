@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Property } from '@/types/property';
 import PropertyCard from '@/components/properties/PropertyCard';
 import LayoutSwitcher from '@/components/properties/LayoutSwitcher';
@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl';
 import { useRegionData } from '@/hooks/useRegionData';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
 import { usePropertyCache } from '@/context/PropertyCacheContext';
-import { fetchPropertyTypes } from '@/utils/api';
+import { fetchPropertyTypes, PropertyType } from '@/utils/api';
 import { useLocale } from 'next-intl';
 
 const transformPropertyForCard = (property: any, propertyTypesMap: Record<number, string>, tCommon?: any) => {
@@ -149,9 +149,12 @@ export default function PropertiesLayout({
 }: PropertiesLayoutProps) {
   const t = useTranslations('properties');
   const tCommon = useTranslations('common');
+  const tFilters = useTranslations('home.filters');
   const locale = useLocale();
   const searchParams = useSearchParams();
-  const { regionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
+  const router = useRouter();
+  const { regionCounts: cachedRegionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
+  const [regionCounts, setRegionCounts] = useState<Array<{ regionId: number; regionName: string; count: number }>>([]);
   const { propertyTypesMap, setPropertyTypesMap } = usePropertyCache();
 
   // Map locale to language ID
@@ -223,8 +226,9 @@ export default function PropertiesLayout({
   const [minBaths, setMinBaths] = useState<string | null>(null);
   const [minPrice, setminPrice] = useState<string | null>(null);
   const [maxPrice, setmaxPrice] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<string>('title');
-  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
+  const [propertyTypesList, setPropertyTypesList] = useState<PropertyType[]>([]);
+  const [sortBy, setSortBy] = useState<string>('id');
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
 
   // Favourite property IDs for the logged-in user
   const favouriteIds = useFavouriteIds();
@@ -257,11 +261,18 @@ export default function PropertiesLayout({
         const data = await res.json();
         if (data?.success && data.data && mounted) {
           const typesMap: Record<number, string> = {};
+          const typesList: PropertyType[] = [];
           data.data.forEach((type: any) => {
             typesMap[type.id] = type.name;
+            typesList.push({
+              id: type.id,
+              name: type.name,
+              code: type.code || String(type.id)
+            });
           });
           // Always update the map when language changes to ensure correct translations
           setPropertyTypesMap(typesMap);
+          setPropertyTypesList(typesList);
           propertyTypesLoadedRef.current = true;
         }
       } catch (err) {
@@ -347,32 +358,58 @@ export default function PropertiesLayout({
     setCurrentPage(1);
   }, [searchParams]); // Only depend on searchParams, not properties
 
-  // Fetch region counts using cache (only for sidebar - don't override filtered results)
-  // Load after property types are ready (only once on mount)
-  const regionCountsLoadedRef = useRef(false);
+  // Initialize region counts from cache on mount
   useEffect(() => {
-    // Don't wait for property types - region counts can load independently
-    if (regionCountsLoadedRef.current) {
-      return; // Skip if already loaded
+    if (cachedRegionCounts.length > 0 && regionCounts.length === 0) {
+      setRegionCounts(cachedRegionCounts);
+      const totalCount = cachedRegionCounts.reduce((sum: number, region: any) => sum + region.count, 0);
+      setTotalPropertiesCount(totalCount);
     }
+  }, [cachedRegionCounts]);
 
+  // Fetch region counts with current filters applied
+  // This updates whenever filters change to show accurate counts
+  useEffect(() => {
     const loadRegionCounts = async () => {
       try {
-        const counts = await fetchRegionCounts();
+        // Build filter object from current filter state
+        const filters = {
+          propertyType: selectedPropertyType || undefined,
+          minBeds: minBeds || undefined,
+          minBaths: minBaths || undefined,
+          minPrice: minPrice || undefined,
+          maxPrice: maxPrice || undefined,
+        };
+
+        console.log('[PROPERTIES LAYOUT] Fetching region counts with filters:', filters);
+        
+        const counts = await fetchRegionCounts(filters);
+        
+        // Update region counts state
+        setRegionCounts(counts);
         
         // Calculate total properties count from region counts
         const totalCount = counts.reduce((sum: number, region: any) => sum + region.count, 0);
         setTotalPropertiesCount(totalCount);
-        regionCountsLoadedRef.current = true;
+        
+        console.log('[PROPERTIES LAYOUT] Region counts updated:', {
+          totalCount,
+          regionCounts: counts.length,
+          counts
+        });
       } catch (err) {
         console.error("Error loading region counts:", err);
         setTotalPropertiesCount(0);
-        regionCountsLoadedRef.current = true; // Mark as attempted even on error
       }
     };
 
-    loadRegionCounts();
-  }, [fetchRegionCounts]);
+    // Debounce region counts fetch to avoid too many requests
+    const timeoutId = setTimeout(() => {
+      loadRegionCounts();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [fetchRegionCounts, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
 
   // Fetch areas when a region is selected (using cache)
   // This is non-blocking and can run in parallel with properties fetch
@@ -458,13 +495,18 @@ export default function PropertiesLayout({
         console.log('[PROPERTIES FETCH] fetchProperties function called');
         console.log('[PROPERTIES FETCH] Current sort state - sortBy:', sortBy, 'sortOrder:', sortOrder);
         
-        // Build query params
+        // Build query params - always include sort parameters
         const queryParams: Record<string, string> = {
           page: String(currentPage),
           limit: String(PROPERTIES_PER_PAGE),
           sortBy: sortBy || 'id',
           sortOrder: sortOrder || 'DESC',
         };
+        
+        console.log('[PROPERTIES FETCH] Sort parameters being sent:', {
+          sortBy: queryParams.sortBy,
+          sortOrder: queryParams.sortOrder
+        });
         
         console.log('[PROPERTIES FETCH] Base query params:', queryParams);
         
@@ -643,6 +685,76 @@ export default function PropertiesLayout({
     }
   };
 
+  // Helper function to update URL with current filter state
+  const updateURL = (updates: {
+    propertyType?: string | null;
+    minBeds?: string | null;
+    minBaths?: string | null;
+    minPrice?: string | null;
+    maxPrice?: string | null;
+    regionId?: number | null;
+    areaId?: number | null;
+  }) => {
+    if (!searchParams) return;
+    const params = new URLSearchParams(searchParams.toString());
+    
+    // Update or remove filter parameters
+    if (updates.propertyType !== undefined) {
+      if (updates.propertyType) {
+        params.set('propertyType', updates.propertyType);
+      } else {
+        params.delete('propertyType');
+      }
+    }
+    if (updates.minBeds !== undefined) {
+      if (updates.minBeds) {
+        params.set('minBeds', updates.minBeds);
+      } else {
+        params.delete('minBeds');
+      }
+    }
+    if (updates.minBaths !== undefined) {
+      if (updates.minBaths) {
+        params.set('minBaths', updates.minBaths);
+      } else {
+        params.delete('minBaths');
+      }
+    }
+    if (updates.minPrice !== undefined) {
+      if (updates.minPrice) {
+        params.set('minPrice', updates.minPrice);
+      } else {
+        params.delete('minPrice');
+      }
+    }
+    if (updates.maxPrice !== undefined) {
+      if (updates.maxPrice) {
+        params.set('maxPrice', updates.maxPrice);
+      } else {
+        params.delete('maxPrice');
+      }
+    }
+    if (updates.regionId !== undefined) {
+      if (updates.regionId) {
+        params.set('regionId', String(updates.regionId));
+      } else {
+        params.delete('regionId');
+      }
+    }
+    if (updates.areaId !== undefined) {
+      if (updates.areaId) {
+        params.set('areaId', String(updates.areaId));
+      } else {
+        params.delete('areaId');
+      }
+    }
+
+    // Reset to page 1 when filters change
+    params.set('page', '1');
+    
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   const handleRegionChange = (regionId: number | null) => {
     // Clear old properties and show loading immediately to prevent glitch
     setProperties([]);
@@ -726,12 +838,61 @@ export default function PropertiesLayout({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const displayedProperties = properties;
+  // Sort properties based on selected sort option
+  const sortedProperties = useMemo(() => {
+    if (sortBy === 'default') {
+      return properties;
+    }
+
+    const sorted = [...properties];
+    
+    switch (sortBy) {
+      case 'price-low-high':
+        return sorted.sort((a, b) => (a.price?.current || 0) - (b.price?.current || 0));
+      case 'price-high-low':
+        return sorted.sort((a, b) => (b.price?.current || 0) - (a.price?.current || 0));
+      case 'title-a-z':
+        return sorted.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      case 'title-z-a':
+        return sorted.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+      default:
+        return properties;
+    }
+  }, [properties, sortBy]);
+
+  const displayedProperties = sortedProperties;
   const displayedTotal = totalProperties;
   const displayedTotalPages = totalPages;
 
   // Force grid layout on mobile (below 768px)
   const effectiveLayout = isMobile ? 'grid' : layout;
+
+  // Pre-compute translated strings for sort dropdown options
+  // This ensures translations work properly in <option> elements
+  // Use try-catch and fallbacks to ensure translations always work
+  const getTranslation = (key: string, fallback: string) => {
+    try {
+      const translated = tCommon(key);
+      // Check if translation is missing (next-intl returns "common.key" or "namespace.key" when missing)
+      if (!translated || 
+          translated === `common.${key}` || 
+          translated === key || 
+          translated.startsWith('common.')) {
+        return fallback;
+      }
+      return translated;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
+  const sortOptions = {
+    default: getTranslation('default', 'Default'),
+    titleAsc: `${getTranslation('title', 'Title')}: A-Z`,
+    titleDesc: `${getTranslation('title', 'Title')}: Z-A`,
+    priceAsc: `${getTranslation('price', 'Price')}: ${getTranslation('lowToHigh', 'Low to High')}`,
+    priceDesc: `${getTranslation('price', 'Price')}: ${getTranslation('highToLow', 'High to Low')}`,
+  };
 
   // Get display title for filter header
   const getFilterTitle = () => {
@@ -754,7 +915,7 @@ export default function PropertiesLayout({
     if (selectedProvince) {
       return t("filter_titles.in_province", { province: selectedProvince });
     }
-    return t("filter_titles.all_properties");
+    return tFilters('region');
   };
 
   const getPageNumbers = () => {
@@ -824,18 +985,176 @@ export default function PropertiesLayout({
               isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
             }`}
           >
-            <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
+            
+            <div className="bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
+              {/* Advanced Search Filters */}
+              <div className="pb-6 mb-6 border-b border-neutral-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-primary-900">
+                    {tFilters('advance_search')}
+                  </h2>
+                  <button
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
+                    aria-label={tCommon("closeFilters")}
+                  >
+                    <XMarkIcon className="h-5 w-5" />
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  {/* Property Type */}
+                  <div>
+                    <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
+                      {tFilters('propertyTypeLabel')}
+                    </label>
+                    <select
+                      id="propertyType"
+                      value={selectedPropertyType || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setSelectedPropertyType(value);
+                        updateURL({ propertyType: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">{tFilters('allTypes')}</option>
+                      {propertyTypesList.map((type) => (
+                        <option key={type.id} value={type.code}>
+                          {type.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Min. Bedrooms */}
+                  <div>
+                    <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
+                      {tFilters('min_bed')}
+                    </label>
+                    <select
+                      id="minBeds"
+                      value={minBeds || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setMinBeds(value);
+                        updateURL({ minBeds: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">{tFilters('any')}</option>
+                      {[1, 2, 3, 4, 5, 6].map((n) => (
+                        <option key={n} value={n}>
+                          {n}+
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Min. Bathrooms */}
+                  <div>
+                    <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
+                      {tFilters('min_bathrooms')}
+                    </label>
+                    <select
+                      id="minBaths"
+                      value={minBaths || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setMinBaths(value);
+                        updateURL({ minBaths: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">{tFilters('any')}</option>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <option key={n} value={n}>
+                          {n}+
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Min. Price */}
+                  <div>
+                    <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                      {tFilters('min_price')}
+                    </label>
+                    <select
+                      id="minPrice"
+                      value={minPrice || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setminPrice(value);
+                        updateURL({ minPrice: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">{tFilters('noMin') || 'No Min'}</option>
+                      <option value="50000">€50,000</option>
+                      <option value="100000">€100,000</option>
+                      <option value="150000">€150,000</option>
+                      <option value="200000">€200,000</option>
+                      <option value="250000">€250,000</option>
+                      <option value="300000">€300,000</option>
+                      <option value="400000">€400,000</option>
+                      <option value="500000">€500,000</option>
+                    </select>
+                  </div>
+
+                  {/* Max. Price */}
+                  <div>
+                    <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                      {tFilters('max_price')}
+                    </label>
+                    <select
+                      id="maxPrice"
+                      value={maxPrice || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setmaxPrice(value);
+                        updateURL({ maxPrice: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">{tFilters('noMax') || 'No Max'}</option>
+                      <option value="200000">€200,000</option>
+                      <option value="300000">€300,000</option>
+                      <option value="400000">€400,000</option>
+                      <option value="500000">€500,000</option>
+                      <option value="600000">€600,000</option>
+                      <option value="750000">€750,000</option>
+                      <option value="1000000">€1,000,000</option>
+                      <option value="1500000">€1,500,000</option>
+                      <option value="2000000">€2,000,000+</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              {/* Filter Header */}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-primary-900">
                   {getFilterTitle()}
                 </h2>
-                <button
-                  onClick={() => setIsSidebarOpen(false)}
-                  className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
-                  aria-label={tCommon("closeFilters")}
-                >
-                  <XMarkIcon className="h-5 w-5" />
-                </button>
               </div>
               <div className="space-y-4">
                 <AreaFilter
@@ -874,44 +1193,47 @@ export default function PropertiesLayout({
             {(loading || displayedProperties.length > 0) && (
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
                 <div className="flex items-center gap-2">
-                <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="lg:hidden flex items-center justify-center min-w-10 w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-                aria-label={tCommon("toggleFilters")}
-              >
-                <FunnelIcon className="h-6 w-6" />
-              </button>
-                <div className="flex items-center gap-2">
-                  {loading ? (
-                    <p className="text-base text-neutral-600 dark:text-neutral-400">
-                      {tCommon('loadingProperties')}
-                    </p>
-                  ) : (
-                    <p className="text-base text-neutral-600 dark:text-neutral-400">
-                      {tCommon('showing')}{' '}
-                      <span className="font-medium text-neutral-900 dark:text-white">
-                        {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
-                      </span>{' '}
-                      -{' '}
-                      <span className="font-medium text-neutral-900 dark:text-white">
-                        {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
-                      </span>{' '}
-                      {tCommon('of')}{' '}
-                      <span className="font-medium text-neutral-900 dark:text-white">
-                        {displayedTotal}
-                      </span>{' '}
-                      {displayedTotal === 1 ? tCommon('property') : tCommon('properties')}
-                    </p>
-                  )}
-                  {(loading || pageLoading) && <LoadingSpinner />}
+                  <button
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    className="lg:hidden flex items-center justify-center min-w-10 w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+                    aria-label={tCommon("toggleFilters")}
+                  >
+                    <FunnelIcon className="h-6 w-6" />
+                  </button>
+                  <div className="flex items-center gap-2">
+                    {loading ? (
+                      <p className="text-base text-neutral-600 dark:text-neutral-400">
+                        {tCommon('loadingProperties')}
+                      </p>
+                    ) : (
+                      <p className="text-base text-neutral-600 dark:text-neutral-400">
+                        {tCommon('showing')}{' '}
+                        <span className="font-medium text-neutral-900 dark:text-white">
+                          {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
+                        </span>{' '}
+                        -{' '}
+                        <span className="font-medium text-neutral-900 dark:text-white">
+                          {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
+                        </span>{' '}
+                        {tCommon('of')}{' '}
+                        <span className="font-medium text-neutral-900 dark:text-white">
+                          {displayedTotal}
+                        </span>{' '}
+                        {displayedTotal === 1 ? tCommon('property') : tCommon('properties')}
+                      </p>
+                    )}
+                    {(loading || pageLoading) && <LoadingSpinner />}
+                  </div>
+
                 </div>
-                </div>
+
+                {/* Sort Dropdown and Layout Switcher */}
                 {!loading && (
                   <div className="flex items-center gap-4">
                     {/* Sort Dropdown */}
                     <div className="flex items-center gap-2">
                       <label htmlFor="sortBy" className="text-sm font-medium text-neutral-700 dark:text-neutral-300 whitespace-nowrap">
-                        {tCommon('sortBy')}:
+                        {getTranslation('sortBy', 'Sort By')}:
                       </label>
                       <select
                         id="sortBy"
@@ -934,18 +1256,14 @@ export default function PropertiesLayout({
                         }}
                         className="rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
                       >
-                        <option value="title:ASC">{tCommon('title')}: A-Z</option>
-                        <option value="title:DESC">{tCommon('title')}: Z-A</option>
-                        <option value="price:ASC">{tCommon('price')}: {tCommon('lowToHigh')}</option>
-                        <option value="price:DESC">{tCommon('price')}: {tCommon('highToLow')}</option>
-                        <option value="bedrooms:DESC">{tCommon('bedrooms')}: {tCommon('most')}</option>
-                        <option value="bedrooms:ASC">{tCommon('bedrooms')}: {tCommon('least')}</option>
-                        <option value="bathrooms:DESC">{tCommon('bathrooms')}: {tCommon('most')}</option>
-                        <option value="bathrooms:ASC">{tCommon('bathrooms')}: {tCommon('least')}</option>
-                        <option value="size:DESC">{tCommon('size')}: {tCommon('largest')}</option>
-                        <option value="size:ASC">{tCommon('size')}: {tCommon('smallest')}</option>
+                        <option value="id:DESC">{sortOptions.default}</option>
+                        <option value="title:ASC">{sortOptions.titleAsc}</option>
+                        <option value="title:DESC">{sortOptions.titleDesc}</option>
+                        <option value="price:ASC">{sortOptions.priceAsc}</option>
+                        <option value="price:DESC">{sortOptions.priceDesc}</option>
                       </select>
                     </div>
+                    {/* Layout Switcher */}
                     <LayoutSwitcher currentLayout={layout} onLayoutChange={handleLayoutChange} />
                   </div>
                 )}

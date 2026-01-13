@@ -52,6 +52,23 @@ function getImageRemotePatterns() {
           hostname: '127.0.0.1',
           ...(port && port !== '80' && { port: port }),
         });
+        
+        // Add common development ports for backend server
+        const commonPorts = ['4000', '4001', '4002', '5000', '8000'];
+        commonPorts.forEach(p => {
+          if (p !== port) {
+            patterns.push({
+              protocol: 'http',
+              hostname: 'localhost',
+              port: p,
+            });
+            patterns.push({
+              protocol: 'http',
+              hostname: '127.0.0.1',
+              port: p,
+            });
+          }
+        });
       }
     } catch (e) {
       console.warn('Failed to parse API URL for image config:', e);
@@ -65,6 +82,34 @@ function getImageRemotePatterns() {
       hostname: 'inlandandalucia.onrender.com',
     });
   }
+
+  // Always add common localhost development ports for flexibility
+  // This ensures images work regardless of which port the backend is running on
+  const devPorts = ['4000', '4001', '4002', '5000', '8000'];
+  devPorts.forEach(port => {
+    // Check if this pattern already exists
+    const exists = patterns.some(p => 
+      p.hostname === '127.0.0.1' && p.port === port && p.protocol === 'http'
+    );
+    if (!exists) {
+      patterns.push({
+        protocol: 'http',
+        hostname: '127.0.0.1',
+        port: port,
+      });
+    }
+    
+    const localhostExists = patterns.some(p => 
+      p.hostname === 'localhost' && p.port === port && p.protocol === 'http'
+    );
+    if (!localhostExists) {
+      patterns.push({
+        protocol: 'http',
+        hostname: 'localhost',
+        port: port,
+      });
+    }
+  });
 
   return patterns;
 }
