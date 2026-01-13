@@ -4,7 +4,7 @@ import React, { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, ChevronDownIcon, MapPinIcon, SunIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -13,6 +13,7 @@ interface MobileMenuProps {
 
 export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const locale = useLocale();
   const t = useTranslations('navigation');
   const tCommon = useTranslations('common');
 
@@ -92,15 +93,13 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                         >
                           {t('buyersGuide')}
                         </Link>
-                        <a 
-                          href="https://luvinland.com" 
-                          target="_blank" 
-                          rel="nofollow noreferrer"
+                        <Link 
+                          href={`/${locale}/blog`}
                           className="block py-2 text-base font-medium text-neutral-900 hover:text-primary-600"
                           onClick={() => setIsOpen(false)}
                         >
                           {t('links.blog')}
-                        </a>
+                        </Link>
                         <div>
                           <button
                             onClick={() => setIsAboutOpen(!isAboutOpen)}

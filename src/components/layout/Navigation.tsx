@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { ChevronDownIcon, HomeIcon } from '@heroicons/react/24/outline';
 import {
   MagnifyingGlassIcon,
@@ -75,6 +75,7 @@ export default function Navigation({ isRtl = false, onLinkClick }: NavigationPro
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownPositionClass = isRtl ? 'right-0 left-auto' : 'left-0';
   const t = useTranslations('navigation');
+  const locale = useLocale();
 
   const toggleDropdown = (dropdown: string) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
@@ -101,10 +102,13 @@ export default function Navigation({ isRtl = false, onLinkClick }: NavigationPro
         );
       }
 
+      const href = link.href.startsWith('http') 
+        ? link.href 
+        : `/${locale}${link.href}`;
       return (
         <Link
           key={link.href}
-          href={link.href}
+          href={href}
           className="flex items-center gap-3 px-6 py-2.5 text-sm text-neutral-900 lg:text-white hover:text-secondary-300 hover:bg-primary-800 transition-colors"
           onClick={onLinkClick}
         >
@@ -174,15 +178,13 @@ export default function Navigation({ isRtl = false, onLinkClick }: NavigationPro
         </div>
       </div>
 
-      <a
-        href="https://luvinland.com"
-        target="_blank"
-        rel="nofollow noreferrer"
+      <Link
+        href={`/${locale}/blog`}
         className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto"
         onClick={onLinkClick}
       >
         {t('links.blog')}
-      </a>
+      </Link>
 
       {/* About Us Dropdown */}
       <div className="relative group w-full lg:w-auto">

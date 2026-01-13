@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLocale } from 'next-intl';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface MenuItem {
@@ -17,6 +18,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { label: 'Home', href: '/' },
   { label: 'Properties', href: '/properties' },
+  { label: 'Blog', href: '/blog' },
   {
     label: 'About Andalucia',
     href: '/about-andalucia',
@@ -40,12 +42,21 @@ const menuItems: MenuItem[] = [
 
 export default function Navigation() {
   const pathname = usePathname();
+  const locale = useLocale();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-  const isActive = (href: string) => pathname === href;
+  const isActive = (href: string) => {
+    // Remove locale prefix from pathname for comparison
+    const pathWithoutLocale = pathname?.replace(/^\/[a-z]{2}/, '') || '/';
+    return pathWithoutLocale === href || pathname === `/${locale}${href}`;
+  };
   const isActiveParent = (item: MenuItem) => {
-    if (pathname === item.href) return true;
-    if (item.submenu?.some((sub) => pathname === sub.href)) return true;
+    const pathWithoutLocale = pathname?.replace(/^\/[a-z]{2}/, '') || '/';
+    if (pathWithoutLocale === item.href || pathname === `/${locale}${item.href}`) return true;
+    if (item.submenu?.some((sub) => {
+      const subPathWithoutLocale = pathname?.replace(/^\/[a-z]{2}/, '') || '/';
+      return subPathWithoutLocale === sub.href || pathname === `/${locale}${sub.href}`;
+    })) return true;
     return false;
   };
 
@@ -90,26 +101,36 @@ export default function Navigation() {
                 onMouseEnter={() => setOpenDropdown(item.label)}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
-                <button
-                  className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
-                    isActiveParent(item)
-                      ? 'border-primary-500 text-neutral-900'
-                      : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700'
-                  }`}
-                  onClick={() =>
-                    item.submenu &&
-                    setOpenDropdown(openDropdown === item.label ? null : item.label)
-                  }
-                >
-                  {item.label}
-                  {item.submenu && (
+                {item.submenu ? (
+                  <button
+                    className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
+                      isActiveParent(item)
+                        ? 'border-primary-500 text-neutral-900'
+                        : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700'
+                    }`}
+                    onClick={() =>
+                      setOpenDropdown(openDropdown === item.label ? null : item.label)
+                    }
+                  >
+                    {item.label}
                     <ChevronDownIcon
                       className={`ml-1 h-4 w-4 transition-transform duration-200 ${
                         openDropdown === item.label ? 'rotate-180' : ''
                       }`}
                     />
-                  )}
-                </button>
+                  </button>
+                ) : (
+                  <Link
+                    href={`/${locale}${item.href}`}
+                    className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
+                      isActive(item.href)
+                        ? 'border-primary-500 text-neutral-900'
+                        : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:text-neutral-700'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                )}
 
                 {/* Dropdown Menu */}
                 {item.submenu && openDropdown === item.label && (
@@ -118,17 +139,20 @@ export default function Navigation() {
                     onMouseEnter={() => setOpenDropdown(item.label)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
-                    {item.submenu.map((subItem) =>
-                      renderLink(
-                        subItem.href,
+                    {item.submenu.map((subItem) => {
+                      const href = subItem.href.startsWith('http') 
+                        ? subItem.href 
+                        : `/${locale}${subItem.href}`;
+                      return renderLink(
+                        href,
                         subItem.label,
                         `block px-4 py-2 text-sm transition-colors duration-150 ${
                           isActive(subItem.href)
                             ? 'bg-primary-50 text-primary-600'
                             : 'text-neutral-700 hover:bg-neutral-50 hover:text-primary-600'
                         }`
-                      )
-                    )}
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -163,38 +187,53 @@ export default function Navigation() {
           <div className="space-y-1 pb-3 pt-2">
             {menuItems.map((item) => (
               <div key={item.label}>
-                <button
-                  onClick={() =>
-                    setOpenDropdown(openDropdown === item.label ? 'mobile' : item.label)
-                  }
-                  className={`flex w-full items-center justify-between border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
-                    isActiveParent(item)
-                      ? 'border-primary-500 bg-primary-50 text-primary-700'
-                      : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700'
-                  }`}
-                >
-                  {item.label}
-                  {item.submenu && (
+                {item.submenu ? (
+                  <button
+                    onClick={() =>
+                      setOpenDropdown(openDropdown === item.label ? 'mobile' : item.label)
+                    }
+                    className={`flex w-full items-center justify-between border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
+                      isActiveParent(item)
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700'
+                    }`}
+                  >
+                    {item.label}
                     <ChevronDownIcon
                       className={`h-5 w-5 transition-transform duration-200 ${
                         openDropdown === item.label ? 'rotate-180' : ''
                       }`}
                     />
-                  )}
-                </button>
+                  </button>
+                ) : (
+                  <Link
+                    href={`/${locale}${item.href}`}
+                    onClick={() => setOpenDropdown(null)}
+                    className={`flex w-full items-center border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
+                      isActive(item.href)
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-transparent text-neutral-500 hover:border-neutral-300 hover:bg-neutral-50 hover:text-neutral-700'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                )}
                 {item.submenu && openDropdown === item.label && (
                   <div className="bg-neutral-50 py-2">
-                    {item.submenu.map((subItem) =>
-                      renderLink(
-                        subItem.href,
+                    {item.submenu.map((subItem) => {
+                      const href = subItem.href.startsWith('http') 
+                        ? subItem.href 
+                        : `/${locale}${subItem.href}`;
+                      return renderLink(
+                        href,
                         subItem.label,
                         `block py-2 pl-8 pr-4 text-sm ${
                           isActive(subItem.href)
                             ? 'text-primary-700'
                             : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700'
                         }`
-                      )
-                    )}
+                      );
+                    })}
                   </div>
                 )}
               </div>

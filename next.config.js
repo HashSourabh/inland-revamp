@@ -2,28 +2,78 @@ const createNextIntlPlugin = require('next-intl/plugin');
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
+// Helper function to parse API URL and extract hostname/port for image config
+function getImageRemotePatterns() {
+  const patterns = [
+    {
+      protocol: 'https',
+      hostname: 'images.unsplash.com',
+    },
+    {
+      protocol: 'https',
+      hostname: 'source.unsplash.com',
+    },
+    {
+      protocol: 'https',
+      hostname: 'www.inlandandalucia.com',
+    },
+    {
+      protocol: 'https',
+      hostname: 'inlandandalucia.com',
+    },
+  ];
+
+  // Get API URL from environment
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_BASE || '';
+  
+  if (apiUrl) {
+    try {
+      const url = new URL(apiUrl.replace('/api/v1', '').replace(/\/$/, ''));
+      const protocol = url.protocol.replace(':', '');
+      const hostname = url.hostname;
+      const port = url.port || (protocol === 'https' ? '443' : '80');
+
+      // Add the backend hostname to remote patterns
+      patterns.push({
+        protocol: protocol,
+        hostname: hostname,
+        ...(port && port !== '80' && port !== '443' && { port: port }),
+      });
+
+      // Also add localhost variants if it's a local development URL
+      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        patterns.push({
+          protocol: 'http',
+          hostname: 'localhost',
+          ...(port && port !== '80' && { port: port }),
+        });
+        patterns.push({
+          protocol: 'http',
+          hostname: '127.0.0.1',
+          ...(port && port !== '80' && { port: port }),
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to parse API URL for image config:', e);
+    }
+  }
+
+  // Add production backend if not already added
+  if (!patterns.some(p => p.hostname === 'inlandandalucia.onrender.com')) {
+    patterns.push({
+      protocol: 'https',
+      hostname: 'inlandandalucia.onrender.com',
+    });
+  }
+
+  return patterns;
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // distDir: 'build',
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'source.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.inlandandalucia.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'inlandandalucia.com',
-      },
-    ],
+    remotePatterns: getImageRemotePatterns(),
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
