@@ -1450,5 +1450,22 @@
       "saveError": "Error al guardar criterios",
       "noCriteriaSelected": "No se seleccionaron criterios"
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Descubre información, guías e historias sobre propiedades en el interior de Andalucía",
+    "noPosts": "No hay publicaciones de blog disponibles en este momento.",
+    "retry": "Reintentar",
+    "backToBlog": "Volver al Blog",
+    "notFound": "Blog no encontrado",
+    "failedToLoad": "Error al cargar el blog",
+    "pagination": {
+      "showing": "Mostrando",
+      "of": "de",
+      "post": "publicación",
+      "posts": "publicaciones",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    }
   }
 }

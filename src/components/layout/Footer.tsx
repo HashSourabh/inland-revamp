@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { PhoneIcon, EnvelopeIcon, MapPinIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 const SocialIcon = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <a
@@ -18,6 +18,7 @@ const SocialIcon = ({ href, children }: { href: string; children: React.ReactNod
 
 export default function Footer() {
   const t = useTranslations('footer');
+  const locale = useLocale();
 
   return (
     <footer className="bg-primary-600 text-white">
@@ -115,7 +116,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="https://luvinland.com" className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
+                <Link href={`/${locale}/blog`} className="text-primary-100/90 hover:text-white transition-colors inline-flex items-center text-sm sm:text-base">
                   <ArrowRightIcon className="mr-2 h-4 w-4" />
                   {t('quick_links.blog')}
                 </Link>

@@ -1448,5 +1448,22 @@
       "saveError": "Échec de l'enregistrement des critères",
       "noCriteriaSelected": "Aucun critère sélectionné"
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Découvrez des informations, des guides et des histoires sur les propriétés dans l'intérieur de l'Andalousie",
+    "noPosts": "Aucun article de blog disponible pour le moment.",
+    "retry": "Réessayer",
+    "backToBlog": "Retour au Blog",
+    "notFound": "Blog introuvable",
+    "failedToLoad": "Échec du chargement du blog",
+    "pagination": {
+      "showing": "Affichage",
+      "of": "de",
+      "post": "article",
+      "posts": "articles",
+      "previous": "Précédent",
+      "next": "Suivant"
+    }
   }
 }

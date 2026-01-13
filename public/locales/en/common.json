@@ -1448,5 +1448,22 @@
       "saveError": "Failed to save criteria",
       "noCriteriaSelected": "No criteria selected"
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Discover insights, guides, and stories about property in Inland Andalucia",
+    "noPosts": "No blog posts available at the moment.",
+    "retry": "Retry",
+    "backToBlog": "Back to Blog",
+    "notFound": "Blog not found",
+    "failedToLoad": "Failed to load blog",
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "post": "post",
+      "posts": "posts",
+      "previous": "Previous",
+      "next": "Next"
+    }
   }
 }

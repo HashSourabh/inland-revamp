@@ -1448,5 +1448,22 @@
       "saveError": "Fehler beim Speichern der Kriterien",
       "noCriteriaSelected": "Keine Kriterien ausgewählt"
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Entdecken Sie Einblicke, Leitfäden und Geschichten über Immobilien im Binnenland von Andalusien",
+    "noPosts": "Derzeit sind keine Blog-Beiträge verfügbar.",
+    "retry": "Wiederholen",
+    "backToBlog": "Zurück zum Blog",
+    "notFound": "Blog nicht gefunden",
+    "failedToLoad": "Fehler beim Laden des Blogs",
+    "pagination": {
+      "showing": "Zeige",
+      "of": "von",
+      "post": "Beitrag",
+      "posts": "Beiträge",
+      "previous": "Vorherige",
+      "next": "Nächste"
+    }
   }
 }

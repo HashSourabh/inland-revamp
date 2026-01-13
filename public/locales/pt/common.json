@@ -1450,5 +1450,22 @@
       "saveError": "Falha ao salvar critérios",
       "noCriteriaSelected": "Nenhum critério selecionado"
     }
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Descubra informações, guias e histórias sobre propriedades no interior da Andaluzia",
+    "noPosts": "Nenhuma publicação de blog disponível no momento.",
+    "retry": "Tentar novamente",
+    "backToBlog": "Voltar ao Blog",
+    "notFound": "Blog não encontrado",
+    "failedToLoad": "Falha ao carregar o blog",
+    "pagination": {
+      "showing": "Mostrando",
+      "of": "de",
+      "post": "postagem",
+      "posts": "postagens",
+      "previous": "Anterior",
+      "next": "Próximo"
+    }
   }
 }
