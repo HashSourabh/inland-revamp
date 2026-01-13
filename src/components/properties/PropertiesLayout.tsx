@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl';
 import { useRegionData } from '@/hooks/useRegionData';
 import { useFavouriteIds } from '@/hooks/useFavouriteIds';
 import { usePropertyCache } from '@/context/PropertyCacheContext';
-import { fetchPropertyTypes } from '@/utils/api';
+import { fetchPropertyTypes, PropertyType } from '@/utils/api';
 import { useLocale } from 'next-intl';
 
 const transformPropertyForCard = (property: any, propertyTypesMap: Record<number, string>, tCommon?: any) => {
@@ -223,6 +223,7 @@ export default function PropertiesLayout({
   const [minBaths, setMinBaths] = useState<string | null>(null);
   const [minPrice, setminPrice] = useState<string | null>(null);
   const [maxPrice, setmaxPrice] = useState<string | null>(null);
+  const [propertyTypesList, setPropertyTypesList] = useState<PropertyType[]>([]);
 
   // Favourite property IDs for the logged-in user
   const favouriteIds = useFavouriteIds();
@@ -255,11 +256,18 @@ export default function PropertiesLayout({
         const data = await res.json();
         if (data?.success && data.data && mounted) {
           const typesMap: Record<number, string> = {};
+          const typesList: PropertyType[] = [];
           data.data.forEach((type: any) => {
             typesMap[type.id] = type.name;
+            typesList.push({
+              id: type.id,
+              name: type.name,
+              code: type.code || String(type.id)
+            });
           });
           // Always update the map when language changes to ensure correct translations
           setPropertyTypesMap(typesMap);
+          setPropertyTypesList(typesList);
           propertyTypesLoadedRef.current = true;
         }
       } catch (err) {
@@ -753,7 +761,150 @@ export default function PropertiesLayout({
               isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
             }`}
           >
+            {/* Advanced Search Filters */}
+            <div className="pb-10 mb-10 border-b border-neutral-200 px-4">
+              <h3 className="text-base font-semibold text-primary-900 mb-4">Advanced Search</h3>
+              <div className="space-y-4">
+                {/* Property Type */}
+                <div>
+                  <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Property Type
+                  </label>
+                  <select
+                    id="propertyType"
+                    value={selectedPropertyType || ''}
+                    onChange={(e) => {
+                      setProperties([]);
+                      setLoading(true);
+                      setError(null);
+                      lastFetchParamsRef.current = '';
+                      setSelectedPropertyType(e.target.value || null);
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Any Type</option>
+                    {propertyTypesList.map((type) => (
+                      <option key={type.id} value={type.code}>
+                        {type.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Min. Bedrooms */}
+                <div>
+                  <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Min. Bedrooms
+                  </label>
+                  <select
+                    id="minBeds"
+                    value={minBeds || ''}
+                    onChange={(e) => {
+                      setProperties([]);
+                      setLoading(true);
+                      setError(null);
+                      lastFetchParamsRef.current = '';
+                      setMinBeds(e.target.value || null);
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Any</option>
+                    {[1, 2, 3, 4, 5, 6].map((n) => (
+                      <option key={n} value={n}>
+                        {n}+
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Min. Bathrooms */}
+                <div>
+                  <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Min. Bathrooms
+                  </label>
+                  <select
+                    id="minBaths"
+                    value={minBaths || ''}
+                    onChange={(e) => {
+                      setProperties([]);
+                      setLoading(true);
+                      setError(null);
+                      lastFetchParamsRef.current = '';
+                      setMinBaths(e.target.value || null);
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Any</option>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <option key={n} value={n}>
+                        {n}+
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Min. Price */}
+                <div>
+                  <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Min. Price
+                  </label>
+                  <select
+                    id="minPrice"
+                    value={minPrice || ''}
+                    onChange={(e) => {
+                      setProperties([]);
+                      setLoading(true);
+                      setError(null);
+                      lastFetchParamsRef.current = '';
+                      setminPrice(e.target.value || null);
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">No Min</option>
+                    <option value="50000">€50,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="150000">€150,000</option>
+                    <option value="200000">€200,000</option>
+                    <option value="250000">€250,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="500000">€500,000</option>
+                  </select>
+                </div>
+
+                {/* Max. Price */}
+                <div>
+                  <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Max. Price
+                  </label>
+                  <select
+                    id="maxPrice"
+                    value={maxPrice || ''}
+                    onChange={(e) => {
+                      setProperties([]);
+                      setLoading(true);
+                      setError(null);
+                      lastFetchParamsRef.current = '';
+                      setmaxPrice(e.target.value || null);
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">No Max</option>
+                    <option value="200000">€200,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="500000">€500,000</option>
+                    <option value="600000">€600,000</option>
+                    <option value="750000">€750,000</option>
+                    <option value="1000000">€1,000,000</option>
+                    <option value="1500000">€1,500,000</option>
+                    <option value="2000000">€2,000,000+</option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
+              {/* Filter Header */}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-primary-900">
                   {getFilterTitle()}
