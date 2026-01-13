@@ -210,7 +210,7 @@ export default function AreaFilter({
 
           {/* Areas List (Accordion Content) */}
           <div 
-            className={`overflow-hidden transition-all duration-200 ease-in-out ${
+            className={`overflow-y-auto transition-all duration-200 ease-in-out ${
               isExpanded && selectedRegion === region.regionId ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
             }`}
           >

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Property } from '@/types/property';
 import PropertyCard from '@/components/properties/PropertyCard';
 import LayoutSwitcher from '@/components/properties/LayoutSwitcher';
@@ -151,6 +151,7 @@ export default function PropertiesLayout({
   const tCommon = useTranslations('common');
   const locale = useLocale();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { regionCounts, areasCache, fetchRegionCounts, fetchAreas } = useRegionData();
   const { propertyTypesMap, setPropertyTypesMap } = usePropertyCache();
 
@@ -224,6 +225,7 @@ export default function PropertiesLayout({
   const [minPrice, setminPrice] = useState<string | null>(null);
   const [maxPrice, setmaxPrice] = useState<string | null>(null);
   const [propertyTypesList, setPropertyTypesList] = useState<PropertyType[]>([]);
+  const [sortBy, setSortBy] = useState<string>('default');
 
   // Favourite property IDs for the logged-in user
   const favouriteIds = useFavouriteIds();
@@ -580,6 +582,76 @@ export default function PropertiesLayout({
     }
   };
 
+  // Helper function to update URL with current filter state
+  const updateURL = (updates: {
+    propertyType?: string | null;
+    minBeds?: string | null;
+    minBaths?: string | null;
+    minPrice?: string | null;
+    maxPrice?: string | null;
+    regionId?: number | null;
+    areaId?: number | null;
+  }) => {
+    if (!searchParams) return;
+    const params = new URLSearchParams(searchParams.toString());
+    
+    // Update or remove filter parameters
+    if (updates.propertyType !== undefined) {
+      if (updates.propertyType) {
+        params.set('propertyType', updates.propertyType);
+      } else {
+        params.delete('propertyType');
+      }
+    }
+    if (updates.minBeds !== undefined) {
+      if (updates.minBeds) {
+        params.set('minBeds', updates.minBeds);
+      } else {
+        params.delete('minBeds');
+      }
+    }
+    if (updates.minBaths !== undefined) {
+      if (updates.minBaths) {
+        params.set('minBaths', updates.minBaths);
+      } else {
+        params.delete('minBaths');
+      }
+    }
+    if (updates.minPrice !== undefined) {
+      if (updates.minPrice) {
+        params.set('minPrice', updates.minPrice);
+      } else {
+        params.delete('minPrice');
+      }
+    }
+    if (updates.maxPrice !== undefined) {
+      if (updates.maxPrice) {
+        params.set('maxPrice', updates.maxPrice);
+      } else {
+        params.delete('maxPrice');
+      }
+    }
+    if (updates.regionId !== undefined) {
+      if (updates.regionId) {
+        params.set('regionId', String(updates.regionId));
+      } else {
+        params.delete('regionId');
+      }
+    }
+    if (updates.areaId !== undefined) {
+      if (updates.areaId) {
+        params.set('areaId', String(updates.areaId));
+      } else {
+        params.delete('areaId');
+      }
+    }
+
+    // Reset to page 1 when filters change
+    params.set('page', '1');
+    
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   const handleRegionChange = (regionId: number | null) => {
     // Clear old properties and show loading immediately to prevent glitch
     setProperties([]);
@@ -663,7 +735,29 @@ export default function PropertiesLayout({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const displayedProperties = properties;
+  // Sort properties based on selected sort option
+  const sortedProperties = useMemo(() => {
+    if (sortBy === 'default') {
+      return properties;
+    }
+
+    const sorted = [...properties];
+    
+    switch (sortBy) {
+      case 'price-low-high':
+        return sorted.sort((a, b) => (a.price?.current || 0) - (b.price?.current || 0));
+      case 'price-high-low':
+        return sorted.sort((a, b) => (b.price?.current || 0) - (a.price?.current || 0));
+      case 'title-a-z':
+        return sorted.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      case 'title-z-a':
+        return sorted.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+      default:
+        return properties;
+    }
+  }, [properties, sortBy]);
+
+  const displayedProperties = sortedProperties;
   const displayedTotal = totalProperties;
   const displayedTotalPages = totalPages;
 
@@ -761,161 +855,176 @@ export default function PropertiesLayout({
               isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
             }`}
           >
-            {/* Advanced Search Filters */}
-            <div className="pb-10 mb-10 border-b border-neutral-200 px-4">
-              <h3 className="text-base font-semibold text-primary-900 mb-4">Advanced Search</h3>
-              <div className="space-y-4">
-                {/* Property Type */}
-                <div>
-                  <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Property Type
-                  </label>
-                  <select
-                    id="propertyType"
-                    value={selectedPropertyType || ''}
-                    onChange={(e) => {
-                      setProperties([]);
-                      setLoading(true);
-                      setError(null);
-                      lastFetchParamsRef.current = '';
-                      setSelectedPropertyType(e.target.value || null);
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+            
+            <div className="bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
+              {/* Advanced Search Filters */}
+              <div className="pb-6 mb-6 border-b border-neutral-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-primary-900">
+                  Advanced Search
+                  </h2>
+                  <button
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
+                    aria-label={tCommon("closeFilters")}
                   >
-                    <option value="">Any Type</option>
-                    {propertyTypesList.map((type) => (
-                      <option key={type.id} value={type.code}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
+                    <XMarkIcon className="h-5 w-5" />
+                  </button>
                 </div>
+                <div className="space-y-4">
+                  {/* Property Type */}
+                  <div>
+                    <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
+                      Property Type
+                    </label>
+                    <select
+                      id="propertyType"
+                      value={selectedPropertyType || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setSelectedPropertyType(value);
+                        updateURL({ propertyType: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">Any Type</option>
+                      {propertyTypesList.map((type) => (
+                        <option key={type.id} value={type.code}>
+                          {type.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                {/* Min. Bedrooms */}
-                <div>
-                  <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Min. Bedrooms
-                  </label>
-                  <select
-                    id="minBeds"
-                    value={minBeds || ''}
-                    onChange={(e) => {
-                      setProperties([]);
-                      setLoading(true);
-                      setError(null);
-                      lastFetchParamsRef.current = '';
-                      setMinBeds(e.target.value || null);
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">Any</option>
-                    {[1, 2, 3, 4, 5, 6].map((n) => (
-                      <option key={n} value={n}>
-                        {n}+
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                  {/* Min. Bedrooms */}
+                  <div>
+                    <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
+                      Min. Bedrooms
+                    </label>
+                    <select
+                      id="minBeds"
+                      value={minBeds || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setMinBeds(value);
+                        updateURL({ minBeds: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">Any</option>
+                      {[1, 2, 3, 4, 5, 6].map((n) => (
+                        <option key={n} value={n}>
+                          {n}+
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                {/* Min. Bathrooms */}
-                <div>
-                  <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Min. Bathrooms
-                  </label>
-                  <select
-                    id="minBaths"
-                    value={minBaths || ''}
-                    onChange={(e) => {
-                      setProperties([]);
-                      setLoading(true);
-                      setError(null);
-                      lastFetchParamsRef.current = '';
-                      setMinBaths(e.target.value || null);
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">Any</option>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <option key={n} value={n}>
-                        {n}+
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                  {/* Min. Bathrooms */}
+                  <div>
+                    <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
+                      Min. Bathrooms
+                    </label>
+                    <select
+                      id="minBaths"
+                      value={minBaths || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setMinBaths(value);
+                        updateURL({ minBaths: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">Any</option>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <option key={n} value={n}>
+                          {n}+
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                {/* Min. Price */}
-                <div>
-                  <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Min. Price
-                  </label>
-                  <select
-                    id="minPrice"
-                    value={minPrice || ''}
-                    onChange={(e) => {
-                      setProperties([]);
-                      setLoading(true);
-                      setError(null);
-                      lastFetchParamsRef.current = '';
-                      setminPrice(e.target.value || null);
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">No Min</option>
-                    <option value="50000">€50,000</option>
-                    <option value="100000">€100,000</option>
-                    <option value="150000">€150,000</option>
-                    <option value="200000">€200,000</option>
-                    <option value="250000">€250,000</option>
-                    <option value="300000">€300,000</option>
-                    <option value="400000">€400,000</option>
-                    <option value="500000">€500,000</option>
-                  </select>
-                </div>
+                  {/* Min. Price */}
+                  <div>
+                    <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                      Min. Price
+                    </label>
+                    <select
+                      id="minPrice"
+                      value={minPrice || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setminPrice(value);
+                        updateURL({ minPrice: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">No Min</option>
+                      <option value="50000">€50,000</option>
+                      <option value="100000">€100,000</option>
+                      <option value="150000">€150,000</option>
+                      <option value="200000">€200,000</option>
+                      <option value="250000">€250,000</option>
+                      <option value="300000">€300,000</option>
+                      <option value="400000">€400,000</option>
+                      <option value="500000">€500,000</option>
+                    </select>
+                  </div>
 
-                {/* Max. Price */}
-                <div>
-                  <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Max. Price
-                  </label>
-                  <select
-                    id="maxPrice"
-                    value={maxPrice || ''}
-                    onChange={(e) => {
-                      setProperties([]);
-                      setLoading(true);
-                      setError(null);
-                      lastFetchParamsRef.current = '';
-                      setmaxPrice(e.target.value || null);
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">No Max</option>
-                    <option value="200000">€200,000</option>
-                    <option value="300000">€300,000</option>
-                    <option value="400000">€400,000</option>
-                    <option value="500000">€500,000</option>
-                    <option value="600000">€600,000</option>
-                    <option value="750000">€750,000</option>
-                    <option value="1000000">€1,000,000</option>
-                    <option value="1500000">€1,500,000</option>
-                    <option value="2000000">€2,000,000+</option>
-                  </select>
+                  {/* Max. Price */}
+                  <div>
+                    <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                      Max. Price
+                    </label>
+                    <select
+                      id="maxPrice"
+                      value={maxPrice || ''}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setProperties([]);
+                        setLoading(true);
+                        setError(null);
+                        lastFetchParamsRef.current = '';
+                        setmaxPrice(value);
+                        updateURL({ maxPrice: value });
+                      }}
+                      className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    >
+                      <option value="">No Max</option>
+                      <option value="200000">€200,000</option>
+                      <option value="300000">€300,000</option>
+                      <option value="400000">€400,000</option>
+                      <option value="500000">€500,000</option>
+                      <option value="600000">€600,000</option>
+                      <option value="750000">€750,000</option>
+                      <option value="1000000">€1,000,000</option>
+                      <option value="1500000">€1,500,000</option>
+                      <option value="2000000">€2,000,000+</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
               {/* Filter Header */}
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-primary-900">
                   {getFilterTitle()}
                 </h2>
-                <button
-                  onClick={() => setIsSidebarOpen(false)}
-                  className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
-                  aria-label={tCommon("closeFilters")}
-                >
-                  <XMarkIcon className="h-5 w-5" />
-                </button>
               </div>
               <div className="space-y-4">
                 <AreaFilter
@@ -954,38 +1063,61 @@ export default function PropertiesLayout({
             {(loading || displayedProperties.length > 0) && (
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
                 <div className="flex items-center gap-2">
-                <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="lg:hidden flex items-center justify-center min-w-10 w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-                aria-label={tCommon("toggleFilters")}
-              >
-                <FunnelIcon className="h-6 w-6" />
-              </button>
-                <div className="flex items-center gap-2">
-                  {loading ? (
-                    <p className="text-base text-neutral-600 dark:text-neutral-400">
-                      {tCommon('loadingProperties')}
-                    </p>
-                  ) : (
-                    <p className="text-base text-neutral-600 dark:text-neutral-400">
-                      {tCommon('showing')}{' '}
-                      <span className="font-medium text-neutral-900 dark:text-white">
-                        {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
-                      </span>{' '}
-                      -{' '}
-                      <span className="font-medium text-neutral-900 dark:text-white">
-                        {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
-                      </span>{' '}
-                      {tCommon('of')}{' '}
-                      <span className="font-medium text-neutral-900 dark:text-white">
-                        {displayedTotal}
-                      </span>{' '}
-                      {displayedTotal === 1 ? tCommon('property') : tCommon('properties')}
-                    </p>
-                  )}
-                  {(loading || pageLoading) && <LoadingSpinner />}
+                  <button
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    className="lg:hidden flex items-center justify-center min-w-10 w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+                    aria-label={tCommon("toggleFilters")}
+                  >
+                    <FunnelIcon className="h-6 w-6" />
+                  </button>
+                  <div className="flex items-center gap-2">
+                    {loading ? (
+                      <p className="text-base text-neutral-600 dark:text-neutral-400">
+                        {tCommon('loadingProperties')}
+                      </p>
+                    ) : (
+                      <p className="text-base text-neutral-600 dark:text-neutral-400">
+                        {tCommon('showing')}{' '}
+                        <span className="font-medium text-neutral-900 dark:text-white">
+                          {(currentPage - 1) * PROPERTIES_PER_PAGE + 1}
+                        </span>{' '}
+                        -{' '}
+                        <span className="font-medium text-neutral-900 dark:text-white">
+                          {Math.min(currentPage * PROPERTIES_PER_PAGE, displayedTotal)}
+                        </span>{' '}
+                        {tCommon('of')}{' '}
+                        <span className="font-medium text-neutral-900 dark:text-white">
+                          {displayedTotal}
+                        </span>{' '}
+                        {displayedTotal === 1 ? tCommon('property') : tCommon('properties')}
+                      </p>
+                    )}
+                    {(loading || pageLoading) && <LoadingSpinner />}
+                  </div>
+
                 </div>
-                </div>
+
+                {/* Sort Dropdown */}
+                {!loading && (
+                  <div className="flex items-center gap-2">
+                    <label htmlFor="sortBy" className="text-sm font-medium text-neutral-700 whitespace-nowrap">
+                      Sort by:
+                    </label>
+                    <select
+                      id="sortBy"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="rounded-md border-neutral-300 py-2 px-3 text-sm focus:border-primary-500 focus:ring-primary-500 bg-white"
+                    >
+                      <option value="default">Default</option>
+                      <option value="price-low-high">Price: Low to High</option>
+                      <option value="price-high-low">Price: High to Low</option>
+                      <option value="title-a-z">Title: A-Z</option>
+                      <option value="title-z-a">Title: Z-A</option>
+                    </select>
+                  </div>
+                )}
+                
                 {!loading && <LayoutSwitcher currentLayout={layout} onLayoutChange={handleLayoutChange} />}
               </div>
             )}
