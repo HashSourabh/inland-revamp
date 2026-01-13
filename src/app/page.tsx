@@ -99,52 +99,31 @@ const propertyService = {
 
   async getExclusiveProperties(): Promise<DatabaseProperty[]> {
     try {
-      // Try to fetch exclusive properties - use a larger page size to get more options
-      const res = await fetch(`${API_BASE_URL}/properties?pageSize=100&includeHidden=false`);
+      // Use dedicated exclusive properties endpoint - much more reliable than client-side filtering
+      // This endpoint handles all filtering server-side, eliminating race conditions and browser inconsistencies
+      const res = await fetch(`${API_BASE_URL}/properties/exclusive?limit=3`);
+      
       if (!res.ok) {
         console.error(`Exclusive properties API error: ${res.status} ${res.statusText}`);
         return [];
       }
+      
       const data: ApiResponse<DatabaseProperty[]> = await res.json();
+      
       if (!data.success) {
         console.error("Exclusive properties API returned success: false", data);
         return [];
       }
+      
       if (!data.data || !Array.isArray(data.data)) {
         console.error("Exclusive properties API returned invalid data format", data);
         return [];
       }
       
-      console.log(`Total properties from API: ${data.data.length}`);
-      console.log('Sample property:', data.data[0]);
+      console.log(`Loaded ${data.data.length} exclusive properties from dedicated API endpoint`);
       
-      // Filter for exclusive properties - check multiple conditions
-      // 1. Explicit Exclusive field
-      // 2. Properties with price reductions (Original_Price > Public_Price)
-      // 3. If no exclusive found, use first 3 properties as fallback
-      let exclusive = data.data.filter(p => {
-        const hasExclusiveFlag = p.Exclusive === true || 
-                                 (typeof p.Exclusive === 'number' && p.Exclusive === 1) ||
-                                 (typeof p.Exclusive === 'string' && p.Exclusive === '1');
-        const hasPriceReduction = p.Original_Price && 
-                                  p.Public_Price && 
-                                  p.Original_Price > p.Public_Price;
-        return hasExclusiveFlag || hasPriceReduction;
-      });
-      
-      console.log(`Found ${exclusive.length} exclusive properties (filtered)`);
-      
-      // If no exclusive properties found by filter, use first 3 properties as fallback
-      if (exclusive.length === 0) {
-        console.log('No exclusive properties found by filter, using first 3 properties as fallback');
-        exclusive = data.data.slice(0, 3);
-      } else {
-        // Take first 3 exclusive properties
-        exclusive = exclusive.slice(0, 3);
-      }
-      
-      console.log(`Returning ${exclusive.length} exclusive properties`);
-      return exclusive;
+      // API already returns filtered exclusive properties (max 3), so return them directly
+      return data.data;
     } catch (err) {
       console.error("Error fetching exclusive properties:", err);
       return [];
@@ -341,10 +320,12 @@ export default function Home() {
   useEffect(() => {
     // Check exclusive properties first (priority)
     if (exclusiveProperties.length > 0 && !needsRefresh) {
+      // We have cached exclusive properties, use them immediately
       setExclusiveLoading(false);
       hasLoadedOnce.current = true;
     } else {
       // If no cache or stale, ensure we load exclusive first
+      // Keep loading state as true - it will be set to false when API call completes
       setExclusiveLoading(true);
     }
     
@@ -366,25 +347,20 @@ export default function Home() {
     }
   }, []); // Run once on mount to check cache
 
-  // Add timeout to prevent infinite loading
+  // Add timeout only for property types as a safety net (non-critical, can timeout)
+  // Featured and exclusive properties should complete naturally from API response
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (featuredLoading) {
-        console.warn('Featured properties loading timeout - setting to false');
-        setFeaturedLoading(false);
-      }
-      if (exclusiveLoading) {
-        console.warn('Exclusive properties loading timeout - setting to false');
-        setExclusiveLoading(false);
-      }
+      // Don't timeout featured or exclusive loading - let them complete naturally from API
+      // Only timeout types loading as a safety net (types are less critical)
       if (typesLoading) {
         console.warn('Property types loading timeout - setting to false');
         setTypesLoading(false);
       }
-    }, 8000); // Reduced to 8 seconds
+    }, 20000); // 20 seconds safety net for types only
 
     return () => clearTimeout(timeout);
-  }, [featuredLoading, exclusiveLoading, typesLoading]);
+  }, [typesLoading]);
 
   function Autoplay(slider: any) {
     let timeout: ReturnType<typeof setTimeout>
@@ -513,9 +489,16 @@ export default function Home() {
         console.log(`Loaded ${exclusiveDb.length} exclusive properties from API`);
         console.log('Exclusive DB data sample:', exclusiveDb[0]);
         
+        // Always set loading to false after API call completes, regardless of result
+        // If API returns empty array, we'll show "no property" message
+        // If API returns properties, we'll transform and display them
         if (exclusiveDb.length === 0) {
-          console.warn('No exclusive properties returned from API - check filter logic');
+          console.warn('No exclusive properties returned from API - will show "no property" message');
+          // Clear any existing properties and show "no property" message
+          setExclusiveProperties([]);
           setExclusiveLoading(false);
+          updateLastFetchTime();
+          hasLoadedOnce.current = true;
           return;
         }
         
@@ -529,7 +512,12 @@ export default function Home() {
         hasLoadedOnce.current = true;
       } catch (err) {
         console.error("Error loading exclusive properties:", err);
+        // On error, clear properties and show "no property" message
+        if (mounted) {
+          setExclusiveProperties([]);
+        }
       } finally {
+        // Always set loading to false after API call completes (success or error)
         if (mounted) {
           setExclusiveLoading(false);
         }
@@ -542,7 +530,7 @@ export default function Home() {
     return () => {
       mounted = false;
     };
-  }, [needsRefresh]); // Depend on needsRefresh to retrigger when cache is stale
+  }, [needsRefresh, propertyTypesMap]); // Depend on needsRefresh and propertyTypesMap to retrigger when cache is stale or types are available
 
   // Re-transform properties when types map becomes available (if properties loaded first)
   // Note: This would require storing original DB data, so we'll reload if types change
@@ -592,6 +580,20 @@ export default function Home() {
         
         console.log(`Loaded ${featuredDb.length} featured properties from API`);
         
+        // Always set loading to false after API call completes, regardless of result
+        // If API returns empty array, we'll show "no property" message
+        // If API returns properties, we'll transform and display them
+        if (featuredDb.length === 0) {
+          console.warn('No featured properties returned from API - will show "no property" message');
+          // Clear any existing properties and show "no property" message
+          setFeaturedProperties([]);
+          setFeaturedLoading(false);
+          updateLastFetchTime();
+          initialLoadComplete.current = true;
+          hasLoadedOnce.current = true;
+          return;
+        }
+        
         // Transform with types map (use empty map if types not loaded yet, will retransform later)
         const transformed = featuredDb.map(p => transformPropertyForCard(p, propertyTypesMap, tCommon));
         setFeaturedProperties(transformed);
@@ -601,7 +603,12 @@ export default function Home() {
         console.log(`Transformed ${transformed.length} featured properties`);
       } catch (err) {
         console.error("Error loading featured properties:", err);
+        // On error, clear properties and show "no property" message
+        if (mounted) {
+          setFeaturedProperties([]);
+        }
       } finally {
+        // Always set loading to false after API call completes (success or error)
         if (mounted) {
           setFeaturedLoading(false);
         }

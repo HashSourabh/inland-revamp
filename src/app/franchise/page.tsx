@@ -3,9 +3,15 @@
 import PromoSidebar from "@/components/PromoSidebar";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import Image from "next/image";
+import { API_BASE_URL } from "@/utils/api";
+import MartinQR from "@/assets/images/qr_inlandandalucia_martos.png";
+import JohnQR from "@/assets/images/qr_inlandandalucia_jaen.png";
 
 export default function FranchisePage() {
     const t = useTranslations("franchisePage");
+    const tCommon = useTranslations("common");
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -16,14 +22,59 @@ export default function FranchisePage() {
         comments: "",
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Franchise Form Submitted:", formData);
-        // TODO: send to backend or email service
+        
+        setIsSubmitting(true);
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/contact/franchise`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    address: formData.address,
+                    telephone: formData.telephone,
+                    email: formData.email,
+                    comments: formData.comments,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to submit form");
+            }
+
+            if (data.success) {
+                toast.success(tCommon("formSubmittedSuccessfully"));
+                // Reset form
+                setFormData({
+                    firstName: "",
+                    lastName: "",
+                    address: "",
+                    telephone: "",
+                    email: "",
+                    comments: "",
+                });
+            } else {
+                throw new Error(data.error || "Failed to submit form");
+            }
+        } catch (error: any) {
+            console.error("Error submitting form:", error);
+            toast.error(error.message || tCommon("formSubmissionFailed"));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -138,9 +189,10 @@ export default function FranchisePage() {
 
                         <button
                             type="submit"
-                            className="w-full md:w-auto float-end px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow hover:bg-primary-700 transition"
+                            disabled={isSubmitting}
+                            className="w-full md:w-auto float-end px-6 py-3 bg-primary-600 text-white font-medium rounded-md shadow hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {t("submitButton")}
+                            {isSubmitting ? tCommon("submitting") : t("submitButton")}
                         </button>
                     </div>
                 </form>
@@ -149,11 +201,23 @@ export default function FranchisePage() {
                     <p>{t("qrInstruction")}</p>
                     <div className="mt-4 flex gap-8 justify-center">
                         <div className="flex flex-col items-center">
-                            <img src="/qr-martin.png" alt={t("qrAltMartin")} className="h-28 w-28" />
+                            <Image 
+                                src={MartinQR} 
+                                alt={t("qrAltMartin")} 
+                                width={112}
+                                height={112}
+                                className="h-28 w-28 object-cover border border-primary-500/50" 
+                            />
                             <span className="mt-2 text-sm text-gray-600">{t("qrNameMartin")}</span>
                         </div>
                         <div className="flex flex-col items-center">
-                            <img src="/qr-john.png" alt={t("qrAltJohn")} className="h-28 w-28" />
+                            <Image 
+                                src={JohnQR} 
+                                alt={t("qrAltJohn")} 
+                                width={112}
+                                height={112}
+                                className="h-28 w-28 object-cover border border-primary-500/50" 
+                            />
                             <span className="mt-2 text-sm text-gray-600">{t("qrNameJohn")}</span>
                         </div>
                     </div>

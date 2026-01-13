@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Property } from '@/types/property';
 import TownFilter from './TownFilter';
 import { useTranslations } from 'next-intl';
+import { CheckIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface RegionCount {
   regionId: number;
@@ -68,7 +69,10 @@ export default function AreaFilter({
   onRegionChange,
   onAreaChange,
 }: AreaFilterProps) {
+  const tCommon = useTranslations('common');
   const t=useTranslations('properties');
+  const [expandedRegions, setExpandedRegions] = useState<Set<number>>(new Set());
+  
   // Get the current region name for styling areas
   const currentRegionName = useMemo(() => {
     if (selectedRegion) {
@@ -78,117 +82,187 @@ export default function AreaFilter({
     return '';
   }, [selectedRegion, regions]);
 
+  const isAllSelected = !selectedProvince && !selectedRegion && !selectedArea;
+
+  const toggleRegion = (regionId: number) => {
+    setExpandedRegions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(regionId)) {
+        newSet.delete(regionId);
+      } else {
+        newSet.add(regionId);
+      }
+      return newSet;
+    });
+  };
+
+  // Auto-expand when a region is selected
+  useEffect(() => {
+    if (selectedRegion) {
+      setExpandedRegions(prev => {
+        const newSet = new Set(prev);
+        newSet.add(selectedRegion);
+        return newSet;
+      });
+    }
+  }, [selectedRegion]);
+
   return (
-    <div className="space-y-4">
-      {/* ALL Button - Single source of truth */}
-      <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => {
-            onProvinceChange(null);
-            onTownChange(null);
-            onRegionChange?.(null);
-            onAreaChange?.(null);
-          }}
-          className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
-            ${!selectedProvince && !selectedRegion && !selectedArea
-              ? 'bg-primary-600 text-white'
-              : 'bg-gray-500 hover:bg-gray-600 text-white'
-            } border border-transparent shadow-sm`}
-        >
-          <span>ALL</span>
-          <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold text-white">
-            {allCount}
-          </span>
-        </button>
+    <div className="space-y-1">
+      {/* All Regions Button */}
+      <button
+        onClick={() => {
+          onProvinceChange(null);
+          onTownChange(null);
+          onRegionChange?.(null);
+          onAreaChange?.(null);
+        }}
+        className={`w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors
+          ${isAllSelected
+            ? 'bg-primary-600 text-white'
+            : 'bg-white text-neutral-700 hover:bg-neutral-50 border border-neutral-200'
+          }`}
+      >
+        <div className="flex items-center gap-2">
+          {isAllSelected && <CheckIcon className="h-5 w-5 text-white flex-shrink-0" />}
+          <span>{tCommon("allRegions")}</span>
+        </div>
+        <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
+          ${isAllSelected
+            ? 'bg-white/20 text-white'
+            : 'bg-neutral-100 text-neutral-600'
+          }`}>
+          {allCount}
+        </span>
+      </button>
 
-        {/* Dynamic Region/Province Buttons from API */}
-        {regions.map((region) => {
-          const colors = regionColors[region.regionName] || {
-            bg: 'bg-gray-500',
-            hover: 'hover:bg-gray-600',
-            hex: '#6B7280',
-          };
+      {/* Region List */}
+      {regions.map((region) => {
+        const isActive = selectedRegion === region.regionId;
+        const isExpanded = expandedRegions.has(region.regionId);
 
-          const isActive = selectedRegion === region.regionId;
-
-          return (
+        return (
+          <div key={region.regionId} className="border border-neutral-200 rounded-lg overflow-hidden">
+            {/* Region Header */}
             <button
-              key={region.regionId}
               onClick={() => {
                 if (isActive) {
+                  // If already active, deselect and collapse
                   onRegionChange?.(null);
                   onProvinceChange(null);
                   onTownChange(null);
                   onAreaChange?.(null);
+                  setExpandedRegions(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(region.regionId);
+                    return newSet;
+                  });
                 } else {
+                  // Select the region and expand it
                   onRegionChange?.(region.regionId);
-                  onProvinceChange(region.regionName);
                   onTownChange(null);
                   onAreaChange?.(null);
+                  // Ensure it's expanded when selected
+                  setExpandedRegions(prev => {
+                    const newSet = new Set(prev);
+                    newSet.add(region.regionId);
+                    return newSet;
+                  });
                 }
               }}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors
+              className={`w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors
                 ${isActive
                   ? 'bg-primary-600 text-white'
-                  : `${colors.bg} ${colors.hover} text-white`
-                } border border-transparent shadow-sm`}
+                  : 'bg-white text-neutral-700 hover:bg-neutral-50'
+                }`}
             >
-              <span>{region.regionName}</span>
-              <span className="rounded-full bg-white/20 px-2 py-0.5 text-xs font-semibold text-white">
-                {region.count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Area Filter - Show when a region is selected */}
-      {selectedRegion && areas.length > 0 && (
-        <div className="flex flex-wrap gap-2 pl-4 border-l-2 border-gray-200">
-          <div className="w-full mb-2">
-            <span className="text-sm font-medium text-gray-600">
-              {t('filter_titles.areas_in_region', { region: currentRegionName })}:
-            </span>
-          </div>
-          {areas.map((area) => {
-            const colors = areaColors[currentRegionName] || {
-              bg: 'bg-gray-300',
-              hover: 'hover:bg-gray-400',
-              hex: '#D1D5DB',
-            };
-
-            const isActive = selectedArea === area.areaId;
-
-            return (
-              <button
-                key={area.areaId}
-                onClick={() => {
-                  if (isActive) {
-                    onAreaChange?.(null);
-                  } else {
-                    onAreaChange?.(area.areaId);
-                  }
-                }}
-                className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-colors
-                  ${isActive
-                    ? 'bg-primary-500 text-white'
-                    : `${colors.bg} ${colors.hover} text-gray-700`
-                  } border border-transparent shadow-sm`}
-              >
-                <span>{area.areaName}</span>
-                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                {isActive && <CheckIcon className="h-5 w-5 text-white flex-shrink-0" />}
+                <span className="truncate">{region.regionName}</span>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
                   ${isActive
                     ? 'bg-white/20 text-white'
-                    : 'bg-gray-500/20 text-gray-600'
+                    : 'bg-neutral-100 text-neutral-600'
+                  }`}>
+                  {region.count}
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleRegion(region.regionId);
+                  }}
+                  className={`p-1 rounded transition-colors ${
+                    isActive 
+                      ? "hover:bg-white/20" 
+                      : "hover:bg-neutral-200"
                   }`}
                 >
-                  {area.count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
+                  {isExpanded ? (
+                    <ChevronDownIcon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-neutral-600'}`} />
+                  ) : (
+                    <ChevronRightIcon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-neutral-600'}`} />
+                  )}
+                </button>
+              </div>
+            </button>
+
+          {/* Areas List (Accordion Content) */}
+          <div 
+            className={`overflow-hidden transition-all duration-200 ease-in-out ${
+              isExpanded && selectedRegion === region.regionId ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+            }`}
+          >
+            {selectedRegion === region.regionId ? (
+              areas.length > 0 ? (
+                <div>
+                  {areas.map((area) => {
+                    const isAreaActive = selectedArea === area.areaId;
+
+                    return (
+                      <button
+                        key={area.areaId}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isAreaActive) {
+                            onAreaChange?.(null);
+                          } else {
+                            onAreaChange?.(area.areaId);
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between px-6 py-2.5 text-sm font-medium transition-colors
+                          ${isAreaActive
+                            ? 'bg-primary-500 text-white'
+                            : 'text-neutral-700 hover:bg-neutral-100'
+                          }`}
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          {isAreaActive && <CheckIcon className="h-4 w-4 text-white flex-shrink-0" />}
+                          <span className="truncate">{area.areaName}</span>
+                        </div>
+                        <span className={`rounded-full px-2 py-0.5 text-xs font-semibold flex-shrink-0
+                          ${isAreaActive
+                            ? 'bg-white/20 text-white'
+                            : 'bg-white text-neutral-600'
+                          }`}>
+                          {area.count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="px-6 py-4 text-sm text-neutral-500">
+                  Loading areas...
+                </div>
+              )
+            ) : null}
+          </div>
+          </div>
+        );
+      })}
+
 
       {/* Town Filter - Only show when a specific province is selected (not region) */}
       {selectedProvince && !selectedRegion && selectedProvince !== 'ALL' && properties && properties.length > 0 && (

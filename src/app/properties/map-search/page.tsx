@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 // Performance: Lazy load Google Maps components to reduce initial bundle size
 import dynamic from 'next/dynamic';
 import Image from "next/image";
-import { CheckIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ChevronDownIcon, ChevronRightIcon, FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { fetchRegions, fetchAreas } from '@/utils/api';
 import { getRegionColors, getAreaColors } from '@/utils/colorUtils';
 import { areaImages, getIAMarkerIcon } from '@/utils/mapUtils';
@@ -81,6 +81,8 @@ export default function MapSearchPage() {
   const [selectedArea, setSelectedArea] = useState<AreaWithCoordinates | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [expandedRegions, setExpandedRegions] = useState<Set<string>>(new Set());
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Fetch regions
   useEffect(() => {
@@ -143,6 +145,29 @@ export default function MapSearchPage() {
     if (regions.length > 0) loadAreas();
   }, [selectedRegion, regions]);
 
+  // Handle body scroll lock when sidebar is open on mobile
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isSidebarOpen]);
+
+  // Close sidebar when window is resized to desktop size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Compute region stats
   const regionStats = useMemo(() => {
     if (!regions.length) return [];
@@ -153,7 +178,7 @@ export default function MapSearchPage() {
     ].sort((a, b) => b.count - a.count);
   }, [regions]);
 
-  // Compute town stats
+  // Compute town stats for selected region
   const townStats = useMemo(() => {
     if (!selectedRegion || selectedRegion === "ALL") return [];
     return areas
@@ -161,6 +186,14 @@ export default function MapSearchPage() {
       .map(area => ({ name: area.areaName, count: area.count }))
       .sort((a, b) => b.count - a.count);
   }, [selectedRegion, areas]);
+
+  // Get towns for a specific region
+  const getTownsForRegion = (regionName: string) => {
+    return areas
+      .filter(area => area.regionName === regionName)
+      .map(area => ({ name: area.areaName, count: area.count }))
+      .sort((a, b) => b.count - a.count);
+  };
 
   // Areas with coordinates
   const areasWithCoordinates = useMemo((): AreaWithCoordinates[] => {
@@ -179,12 +212,33 @@ export default function MapSearchPage() {
   }, [areas, selectedRegion, selectedTown]);
 
   const handleRegionSelect = (regionName: string) => {
-    setSelectedRegion(regionName === selectedRegion ? null : regionName);
+    const newSelected = regionName === selectedRegion ? null : regionName;
+    setSelectedRegion(newSelected);
     setSelectedTown(null);
+    
+    // Auto-expand if region is selected and has towns
+    if (newSelected && newSelected !== "ALL") {
+      const regionTowns = areas.filter(area => area.regionName === newSelected);
+      if (regionTowns.length > 0) {
+        setExpandedRegions(prev => new Set(prev).add(newSelected));
+      }
+    }
   };
 
   const handleTownSelect = (townName: string) => {
     setSelectedTown(townName === selectedTown ? null : townName);
+  };
+
+  const toggleRegion = (regionName: string) => {
+    setExpandedRegions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(regionName)) {
+        newSet.delete(regionName);
+      } else {
+        newSet.add(regionName);
+      }
+      return newSet;
+    });
   };
 
   const handleAreaClick = (area: AreaWithCoordinates) => {
@@ -197,71 +251,169 @@ export default function MapSearchPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
-      <h1 className="mb-6 font-heading text-3xl font-bold text-primary-600">{t('g_map')}</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-heading lg:text-3xl md:text-2xl text-xl font-bold text-primary-600">{t('g_map')}</h1>
+        {/* Mobile Toggle Button */}
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
+          aria-label={tCommon("toggleFilters")}
+        >
+          <FunnelIcon className="h-6 w-6" />
+        </button>
+      </div>
 
-      {/* Region Filters */}
-      <div className="mb-8 rounded-xl border border-neutral-200 bg-white p-4">
-        <div className="flex flex-wrap gap-2 mb-4">
-          {regionStats.map(({ name, count }) => {
-            const colors = getRegionColors(name);
-            const isActive = selectedRegion === name;
-
-            return (
-              <button
-                key={name}
-                onClick={() => handleRegionSelect(name)}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 text-base font-medium transition-colors
-                  ${isActive
-                    ? "bg-primary-600 text-white border-primary-700"
-                    : `text-white ${colors.hover}`
-                  } border border-transparent shadow-sm`}
-                style={isActive ? {} : { backgroundColor: colors.hex }}
-              >
-                {isActive && <CheckIcon className="h-4 w-4 text-white" />}
-                <span>{name}</span>
-                <span className="rounded-full bg-white/15 px-2 py-0.5 text-sm font-semibold text-white">
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Town List */}
-        {selectedRegion && selectedRegion !== "ALL" && townStats.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {townStats.map(town => {
-              const colors = getAreaColors(selectedRegion);
-              const isActive = selectedTown === town.name;
-
-              return (
-                <button
-                  key={town.name}
-                  onClick={() => handleTownSelect(town.name)}
-                  className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm font-medium transition-colors
-                    ${isActive
-                      ? "bg-primary-500 text-white border-primary-600"
-                      : `text-gray-700 ${colors.hover}`
-                    } border border-transparent shadow-sm`}
-                  style={isActive ? {} : { backgroundColor: colors.hex }}
-                >
-                  {isActive && <CheckIcon className="h-4 w-4 text-white" />}
-                  <span>{town.name}</span>
-                  <span className={`rounded-full px-1.5 py-0.5 text-xs font-semibold
-                    ${isActive
-                      ? "bg-white/20 text-white"
-                      : "bg-white/60 text-neutral-600"
-                    }`}>
-                    {town.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+      <div className="flex flex-col lg:flex-row gap-4 relative">
+        {/* Mobile Overlay */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
         )}
 
+        {/* Sidebar Filters */}
+        <div
+          className={`fixed lg:static inset-y-0 left-0 z-50 lg:z-auto w-80 lg:w-80 flex-shrink-0 transform transition-transform duration-300 ease-in-out ${
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}
+        >
+          <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-primary-900">{tCommon("filters")}</h2>
+              <button
+                onClick={() => setIsSidebarOpen(false)}
+                className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
+                aria-label={tCommon("closeFilters")}
+              >
+                <XMarkIcon className="h-5 w-5" />
+              </button>
+            </div>
+            
+            {/* All Regions Option */}
+            <div className="mb-2">
+              <button
+                onClick={() => handleRegionSelect("ALL")}
+                className={`w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors
+                  ${selectedRegion === "ALL"
+                    ? "bg-primary-600 text-white"
+                    : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+                  }`}
+              >
+                <div className="flex items-center gap-2">
+                  {selectedRegion === "ALL" && <CheckIcon className="h-5 w-5 text-white" />}
+                  <span>{tCommon("allRegions")}</span>
+                </div>
+                <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
+                  ${selectedRegion === "ALL"
+                    ? "bg-white/20 text-white"
+                    : "bg-white text-neutral-600"
+                  }`}>
+                  {regionStats.find(r => r.name === "ALL")?.count || 0}
+                </span>
+              </button>
+            </div>
+
+            {/* Region Accordions */}
+            <div className="space-y-1">
+              {regionStats
+                .filter(({ name }) => name !== "ALL")
+                .map(({ name, count }) => {
+                  const colors = getRegionColors(name);
+                  const isActive = selectedRegion === name;
+                  const isExpanded = expandedRegions.has(name);
+                  const regionTowns = getTownsForRegion(name);
+
+                  return (
+                    <div key={name} className="border border-neutral-200 rounded-lg overflow-hidden">
+                      {/* Region Header */}
+                      <button
+                        onClick={() => {
+                          handleRegionSelect(name);
+                          if (!isExpanded && regionTowns.length > 0) {
+                            toggleRegion(name);
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between px-4 py-3 text-base font-medium transition-colors
+                          ${isActive
+                            ? "bg-primary-600 text-white"
+                            : "bg-white text-neutral-700 hover:bg-neutral-50"
+                          }`}
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          {isActive && <CheckIcon className="h-5 w-5 text-white flex-shrink-0" />}
+                          <span className="truncate">{name}</span>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
+                            ${isActive
+                              ? "bg-white/20 text-white"
+                              : "bg-neutral-100 text-neutral-600"
+                            }`}>
+                            {count}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleRegion(name);
+                            }}
+                            className={`p-1 rounded transition-colors ${
+                              isActive 
+                                ? "hover:bg-white/20" 
+                                : "hover:bg-neutral-200"
+                            }`}
+                          >
+                            {isExpanded ? (
+                              <ChevronDownIcon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-neutral-600'}`} />
+                            ) : (
+                              <ChevronRightIcon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-neutral-600'}`} />
+                            )}
+                          </button>
+                        </div>
+                      </button>
+
+                      {/* Towns List (Accordion Content) */}
+                      {isExpanded && regionTowns.length > 0 && (
+                        <div className="bg-neutral-50 border-t border-neutral-200">
+                          {regionTowns.map(town => {
+                            const townColors = getAreaColors(name);
+                            const isTownActive = selectedTown === town.name;
+
+                            return (
+                              <button
+                                key={town.name}
+                                onClick={() => handleTownSelect(town.name)}
+                                className={`w-full flex items-center justify-between px-6 py-2.5 text-sm font-medium transition-colors
+                                  ${isTownActive
+                                    ? "bg-primary-500 text-white"
+                                    : "text-neutral-700 hover:bg-neutral-100"
+                                  }`}
+                              >
+                                <div className="flex items-center gap-2 flex-1 min-w-0">
+                                  {isTownActive && <CheckIcon className="h-4 w-4 text-white flex-shrink-0" />}
+                                  <span className="truncate">{town.name}</span>
+                                </div>
+                                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold flex-shrink-0
+                                  ${isTownActive
+                                    ? "bg-white/20 text-white"
+                                    : "bg-white text-neutral-600"
+                                  }`}>
+                                  {town.count}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+
         {/* Map */}
-        <div className="rounded-xl overflow-hidden border border-neutral-200">
+        <div className="flex-1 rounded-xl overflow-hidden border border-neutral-200">
           <GoogleMap mapContainerStyle={containerStyle} center={defaultCenter} zoom={defaultZoom}>
             {areasWithCoordinates.map(area => (
               <Marker
