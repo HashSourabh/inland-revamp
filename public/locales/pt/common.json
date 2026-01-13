@@ -1475,5 +1475,17 @@
       "previous": "Anterior",
       "next": "Próximo"
     }
-  }
+  },
+  "sortBy": "Ordenar por",
+  "title": "Título",
+  "price": "Preço",
+  "bedrooms": "Quartos",
+  "bathrooms": "Banheiros",
+  "size": "Tamanho",
+  "lowToHigh": "Menor para Maior",
+  "highToLow": "Maior para Menor",
+  "most": "Mais",
+  "least": "Menos",
+  "largest": "Maior",
+  "smallest": "Menor"
 }

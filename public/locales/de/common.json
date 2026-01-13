@@ -1473,5 +1473,17 @@
       "previous": "Vorherige",
       "next": "Nächste"
     }
-  }
+  },
+  "sortBy": "Sortieren nach",
+  "title": "Titel",
+  "price": "Preis",
+  "bedrooms": "Schlafzimmer",
+  "bathrooms": "Badezimmer",
+  "size": "Größe",
+  "lowToHigh": "Niedrig zu Hoch",
+  "highToLow": "Hoch zu Niedrig",
+  "most": "Meiste",
+  "least": "Wenigste",
+  "largest": "Größte",
+  "smallest": "Kleinste"
 }

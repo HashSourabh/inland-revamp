@@ -1473,5 +1473,17 @@
       "previous": "Previous",
       "next": "Next"
     }
-  }
+  },
+  "sortBy": "Sort by",
+  "title": "Title",
+  "price": "Price",
+  "bedrooms": "Bedrooms",
+  "bathrooms": "Bathrooms",
+  "size": "Size",
+  "lowToHigh": "Low to High",
+  "highToLow": "High to Low",
+  "most": "Most",
+  "least": "Least",
+  "largest": "Largest",
+  "smallest": "Smallest"
 }

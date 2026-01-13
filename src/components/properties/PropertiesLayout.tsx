@@ -223,6 +223,8 @@ export default function PropertiesLayout({
   const [minBaths, setMinBaths] = useState<string | null>(null);
   const [minPrice, setminPrice] = useState<string | null>(null);
   const [maxPrice, setmaxPrice] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<string>('title');
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
 
   // Favourite property IDs for the logged-in user
   const favouriteIds = useFavouriteIds();
@@ -399,22 +401,42 @@ export default function PropertiesLayout({
 
   // Main properties fetch effect with race condition prevention, debouncing, and sequencing
   useEffect(() => {
+    console.log('[PROPERTIES FETCH] useEffect triggered');
+    console.log('[PROPERTIES FETCH] Dependencies:', {
+      currentPage,
+      selectedProvince,
+      selectedTown,
+      selectedRegion,
+      selectedArea,
+      selectedPropertyType,
+      minBeds,
+      minBaths,
+      minPrice,
+      maxPrice,
+      sortBy,
+      sortOrder,
+      initialLoad
+    });
+
     // Don't block properties fetch - it can load independently
     // Property types are used for transformation, not blocking
 
     // Cancel any pending debounce timer
     if (debounceTimerRef.current) {
+      console.log('[PROPERTIES FETCH] Clearing debounce timer');
       clearTimeout(debounceTimerRef.current);
     }
 
     // Cancel any in-flight request
     if (abortControllerRef.current) {
+      console.log('[PROPERTIES FETCH] Aborting previous request');
       abortControllerRef.current.abort();
     }
 
     // Clear old properties and show loading immediately when filters change
     // This prevents showing stale data (glitch) before new data loads
     if (!initialLoad) {
+      console.log('[PROPERTIES FETCH] Clearing properties and showing loading (not initial load)');
       setProperties([]);
       setLoading(true);
       setError(null);
@@ -429,26 +451,40 @@ export default function PropertiesLayout({
     // Debounce filter changes (but not page changes or initial load)
     const shouldDebounce = initialLoad === false;
     const delay = shouldDebounce ? 300 : 0;
+    console.log('[PROPERTIES FETCH] Debounce settings - shouldDebounce:', shouldDebounce, 'delay:', delay);
 
     debounceTimerRef.current = setTimeout(() => {
       const fetchProperties = async () => {
+        console.log('[PROPERTIES FETCH] fetchProperties function called');
+        console.log('[PROPERTIES FETCH] Current sort state - sortBy:', sortBy, 'sortOrder:', sortOrder);
+        
         // Build query params
-        const queryParams = {
+        const queryParams: Record<string, string> = {
           page: String(currentPage),
           limit: String(PROPERTIES_PER_PAGE),
-          ...(selectedProvince ? { province: selectedProvince } : {}),
-          ...(selectedTown ? { town: selectedTown } : {}),
-          ...(selectedRegion ? { regionId: String(selectedRegion) } : {}),
-          ...(selectedArea ? { areaId: String(selectedArea) } : {}),
-          ...(selectedPropertyType ? { propertyType: selectedPropertyType } : {}),
-          ...(minBeds ? { minBeds } : {}),
-          ...(minBaths ? { minBaths } : {}),
-          ...(minPrice ? { minPrice } : {}),
-          ...(maxPrice ? { maxPrice } : {}),
+          sortBy: sortBy || 'id',
+          sortOrder: sortOrder || 'DESC',
         };
+        
+        console.log('[PROPERTIES FETCH] Base query params:', queryParams);
+        
+        // Add optional filters
+        if (selectedProvince) queryParams.province = selectedProvince;
+        if (selectedTown) queryParams.town = selectedTown;
+        if (selectedRegion) queryParams.regionId = String(selectedRegion);
+        if (selectedArea) queryParams.areaId = String(selectedArea);
+        if (selectedPropertyType) queryParams.propertyType = selectedPropertyType;
+        if (minBeds) queryParams.minBeds = minBeds;
+        if (minBaths) queryParams.minBaths = minBaths;
+        if (minPrice) queryParams.minPrice = minPrice;
+        if (maxPrice) queryParams.maxPrice = maxPrice;
 
         const query = new URLSearchParams(queryParams);
         const queryString = query.toString();
+        
+        console.log('[PROPERTIES FETCH] Final query params:', queryParams);
+        console.log('[PROPERTIES FETCH] Query string:', queryString);
+        console.log('[PROPERTIES FETCH] Last fetch params:', lastFetchParamsRef.current);
         
         // Prevent duplicate fetches with the same parameters (only for subsequent loads)
         // Allow initial load and page changes even if params are the same
@@ -456,13 +492,16 @@ export default function PropertiesLayout({
                             lastFetchParamsRef.current.split('&').find(p => p.startsWith('page=')) !== 
                             queryString.split('&').find(p => p.startsWith('page='));
         
+        console.log('[PROPERTIES FETCH] isPageChange:', isPageChange);
+        console.log('[PROPERTIES FETCH] Will skip duplicate?', lastFetchParamsRef.current === queryString && !initialLoad && !isPageChange);
+        
         // Only skip if it's the exact same query AND not initial load AND not a page change
         if (lastFetchParamsRef.current === queryString && !initialLoad && !isPageChange) {
-          console.log('Skipping duplicate properties fetch:', queryString);
+          console.log('[PROPERTIES FETCH] ⚠️ SKIPPING duplicate properties fetch:', queryString);
           return; // Skip duplicate fetch
         }
         
-        console.log('Fetching properties with params:', queryString);
+        console.log('[PROPERTIES FETCH] ✅ Fetching properties with params:', queryString);
         // Update last fetch params before making the request
         lastFetchParamsRef.current = queryString;
 
@@ -486,14 +525,24 @@ export default function PropertiesLayout({
 
         try {
           const url = `${API_BASE_URL}/properties?${queryString}`;
+          console.log('[PROPERTIES FETCH] 🌐 Making API request to:', url);
 
           const res = await fetch(url, {
             signal: abortController.signal,
           });
 
+          console.log('[PROPERTIES FETCH] 📡 API response status:', res.status, res.statusText);
+
           if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
 
           const data = await res.json();
+          console.log('[PROPERTIES FETCH] 📦 API response data:', {
+            success: data.success,
+            propertiesCount: data.data?.length || 0,
+            total: data.pagination?.total || data.total,
+            sortBy: queryParams.sortBy,
+            sortOrder: queryParams.sortOrder
+          });
 
           // Check if this is still the latest fetch and not aborted
           if (currentFetch !== fetchPropertiesRef.current || abortController.signal.aborted) {
@@ -505,10 +554,18 @@ export default function PropertiesLayout({
             const total = data.pagination?.total ?? data.total ?? (data.data?.length || 0);
             const pages = data.pagination?.totalPages ?? data.totalPages ?? Math.ceil(total / PROPERTIES_PER_PAGE);
 
+            console.log('[PROPERTIES FETCH] ✅ Success! Setting properties:', {
+              propertiesCount: newProperties.length,
+              total,
+              pages,
+              firstPropertyTitle: newProperties[0]?.title || newProperties[0]?.Property_Ref || 'N/A'
+            });
+
             setProperties(newProperties);
             setTotalProperties(total); // This should be the filtered count
             setTotalPages(pages);
           } else {
+            console.error('[PROPERTIES FETCH] ❌ API returned success: false');
             setProperties([]);
             setTotalProperties(0);
             setTotalPages(1);
@@ -516,8 +573,18 @@ export default function PropertiesLayout({
         } catch (err) {
           // Ignore abort errors
           if (err instanceof Error && err.name === 'AbortError') {
+            console.log('[PROPERTIES FETCH] ⏹️ Request was aborted');
             return;
           }
+
+          console.error('[PROPERTIES FETCH] ❌ Error fetching properties:', err);
+          console.error('[PROPERTIES FETCH] Error details:', {
+            name: err instanceof Error ? err.name : 'Unknown',
+            message: err instanceof Error ? err.message : String(err),
+            currentFetch,
+            fetchPropertiesRef: fetchPropertiesRef.current,
+            aborted: abortController.signal.aborted
+          });
 
           if (currentFetch === fetchPropertiesRef.current && !abortController.signal.aborted) {
             setError(err instanceof Error ? err.message : tCommon('failedToLoadProperties'));
@@ -527,10 +594,12 @@ export default function PropertiesLayout({
           }
         } finally {
           if (currentFetch === fetchPropertiesRef.current && !abortController.signal.aborted) {
+            console.log('[PROPERTIES FETCH] 🏁 Fetch completed, setting loading to false');
             setLoading(false);
             setPageLoading(false);
             // Mark initial load as complete after first fetch
             if (initialLoad) {
+              console.log('[PROPERTIES FETCH] Marking initial load as complete');
               setInitialLoad(false);
             }
           }
@@ -561,6 +630,8 @@ export default function PropertiesLayout({
     minBaths,
     minPrice,
     maxPrice,
+    sortBy,
+    sortOrder,
     API_BASE_URL,
     initialLoad,
     tCommon,
@@ -630,7 +701,7 @@ export default function PropertiesLayout({
     if (currentPage !== 1) {
       setCurrentPage(1);
     }
-  }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]); // currentPage removed from deps to prevent loop
+  }, [selectedProvince, selectedTown, selectedRegion, selectedArea, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice, sortBy, sortOrder]); // currentPage removed from deps to prevent loop
 
   // Handle body scroll lock when sidebar is open on mobile
   useEffect(() => {
@@ -835,7 +906,49 @@ export default function PropertiesLayout({
                   {(loading || pageLoading) && <LoadingSpinner />}
                 </div>
                 </div>
-                {!loading && <LayoutSwitcher currentLayout={layout} onLayoutChange={handleLayoutChange} />}
+                {!loading && (
+                  <div className="flex items-center gap-4">
+                    {/* Sort Dropdown */}
+                    <div className="flex items-center gap-2">
+                      <label htmlFor="sortBy" className="text-sm font-medium text-neutral-700 dark:text-neutral-300 whitespace-nowrap">
+                        {tCommon('sortBy')}:
+                      </label>
+                      <select
+                        id="sortBy"
+                        value={`${sortBy}:${sortOrder}`}
+                        onChange={(e) => {
+                          console.log('[SORT DROPDOWN] onChange triggered, value:', e.target.value);
+                          const [newSortBy, newSortOrder] = e.target.value.split(':');
+                          console.log('[SORT DROPDOWN] Parsed values - sortBy:', newSortBy, 'sortOrder:', newSortOrder);
+                          console.log('[SORT DROPDOWN] Current state - sortBy:', sortBy, 'sortOrder:', sortOrder);
+                          
+                          if (newSortBy && newSortOrder) {
+                            console.log('[SORT DROPDOWN] Setting new sort values...');
+                            setSortBy(newSortBy);
+                            setSortOrder(newSortOrder as 'ASC' | 'DESC');
+                            setCurrentPage(1); // Reset to first page when sorting changes
+                            console.log('[SORT DROPDOWN] State updated - new sortBy:', newSortBy, 'new sortOrder:', newSortOrder);
+                          } else {
+                            console.error('[SORT DROPDOWN] ERROR: Failed to parse sort values from:', e.target.value);
+                          }
+                        }}
+                        className="rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
+                      >
+                        <option value="title:ASC">{tCommon('title')}: A-Z</option>
+                        <option value="title:DESC">{tCommon('title')}: Z-A</option>
+                        <option value="price:ASC">{tCommon('price')}: {tCommon('lowToHigh')}</option>
+                        <option value="price:DESC">{tCommon('price')}: {tCommon('highToLow')}</option>
+                        <option value="bedrooms:DESC">{tCommon('bedrooms')}: {tCommon('most')}</option>
+                        <option value="bedrooms:ASC">{tCommon('bedrooms')}: {tCommon('least')}</option>
+                        <option value="bathrooms:DESC">{tCommon('bathrooms')}: {tCommon('most')}</option>
+                        <option value="bathrooms:ASC">{tCommon('bathrooms')}: {tCommon('least')}</option>
+                        <option value="size:DESC">{tCommon('size')}: {tCommon('largest')}</option>
+                        <option value="size:ASC">{tCommon('size')}: {tCommon('smallest')}</option>
+                      </select>
+                    </div>
+                    <LayoutSwitcher currentLayout={layout} onLayoutChange={handleLayoutChange} />
+                  </div>
+                )}
               </div>
             )}
 

@@ -1477,5 +1477,17 @@
       "previous": "Précédent",
       "next": "Suivant"
     }
-  }
+  },
+  "sortBy": "Trier par",
+  "title": "Titre",
+  "price": "Prix",
+  "bedrooms": "Chambres",
+  "bathrooms": "Salles de bain",
+  "size": "Taille",
+  "lowToHigh": "Du moins cher au plus cher",
+  "highToLow": "Du plus cher au moins cher",
+  "most": "Plus",
+  "least": "Moins",
+  "largest": "Plus grand",
+  "smallest": "Plus petit"
 }
