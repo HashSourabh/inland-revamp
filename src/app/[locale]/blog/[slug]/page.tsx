@@ -122,7 +122,7 @@ export default function BlogDetailPage() {
       if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
         const headingText = paragraph.slice(2, -2);
         return (
-          <h3 key={index} className="text-2xl font-bold text-neutral-900 dark:text-white mt-6 mb-4">
+          <h3 key={index} className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mt-4 sm:mt-6">
             {headingText}
           </h3>
         );
@@ -142,7 +142,7 @@ export default function BlogDetailPage() {
       
       // Regular paragraph
       return (
-        <p key={index} className="mb-4 text-neutral-700 dark:text-neutral-300 leading-relaxed">
+        <p key={index} className="mb-4 text-neutral-700 dark:text-neutral-300 leading-relaxed mt-0">
           {paragraph}
         </p>
       );
@@ -171,20 +171,10 @@ export default function BlogDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <div className="mb-6">
-          <Link
-            href={`/${locale}/blog`}
-            className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 dark:text-primary-400"
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            {t('backToBlog')}
-          </Link>
-        </div>
-
-        {/* Blog Header Image */}
+    <div className="">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm">
+          {/* Blog Header Image */}
         {blog.image && (() => {
           // Construct image URL - if it starts with http, use as-is
           // Otherwise, construct URL from backend API using env-based URL
@@ -197,7 +187,7 @@ export default function BlogDetailPage() {
             imageUrl = `${backendBase}${imagePath}`;
           }
           return (
-            <div className="relative h-64 md:h-96 w-full mb-8 rounded-lg overflow-hidden bg-neutral-200 dark:bg-neutral-700">
+            <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden bg-neutral-200 dark:bg-neutral-700">
               <Image
                 src={imageUrl}
                 alt={blog.title}
@@ -209,18 +199,18 @@ export default function BlogDetailPage() {
             </div>
           );
         })()}
-
+        <div className="p-5 md:p-6">
         {/* Blog Header */}
         <div className="mb-8">
           {/* Category */}
           <div className="mb-4">
-            <span className="inline-block px-3 py-1 text-sm font-semibold text-primary-600 bg-primary-50 dark:bg-primary-900/20 rounded-full">
+            <span className="inline-block px-3 py-1 text-xs font-semibold text-primary-600 bg-primary-50 rounded-full">
               {blog.category}
             </span>
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             {blog.title}
           </h1>
 
@@ -253,13 +243,15 @@ export default function BlogDetailPage() {
         </div>
 
         {/* Blog Content */}
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 md:p-8 shadow-sm">
+        <article className="prose prose-sm sm:prose-base dark:prose-invert max-w-none">
+          <div className="">
             <div className="text-neutral-700 dark:text-neutral-300">
               {formatContent(blog.content)}
             </div>
           </div>
         </article>
+        </div>
+        </div>
       </div>
     </div>
   );
