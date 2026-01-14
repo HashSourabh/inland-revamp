@@ -123,12 +123,12 @@ export default function BlogPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
+          <p className="text-red-600 mb-4 text-lg">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
             {t('retry')}
           </button>
@@ -138,41 +138,41 @@ export default function BlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-2">
+        <header className="mb-8">
+          <h1 className="font-heading lg:text-3xl md:text-2xl text-xl font-bold text-primary-600">
             {t('title')}
           </h1>
-          <p className="text-lg text-neutral-600 dark:text-neutral-400">
+          <p className="mt-2 text-neutral-600 lg:text-xl md:text-lg sm:text-base text-sm">
             {t('subtitle')}
           </p>
-        </div>
+        </header>
 
         {/* Blog Grid */}
         {loading && blogs.length === 0 ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: BLOGS_PER_PAGE }).map((_, i) => (
-              <div key={i} className="bg-white dark:bg-neutral-800 rounded-lg shadow-md overflow-hidden animate-pulse">
-                <div className="h-48 w-full bg-neutral-200 dark:bg-neutral-700"></div>
+              <div key={i} className="bg-white rounded-xl border border-neutral-200 overflow-hidden animate-pulse">
+                <div className="h-48 w-full bg-neutral-200"></div>
                 <div className="p-6 space-y-3">
-                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/4"></div>
-                  <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
-                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
-                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-2/3"></div>
+                  <div className="h-4 bg-neutral-200 rounded w-1/4"></div>
+                  <div className="h-6 bg-neutral-200 rounded w-3/4"></div>
+                  <div className="h-4 bg-neutral-200 rounded w-full"></div>
+                  <div className="h-4 bg-neutral-200 rounded w-2/3"></div>
                 </div>
               </div>
             ))}
           </div>
         ) : blogs.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-neutral-600 dark:text-neutral-400">
+            <p className="text-neutral-600 text-lg">
               {t('noPosts')}
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {blogs.map((blog) => {
               // Construct image URL - if it starts with http, use as-is
               // Otherwise, construct URL from backend API using env-based URL
@@ -189,10 +189,10 @@ export default function BlogPage() {
                 <Link
                   key={blog.id}
                   href={`/${locale}/blog/${blog.slug}`}
-                  className="group bg-white dark:bg-neutral-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                  className="flex flex-col group bg-white rounded-xl border border-neutral-200 overflow-hidden hover:shadow-lg transition-all duration-300"
                 >
                   {/* Blog Image */}
-                  <div className="relative h-48 w-full overflow-hidden bg-neutral-200 dark:bg-neutral-700">
+                  <div className="relative h-48 w-full overflow-hidden bg-neutral-200">
                     {imageUrl ? (
                       <Image
                         src={imageUrl}
@@ -221,49 +221,58 @@ export default function BlogPage() {
                   </div>
 
                   {/* Blog Content */}
-                  <div className="p-6">
-                  {/* Category */}
-                  <div className="mb-2">
-                    <span className="inline-block px-3 py-1 text-xs font-semibold text-primary-600 bg-primary-50 dark:bg-primary-900/20 rounded-full">
-                      {blog.category}
-                    </span>
-                  </div>
-
-                  {/* Title */}
-                  <h2 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 transition-colors">
-                    {blog.title}
-                  </h2>
-
-                  {/* Excerpt */}
-                  <p className="text-neutral-600 dark:text-neutral-400 mb-4 line-clamp-3">
-                    {blog.excerpt}
-                  </p>
-
-                  {/* Meta Information */}
-                  <div className="flex items-center justify-between text-sm text-neutral-500 dark:text-neutral-400">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <CalendarIcon className="h-4 w-4" />
-                        <span>{formatDate(blog.publishedAt)}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Tags */}
-                  {blog.tags && blog.tags.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {blog.tags.slice(0, 3).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs text-neutral-600 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-700 rounded"
-                        >
-                          <TagIcon className="h-3 w-3" />
-                          {tag}
+                  <div className="p-5 flex flex-col flex-1">
+                    <div className="flex-1">
+                      {/* Category */}
+                      <div className="mb-3">
+                        <span className="inline-block px-3 py-1 text-xs font-semibold text-primary-600 bg-primary-50 rounded-full">
+                          {blog.category}
                         </span>
-                      ))}
+                      </div>
+
+                      {/* Title */}
+                      <h2 className="text-lg font-semibold text-neutral-900 mb-3 group-hover:text-primary-600 transition-colors line-clamp-2">
+                        {blog.title}
+                      </h2>
+
+                      {/* Excerpt */}
+                      <p className="text-neutral-600 mb-4 line-clamp-3 text-sm">
+                        {blog.excerpt}
+                      </p>
                     </div>
-                  )}
+
+                    <div className="pt-4 border-t border-neutral-100 mt-auto">
+                      {/* Meta Information */}
+                      <div className="flex items-center justify-between text-sm text-neutral-500">
+                        <div className="flex items-center gap-1">
+                          <CalendarIcon className="h-4 w-4" />
+                          <span>{formatDate(blog.publishedAt)}</span>
+                        </div>
+                        {blog.readTime && (
+                          <div className="flex items-center gap-1">
+                            <ClockIcon className="h-4 w-4" />
+                            <span>{blog.readTime} min</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Tags */}
+                      {blog.tags && blog.tags.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {blog.tags.slice(0, 3).map((tag, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center gap-1 px-2 py-1 text-xs text-neutral-600 bg-neutral-100 rounded-md"
+                            >
+                              <TagIcon className="h-3 w-3" />
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
+
                 </Link>
               );
             })}
@@ -276,17 +285,17 @@ export default function BlogPage() {
             {/* Results Count - Left Side */}
             {!loading && blogs.length > 0 && (
               <div className="flex items-center">
-                <p className="text-base text-neutral-600 dark:text-neutral-400">
+                <p className="text-base text-neutral-600">
                   {t('pagination.showing')}{' '}
-                  <span className="font-medium text-neutral-900 dark:text-white">
+                  <span className="font-medium text-neutral-900">
                     {(currentPage - 1) * BLOGS_PER_PAGE + 1}
                   </span>{' '}
                   -{' '}
-                  <span className="font-medium text-neutral-900 dark:text-white">
+                  <span className="font-medium text-neutral-900">
                     {Math.min(currentPage * BLOGS_PER_PAGE, pagination.total)}
                   </span>{' '}
                   {t('pagination.of')}{' '}
-                  <span className="font-medium text-neutral-900 dark:text-white">
+                  <span className="font-medium text-neutral-900">
                     {pagination.total}
                   </span>{' '}
                   {pagination.total === 1 ? t('pagination.post') : t('pagination.posts')}
@@ -306,7 +315,7 @@ export default function BlogPage() {
                   }
                 }}
                 disabled={currentPage === 1 || loading}
-                className="relative inline-flex items-center rounded-md px-2 py-2 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900 transition-colors"
+                className="relative inline-flex items-center sm:px-2 px-1.5 sm:py-2 py-1.5 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <span className="sr-only">{t('pagination.previous')}</span>
                 <svg
@@ -356,7 +365,7 @@ export default function BlogPage() {
                   pageNumber === 'ellipsis1' || pageNumber === 'ellipsis2' ? (
                     <span
                       key={`${pageNumber}-${index}`}
-                      className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-neutral-700 dark:text-neutral-300"
+                      className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-neutral-700"
                     >
                       <EllipsisHorizontalIcon className="h-5 w-5" />
                     </span>
@@ -368,12 +377,12 @@ export default function BlogPage() {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
                       disabled={loading}
-                      className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed ${
+                      className={`relative inline-flex items-center sm:px-4 px-3 sm:py-2 py-1.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed ${
                         currentPage === pageNumber
                           ? 'z-10 bg-primary-600 text-white'
                           : loading
-                            ? 'text-neutral-400 ring-1 ring-inset ring-neutral-300 dark:text-neutral-500 dark:ring-neutral-700'
-                            : 'text-neutral-900 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 dark:text-neutral-100 dark:ring-neutral-700 dark:hover:bg-neutral-800'
+                            ? 'text-neutral-400 ring-1 ring-inset ring-neutral-300'
+                            : 'text-neutral-900 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50'
                       }`}
                     >
                       {pageNumber}
@@ -391,7 +400,7 @@ export default function BlogPage() {
                   }
                 }}
                 disabled={currentPage === pagination.totalPages || loading}
-                className="relative inline-flex items-center rounded-md px-2 py-2 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-500 dark:ring-neutral-700 dark:hover:bg-neutral-800 dark:disabled:hover:bg-neutral-900 transition-colors"
+                className="relative inline-flex items-center sm:px-2 px-1.5 sm:py-2 py-1.5 text-neutral-400 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <span className="sr-only">{t('pagination.next')}</span>
                 <svg

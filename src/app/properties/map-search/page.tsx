@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 // Performance: Lazy load Google Maps components to reduce initial bundle size
 import dynamic from 'next/dynamic';
 import Image from "next/image";
 import { CheckIcon, ChevronDownIcon, ChevronRightIcon, FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { fetchRegions, fetchAreas } from '@/utils/api';
+import { fetchRegions, fetchAreas, fetchPropertyTypes, PropertyType } from '@/utils/api';
 import { getRegionColors, getAreaColors } from '@/utils/colorUtils';
 import { areaImages, getIAMarkerIcon } from '@/utils/mapUtils';
 import PageOverlayLoader from "@/components/loader/PageOverlayLoader";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { useSearchParams, useRouter } from 'next/navigation';
+import { usePropertyCache } from '@/context/PropertyCacheContext';
 
 // Performance: Import useJsApiLoader normally as it's needed for initialization
 // This hook is lightweight and needed early in the component lifecycle
@@ -70,19 +72,129 @@ interface AreaWithCoordinates extends Area {
 export default function MapSearchPage() {
     const t = useTranslations('advance_search');
     const tCommon = useTranslations('common');
+    const locale = useLocale();
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const { propertyTypesMap, setPropertyTypesMap } = usePropertyCache();
+    
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyA5h3ZfC3rhIC2ow1VlVC_J6sprxC1Rbns",
   });
 
+  // Map locale to language ID
+  const localeToLanguageId: Record<string, number> = {
+    'en': 1,
+    'es': 2,
+    'fr': 3,
+    'pt': 8,
+    'de': 4,
+  };
+  const languageId = localeToLanguageId[locale] || 1;
+
   const [regions, setRegions] = useState<Region[]>([]);
   const [areas, setAreas] = useState<Area[]>([]);
+  const [filteredAreas, setFilteredAreas] = useState<Area[]>([]);
   const [selectedRegion, setSelectedRegion] = useState<string | null>("ALL");
   const [selectedTown, setSelectedTown] = useState<string | null>(null);
   const [selectedArea, setSelectedArea] = useState<AreaWithCoordinates | null>(null);
   const [loading, setLoading] = useState(true);
+  const [filteringAreas, setFilteringAreas] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedRegions, setExpandedRegions] = useState<Set<string>>(new Set());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Advanced filter states
+  const [selectedPropertyType, setSelectedPropertyType] = useState<string | null>(null);
+  const [minBeds, setMinBeds] = useState<string | null>(null);
+  const [minBaths, setMinBaths] = useState<string | null>(null);
+  const [minPrice, setMinPrice] = useState<string | null>(null);
+  const [maxPrice, setMaxPrice] = useState<string | null>(null);
+  const [propertyTypesList, setPropertyTypesList] = useState<PropertyType[]>([]);
+  const propertyTypesLoadedRef = useRef(false);
+
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
+
+  // Load property types
+  useEffect(() => {
+    let mounted = true;
+    const loadPropertyTypes = async () => {
+      try {
+        // Check cache first
+        if (Object.keys(propertyTypesMap).length > 0) {
+          propertyTypesLoadedRef.current = true;
+          return;
+        }
+
+        const res = await fetch(`${API_BASE_URL}/properties/types?languageId=${languageId}`);
+        if (!res.ok) throw new Error(`Failed: ${res.status}`);
+
+        const data = await res.json();
+        if (data?.success && data.data && mounted) {
+          const typesMap: Record<number, string> = {};
+          const typesList: PropertyType[] = [];
+          data.data.forEach((type: any) => {
+            typesMap[type.id] = type.name;
+            typesList.push({
+              id: type.id,
+              name: type.name,
+              code: type.code || String(type.id)
+            });
+          });
+          setPropertyTypesMap(typesMap);
+          setPropertyTypesList(typesList);
+          propertyTypesLoadedRef.current = true;
+        }
+      } catch (err) {
+        console.error("Error loading property types:", err);
+        propertyTypesLoadedRef.current = true;
+      }
+    };
+
+    if (Object.keys(propertyTypesMap).length > 0) {
+      propertyTypesLoadedRef.current = true;
+    } else {
+      loadPropertyTypes();
+    }
+    
+    return () => {
+      mounted = false;
+    };
+  }, [languageId, setPropertyTypesMap, API_BASE_URL, propertyTypesMap]);
+
+  // Read URL parameters for filters
+  useEffect(() => {
+    if (!searchParams) return;
+
+    const propertyTypeParam = searchParams.get('propertyType');
+    const minBedsParam = searchParams.get('minBeds');
+    const minBathsParam = searchParams.get('minBaths');
+    const minPriceParam = searchParams.get('minPrice');
+    const maxPriceParam = searchParams.get('maxPrice');
+    const regionParam = searchParams.get('region');
+    const townParam = searchParams.get('town');
+
+    if (propertyTypeParam !== null) {
+      setSelectedPropertyType(propertyTypeParam || null);
+    }
+    if (minBedsParam !== null) {
+      setMinBeds(minBedsParam || null);
+    }
+    if (minBathsParam !== null) {
+      setMinBaths(minBathsParam || null);
+    }
+    if (minPriceParam !== null) {
+      setMinPrice(minPriceParam || null);
+    }
+    if (maxPriceParam !== null) {
+      setMaxPrice(maxPriceParam || null);
+    }
+    if (regionParam !== null) {
+      setSelectedRegion(regionParam || "ALL");
+    }
+    if (townParam !== null) {
+      setSelectedTown(townParam || null);
+    }
+  }, [searchParams]);
 
   // Fetch regions
   useEffect(() => {
@@ -101,7 +213,7 @@ export default function MapSearchPage() {
     loadRegions();
   }, []);
 
-  // Fetch areas based on selected region
+  // Fetch areas based on selected region (base areas with coordinates)
   useEffect(() => {
     const loadAreas = async () => {
       if (!selectedRegion || selectedRegion === "ALL") {
@@ -119,6 +231,10 @@ export default function MapSearchPage() {
             );
 
             setAreas(flattenedAreas);
+            // Initialize filtered areas with original areas when no filters are active
+            if (!selectedPropertyType && !minBeds && !minBaths && !minPrice && !maxPrice) {
+              setFilteredAreas(flattenedAreas);
+            }
           } catch (err) {
             console.error(err);
           }
@@ -136,6 +252,10 @@ export default function MapSearchPage() {
             regionName: region.region
           }));
           setAreas(areasWithRegion);
+          // Initialize filtered areas with original areas when no filters are active
+          if (!selectedPropertyType && !minBeds && !minBaths && !minPrice && !maxPrice) {
+            setFilteredAreas(areasWithRegion);
+          }
         } catch (err) {
           console.error(err);
         }
@@ -144,6 +264,99 @@ export default function MapSearchPage() {
 
     if (regions.length > 0) loadAreas();
   }, [selectedRegion, regions]);
+
+  // Fetch filtered properties and update area counts
+  useEffect(() => {
+    const fetchFilteredProperties = async () => {
+      // Check if any filters are active
+      const hasFilters = selectedPropertyType || minBeds || minBaths || minPrice || maxPrice;
+      
+      if (!hasFilters || areas.length === 0) {
+        // No filters or no areas, use original areas
+        setFilteredAreas(areas);
+        setFilteringAreas(false);
+        return;
+      }
+
+      setFilteringAreas(true);
+      try {
+        // Build query params for filtered properties
+        const queryParams = {
+          limit: '1000', // Get a large number to calculate accurate counts
+          ...(selectedRegion && selectedRegion !== "ALL" ? { 
+            regionId: String(regions.find(r => r.region === selectedRegion)?.regionId || '') 
+          } : {}),
+          ...(selectedTown ? { town: selectedTown } : {}),
+          ...(selectedPropertyType ? { propertyType: selectedPropertyType } : {}),
+          ...(minBeds ? { minBeds } : {}),
+          ...(minBaths ? { minBaths } : {}),
+          ...(minPrice ? { minPrice } : {}),
+          ...(maxPrice ? { maxPrice } : {}),
+        };
+
+        const query = new URLSearchParams(queryParams);
+        const url = `${API_BASE_URL}/properties?${query.toString()}`;
+        
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Failed: ${res.status}`);
+
+        const data = await res.json();
+        
+        if (data.success && data.data) {
+          // Group properties by area
+          const areaCounts: Record<number, number> = {};
+          const areaMap: Record<number, Area> = {};
+          
+          // Create a map of areaId to area for quick lookup
+          areas.forEach(area => {
+            areaMap[area.areaId] = area;
+            areaCounts[area.areaId] = 0;
+          });
+
+          // Count properties per area
+          // Try to match by area name first (more reliable), then by area ID
+          data.data.forEach((property: any) => {
+            const propertyAreaName = property.Area_Name || property.areaName;
+            const areaId = property.Area_ID || property.areaId || property.AreaId;
+            
+            // First try to match by area name
+            if (propertyAreaName) {
+              const matchingArea = areas.find(area => 
+                area.areaName === propertyAreaName || 
+                area.areaName.toLowerCase() === propertyAreaName.toLowerCase()
+              );
+              if (matchingArea) {
+                areaCounts[matchingArea.areaId]++;
+                return;
+              }
+            }
+            
+            // Fallback to area ID matching
+            if (areaId && areaCounts[areaId] !== undefined) {
+              areaCounts[areaId]++;
+            }
+          });
+
+          // Update areas with filtered counts
+          const updatedAreas = areas.map(area => ({
+            ...area,
+            count: areaCounts[area.areaId] || 0
+          }));
+
+          setFilteredAreas(updatedAreas);
+        } else {
+          setFilteredAreas(areas);
+        }
+      } catch (err) {
+        console.error("Error fetching filtered properties:", err);
+        setFilteredAreas(areas);
+      } finally {
+        setFilteringAreas(false);
+      }
+    };
+
+    fetchFilteredProperties();
+  }, [areas, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice, selectedRegion, selectedTown, regions, API_BASE_URL]);
 
   // Handle body scroll lock when sidebar is open on mobile
   useEffect(() => {
@@ -168,57 +381,155 @@ export default function MapSearchPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Compute region stats
+  // Compute region stats with filtered counts
   const regionStats = useMemo(() => {
     if (!regions.length) return [];
-    const totalCount = regions.reduce((sum, region) => sum + region.count, 0);
-    return [
-      { name: "ALL", count: totalCount },
-      ...regions.map(region => ({ name: region.region, count: region.count }))
-    ].sort((a, b) => b.count - a.count);
-  }, [regions]);
+    
+    // Use filtered areas if filters are active, otherwise use original areas
+    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
+    const hasFilters = selectedPropertyType || minBeds || minBaths || minPrice || maxPrice;
+    
+    if (hasFilters && areasToUse.length > 0) {
+      // Calculate filtered counts per region
+      const regionCounts: Record<string, number> = {};
+      areasToUse.forEach(area => {
+        const regionName = area.regionName || '';
+        regionCounts[regionName] = (regionCounts[regionName] || 0) + area.count;
+      });
+      
+      const totalCount = Object.values(regionCounts).reduce((sum, count) => sum + count, 0);
+      
+      return [
+        { name: "ALL", count: totalCount },
+        ...regions.map(region => ({ 
+          name: region.region, 
+          count: regionCounts[region.region] || 0 
+        }))
+      ].sort((a, b) => b.count - a.count);
+    } else {
+      // Use original region counts
+      const totalCount = regions.reduce((sum, region) => sum + region.count, 0);
+      return [
+        { name: "ALL", count: totalCount },
+        ...regions.map(region => ({ name: region.region, count: region.count }))
+      ].sort((a, b) => b.count - a.count);
+    }
+  }, [regions, filteredAreas, areas, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
 
-  // Compute town stats for selected region
+  // Compute town stats for selected region with filtered counts
   const townStats = useMemo(() => {
     if (!selectedRegion || selectedRegion === "ALL") return [];
-    return areas
+    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
+    return areasToUse
       .filter(area => area.regionName === selectedRegion)
       .map(area => ({ name: area.areaName, count: area.count }))
       .sort((a, b) => b.count - a.count);
-  }, [selectedRegion, areas]);
+  }, [selectedRegion, filteredAreas, areas]);
 
-  // Get towns for a specific region
+  // Get towns for a specific region with filtered counts
   const getTownsForRegion = (regionName: string) => {
-    return areas
+    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
+    return areasToUse
       .filter(area => area.regionName === regionName)
       .map(area => ({ name: area.areaName, count: area.count }))
       .sort((a, b) => b.count - a.count);
   };
 
-  // Areas with coordinates
+  // Areas with coordinates (use filtered areas if filters are active)
   const areasWithCoordinates = useMemo((): AreaWithCoordinates[] => {
-    return areas
+    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
+    return areasToUse
       .filter(area => {
         if (selectedTown) return area.areaName === selectedTown;
         if (selectedRegion && selectedRegion !== "ALL") return area.regionName === selectedRegion;
         return true;
       })
       .filter(area => area.lat && area.lng) // only valid coordinates
+      .filter(area => area.count > 0) // Only show areas with properties matching filters
       .map(area => ({
         ...area,
         lat: area.lat!,
         lng: area.lng!
       }));
-  }, [areas, selectedRegion, selectedTown]);
+  }, [filteredAreas, areas, selectedRegion, selectedTown]);
+
+  // Helper function to update URL with current filter state
+  const updateURL = (updates: {
+    propertyType?: string | null;
+    minBeds?: string | null;
+    minBaths?: string | null;
+    minPrice?: string | null;
+    maxPrice?: string | null;
+    region?: string | null;
+    town?: string | null;
+  }) => {
+    if (!searchParams) return;
+    const params = new URLSearchParams(searchParams.toString());
+    
+    // Update or remove filter parameters
+    if (updates.propertyType !== undefined) {
+      if (updates.propertyType) {
+        params.set('propertyType', updates.propertyType);
+      } else {
+        params.delete('propertyType');
+      }
+    }
+    if (updates.minBeds !== undefined) {
+      if (updates.minBeds) {
+        params.set('minBeds', updates.minBeds);
+      } else {
+        params.delete('minBeds');
+      }
+    }
+    if (updates.minBaths !== undefined) {
+      if (updates.minBaths) {
+        params.set('minBaths', updates.minBaths);
+      } else {
+        params.delete('minBaths');
+      }
+    }
+    if (updates.minPrice !== undefined) {
+      if (updates.minPrice) {
+        params.set('minPrice', updates.minPrice);
+      } else {
+        params.delete('minPrice');
+      }
+    }
+    if (updates.maxPrice !== undefined) {
+      if (updates.maxPrice) {
+        params.set('maxPrice', updates.maxPrice);
+      } else {
+        params.delete('maxPrice');
+      }
+    }
+    if (updates.region !== undefined) {
+      if (updates.region && updates.region !== "ALL") {
+        params.set('region', updates.region);
+      } else {
+        params.delete('region');
+      }
+    }
+    if (updates.town !== undefined) {
+      if (updates.town) {
+        params.set('town', updates.town);
+      } else {
+        params.delete('town');
+      }
+    }
+    
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   const handleRegionSelect = (regionName: string) => {
     const newSelected = regionName === selectedRegion ? null : regionName;
-    setSelectedRegion(newSelected);
+    setSelectedRegion(newSelected || "ALL");
     setSelectedTown(null);
+    updateURL({ region: newSelected || "ALL", town: null });
     
     // Auto-expand if region is selected and has towns
     if (newSelected && newSelected !== "ALL") {
-      const regionTowns = areas.filter(area => area.regionName === newSelected);
+      const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
+      const regionTowns = areasToUse.filter(area => area.regionName === newSelected);
       if (regionTowns.length > 0) {
         setExpandedRegions(prev => new Set(prev).add(newSelected));
       }
@@ -226,7 +537,9 @@ export default function MapSearchPage() {
   };
 
   const handleTownSelect = (townName: string) => {
-    setSelectedTown(townName === selectedTown ? null : townName);
+    const newSelected = townName === selectedTown ? null : townName;
+    setSelectedTown(newSelected);
+    updateURL({ town: newSelected });
   };
 
   const toggleRegion = (regionName: string) => {
@@ -280,7 +593,7 @@ export default function MapSearchPage() {
         >
           <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-primary-900">{tCommon("filters")}</h2>
+              <h2 className="text-lg font-semibold text-primary-900">Advanced Search</h2>
               <button
                 onClick={() => setIsSidebarOpen(false)}
                 className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
@@ -288,6 +601,138 @@ export default function MapSearchPage() {
               >
                 <XMarkIcon className="h-5 w-5" />
               </button>
+            </div>
+
+            {/* Advanced Search Filters */}
+            <div className="pb-4 mb-4 border-b border-neutral-200">
+              <div className="space-y-4">
+                {/* Property Type */}
+                <div>
+                  <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Property Type
+                  </label>
+                  <select
+                    id="propertyType"
+                    value={selectedPropertyType || ''}
+                    onChange={(e) => {
+                      const value = e.target.value || null;
+                      setSelectedPropertyType(value);
+                      updateURL({ propertyType: value });
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Any Type</option>
+                    {propertyTypesList.map((type) => (
+                      <option key={type.id} value={type.code}>
+                        {type.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Min. Bedrooms */}
+                <div>
+                  <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Min. Bedrooms
+                  </label>
+                  <select
+                    id="minBeds"
+                    value={minBeds || ''}
+                    onChange={(e) => {
+                      const value = e.target.value || null;
+                      setMinBeds(value);
+                      updateURL({ minBeds: value });
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Any</option>
+                    {[1, 2, 3, 4, 5, 6].map((n) => (
+                      <option key={n} value={n}>
+                        {n}+
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Min. Bathrooms */}
+                <div>
+                  <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Min. Bathrooms
+                  </label>
+                  <select
+                    id="minBaths"
+                    value={minBaths || ''}
+                    onChange={(e) => {
+                      const value = e.target.value || null;
+                      setMinBaths(value);
+                      updateURL({ minBaths: value });
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Any</option>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <option key={n} value={n}>
+                        {n}+
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Min. Price */}
+                <div>
+                  <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Min. Price
+                  </label>
+                  <select
+                    id="minPrice"
+                    value={minPrice || ''}
+                    onChange={(e) => {
+                      const value = e.target.value || null;
+                      setMinPrice(value);
+                      updateURL({ minPrice: value });
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">No Min</option>
+                    <option value="50000">€50,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="150000">€150,000</option>
+                    <option value="200000">€200,000</option>
+                    <option value="250000">€250,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="500000">€500,000</option>
+                  </select>
+                </div>
+
+                {/* Max. Price */}
+                <div>
+                  <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                    Max. Price
+                  </label>
+                  <select
+                    id="maxPrice"
+                    value={maxPrice || ''}
+                    onChange={(e) => {
+                      const value = e.target.value || null;
+                      setMaxPrice(value);
+                      updateURL({ maxPrice: value });
+                    }}
+                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">No Max</option>
+                    <option value="200000">€200,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="500000">€500,000</option>
+                    <option value="600000">€600,000</option>
+                    <option value="750000">€750,000</option>
+                    <option value="1000000">€1,000,000</option>
+                    <option value="1500000">€1,500,000</option>
+                    <option value="2000000">€2,000,000+</option>
+                  </select>
+                </div>
+              </div>
             </div>
             
             {/* All Regions Option */}
@@ -457,7 +902,7 @@ export default function MapSearchPage() {
                       </span>
                     </div>
                     <a
-                      href={`/properties?location=${encodeURIComponent(selectedArea.areaName)}&regionId=${selectedArea.regionId}&areaId=${selectedArea.areaId}`}
+                      href={`/properties?location=${encodeURIComponent(selectedArea.areaName)}&regionId=${selectedArea.regionId}&areaId=${selectedArea.areaId}${selectedPropertyType ? `&propertyType=${selectedPropertyType}` : ''}${minBeds ? `&minBeds=${minBeds}` : ''}${minBaths ? `&minBaths=${minBaths}` : ''}${minPrice ? `&minPrice=${minPrice}` : ''}${maxPrice ? `&maxPrice=${maxPrice}` : ''}`}
                       className="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
                     >
                       View Properties

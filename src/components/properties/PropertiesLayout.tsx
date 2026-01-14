@@ -1092,7 +1092,7 @@ export default function PropertiesLayout({
             
             <div className="bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
               {/* Advanced Search Filters */}
-              <div className="pb-6 mb-6 border-b border-neutral-200">
+              <div className="pb-4 mb-4 border-b border-neutral-200">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-primary-900">
                     {tFilters('advance_search')}
@@ -1274,12 +1274,7 @@ export default function PropertiesLayout({
                   </div>
                 </div>
               </div>
-              {/* Filter Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-primary-900">
-                  {getFilterTitle()}
-                </h2>
-              </div>
+              
               <div className="space-y-4">
                 <AreaFilter
                   properties={displayedProperties}
