@@ -604,11 +604,11 @@ export default function PropertiesLayout({
         } else {
           console.log('[PROPERTIES FETCH] ⚠️ currentAreaId is null/undefined, not including in query');
         }
-        if (currentPropertyType) queryParams.propertyType = currentPropertyType;
-        if (currentMinBeds) queryParams.minBeds = currentMinBeds;
-        if (currentMinBaths) queryParams.minBaths = currentMinBaths;
-        if (currentMinPrice) queryParams.minPrice = currentMinPrice;
-        if (currentMaxPrice) queryParams.maxPrice = currentMaxPrice;
+        if (currentPropertyType) queryParams.propertyType = String(currentPropertyType);
+        if (currentMinBeds) queryParams.minBeds = String(currentMinBeds);
+        if (currentMinBaths) queryParams.minBaths = String(currentMinBaths);
+        if (currentMinPrice) queryParams.minPrice = String(currentMinPrice);
+        if (currentMaxPrice) queryParams.maxPrice = String(currentMaxPrice);
 
         const query = new URLSearchParams(queryParams);
         const queryString = query.toString();
