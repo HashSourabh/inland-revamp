@@ -147,18 +147,12 @@ export default function AreaFilter({
             <button
               onClick={() => {
                 if (isActive) {
-                  // If already active, deselect and collapse
-                  onRegionChange?.(null);
-                  onProvinceChange(null);
-                  onTownChange(null);
-                  onAreaChange?.(null);
-                  setExpandedRegions(prev => {
-                    const newSet = new Set(prev);
-                    newSet.delete(region.regionId);
-                    return newSet;
-                  });
+                  // If already active, just toggle expansion without deselecting
+                  // This allows users to expand/collapse to see areas without clearing filters
+                  toggleRegion(region.regionId);
                 } else {
-                  // Select the region and expand it
+                  // Select the region and expand it - but don't clear filters
+                  // The handleRegionChange function will preserve filters
                   onRegionChange?.(region.regionId);
                   onTownChange(null);
                   onAreaChange?.(null);

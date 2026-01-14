@@ -209,8 +209,8 @@ export default function PropertiesLayout({
   // Total properties count from API (for sidebar/info)
   const [totalPropertiesCount, setTotalPropertiesCount] = useState<number>(0);
 
-  // Get areas for selected region from cache
-  const areas = selectedRegion ? areasCache.get(selectedRegion) || [] : [];
+  // State to store areas for the selected region (handles both cached and filtered areas)
+  const [areas, setAreas] = useState<Array<{ areaId: number; areaName: string; count: number }>>([]);
 
   const [properties, setProperties] = useState<Property[]>([]);
   const [totalProperties, setTotalProperties] = useState<number>(0);
@@ -227,6 +227,23 @@ export default function PropertiesLayout({
   const [minPrice, setminPrice] = useState<string | null>(null);
   const [maxPrice, setmaxPrice] = useState<string | null>(null);
   const [propertyTypesList, setPropertyTypesList] = useState<PropertyType[]>([]);
+  
+  // Track if we have any active filters - must be defined before useEffects that use it
+  const hasActiveFilters = useMemo(() => {
+    return !!(selectedPropertyType || minBeds || minBaths || minPrice || maxPrice);
+  }, [selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
+  
+  // Initialize areas from cache if available and no filters are active
+  // This must come AFTER hasActiveFilters is defined
+  useEffect(() => {
+    if (selectedRegion && !hasActiveFilters && areas.length === 0) {
+      const cachedAreas = areasCache.get(selectedRegion);
+      if (cachedAreas && cachedAreas.length > 0) {
+        setAreas(cachedAreas);
+      }
+    }
+  }, [selectedRegion, hasActiveFilters, areasCache, areas.length]);
+  
   const [sortBy, setSortBy] = useState<string>('id');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
 
@@ -311,12 +328,16 @@ export default function PropertiesLayout({
     const maxPriceParam = searchParams.get('maxPrice');
     const locationParam = searchParams.get('location');
 
-    // Only update state if params exist in URL (don't reset user selections)
+    // Always update state from URL params when they exist
+    // Use !== null check to distinguish between "not in URL" vs "empty value in URL"
+    // IMPORTANT: Update regionId and areaId FIRST to ensure they're available for properties fetch
     if (regionIdParam !== null) {
-      setSelectedRegion(regionIdParam ? Number(regionIdParam) : null);
+      const newRegionId = regionIdParam ? Number(regionIdParam) : null;
+      setSelectedRegion(newRegionId);
     }
     if (areaIdParam !== null) {
-      setSelectedArea(areaIdParam ? Number(areaIdParam) : null);
+      const newAreaId = areaIdParam ? Number(areaIdParam) : null;
+      setSelectedArea(newAreaId);
     }
     if (provinceParam !== null) {
       setSelectedProvince(provinceParam || null);
@@ -356,19 +377,15 @@ export default function PropertiesLayout({
 
     // Reset to page 1 when filters change
     setCurrentPage(1);
-  }, [searchParams]); // Only depend on searchParams, not properties
-
-  // Initialize region counts from cache on mount
-  useEffect(() => {
-    if (cachedRegionCounts.length > 0 && regionCounts.length === 0) {
-      setRegionCounts(cachedRegionCounts);
-      const totalCount = cachedRegionCounts.reduce((sum: number, region: any) => sum + region.count, 0);
-      setTotalPropertiesCount(totalCount);
+    
+    // Mark that URL params have been processed (for initial load)
+    if (firstLoadFromParams) {
+      setFirstLoadFromParams(false);
     }
-  }, [cachedRegionCounts]);
+  }, [searchParams, firstLoadFromParams, properties.length]); // Only depend on searchParams, not properties
 
   // Fetch region counts with current filters applied
-  // This updates whenever filters change to show accurate counts
+  // This ALWAYS runs to ensure counts reflect current filters
   useEffect(() => {
     const loadRegionCounts = async () => {
       try {
@@ -385,7 +402,7 @@ export default function PropertiesLayout({
         
         const counts = await fetchRegionCounts(filters);
         
-        // Update region counts state
+        // Always update region counts state with filtered results
         setRegionCounts(counts);
         
         // Calculate total properties count from region counts
@@ -399,42 +416,70 @@ export default function PropertiesLayout({
         });
       } catch (err) {
         console.error("Error loading region counts:", err);
-        setTotalPropertiesCount(0);
+        // On error, only use cache if no filters are active
+        if (!hasActiveFilters && cachedRegionCounts.length > 0) {
+          setRegionCounts(cachedRegionCounts);
+          const totalCount = cachedRegionCounts.reduce((sum: number, region: any) => sum + region.count, 0);
+          setTotalPropertiesCount(totalCount);
+        } else {
+          setTotalPropertiesCount(0);
+        }
       }
     };
 
-    // Debounce region counts fetch to avoid too many requests
+    // Always fetch region counts (with or without filters) to ensure accuracy
+    // Debounce to avoid too many requests
     const timeoutId = setTimeout(() => {
       loadRegionCounts();
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [fetchRegionCounts, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
+  }, [fetchRegionCounts, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice, hasActiveFilters, cachedRegionCounts]);
 
   // Fetch areas when a region is selected (using cache)
-  // This is non-blocking and can run in parallel with properties fetch
+  // This updates whenever filters change to show accurate counts
   useEffect(() => {
     if (!selectedRegion) {
+      setAreas([]);
       return;
     }
 
     let mounted = true;
     const loadAreas = async () => {
       try {
-        await fetchAreas(selectedRegion);
+        // Build filter object from current filter state
+        const filters = {
+          propertyType: selectedPropertyType || undefined,
+          minBeds: minBeds || undefined,
+          minBaths: minBaths || undefined,
+          minPrice: minPrice || undefined,
+          maxPrice: maxPrice || undefined,
+        };
+        
+        const fetchedAreas = await fetchAreas(selectedRegion, filters);
+        
+        // Update areas state with fetched data
+        if (mounted) {
+          setAreas(fetchedAreas || []);
+        }
       } catch (err) {
         if (mounted) {
           console.error("Error loading areas:", err);
+          setAreas([]);
         }
       }
     };
 
-    loadAreas();
+    // Debounce areas fetch to avoid too many requests
+    const timeoutId = setTimeout(() => {
+      loadAreas();
+    }, 300);
     
     return () => {
       mounted = false;
+      clearTimeout(timeoutId);
     };
-  }, [selectedRegion, fetchAreas]);
+  }, [selectedRegion, fetchAreas, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
 
   // Main properties fetch effect with race condition prevention, debouncing, and sequencing
   useEffect(() => {
@@ -452,11 +497,13 @@ export default function PropertiesLayout({
       maxPrice,
       sortBy,
       sortOrder,
-      initialLoad
+      initialLoad,
+      firstLoadFromParams
     });
 
     // Don't block properties fetch - it can load independently
     // Property types are used for transformation, not blocking
+    // Note: On initial load, we read from URL params directly as fallback, so we don't need to wait
 
     // Cancel any pending debounce timer
     if (debounceTimerRef.current) {
@@ -495,6 +542,43 @@ export default function PropertiesLayout({
         console.log('[PROPERTIES FETCH] fetchProperties function called');
         console.log('[PROPERTIES FETCH] Current sort state - sortBy:', sortBy, 'sortOrder:', sortOrder);
         
+        // Get current state values - always prioritize URL params as source of truth
+        // This prevents race conditions where state hasn't updated yet after URL changes
+        const getFromURL = (key: string) => searchParams?.get(key) || null;
+        const getFromStateOrURL = (stateValue: string | number | null, urlKey: string, isNumber = false) => {
+          // Always check URL first - it's the source of truth after router.push
+          const urlValue = getFromURL(urlKey);
+          if (urlValue !== null && urlValue !== '') {
+            return isNumber ? Number(urlValue) : urlValue;
+          }
+          // Fallback to state if URL doesn't have it
+          if (stateValue !== null && stateValue !== '') {
+            return stateValue;
+          }
+          return null;
+        };
+        
+        const currentAreaId = getFromStateOrURL(selectedArea, 'areaId', true);
+        const currentRegionId = getFromStateOrURL(selectedRegion, 'regionId', true);
+        const currentPropertyType = getFromStateOrURL(selectedPropertyType, 'propertyType');
+        const currentMinBeds = getFromStateOrURL(minBeds, 'minBeds');
+        const currentMinBaths = getFromStateOrURL(minBaths, 'minBaths');
+        const currentMinPrice = getFromStateOrURL(minPrice, 'minPrice');
+        const currentMaxPrice = getFromStateOrURL(maxPrice, 'maxPrice');
+        
+        console.log('[PROPERTIES FETCH] Parameter resolution:', {
+          initialLoad,
+          'selectedArea (state)': selectedArea,
+          'areaId (URL)': getFromURL('areaId'),
+          'currentAreaId (resolved)': currentAreaId,
+          'selectedRegion (state)': selectedRegion,
+          'regionId (URL)': getFromURL('regionId'),
+          'currentRegionId (resolved)': currentRegionId,
+          'selectedPropertyType (state)': selectedPropertyType,
+          'propertyType (URL)': getFromURL('propertyType'),
+          'currentPropertyType (resolved)': currentPropertyType,
+        });
+        
         // Build query params - always include sort parameters
         const queryParams: Record<string, string> = {
           page: String(currentPage),
@@ -510,22 +594,28 @@ export default function PropertiesLayout({
         
         console.log('[PROPERTIES FETCH] Base query params:', queryParams);
         
-        // Add optional filters
+        // Add optional filters - use current values (state with URL fallback)
         if (selectedProvince) queryParams.province = selectedProvince;
         if (selectedTown) queryParams.town = selectedTown;
-        if (selectedRegion) queryParams.regionId = String(selectedRegion);
-        if (selectedArea) queryParams.areaId = String(selectedArea);
-        if (selectedPropertyType) queryParams.propertyType = selectedPropertyType;
-        if (minBeds) queryParams.minBeds = minBeds;
-        if (minBaths) queryParams.minBaths = minBaths;
-        if (minPrice) queryParams.minPrice = minPrice;
-        if (maxPrice) queryParams.maxPrice = maxPrice;
+        if (currentRegionId) queryParams.regionId = String(currentRegionId);
+        if (currentAreaId) {
+          queryParams.areaId = String(currentAreaId);
+          console.log('[PROPERTIES FETCH] ✅ Including areaId in query:', currentAreaId);
+        } else {
+          console.log('[PROPERTIES FETCH] ⚠️ currentAreaId is null/undefined, not including in query');
+        }
+        if (currentPropertyType) queryParams.propertyType = currentPropertyType;
+        if (currentMinBeds) queryParams.minBeds = currentMinBeds;
+        if (currentMinBaths) queryParams.minBaths = currentMinBaths;
+        if (currentMinPrice) queryParams.minPrice = currentMinPrice;
+        if (currentMaxPrice) queryParams.maxPrice = currentMaxPrice;
 
         const query = new URLSearchParams(queryParams);
         const queryString = query.toString();
         
         console.log('[PROPERTIES FETCH] Final query params:', queryParams);
         console.log('[PROPERTIES FETCH] Query string:', queryString);
+        console.log('[PROPERTIES FETCH] Current state - selectedArea:', selectedArea, 'selectedRegion:', selectedRegion);
         console.log('[PROPERTIES FETCH] Last fetch params:', lastFetchParamsRef.current);
         
         // Prevent duplicate fetches with the same parameters (only for subsequent loads)
@@ -676,6 +766,8 @@ export default function PropertiesLayout({
     sortOrder,
     API_BASE_URL,
     initialLoad,
+    firstLoadFromParams,
+    searchParams, // Add searchParams to trigger fetch when URL changes
     tCommon,
   ]); // Removed propertyTypesMap from deps - we only check the ref
 
@@ -697,6 +789,14 @@ export default function PropertiesLayout({
   }) => {
     if (!searchParams) return;
     const params = new URLSearchParams(searchParams.toString());
+    
+    // Get current regionId and areaId from updates, state, or URL (in that priority order)
+    const currentRegionId = updates.regionId !== undefined 
+      ? updates.regionId 
+      : (selectedRegion || (searchParams.get('regionId') ? Number(searchParams.get('regionId')) : null));
+    const currentAreaId = updates.areaId !== undefined 
+      ? updates.areaId 
+      : (selectedArea || (searchParams.get('areaId') ? Number(searchParams.get('areaId')) : null));
     
     // Update or remove filter parameters
     if (updates.propertyType !== undefined) {
@@ -734,25 +834,28 @@ export default function PropertiesLayout({
         params.delete('maxPrice');
       }
     }
-    if (updates.regionId !== undefined) {
-      if (updates.regionId) {
-        params.set('regionId', String(updates.regionId));
-      } else {
-        params.delete('regionId');
-      }
+    
+    // Always preserve regionId and areaId if they exist (from updates, state, or URL)
+    if (currentRegionId) {
+      params.set('regionId', String(currentRegionId));
+    } else {
+      params.delete('regionId');
     }
-    if (updates.areaId !== undefined) {
-      if (updates.areaId) {
-        params.set('areaId', String(updates.areaId));
-      } else {
-        params.delete('areaId');
-      }
+    
+    if (currentAreaId) {
+      params.set('areaId', String(currentAreaId));
+    } else {
+      params.delete('areaId');
     }
 
     // Reset to page 1 when filters change
     params.set('page', '1');
     
-    router.push(`?${params.toString()}`, { scroll: false });
+    console.log('[UPDATE URL] Preserving regionId:', currentRegionId, 'areaId:', currentAreaId);
+    console.log('[UPDATE URL] Final URL params:', params.toString());
+    
+    // Use replace instead of push to avoid adding to history, and ensure it updates immediately
+    router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   const handleRegionChange = (regionId: number | null) => {
@@ -774,12 +877,14 @@ export default function PropertiesLayout({
     }
     setSelectedTown(null);
 
-    // Clear advanced search filters so only area filter is used
-    setSelectedPropertyType(null);
-    setMinBeds(null);
-    setMinBaths(null);
-    setminPrice(null);
-    setmaxPrice(null);
+    // DO NOT clear advanced search filters when selecting a region
+    // Preserve all filters so they work together with region selection
+    // Only update URL with region change, keeping all existing filters
+    updateURL({
+      regionId: regionId,
+      areaId: null, // Clear area when region changes
+      // Don't pass filter params - they will be preserved in URL
+    });
   };
 
   const handleAreaChange = (areaId: number | null) => {
@@ -799,12 +904,11 @@ export default function PropertiesLayout({
       setSelectedTown(null);
     }
 
-    // Clear advanced search filters
-    setSelectedPropertyType(null);
-    setMinBeds(null);
-    setMinBaths(null);
-    setminPrice(null);
-    setmaxPrice(null);
+    // Update URL to include areaId while preserving all advanced filters
+    updateURL({
+      areaId: areaId,
+      // Preserve all existing filters - don't pass them so they stay in URL
+    });
   };
 
   // Reset page to 1 when filters change (but don't trigger fetch here - the main useEffect will handle it)
@@ -1017,7 +1121,11 @@ export default function PropertiesLayout({
                         setError(null);
                         lastFetchParamsRef.current = '';
                         setSelectedPropertyType(value);
-                        updateURL({ propertyType: value });
+                        updateURL({ 
+                          propertyType: value,
+                          regionId: selectedRegion || null,
+                          areaId: selectedArea || null
+                        });
                       }}
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
@@ -1045,7 +1153,11 @@ export default function PropertiesLayout({
                         setError(null);
                         lastFetchParamsRef.current = '';
                         setMinBeds(value);
-                        updateURL({ minBeds: value });
+                        updateURL({ 
+                          minBeds: value,
+                          regionId: selectedRegion || null,
+                          areaId: selectedArea || null
+                        });
                       }}
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
@@ -1073,7 +1185,11 @@ export default function PropertiesLayout({
                         setError(null);
                         lastFetchParamsRef.current = '';
                         setMinBaths(value);
-                        updateURL({ minBaths: value });
+                        updateURL({ 
+                          minBaths: value,
+                          regionId: selectedRegion || null,
+                          areaId: selectedArea || null
+                        });
                       }}
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
@@ -1101,7 +1217,11 @@ export default function PropertiesLayout({
                         setError(null);
                         lastFetchParamsRef.current = '';
                         setminPrice(value);
-                        updateURL({ minPrice: value });
+                        updateURL({ 
+                          minPrice: value,
+                          regionId: selectedRegion || null,
+                          areaId: selectedArea || null
+                        });
                       }}
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
@@ -1132,7 +1252,11 @@ export default function PropertiesLayout({
                         setError(null);
                         lastFetchParamsRef.current = '';
                         setmaxPrice(value);
-                        updateURL({ maxPrice: value });
+                        updateURL({ 
+                          maxPrice: value,
+                          regionId: selectedRegion || null,
+                          areaId: selectedArea || null
+                        });
                       }}
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >

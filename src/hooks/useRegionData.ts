@@ -85,8 +85,27 @@ export function useRegionData() {
     }
   }, [cache]);
 
-  const fetchAreas = useCallback(async (regionId: number) => {
-    if (!cache.isAreasStale(regionId)) {
+  const fetchAreas = useCallback(async (
+    regionId: number,
+    filters?: {
+      propertyType?: string | null;
+      minBeds?: string | null;
+      minBaths?: string | null;
+      minPrice?: string | null;
+      maxPrice?: string | null;
+    }
+  ) => {
+    // For filtered counts, don't use cache - always fetch fresh data
+    // Only use cache when no filters are applied
+    const hasFilters = filters && (
+      filters.propertyType || 
+      filters.minBeds || 
+      filters.minBaths || 
+      filters.minPrice || 
+      filters.maxPrice
+    );
+
+    if (!hasFilters && !cache.isAreasStale(regionId)) {
       const cachedAreas = cache.areasCache.get(regionId);
       if (cachedAreas) {
         return cachedAreas;
@@ -95,7 +114,19 @@ export function useRegionData() {
 
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
-      const res = await fetch(`${API_BASE_URL}/properties/regions/${regionId}/areas`);
+      
+      // Build query string with filters
+      const queryParams = new URLSearchParams();
+      if (filters?.propertyType) queryParams.append('propertyType', filters.propertyType);
+      if (filters?.minBeds) queryParams.append('minBeds', filters.minBeds);
+      if (filters?.minBaths) queryParams.append('minBaths', filters.minBaths);
+      if (filters?.minPrice) queryParams.append('minPrice', filters.minPrice);
+      if (filters?.maxPrice) queryParams.append('maxPrice', filters.maxPrice);
+      
+      const queryString = queryParams.toString();
+      const url = `${API_BASE_URL}/properties/regions/${regionId}/areas${queryString ? `?${queryString}` : ''}`;
+      
+      const res = await fetch(url);
       
       if (!res.ok) {
         throw new Error(`Failed to fetch areas for region ${regionId}`);
@@ -104,8 +135,11 @@ export function useRegionData() {
       const data = await res.json();
       const areas = data.data?.areas || [];
       
-      cache.setAreas(regionId, areas);
-      cache.updateAreasFetchTime(regionId);
+      // Only cache if no filters were applied
+      if (!hasFilters) {
+        cache.setAreas(regionId, areas);
+        cache.updateAreasFetchTime(regionId);
+      }
       
       return areas;
     } catch (error) {
