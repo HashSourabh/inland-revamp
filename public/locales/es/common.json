@@ -1339,7 +1339,21 @@
     "sending": "Enviando...",
     "send": "Enviar",
     "showing": "Mostrando",
-    "of": "de"
+    "of": "de",
+    "sortBy": "Ordenar por",
+    "title": "Título",
+    "price": "Precio",
+    "bedrooms": "Habitaciones",
+    "bathrooms": "Baños",
+    "size": "Tamaño",
+    "lowToHigh": "De menor a mayor",
+    "highToLow": "De mayor a menor",
+    "most": "Más",
+    "least": "Menos",
+    "largest": "Más grande",
+    "smallest": "Más pequeño",
+    "default": "Por defecto",
+    "newestFirst": "Más recientes primero"
   },
   "contactPage": {
     "hero": {

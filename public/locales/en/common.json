@@ -1140,7 +1140,21 @@
     "sending": "Sending...",
     "send": "Send",
     "showing": "Showing",
-    "of": "of"
+    "of": "of",
+    "sortBy": "Sort By",
+    "title": "Title",
+    "price": "Price",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "size": "Size",
+    "lowToHigh": "Low to High",
+    "highToLow": "High to Low",
+    "most": "Most",
+    "least": "Least",
+    "largest": "Largest",
+    "smallest": "Smallest",
+    "default": "Default",
+    "newestFirst": "Newest First"
   },
   "contactPage": {
     "hero": {
@@ -1475,19 +1489,5 @@
       "previous": "Previous",
       "next": "Next"
     }
-  },
-  "sortBy": "Sort By",
-  "title": "Title",
-  "price": "Price",
-  "bedrooms": "Bedrooms",
-  "bathrooms": "Bathrooms",
-  "size": "Size",
-  "lowToHigh": "Low to High",
-  "highToLow": "High to Low",
-  "most": "Most",
-  "least": "Least",
-  "largest": "Largest",
-  "smallest": "Smallest",
-  "default": "Default",
-  "newestFirst": "Newest First"
+  }
 }

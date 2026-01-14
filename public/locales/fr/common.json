@@ -329,7 +329,21 @@
     "sending": "Envoi...",
     "send": "Envoyer",
     "showing": "Affichage",
-    "of": "de"
+    "of": "de",
+    "sortBy": "Trier par",
+    "title": "Titre",
+    "price": "Prix",
+    "bedrooms": "Chambres",
+    "bathrooms": "Salles de bain",
+    "size": "Taille",
+    "lowToHigh": "Du plus bas au plus haut",
+    "highToLow": "Du plus haut au plus bas",
+    "most": "Plus",
+    "least": "Moins",
+    "largest": "Plus grand",
+    "smallest": "Plus petit",
+    "default": "Par défaut",
+    "newestFirst": "Plus récent en premier"
   },
   "town-guide": {
     "description": "Inland Andalucia collabore avec LuvInland.com pour vous offrir les meilleures informations sur l'Andalousie et son art de vivre. Pour chaque ville où nous avons des propriétés à vendre, cliquez sur le nom de la ville pour obtenir toutes les informations nécessaires. Luvinland vous recontactera pour consulter les propriétés à vendre dans la ville sélectionnée.",

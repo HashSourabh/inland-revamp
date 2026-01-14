@@ -1311,7 +1311,21 @@
     "sending": "Senden...",
     "send": "Senden",
     "showing": "Zeige",
-    "of": "von"
+    "of": "von",
+    "sortBy": "Sortieren nach",
+    "title": "Titel",
+    "price": "Preis",
+    "bedrooms": "Schlafzimmer",
+    "bathrooms": "Badezimmer",
+    "size": "Größe",
+    "lowToHigh": "Niedrig bis hoch",
+    "highToLow": "Hoch bis niedrig",
+    "most": "Meiste",
+    "least": "Wenigste",
+    "largest": "Größte",
+    "smallest": "Kleinste",
+    "default": "Standard",
+    "newestFirst": "Neueste zuerst"
   },
   "aboutPage": {
     "hero": {

@@ -561,7 +561,7 @@ export default function MapSearchPage() {
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}
         >
-          <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
+          <div className="h-full lg:h-auto bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 shadow-xl lg:shadow-none">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-primary-900">
                 {tFilters('advance_search')}
@@ -722,6 +722,9 @@ export default function MapSearchPage() {
                 </select>
               </div>
             </div>
+            
+            {/* Horizontal line above All Regions */}
+            <hr className="my-4 border-neutral-200" />
             
             <div className="space-y-4 mt-4">
               <AreaFilter

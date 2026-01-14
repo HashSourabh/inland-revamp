@@ -96,14 +96,14 @@ export default function AreaFilter({
     });
   };
 
-  // Auto-expand when a region is selected
+  // Auto-expand when a region is selected, and close all others
   useEffect(() => {
     if (selectedRegion) {
-      setExpandedRegions(prev => {
-        const newSet = new Set(prev);
-        newSet.add(selectedRegion);
-        return newSet;
-      });
+      // Only expand the selected region, close all others
+      setExpandedRegions(new Set([selectedRegion]));
+    } else {
+      // If no region is selected, close all
+      setExpandedRegions(new Set());
     }
   }, [selectedRegion]);
 
@@ -145,24 +145,33 @@ export default function AreaFilter({
           <div key={region.regionId} className="border border-neutral-200 rounded-lg overflow-hidden">
             {/* Region Header */}
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('[AREA FILTER] ===== REGION CLICK =====');
+                console.log('[AREA FILTER] Clicked region:', region.regionId, region.regionName);
+                console.log('[AREA FILTER] Current selectedRegion:', selectedRegion);
+                console.log('[AREA FILTER] Is active?', isActive);
+                
                 if (isActive) {
                   // If already active, just toggle expansion without deselecting
                   // This allows users to expand/collapse to see areas without clearing filters
+                  console.log('[AREA FILTER] Region already active, toggling expansion only');
                   toggleRegion(region.regionId);
                 } else {
                   // Select the region and expand it - but don't clear filters
                   // The handleRegionChange function will preserve filters
+                  // Close all other regions and only expand the selected one
+                  console.log('[AREA FILTER] Region not active, selecting new region');
+                  console.log('[AREA FILTER] Calling onRegionChange with regionId:', region.regionId);
+                  setExpandedRegions(new Set([region.regionId]));
                   onRegionChange?.(region.regionId);
                   onTownChange(null);
                   onAreaChange?.(null);
-                  // Ensure it's expanded when selected
-                  setExpandedRegions(prev => {
-                    const newSet = new Set(prev);
-                    newSet.add(region.regionId);
-                    return newSet;
-                  });
+                  console.log('[AREA FILTER] onRegionChange called, waiting for handler...');
                 }
+                console.log('[AREA FILTER] ===== END REGION CLICK =====');
               }}
               className={`w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors
                 ${isActive
@@ -184,6 +193,7 @@ export default function AreaFilter({
                 </span>
                 <button
                   onClick={(e) => {
+                    e.preventDefault();
                     e.stopPropagation();
                     toggleRegion(region.regionId);
                   }}
@@ -192,6 +202,7 @@ export default function AreaFilter({
                       ? "hover:bg-white/20" 
                       : "hover:bg-neutral-200"
                   }`}
+                  aria-label={isExpanded ? "Collapse" : "Expand"}
                 >
                   {isExpanded ? (
                     <ChevronDownIcon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-neutral-600'}`} />
@@ -203,13 +214,14 @@ export default function AreaFilter({
             </button>
 
           {/* Areas List (Accordion Content) */}
-          <div 
-            className={`overflow-y-auto transition-all duration-200 ease-in-out ${
-              isExpanded && selectedRegion === region.regionId ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-            }`}
-          >
-            {selectedRegion === region.regionId ? (
-              areas.length > 0 ? (
+          {/* Only show areas for the selected region to prevent showing wrong areas */}
+          {selectedRegion === region.regionId && (
+            <div 
+              className={`overflow-y-auto transition-all duration-200 ease-in-out ${
+                isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+              }`}
+            >
+              {areas.length > 0 ? (
                 <div>
                   {areas.map((area) => {
                     const isAreaActive = selectedArea === area.areaId;
@@ -218,6 +230,7 @@ export default function AreaFilter({
                       <button
                         key={`region-${region.regionId}-area-${area.areaId}`}
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           if (isAreaActive) {
                             onAreaChange?.(null);
@@ -250,9 +263,9 @@ export default function AreaFilter({
                 <div className="px-6 py-4 text-sm text-neutral-500">
                   Loading areas...
                 </div>
-              )
-            ) : null}
-          </div>
+              )}
+            </div>
+          )}
           </div>
         );
       })}

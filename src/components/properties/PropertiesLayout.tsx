@@ -256,6 +256,8 @@ export default function PropertiesLayout({
   const propertyTypesLoadedRef = useRef(false);
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lastFetchParamsRef = useRef<string>(''); // Track last fetch params to prevent duplicate calls
+  const isUpdatingURLRef = useRef(false); // Track when we're programmatically updating URL to prevent useEffect interference
+  const pendingRegionUpdateRef = useRef<number | null>(null); // Track pending region updates
 
   const API_BASE_URL =
     process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
@@ -333,6 +335,17 @@ export default function PropertiesLayout({
   useEffect(() => {
     if (!searchParams) return;
 
+    // Skip updating state if we're programmatically updating the URL
+    // This prevents race conditions where our manual update gets overwritten
+    if (isUpdatingURLRef.current) {
+      console.log('[SEARCH PARAMS EFFECT] Skipping update - URL is being updated programmatically');
+      console.log('[SEARCH PARAMS EFFECT] Pending region update:', pendingRegionUpdateRef.current);
+      return;
+    }
+
+    console.log('[SEARCH PARAMS EFFECT] ===== START =====');
+    console.log('[SEARCH PARAMS EFFECT] searchParams changed, current URL:', searchParams.toString());
+
     // Extract all parameters at once
     const regionIdParam = searchParams.get('regionId');
     const areaIdParam = searchParams.get('areaId');
@@ -345,12 +358,26 @@ export default function PropertiesLayout({
     const maxPriceParam = searchParams.get('maxPrice');
     const locationParam = searchParams.get('location');
 
+    console.log('[SEARCH PARAMS EFFECT] Extracted params - regionId:', regionIdParam, 'areaId:', areaIdParam);
+    console.log('[SEARCH PARAMS EFFECT] Current selectedRegion state:', selectedRegion);
+
     // Always update state from URL params when they exist
     // Use !== null check to distinguish between "not in URL" vs "empty value in URL"
     // IMPORTANT: Update regionId and areaId FIRST to ensure they're available for properties fetch
     if (regionIdParam !== null) {
       const newRegionId = regionIdParam ? Number(regionIdParam) : null;
-      setSelectedRegion(newRegionId);
+      console.log('[SEARCH PARAMS EFFECT] Updating selectedRegion from URL:', newRegionId);
+      if (newRegionId !== selectedRegion) {
+        setSelectedRegion(newRegionId);
+        console.log('[SEARCH PARAMS EFFECT] State updated - selectedRegion:', newRegionId);
+      } else {
+        console.log('[SEARCH PARAMS EFFECT] State already matches URL, skipping update');
+      }
+    } else {
+      console.log('[SEARCH PARAMS EFFECT] No regionId in URL, clearing selectedRegion');
+      if (selectedRegion !== null) {
+        setSelectedRegion(null);
+      }
     }
     if (areaIdParam !== null) {
       const newAreaId = areaIdParam ? Number(areaIdParam) : null;
@@ -399,7 +426,9 @@ export default function PropertiesLayout({
     if (firstLoadFromParams) {
       setFirstLoadFromParams(false);
     }
-  }, [searchParams, firstLoadFromParams, properties.length]); // Only depend on searchParams, not properties
+    
+    console.log('[SEARCH PARAMS EFFECT] ===== END =====');
+  }, [searchParams, firstLoadFromParams, properties.length, selectedRegion]); // Include selectedRegion to check for changes
 
   // Fetch region counts with current filters applied
   // This ALWAYS runs to ensure counts reflect current filters
@@ -461,6 +490,9 @@ export default function PropertiesLayout({
       return;
     }
 
+    // Clear areas immediately when region changes to prevent showing wrong areas
+    setAreas([]);
+
     let mounted = true;
     const loadAreas = async () => {
       try {
@@ -475,8 +507,8 @@ export default function PropertiesLayout({
         
         const fetchedAreas = await fetchAreas(selectedRegion, filters);
         
-        // Update areas state with fetched data
-        if (mounted) {
+        // Update areas state with fetched data - only if still mounted and region hasn't changed
+        if (mounted && selectedRegion) {
           setAreas(fetchedAreas || []);
         }
       } catch (err) {
@@ -559,22 +591,25 @@ export default function PropertiesLayout({
         console.log('[PROPERTIES FETCH] fetchProperties function called');
         console.log('[PROPERTIES FETCH] Current sort state - sortBy:', sortBy, 'sortOrder:', sortOrder);
         
-        // Get current state values - always prioritize URL params as source of truth
-        // This prevents race conditions where state hasn't updated yet after URL changes
+        // Get current state values - prioritize state over URL to avoid race conditions
+        // When filters change, state updates immediately but URL update via router.replace is async
+        // So we check state first (most up-to-date), then URL as fallback
         const getFromURL = (key: string) => searchParams?.get(key) || null;
         const getFromStateOrURL = (stateValue: string | number | null, urlKey: string, isNumber = false) => {
-          // Always check URL first - it's the source of truth after router.push
+          // Check state first - it updates immediately when filters change
+          if (stateValue !== null && stateValue !== '') {
+            return stateValue;
+          }
+          // Fallback to URL if state is not set (e.g., on initial load from URL)
           const urlValue = getFromURL(urlKey);
           if (urlValue !== null && urlValue !== '') {
             return isNumber ? Number(urlValue) : urlValue;
           }
-          // Fallback to state if URL doesn't have it
-          if (stateValue !== null && stateValue !== '') {
-            return stateValue;
-          }
           return null;
         };
         
+        // Resolve parameters - prioritize state (updates immediately) over URL (async update)
+        // This prevents race conditions where URL hasn't updated yet after filter changes
         const currentAreaId = getFromStateOrURL(selectedArea, 'areaId', true);
         const currentRegionId = getFromStateOrURL(selectedRegion, 'regionId', true);
         const currentPropertyType = getFromStateOrURL(selectedPropertyType, 'propertyType');
@@ -583,7 +618,7 @@ export default function PropertiesLayout({
         const currentMinPrice = getFromStateOrURL(minPrice, 'minPrice');
         const currentMaxPrice = getFromStateOrURL(maxPrice, 'maxPrice');
         
-        console.log('[PROPERTIES FETCH] Parameter resolution:', {
+        console.log('[PROPERTIES FETCH] Parameter resolution (state prioritized):', {
           initialLoad,
           'selectedArea (state)': selectedArea,
           'areaId (URL)': getFromURL('areaId'),
@@ -594,6 +629,10 @@ export default function PropertiesLayout({
           'selectedPropertyType (state)': selectedPropertyType,
           'propertyType (URL)': getFromURL('propertyType'),
           'currentPropertyType (resolved)': currentPropertyType,
+          'minBeds (state)': minBeds,
+          'minBaths (state)': minBaths,
+          'minPrice (state)': minPrice,
+          'maxPrice (state)': maxPrice,
         });
         
         // Build query params - always include sort parameters
@@ -783,6 +822,7 @@ export default function PropertiesLayout({
     sortOrder,
     API_BASE_URL,
     initialLoad,
+    searchParams, // Include searchParams to refetch when URL updates (e.g., browser navigation)
     firstLoadFromParams,
     searchParams, // Add searchParams to trigger fetch when URL changes
     tCommon,
@@ -808,12 +848,17 @@ export default function PropertiesLayout({
     const params = new URLSearchParams(searchParams.toString());
     
     // Get current regionId and areaId from updates, state, or URL (in that priority order)
+    // Priority: updates > state > URL (state is most reliable as it updates immediately)
     const currentRegionId = updates.regionId !== undefined 
       ? updates.regionId 
-      : (selectedRegion || (searchParams.get('regionId') ? Number(searchParams.get('regionId')) : null));
+      : (selectedRegion !== null && selectedRegion !== undefined
+          ? selectedRegion 
+          : (searchParams.get('regionId') ? Number(searchParams.get('regionId')) : null));
     const currentAreaId = updates.areaId !== undefined 
       ? updates.areaId 
-      : (selectedArea || (searchParams.get('areaId') ? Number(searchParams.get('areaId')) : null));
+      : (selectedArea !== null && selectedArea !== undefined
+          ? selectedArea 
+          : (searchParams.get('areaId') ? Number(searchParams.get('areaId')) : null));
     
     // Update or remove filter parameters
     if (updates.propertyType !== undefined) {
@@ -876,12 +921,30 @@ export default function PropertiesLayout({
   };
 
   const handleRegionChange = (regionId: number | null) => {
+    console.log('[HANDLE REGION CHANGE] ===== START =====');
+    console.log('[HANDLE REGION CHANGE] Called with regionId:', regionId);
+    console.log('[HANDLE REGION CHANGE] Current selectedRegion state:', selectedRegion);
+    console.log('[HANDLE REGION CHANGE] Current URL regionId:', searchParams?.get('regionId'));
+    console.log('[HANDLE REGION CHANGE] window.location.search:', window.location.search);
+    
+    // Check if this is actually a different region
+    if (regionId === selectedRegion) {
+      console.log('[HANDLE REGION CHANGE] WARNING: Same region clicked, but handler was called anyway');
+      console.log('[HANDLE REGION CHANGE] This might indicate a state sync issue');
+    }
+    
+    // Track that we're updating URL programmatically
+    isUpdatingURLRef.current = true;
+    pendingRegionUpdateRef.current = regionId;
+    
     // Clear old properties and show loading immediately to prevent glitch
     setProperties([]);
     setLoading(true);
     setError(null);
     lastFetchParamsRef.current = ''; // Reset to allow new fetch
     
+    // Update state first
+    console.log('[HANDLE REGION CHANGE] Setting selectedRegion state to:', regionId);
     setSelectedRegion(regionId);
     setSelectedArea(null);
 
@@ -889,28 +952,113 @@ export default function PropertiesLayout({
     if (regionId) {
       const region = regionCounts.find(r => r.regionId === regionId);
       setSelectedProvince(region?.regionName || null);
+      console.log('[HANDLE REGION CHANGE] Found region:', region?.regionName);
     } else {
       setSelectedProvince(null);
     }
     setSelectedTown(null);
 
-    // DO NOT clear advanced search filters when selecting a region
-    // Preserve all filters so they work together with region selection
-    // Only update URL with region change, keeping all existing filters
-    updateURL({
-      regionId: regionId,
-      areaId: null, // Clear area when region changes
-      // Don't pass filter params - they will be preserved in URL
-    });
+    // Update URL IMMEDIATELY with the new regionId to ensure URL reflects the change
+    // This must happen synchronously before any other operations
+    if (!searchParams) {
+      console.error('[HANDLE REGION CHANGE] ERROR: searchParams is null!');
+      isUpdatingURLRef.current = false;
+      return;
+    }
+    
+    const params = new URLSearchParams(searchParams.toString());
+    console.log('[HANDLE REGION CHANGE] Current URL params before update:', params.toString());
+    
+    // Update regionId in URL immediately
+    if (regionId !== null && regionId !== undefined) {
+      params.set('regionId', String(regionId));
+      console.log('[HANDLE REGION CHANGE] Setting regionId in URL to:', regionId);
+    } else {
+      params.delete('regionId');
+      console.log('[HANDLE REGION CHANGE] Removing regionId from URL');
+    }
+    
+    // Clear areaId when region changes
+    params.delete('areaId');
+    console.log('[HANDLE REGION CHANGE] Cleared areaId from URL');
+    
+    // Reset to page 1
+    params.set('page', '1');
+    
+    const newURL = `?${params.toString()}`;
+    console.log('[HANDLE REGION CHANGE] New URL will be:', newURL);
+    console.log('[HANDLE REGION CHANGE] Calling router.replace...');
+    
+    // Update URL immediately - use window.history FIRST for immediate update, then router for Next.js
+    try {
+      // Update window.history FIRST for immediate visual update
+      const fullURL = `${window.location.pathname}${newURL}`;
+      console.log('[HANDLE REGION CHANGE] Calling window.history.replaceState FIRST with:', fullURL);
+      window.history.replaceState({ ...window.history.state, as: fullURL, url: fullURL }, '', fullURL);
+      console.log('[HANDLE REGION CHANGE] window.history.replaceState called, current search:', window.location.search);
+      
+      // Then update Next.js router (this might be async, but window.history already updated)
+      console.log('[HANDLE REGION CHANGE] Calling router.replace with:', newURL);
+      router.replace(newURL, { scroll: false });
+      console.log('[HANDLE REGION CHANGE] router.replace called successfully');
+      
+      // Verify the URL was updated after a short delay
+      setTimeout(() => {
+        const currentSearch = window.location.search;
+        const currentParams = new URLSearchParams(currentSearch);
+        const urlRegionId = currentParams.get('regionId');
+        console.log('[HANDLE REGION CHANGE] URL verification after 50ms:');
+        console.log('[HANDLE REGION CHANGE] - window.location.search:', currentSearch);
+        console.log('[HANDLE REGION CHANGE] - URL regionId:', urlRegionId);
+        console.log('[HANDLE REGION CHANGE] - Expected regionId:', regionId);
+        if (String(urlRegionId) !== String(regionId)) {
+          console.error('[HANDLE REGION CHANGE] ❌ URL MISMATCH! URL has regionId:', urlRegionId, 'but expected:', regionId);
+          // Force update if mismatch detected
+          const forceParams = new URLSearchParams(currentSearch);
+          if (regionId !== null && regionId !== undefined) {
+            forceParams.set('regionId', String(regionId));
+          } else {
+            forceParams.delete('regionId');
+          }
+          forceParams.delete('areaId');
+          forceParams.set('page', '1');
+          const forceURL = `?${forceParams.toString()}`;
+          window.history.replaceState({}, '', `${window.location.pathname}${forceURL}`);
+          console.log('[HANDLE REGION CHANGE] 🔧 Force updated URL to:', forceURL);
+        } else {
+          console.log('[HANDLE REGION CHANGE] ✅ URL matches expected regionId');
+        }
+      }, 50);
+    } catch (error) {
+      console.error('[HANDLE REGION CHANGE] ERROR updating URL:', error);
+    }
+    
+    // Reset the flag after a delay to allow URL to update
+    setTimeout(() => {
+      isUpdatingURLRef.current = false;
+      pendingRegionUpdateRef.current = null;
+      console.log('[HANDLE REGION CHANGE] Reset isUpdatingURLRef flag');
+      console.log('[HANDLE REGION CHANGE] ===== END =====');
+    }, 200);
   };
 
   const handleAreaChange = (areaId: number | null) => {
+    console.log('[HANDLE AREA CHANGE] ===== START =====');
+    console.log('[HANDLE AREA CHANGE] Called with areaId:', areaId);
+    console.log('[HANDLE AREA CHANGE] Current selectedArea state:', selectedArea);
+    console.log('[HANDLE AREA CHANGE] Current URL areaId:', searchParams?.get('areaId'));
+    
+    // Track that we're updating URL programmatically
+    isUpdatingURLRef.current = true;
+    
     // Clear old properties and show loading immediately to prevent glitch
     setProperties([]);
     setLoading(true);
     setError(null);
     lastFetchParamsRef.current = ''; // Reset to allow new fetch
     
+    // Update state first
+    console.log('[HANDLE AREA CHANGE] Setting selectedArea state to:', areaId);
     setSelectedArea(areaId);
 
     // Preserve region and province when selecting an area
@@ -921,11 +1069,60 @@ export default function PropertiesLayout({
       setSelectedTown(null);
     }
 
-    // Update URL to include areaId while preserving all advanced filters
-    updateURL({
-      areaId: areaId,
-      // Preserve all existing filters - don't pass them so they stay in URL
-    });
+    // Update URL IMMEDIATELY with the new areaId to ensure URL reflects the change
+    // This must happen synchronously before any other operations
+    if (!searchParams) {
+      console.error('[HANDLE AREA CHANGE] ERROR: searchParams is null!');
+      isUpdatingURLRef.current = false;
+      return;
+    }
+    
+    const params = new URLSearchParams(searchParams.toString());
+    console.log('[HANDLE AREA CHANGE] Current URL params before update:', params.toString());
+    
+    // Preserve regionId if it exists
+    const currentRegionId = selectedRegion || (searchParams.get('regionId') ? Number(searchParams.get('regionId')) : null);
+    console.log('[HANDLE AREA CHANGE] Preserving regionId:', currentRegionId);
+    if (currentRegionId) {
+      params.set('regionId', String(currentRegionId));
+    }
+    
+    // Update areaId in URL immediately
+    if (areaId !== null && areaId !== undefined) {
+      params.set('areaId', String(areaId));
+      console.log('[HANDLE AREA CHANGE] Setting areaId in URL to:', areaId);
+    } else {
+      params.delete('areaId');
+      console.log('[HANDLE AREA CHANGE] Removing areaId from URL');
+    }
+    
+    // Reset to page 1
+    params.set('page', '1');
+    
+    const newURL = `?${params.toString()}`;
+    console.log('[HANDLE AREA CHANGE] New URL will be:', newURL);
+    console.log('[HANDLE AREA CHANGE] Calling router.replace...');
+    
+    // Update URL immediately using router.replace
+    try {
+      router.replace(newURL, { scroll: false });
+      console.log('[HANDLE AREA CHANGE] router.replace called successfully');
+      
+      // Also update window.location directly as a backup to ensure URL updates immediately
+      const fullURL = `${window.location.pathname}${newURL}`;
+      window.history.replaceState({ ...window.history.state, as: fullURL, url: fullURL }, '', fullURL);
+      console.log('[HANDLE AREA CHANGE] window.history.replaceState called as backup');
+      console.log('[HANDLE AREA CHANGE] Current window.location.search:', window.location.search);
+    } catch (error) {
+      console.error('[HANDLE AREA CHANGE] ERROR updating URL:', error);
+    }
+    
+    // Reset the flag after a short delay to allow URL to update
+    setTimeout(() => {
+      isUpdatingURLRef.current = false;
+      console.log('[HANDLE AREA CHANGE] Reset isUpdatingURLRef flag');
+      console.log('[HANDLE AREA CHANGE] ===== END =====');
+    }, 100);
   };
 
   // Reset page to 1 when filters change (but don't trigger fetch here - the main useEffect will handle it)
@@ -1390,7 +1587,7 @@ export default function PropertiesLayout({
                             console.error('[SORT DROPDOWN] ERROR: Failed to parse sort values from:', e.target.value);
                           }
                         }}
-                        className="rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 px-3 py-2 text-sm focus:border-primary-500 focus:ring-primary-500"
+                        className="min-w-[150px] rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 px-3 py-2 pr-8 text-sm focus:border-primary-500 focus:ring-primary-500"
                       >
                         <option value="id:DESC">{sortOptions.default}</option>
                         <option value="title:ASC">{sortOptions.titleAsc}</option>
