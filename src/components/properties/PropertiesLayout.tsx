@@ -858,7 +858,7 @@ export default function PropertiesLayout({
             
             <div className="bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
               {/* Advanced Search Filters */}
-              <div className="pb-6 mb-6 border-b border-neutral-200">
+              <div className="pb-4 mb-4 border-b border-neutral-200">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-primary-900">
                   Advanced Search
@@ -1020,12 +1020,7 @@ export default function PropertiesLayout({
                   </div>
                 </div>
               </div>
-              {/* Filter Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-primary-900">
-                  {getFilterTitle()}
-                </h2>
-              </div>
+              
               <div className="space-y-4">
                 <AreaFilter
                   properties={displayedProperties}
@@ -1096,29 +1091,30 @@ export default function PropertiesLayout({
                   </div>
 
                 </div>
-
-                {/* Sort Dropdown */}
-                {!loading && (
-                  <div className="flex items-center gap-2">
-                    <label htmlFor="sortBy" className="text-sm font-medium text-neutral-700 whitespace-nowrap">
-                      Sort by:
-                    </label>
-                    <select
-                      id="sortBy"
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="rounded-md border-neutral-300 py-2 px-3 text-sm focus:border-primary-500 focus:ring-primary-500 bg-white"
-                    >
-                      <option value="default">Default</option>
-                      <option value="price-low-high">Price: Low to High</option>
-                      <option value="price-high-low">Price: High to Low</option>
-                      <option value="title-a-z">Title: A-Z</option>
-                      <option value="title-z-a">Title: Z-A</option>
-                    </select>
-                  </div>
-                )}
-                
-                {!loading && <LayoutSwitcher currentLayout={layout} onLayoutChange={handleLayoutChange} />}
+                <div className='flex gap-4'>
+                  {/* Sort Dropdown */}
+                  {!loading && (
+                    <div className="flex items-center gap-2">
+                      <label htmlFor="sortBy" className="text-sm font-medium text-neutral-700 whitespace-nowrap">
+                        Sort by:
+                      </label>
+                      <select
+                        id="sortBy"
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="rounded-md border-neutral-300 py-2 px-3 text-sm focus:border-primary-500 focus:ring-primary-500 bg-white"
+                      >
+                        <option value="default">Default</option>
+                        <option value="price-low-high">Price: Low to High</option>
+                        <option value="price-high-low">Price: High to Low</option>
+                        <option value="title-a-z">Title: A-Z</option>
+                        <option value="title-z-a">Title: Z-A</option>
+                      </select>
+                    </div>
+                  )}
+                  
+                  {!loading && <LayoutSwitcher currentLayout={layout} onLayoutChange={handleLayoutChange} />}
+                </div> 
               </div>
             )}
 

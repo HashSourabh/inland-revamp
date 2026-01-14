@@ -17,7 +17,7 @@ export default function LayoutSwitcher({ currentLayout, onLayoutChange }: Layout
       <div className="flex dark:border-neutral-700 dark:bg-neutral-800">
         <button
           onClick={() => onLayoutChange('grid')}
-          className={`flex items-center rounded-lg gap-2 px-3 py-2 text-sm font-medium transition-colors ${
+          className={`flex items-center rounded-lg gap-2 px-2 py-2 text-sm font-medium transition-colors ${
             currentLayout === 'grid'
               ? 'bg-primary-600 text-white'
               : 'text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-700'
@@ -28,7 +28,7 @@ export default function LayoutSwitcher({ currentLayout, onLayoutChange }: Layout
         </button>
         <button
           onClick={() => onLayoutChange('list')}
-          className={`flex items-center rounded-lg gap-2 px-3 py-2 text-sm font-medium transition-colors ${
+          className={`flex items-center rounded-lg gap-2 px-2 py-2 text-sm font-medium transition-colors ${
             currentLayout === 'list'
               ? 'bg-primary-600 text-white'
               : 'text-neutral-700 hover:bg-neutral-50 dark:text-neutral-300 dark:hover:bg-neutral-700'
