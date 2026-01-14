@@ -265,13 +265,8 @@ export default function PropertiesLayout({
     let mounted = true;
     const loadPropertyTypes = async () => {
       try {
-        // Check cache first - if we already have types for this language, skip
-        if (Object.keys(propertyTypesMap).length > 0) {
-          propertyTypesLoadedRef.current = true;
-          return;
-        }
-
-        // Fetch property types with current language ID
+        // Always fetch to ensure we have both map and list with codes
+        // The cache might have map but not list, or codes might be missing
         const res = await fetch(`${API_BASE_URL}/properties/types?languageId=${languageId}`);
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
 
@@ -287,30 +282,52 @@ export default function PropertiesLayout({
               code: type.code || String(type.id)
             });
           });
-          // Always update the map when language changes to ensure correct translations
+          // Always update both map and list to ensure consistency
           setPropertyTypesMap(typesMap);
           setPropertyTypesList(typesList);
           propertyTypesLoadedRef.current = true;
         }
       } catch (err) {
         console.error("Error loading property types:", err);
+        // On error, try to build list from cache if available
+        if (Object.keys(propertyTypesMap).length > 0 && propertyTypesList.length === 0 && mounted) {
+          const typesListFromCache: PropertyType[] = Object.entries(propertyTypesMap).map(([id, name]) => ({
+            id: Number(id),
+            name: name || `Property Type ${id}`,
+            code: (name || '').toLowerCase().replace(/\s+/g, '-') || String(id)
+          }));
+          setPropertyTypesList(typesListFromCache);
+        }
         // Even on error, mark as loaded to prevent blocking
         propertyTypesLoadedRef.current = true;
       }
     };
 
-    // Always try to load (will check cache inside)
-    // If cache exists, mark as loaded immediately
-    if (Object.keys(propertyTypesMap).length > 0) {
+    // Check if we have both map and list - if not, fetch or initialize from cache
+    const hasMap = Object.keys(propertyTypesMap).length > 0;
+    const hasList = propertyTypesList.length > 0;
+    
+    if (hasMap && hasList) {
+      // Both are available, mark as loaded
+      propertyTypesLoadedRef.current = true;
+    } else if (hasMap && !hasList) {
+      // Map exists but list is missing - initialize list from map
+      const typesListFromCache: PropertyType[] = Object.entries(propertyTypesMap).map(([id, name]) => ({
+        id: Number(id),
+        name: name || `Property Type ${id}`,
+        code: (name || '').toLowerCase().replace(/\s+/g, '-') || String(id)
+      }));
+      setPropertyTypesList(typesListFromCache);
       propertyTypesLoadedRef.current = true;
     } else {
+      // Either missing or incomplete, fetch fresh data
       loadPropertyTypes();
     }
     
     return () => {
       mounted = false;
     };
-  }, [languageId, setPropertyTypesMap, API_BASE_URL]); // Removed propertyTypesMap to prevent loops
+  }, [languageId, setPropertyTypesMap, API_BASE_URL, propertyTypesMap, propertyTypesList.length]); // Include propertyTypesList.length to check if list is populated
 
   // Consolidated useEffect for search parameters - only on mount or when searchParams change
   useEffect(() => {
