@@ -14,6 +14,7 @@ interface AreaCount {
   areaId: number;
   areaName: string;
   count: number;
+  regionId?: number; // Optional to support backward compatibility
 }
 
 interface AreaFilterProps {
@@ -195,7 +196,24 @@ export default function AreaFilter({
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    toggleRegion(region.regionId);
+                    
+                    console.log('[AREA FILTER] Chevron clicked for region:', region.regionId, region.regionName);
+                    console.log('[AREA FILTER] Is active?', isActive);
+                    console.log('[AREA FILTER] Is expanded?', isExpanded);
+                    
+                    if (!isActive) {
+                      // If region is not active, select it first (this will fetch areas)
+                      // Then expand it
+                      console.log('[AREA FILTER] Region not active, selecting and expanding');
+                      setExpandedRegions(new Set([region.regionId]));
+                      onRegionChange?.(region.regionId);
+                      onTownChange(null);
+                      onAreaChange?.(null);
+                    } else {
+                      // If region is already active, just toggle expansion
+                      console.log('[AREA FILTER] Region already active, toggling expansion');
+                      toggleRegion(region.regionId);
+                    }
                   }}
                   className={`p-1 rounded transition-colors ${
                     isActive 
@@ -214,56 +232,78 @@ export default function AreaFilter({
             </button>
 
           {/* Areas List (Accordion Content) */}
-          {/* Only show areas for the selected region to prevent showing wrong areas */}
-          {selectedRegion === region.regionId && (
+          {/* Show areas when region is expanded, filter by regionId to show correct areas */}
+          {isExpanded && (
             <div 
               className={`overflow-y-auto transition-all duration-200 ease-in-out ${
                 isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
-              {areas.length > 0 ? (
-                <div>
-                  {areas.map((area) => {
-                    const isAreaActive = selectedArea === area.areaId;
+              {(() => {
+                // Filter areas for this specific region
+                // Areas should have regionId property to match
+                const regionAreas = areas.filter((area: any) => {
+                  // If area has regionId, use it; otherwise, only show if region is selected
+                  if ('regionId' in area) {
+                    return area.regionId === region.regionId;
+                  }
+                  // Fallback: only show areas when this region is selected (backward compatibility)
+                  return selectedRegion === region.regionId;
+                });
 
-                    return (
-                      <button
-                        key={`region-${region.regionId}-area-${area.areaId}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          if (isAreaActive) {
-                            onAreaChange?.(null);
-                          } else {
-                            onAreaChange?.(area.areaId);
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between px-6 py-2.5 text-sm font-medium transition-colors
-                          ${isAreaActive
-                            ? 'bg-primary-500 text-white'
-                            : 'text-neutral-700 hover:bg-neutral-100'
-                          }`}
-                      >
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          {isAreaActive && <CheckIcon className="h-4 w-4 text-white flex-shrink-0" />}
-                          <span className="truncate">{area.areaName}</span>
-                        </div>
-                        <span className={`rounded-full px-2 py-0.5 text-xs font-semibold flex-shrink-0
-                          ${isAreaActive
-                            ? 'bg-white/20 text-white'
-                            : 'bg-white text-neutral-600'
-                          }`}>
-                          {area.count}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="px-6 py-4 text-sm text-neutral-500">
-                  Loading areas...
-                </div>
-              )}
+                if (regionAreas.length > 0) {
+                  return (
+                    <div>
+                      {regionAreas.map((area) => {
+                        const isAreaActive = selectedArea === area.areaId;
+
+                        return (
+                          <button
+                            key={`region-${region.regionId}-area-${area.areaId}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              // When clicking an area, also select the region if not already selected
+                              if (!isActive) {
+                                onRegionChange?.(region.regionId);
+                                onTownChange(null);
+                              }
+                              if (isAreaActive) {
+                                onAreaChange?.(null);
+                              } else {
+                                onAreaChange?.(area.areaId);
+                              }
+                            }}
+                            className={`w-full flex items-center justify-between px-6 py-2.5 text-sm font-medium transition-colors
+                              ${isAreaActive
+                                ? 'bg-primary-500 text-white'
+                                : 'text-neutral-700 hover:bg-neutral-100'
+                              }`}
+                          >
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              {isAreaActive && <CheckIcon className="h-4 w-4 text-white flex-shrink-0" />}
+                              <span className="truncate">{area.areaName}</span>
+                            </div>
+                            <span className={`rounded-full px-2 py-0.5 text-xs font-semibold flex-shrink-0
+                              ${isAreaActive
+                                ? 'bg-white/20 text-white'
+                                : 'bg-white text-neutral-600'
+                              }`}>
+                              {area.count}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="px-6 py-4 text-sm text-neutral-500">
+                      {selectedRegion === region.regionId ? 'Loading areas...' : 'No areas available'}
+                    </div>
+                  );
+                }
+              })()}
             </div>
           )}
           </div>

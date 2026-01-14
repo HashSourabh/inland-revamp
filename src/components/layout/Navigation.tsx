@@ -180,7 +180,7 @@ export default function Navigation({ isRtl = false, onLinkClick }: NavigationPro
 
       <Link
         href={`/${locale}/blog`}
-        className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto"
+        className="flex px-2 lg:px-0 py-2 lg:py-0 items-center justify-between lg:justify-start gap-1.5 text-neutral-900 group-hover:text-primary-600 transition-colors text-[15px] w-full lg:w-auto font-medium"
         onClick={onLinkClick}
       >
         {t('links.blog')}

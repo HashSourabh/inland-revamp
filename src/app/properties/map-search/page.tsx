@@ -212,8 +212,8 @@ export default function MapSearchPage() {
   }, [searchParams]);
 
   // Track last fetch params to prevent duplicate calls
-  const lastRegionCountsParamsRef = useRef<string>('');
-  const lastAreasParamsRef = useRef<string>('');
+  // Removed duplicate check refs - following PropertiesLayout pattern
+  // Always fetch to ensure data is up-to-date
   
   // Check if any filters are active
   const hasActiveFilters = useMemo(() => {
@@ -234,19 +234,10 @@ export default function MapSearchPage() {
           maxPrice: maxPrice || undefined,
         };
         
-        // Create a unique key for these filter params
-        const paramsKey = JSON.stringify(filters);
-        
-        // Skip if we just fetched with the same params
-        if (lastRegionCountsParamsRef.current === paramsKey) {
-          return;
-        }
-        
         // Only show loading on initial load, not on filter changes
         if (initialLoading) {
           setLoading(true);
         }
-        lastRegionCountsParamsRef.current = paramsKey;
         
         const counts = await fetchRegionCounts(filters);
         
@@ -276,7 +267,6 @@ export default function MapSearchPage() {
         } else {
           setTotalPropertiesCount(0);
         }
-        lastRegionCountsParamsRef.current = ''; // Reset on error to allow retry
       }
     };
     
@@ -293,6 +283,7 @@ export default function MapSearchPage() {
 
   // Fetch areas when a region is selected (using cache)
   // This updates whenever filters change to show accurate counts
+  // Following the same pattern as PropertiesLayout.tsx
   useEffect(() => {
     // Don't fetch if regionCounts haven't loaded yet
     if (regionCounts.length === 0) {
@@ -302,6 +293,16 @@ export default function MapSearchPage() {
     }
     
     let mounted = true;
+    
+    // Clear areas immediately when filters change to show update is happening
+    setFilteredAreas([]);
+    setSelectedAreaMarker(null);
+    
+    // Show loader immediately when filters change (not on initial load)
+    if (!initialLoading) {
+      setLoading(true);
+    }
+    
     const loadAreas = async () => {
       const filters = {
         propertyType: selectedPropertyType || undefined,
@@ -311,23 +312,8 @@ export default function MapSearchPage() {
         maxPrice: maxPrice || undefined,
       };
       
-      // Create a unique key for these params
-      const paramsKey = JSON.stringify({
-        regionId: selectedRegion,
-        ...filters
-      });
-      
-      // Skip if we just fetched with the same params
-      if (lastAreasParamsRef.current === paramsKey) {
-        return;
-      }
-      
-      // Show loader when fetching areas (only if not initial loading)
-      if (!initialLoading) {
-        setLoading(true);
-      }
-      
-      lastAreasParamsRef.current = paramsKey;
+      console.log('[MAP SEARCH] Fetching areas with filters:', filters);
+      console.log('[MAP SEARCH] selectedRegion:', selectedRegion);
       
       try {
         if (!selectedRegion) {
@@ -350,12 +336,13 @@ export default function MapSearchPage() {
               }))
             );
             
+            console.log('[MAP SEARCH] ✅ Areas fetched (all regions):', flattenedAreas.length);
+            console.log('[MAP SEARCH] Areas with coordinates:', flattenedAreas.filter(a => a.lat && a.lng).length);
+            console.log('[MAP SEARCH] Areas with count > 0:', flattenedAreas.filter(a => a.count > 0).length);
+            
+            // Update immediately when API response comes
             setAreas(flattenedAreas);
             setFilteredAreas(flattenedAreas);
-            
-            if (!initialLoading) {
-              setLoading(false);
-            }
           }
         } else {
           // Fetch areas for selected region
@@ -372,12 +359,13 @@ export default function MapSearchPage() {
               lng: area.lng,
             }));
             
+            console.log('[MAP SEARCH] ✅ Areas fetched for region', selectedRegion, ':', areasWithRegion.length);
+            console.log('[MAP SEARCH] Areas with coordinates:', areasWithRegion.filter(a => a.lat && a.lng).length);
+            console.log('[MAP SEARCH] Areas with count > 0:', areasWithRegion.filter(a => a.count > 0).length);
+            
+            // Update immediately when API response comes
             setAreas(areasWithRegion);
             setFilteredAreas(areasWithRegion);
-            
-            if (!initialLoading) {
-              setLoading(false);
-            }
           }
         }
       } catch (err) {
@@ -385,18 +373,25 @@ export default function MapSearchPage() {
           console.error("Error loading areas:", err);
           setAreas([]);
           setFilteredAreas([]);
+        }
+      } finally {
+        if (mounted) {
+          // Always clear loading state when done
           if (!initialLoading) {
             setLoading(false);
           }
         }
-        lastAreasParamsRef.current = ''; // Reset on error
       }
     };
 
-    // Debounce areas fetch to avoid too many requests
+    // Debounce filter changes (but not initial load) - same pattern as PropertiesLayout
+    const shouldDebounce = !initialLoading;
+    const delay = shouldDebounce ? 300 : 0;
+    console.log('[MAP SEARCH] Debounce settings - shouldDebounce:', shouldDebounce, 'delay:', delay);
+    
     const timeoutId = setTimeout(() => {
       loadAreas();
-    }, 300);
+    }, delay);
     
     return () => {
       mounted = false;
@@ -431,20 +426,32 @@ export default function MapSearchPage() {
 
 
   // Areas with coordinates (use filtered areas)
+  // This recalculates whenever filteredAreas changes (which happens when filters change)
   const areasWithCoordinates = useMemo((): AreaWithCoordinates[] => {
-    return filteredAreas
+    console.log('[MAP PINS] Recalculating areasWithCoordinates');
+    console.log('[MAP PINS] filteredAreas count:', filteredAreas.length);
+    console.log('[MAP PINS] selectedRegion:', selectedRegion, 'selectedArea:', selectedArea);
+    
+    const filtered = filteredAreas
       .filter(area => {
         if (selectedArea) return area.areaId === selectedArea;
         if (selectedRegion) return area.regionId === selectedRegion;
         return true;
       })
       .filter(area => area.lat && area.lng) // only valid coordinates
-      .filter(area => area.count > 0) // Only show areas with properties matching filters
-      .map(area => ({
-        ...area,
-        lat: area.lat!,
-        lng: area.lng!
-      }));
+      .filter(area => area.count > 0); // Only show areas with properties matching filters
+    
+    console.log('[MAP PINS] After filtering - areas with coordinates:', filtered.length);
+    console.log('[MAP PINS] Areas with count > 0:', filtered.filter(a => a.count > 0).length);
+    
+    const result = filtered.map(area => ({
+      ...area,
+      lat: area.lat!,
+      lng: area.lng!
+    }));
+    
+    console.log('[MAP PINS] Final areasWithCoordinates count:', result.length);
+    return result;
   }, [filteredAreas, selectedRegion, selectedArea]);
 
   // Helper function to update URL with current filter state
@@ -546,7 +553,7 @@ export default function MapSearchPage() {
         </button>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4 relative">
+      <div className="flex flex-col lg:flex-row gap-4 relative items-start">
         {/* Mobile Overlay */}
         {isSidebarOpen && (
           <div
@@ -585,6 +592,10 @@ export default function MapSearchPage() {
                   value={selectedPropertyType || ''}
                   onChange={(e) => {
                     const value = e.target.value || null;
+                    console.log('[MAP SEARCH] Property type changed to:', value);
+                    // Clear areas immediately to show update is happening
+                    setFilteredAreas([]);
+                    setSelectedAreaMarker(null);
                     setSelectedPropertyType(value);
                     updateURL({ 
                       propertyType: value,
@@ -641,6 +652,11 @@ export default function MapSearchPage() {
                   value={minBaths || ''}
                   onChange={(e) => {
                     const value = e.target.value || null;
+                    console.log('[MAP SEARCH] Min baths changed to:', value);
+                    // Set loading immediately when filter changes
+                    if (!initialLoading) {
+                      setLoading(true);
+                    }
                     setMinBaths(value);
                     updateURL({ 
                       minBaths: value,
@@ -669,6 +685,11 @@ export default function MapSearchPage() {
                   value={minPrice || ''}
                   onChange={(e) => {
                     const value = e.target.value || null;
+                    console.log('[MAP SEARCH] Min price changed to:', value);
+                    // Set loading immediately when filter changes
+                    if (!initialLoading) {
+                      setLoading(true);
+                    }
                     setMinPrice(value);
                     updateURL({ 
                       minPrice: value,
@@ -700,6 +721,11 @@ export default function MapSearchPage() {
                   value={maxPrice || ''}
                   onChange={(e) => {
                     const value = e.target.value || null;
+                    console.log('[MAP SEARCH] Max price changed to:', value);
+                    // Set loading immediately when filter changes
+                    if (!initialLoading) {
+                      setLoading(true);
+                    }
                     setMaxPrice(value);
                     updateURL({ 
                       maxPrice: value,
@@ -737,7 +763,8 @@ export default function MapSearchPage() {
                 areas={filteredAreas.map(area => ({
                   areaId: area.areaId,
                   areaName: area.areaName,
-                  count: area.count
+                  count: area.count,
+                  regionId: area.regionId
                 }))}
                 allCount={totalPropertiesCount}
                 onProvinceChange={(province) => {
@@ -769,19 +796,35 @@ export default function MapSearchPage() {
         {/* Map */}
         <div className="flex-1 rounded-xl overflow-hidden border border-neutral-200">
           {isLoaded ? (
-          <GoogleMap mapContainerStyle={containerStyle} center={defaultCenter} zoom={defaultZoom}>
-            {areasWithCoordinates.map(area => (
-              <Marker
-                key={`region-${area.regionId}-area-${area.areaId}`}
-                position={{ lat: area.lat, lng: area.lng }}
-                onClick={() => handleAreaClick(area)}
-                icon={{
-                  url: getIAMarkerIcon(area.regionName || 'default'),
-                  scaledSize: new window.google.maps.Size(44, 54),
-                  anchor: new window.google.maps.Point(22, 52),
-                }}
-              />
-            ))}
+          <GoogleMap 
+            mapContainerStyle={containerStyle} 
+            center={defaultCenter} 
+            zoom={defaultZoom}
+            key={`map-${areasWithCoordinates.length}-${selectedPropertyType}-${minBeds}-${minBaths}-${minPrice}-${maxPrice}`}
+          >
+            {(() => {
+              if (process.env.NODE_ENV === 'development') {
+                console.log('[MAP RENDER] Rendering', areasWithCoordinates.length, 'markers');
+              }
+              return null;
+            })()}
+            {areasWithCoordinates.map(area => {
+              if (process.env.NODE_ENV === 'development') {
+                console.log('[MAP RENDER] Rendering marker for area:', area.areaName, 'count:', area.count, 'lat:', area.lat, 'lng:', area.lng);
+              }
+              return (
+                <Marker
+                  key={`region-${area.regionId}-area-${area.areaId}`}
+                  position={{ lat: area.lat, lng: area.lng }}
+                  onClick={() => handleAreaClick(area)}
+                  icon={{
+                    url: getIAMarkerIcon(area.regionName || 'default'),
+                    scaledSize: new window.google.maps.Size(44, 54),
+                    anchor: new window.google.maps.Point(22, 52),
+                  }}
+                />
+              );
+            })}
 
             {selectedAreaMarker && (
               <InfoWindow
