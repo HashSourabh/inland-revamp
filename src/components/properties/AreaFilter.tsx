@@ -216,7 +216,7 @@ export default function AreaFilter({
 
                     return (
                       <button
-                        key={area.areaId}
+                        key={`region-${region.regionId}-area-${area.areaId}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           if (isAreaActive) {

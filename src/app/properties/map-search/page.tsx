@@ -4,28 +4,27 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 // Performance: Lazy load Google Maps components to reduce initial bundle size
 import dynamic from 'next/dynamic';
 import Image from "next/image";
-import { CheckIcon, ChevronDownIcon, ChevronRightIcon, FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { fetchRegions, fetchAreas, fetchPropertyTypes, PropertyType } from '@/utils/api';
-import { getRegionColors, getAreaColors } from '@/utils/colorUtils';
+import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { areaImages, getIAMarkerIcon } from '@/utils/mapUtils';
-import PageOverlayLoader from "@/components/loader/PageOverlayLoader";
+import { getRegionColors } from '@/utils/colorUtils';
 import { useTranslations, useLocale } from "next-intl";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { usePropertyCache } from '@/context/PropertyCacheContext';
+import AreaFilter from '@/components/properties/AreaFilter';
+import { useRegionData } from '@/hooks/useRegionData';
+import GlobalLoader from '@/components/shared/GlobalLoader';
 
 // Performance: Import useJsApiLoader normally as it's needed for initialization
 // This hook is lightweight and needed early in the component lifecycle
 import { useJsApiLoader } from "@react-google-maps/api";
 
-// Performance: Dynamically import Google Maps components with loading state
+// Performance: Dynamically import Google Maps components
 // This reduces initial bundle size significantly as Google Maps is a large library
 const GoogleMap = dynamic(
   () => import("@react-google-maps/api").then((mod) => ({ default: mod.GoogleMap })),
   {
     loading: () => (
-      <div className="h-[70vh] flex items-center justify-center bg-neutral-100">
-        <PageOverlayLoader />
-      </div>
+      <div className="h-[70vh] bg-neutral-100" />
     ),
     ssr: false, // Google Maps requires browser APIs, disable SSR
   }
@@ -71,11 +70,14 @@ interface AreaWithCoordinates extends Area {
 
 export default function MapSearchPage() {
     const t = useTranslations('advance_search');
+    const tFilters = useTranslations('home.filters');
     const tCommon = useTranslations('common');
     const locale = useLocale();
     const searchParams = useSearchParams();
     const router = useRouter();
     const { propertyTypesMap, setPropertyTypesMap } = usePropertyCache();
+    const { regionCounts: cachedRegionCounts, fetchRegionCounts, fetchAreas } = useRegionData();
+    const [regionCounts, setRegionCounts] = useState<Array<{ regionId: number; regionName: string; count: number }>>([]);
     
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyA5h3ZfC3rhIC2ow1VlVC_J6sprxC1Rbns",
@@ -91,17 +93,18 @@ export default function MapSearchPage() {
   };
   const languageId = localeToLanguageId[locale] || 1;
 
-  const [regions, setRegions] = useState<Region[]>([]);
   const [areas, setAreas] = useState<Area[]>([]);
   const [filteredAreas, setFilteredAreas] = useState<Area[]>([]);
-  const [selectedRegion, setSelectedRegion] = useState<string | null>("ALL");
+  const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
+  const [selectedArea, setSelectedArea] = useState<number | null>(null);
+  const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   const [selectedTown, setSelectedTown] = useState<string | null>(null);
-  const [selectedArea, setSelectedArea] = useState<AreaWithCoordinates | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [filteringAreas, setFilteringAreas] = useState(false);
+  const [selectedAreaMarker, setSelectedAreaMarker] = useState<AreaWithCoordinates | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expandedRegions, setExpandedRegions] = useState<Set<string>>(new Set());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [totalPropertiesCount, setTotalPropertiesCount] = useState(0);
 
   // Advanced filter states
   const [selectedPropertyType, setSelectedPropertyType] = useState<string | null>(null);
@@ -109,29 +112,46 @@ export default function MapSearchPage() {
   const [minBaths, setMinBaths] = useState<string | null>(null);
   const [minPrice, setMinPrice] = useState<string | null>(null);
   const [maxPrice, setMaxPrice] = useState<string | null>(null);
-  const [propertyTypesList, setPropertyTypesList] = useState<PropertyType[]>([]);
-  const propertyTypesLoadedRef = useRef(false);
+  
+  // Store property types with codes
+  const [propertyTypesList, setPropertyTypesList] = useState<Array<{ id: number; name: string; code: string }>>([]);
 
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inlandandalucia.onrender.com/api/v1';
 
-  // Load property types
+  // Load property types if not in cache
   useEffect(() => {
     let mounted = true;
     const loadPropertyTypes = async () => {
       try {
-        // Check cache first
-        if (Object.keys(propertyTypesMap).length > 0) {
-          propertyTypesLoadedRef.current = true;
+        // Check cache first - if we already have types, initialize list from cache
+        if (Object.keys(propertyTypesMap).length > 0 && propertyTypesList.length === 0) {
+          // Initialize from cache - we need to fetch to get codes
+          const res = await fetch(`${API_BASE_URL}/properties/types?languageId=${languageId}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.success && data.data && mounted) {
+              const typesList: Array<{ id: number; name: string; code: string }> = [];
+              data.data.forEach((type: any) => {
+                typesList.push({
+                  id: type.id,
+                  name: type.name,
+                  code: type.code || String(type.id)
+                });
+              });
+              setPropertyTypesList(typesList);
+            }
+          }
           return;
         }
 
+        // Fetch property types with current language ID
         const res = await fetch(`${API_BASE_URL}/properties/types?languageId=${languageId}`);
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
 
         const data = await res.json();
         if (data?.success && data.data && mounted) {
           const typesMap: Record<number, string> = {};
-          const typesList: PropertyType[] = [];
+          const typesList: Array<{ id: number; name: string; code: string }> = [];
           data.data.forEach((type: any) => {
             typesMap[type.id] = type.name;
             typesList.push({
@@ -142,24 +162,19 @@ export default function MapSearchPage() {
           });
           setPropertyTypesMap(typesMap);
           setPropertyTypesList(typesList);
-          propertyTypesLoadedRef.current = true;
         }
       } catch (err) {
         console.error("Error loading property types:", err);
-        propertyTypesLoadedRef.current = true;
       }
     };
 
-    if (Object.keys(propertyTypesMap).length > 0) {
-      propertyTypesLoadedRef.current = true;
-    } else {
-      loadPropertyTypes();
-    }
+    // Always try to load
+    loadPropertyTypes();
     
     return () => {
       mounted = false;
     };
-  }, [languageId, setPropertyTypesMap, API_BASE_URL, propertyTypesMap]);
+  }, [languageId, setPropertyTypesMap, API_BASE_URL]);
 
   // Read URL parameters for filters
   useEffect(() => {
@@ -170,8 +185,8 @@ export default function MapSearchPage() {
     const minBathsParam = searchParams.get('minBaths');
     const minPriceParam = searchParams.get('minPrice');
     const maxPriceParam = searchParams.get('maxPrice');
-    const regionParam = searchParams.get('region');
-    const townParam = searchParams.get('town');
+    const regionIdParam = searchParams.get('regionId');
+    const areaIdParam = searchParams.get('areaId');
 
     if (propertyTypeParam !== null) {
       setSelectedPropertyType(propertyTypeParam || null);
@@ -188,175 +203,208 @@ export default function MapSearchPage() {
     if (maxPriceParam !== null) {
       setMaxPrice(maxPriceParam || null);
     }
-    if (regionParam !== null) {
-      setSelectedRegion(regionParam || "ALL");
+    if (regionIdParam !== null) {
+      setSelectedRegion(regionIdParam ? Number(regionIdParam) : null);
     }
-    if (townParam !== null) {
-      setSelectedTown(townParam || null);
+    if (areaIdParam !== null) {
+      setSelectedArea(areaIdParam ? Number(areaIdParam) : null);
     }
   }, [searchParams]);
 
-  // Fetch regions
+  // Track last fetch params to prevent duplicate calls
+  const lastRegionCountsParamsRef = useRef<string>('');
+  const lastAreasParamsRef = useRef<string>('');
+  
+  // Check if any filters are active
+  const hasActiveFilters = useMemo(() => {
+    return !!(selectedPropertyType || minBeds || minBaths || minPrice || maxPrice);
+  }, [selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
+
+  // Fetch region counts with current filters applied
+  // This ALWAYS runs to ensure counts reflect current filters
   useEffect(() => {
-    const loadRegions = async () => {
+    const loadRegionCounts = async () => {
       try {
-        setLoading(true);
-        const regionsData = await fetchRegions();
-        setRegions(regionsData);
+        // Build filter object from current filter state
+        const filters = {
+          propertyType: selectedPropertyType || undefined,
+          minBeds: minBeds || undefined,
+          minBaths: minBaths || undefined,
+          minPrice: minPrice || undefined,
+          maxPrice: maxPrice || undefined,
+        };
+        
+        // Create a unique key for these filter params
+        const paramsKey = JSON.stringify(filters);
+        
+        // Skip if we just fetched with the same params
+        if (lastRegionCountsParamsRef.current === paramsKey) {
+          return;
+        }
+        
+        // Only show loading on initial load, not on filter changes
+        if (initialLoading) {
+          setLoading(true);
+        }
+        lastRegionCountsParamsRef.current = paramsKey;
+        
+        const counts = await fetchRegionCounts(filters);
+        
+        // Always update region counts state with filtered results
+        setRegionCounts(counts);
+        
+        // Calculate total properties count from region counts
+        const totalCount = counts.reduce((sum: number, region: any) => sum + region.count, 0);
+        setTotalPropertiesCount(totalCount);
+        
+        if (initialLoading) {
+          setInitialLoading(false);
+          setLoading(false);
+        }
       } catch (err) {
-        console.error(err);
+        console.error("Error loading region counts:", err);
+        if (initialLoading) {
+          setInitialLoading(false);
+          setLoading(false);
+        }
         setError(tCommon('failedToLoadRegions'));
-      } finally {
-        setLoading(false);
+        // On error, only use cache if no filters are active
+        if (!hasActiveFilters && cachedRegionCounts.length > 0) {
+          setRegionCounts(cachedRegionCounts);
+          const totalCount = cachedRegionCounts.reduce((sum: number, region: any) => sum + region.count, 0);
+          setTotalPropertiesCount(totalCount);
+        } else {
+          setTotalPropertiesCount(0);
+        }
+        lastRegionCountsParamsRef.current = ''; // Reset on error to allow retry
       }
     };
-    loadRegions();
-  }, []);
+    
+    // Always fetch region counts (with or without filters) to ensure accuracy
+    // On initial load, fetch immediately. On filter changes, debounce to avoid too many requests
+    const delay = initialLoading ? 0 : 300;
+    const timeoutId = setTimeout(() => {
+      loadRegionCounts();
+    }, delay);
+    
+    return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPropertyType, minBeds, minBaths, minPrice, maxPrice, hasActiveFilters, cachedRegionCounts, initialLoading]); // fetchRegionCounts is stable from useCallback
 
-  // Fetch areas based on selected region (base areas with coordinates)
+  // Fetch areas when a region is selected (using cache)
+  // This updates whenever filters change to show accurate counts
   useEffect(() => {
+    // Don't fetch if regionCounts haven't loaded yet
+    if (regionCounts.length === 0) {
+      setAreas([]);
+      setFilteredAreas([]);
+      return;
+    }
+    
+    let mounted = true;
     const loadAreas = async () => {
-      if (!selectedRegion || selectedRegion === "ALL") {
-        if (regions.length > 0) {
-          try {
-            const allAreasPromises = regions.map(region => fetchAreas(region.regionId));
-            const allAreasResults = await Promise.all(allAreasPromises);
-
-            const flattenedAreas: Area[] = allAreasResults.flatMap(result =>
-              result.areas.map(area => ({
-                ...area,
-                regionId: result.regionId,
-                regionName: regions.find(r => r.regionId === result.regionId)?.region || tCommon('unknown')
+      const filters = {
+        propertyType: selectedPropertyType || undefined,
+        minBeds: minBeds || undefined,
+        minBaths: minBaths || undefined,
+        minPrice: minPrice || undefined,
+        maxPrice: maxPrice || undefined,
+      };
+      
+      // Create a unique key for these params
+      const paramsKey = JSON.stringify({
+        regionId: selectedRegion,
+        ...filters
+      });
+      
+      // Skip if we just fetched with the same params
+      if (lastAreasParamsRef.current === paramsKey) {
+        return;
+      }
+      
+      // Show loader when fetching areas (only if not initial loading)
+      if (!initialLoading) {
+        setLoading(true);
+      }
+      
+      lastAreasParamsRef.current = paramsKey;
+      
+      try {
+        if (!selectedRegion) {
+          // If no region selected, fetch all areas from all regions
+          const allAreasPromises = regionCounts.map(region => 
+            fetchAreas(region.regionId, filters)
+          );
+          const allAreasResults = await Promise.all(allAreasPromises);
+          
+          if (mounted) {
+            const flattenedAreas: Area[] = allAreasResults.flatMap((areas, index) =>
+              areas.map((area: any) => ({
+                areaId: area.areaId,
+                areaName: area.areaName,
+                count: area.count || 0,
+                regionId: regionCounts[index].regionId,
+                regionName: regionCounts[index].regionName,
+                lat: area.lat,
+                lng: area.lng,
               }))
             );
-
+            
             setAreas(flattenedAreas);
-            // Initialize filtered areas with original areas when no filters are active
-            if (!selectedPropertyType && !minBeds && !minBaths && !minPrice && !maxPrice) {
-              setFilteredAreas(flattenedAreas);
-            }
-          } catch (err) {
-            console.error(err);
-          }
-        }
-        return;
-      }
-
-      const region = regions.find(r => r.region === selectedRegion);
-      if (region) {
-        try {
-          const result = await fetchAreas(region.regionId);
-          const areasWithRegion: Area[] = result.areas.map(area => ({
-            ...area,
-            regionId: result.regionId,
-            regionName: region.region
-          }));
-          setAreas(areasWithRegion);
-          // Initialize filtered areas with original areas when no filters are active
-          if (!selectedPropertyType && !minBeds && !minBaths && !minPrice && !maxPrice) {
-            setFilteredAreas(areasWithRegion);
-          }
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    };
-
-    if (regions.length > 0) loadAreas();
-  }, [selectedRegion, regions]);
-
-  // Fetch filtered properties and update area counts
-  useEffect(() => {
-    const fetchFilteredProperties = async () => {
-      // Check if any filters are active
-      const hasFilters = selectedPropertyType || minBeds || minBaths || minPrice || maxPrice;
-      
-      if (!hasFilters || areas.length === 0) {
-        // No filters or no areas, use original areas
-        setFilteredAreas(areas);
-        setFilteringAreas(false);
-        return;
-      }
-
-      setFilteringAreas(true);
-      try {
-        // Build query params for filtered properties
-        const queryParams = {
-          limit: '1000', // Get a large number to calculate accurate counts
-          ...(selectedRegion && selectedRegion !== "ALL" ? { 
-            regionId: String(regions.find(r => r.region === selectedRegion)?.regionId || '') 
-          } : {}),
-          ...(selectedTown ? { town: selectedTown } : {}),
-          ...(selectedPropertyType ? { propertyType: selectedPropertyType } : {}),
-          ...(minBeds ? { minBeds } : {}),
-          ...(minBaths ? { minBaths } : {}),
-          ...(minPrice ? { minPrice } : {}),
-          ...(maxPrice ? { maxPrice } : {}),
-        };
-
-        const query = new URLSearchParams(queryParams);
-        const url = `${API_BASE_URL}/properties?${query.toString()}`;
-        
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`Failed: ${res.status}`);
-
-        const data = await res.json();
-        
-        if (data.success && data.data) {
-          // Group properties by area
-          const areaCounts: Record<number, number> = {};
-          const areaMap: Record<number, Area> = {};
-          
-          // Create a map of areaId to area for quick lookup
-          areas.forEach(area => {
-            areaMap[area.areaId] = area;
-            areaCounts[area.areaId] = 0;
-          });
-
-          // Count properties per area
-          // Try to match by area name first (more reliable), then by area ID
-          data.data.forEach((property: any) => {
-            const propertyAreaName = property.Area_Name || property.areaName;
-            const areaId = property.Area_ID || property.areaId || property.AreaId;
+            setFilteredAreas(flattenedAreas);
             
-            // First try to match by area name
-            if (propertyAreaName) {
-              const matchingArea = areas.find(area => 
-                area.areaName === propertyAreaName || 
-                area.areaName.toLowerCase() === propertyAreaName.toLowerCase()
-              );
-              if (matchingArea) {
-                areaCounts[matchingArea.areaId]++;
-                return;
-              }
+            if (!initialLoading) {
+              setLoading(false);
             }
-            
-            // Fallback to area ID matching
-            if (areaId && areaCounts[areaId] !== undefined) {
-              areaCounts[areaId]++;
-            }
-          });
-
-          // Update areas with filtered counts
-          const updatedAreas = areas.map(area => ({
-            ...area,
-            count: areaCounts[area.areaId] || 0
-          }));
-
-          setFilteredAreas(updatedAreas);
+          }
         } else {
-          setFilteredAreas(areas);
+          // Fetch areas for selected region
+          const areasData = await fetchAreas(selectedRegion, filters);
+          
+          if (mounted) {
+            const areasWithRegion: Area[] = areasData.map((area: any) => ({
+              areaId: area.areaId,
+              areaName: area.areaName,
+              count: area.count || 0,
+              regionId: selectedRegion,
+              regionName: regionCounts.find(r => r.regionId === selectedRegion)?.regionName || '',
+              lat: area.lat,
+              lng: area.lng,
+            }));
+            
+            setAreas(areasWithRegion);
+            setFilteredAreas(areasWithRegion);
+            
+            if (!initialLoading) {
+              setLoading(false);
+            }
+          }
         }
       } catch (err) {
-        console.error("Error fetching filtered properties:", err);
-        setFilteredAreas(areas);
-      } finally {
-        setFilteringAreas(false);
+        if (mounted) {
+          console.error("Error loading areas:", err);
+          setAreas([]);
+          setFilteredAreas([]);
+          if (!initialLoading) {
+            setLoading(false);
+          }
+        }
+        lastAreasParamsRef.current = ''; // Reset on error
       }
     };
 
-    fetchFilteredProperties();
-  }, [areas, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice, selectedRegion, selectedTown, regions, API_BASE_URL]);
+    // Debounce areas fetch to avoid too many requests
+    const timeoutId = setTimeout(() => {
+      loadAreas();
+    }, 300);
+    
+    return () => {
+      mounted = false;
+      clearTimeout(timeoutId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRegion, regionCounts, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice, initialLoading]); // fetchAreas is stable from useCallback
+
 
   // Handle body scroll lock when sidebar is open on mobile
   useEffect(() => {
@@ -381,67 +429,13 @@ export default function MapSearchPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Compute region stats with filtered counts
-  const regionStats = useMemo(() => {
-    if (!regions.length) return [];
-    
-    // Use filtered areas if filters are active, otherwise use original areas
-    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
-    const hasFilters = selectedPropertyType || minBeds || minBaths || minPrice || maxPrice;
-    
-    if (hasFilters && areasToUse.length > 0) {
-      // Calculate filtered counts per region
-      const regionCounts: Record<string, number> = {};
-      areasToUse.forEach(area => {
-        const regionName = area.regionName || '';
-        regionCounts[regionName] = (regionCounts[regionName] || 0) + area.count;
-      });
-      
-      const totalCount = Object.values(regionCounts).reduce((sum, count) => sum + count, 0);
-      
-      return [
-        { name: "ALL", count: totalCount },
-        ...regions.map(region => ({ 
-          name: region.region, 
-          count: regionCounts[region.region] || 0 
-        }))
-      ].sort((a, b) => b.count - a.count);
-    } else {
-      // Use original region counts
-      const totalCount = regions.reduce((sum, region) => sum + region.count, 0);
-      return [
-        { name: "ALL", count: totalCount },
-        ...regions.map(region => ({ name: region.region, count: region.count }))
-      ].sort((a, b) => b.count - a.count);
-    }
-  }, [regions, filteredAreas, areas, selectedPropertyType, minBeds, minBaths, minPrice, maxPrice]);
 
-  // Compute town stats for selected region with filtered counts
-  const townStats = useMemo(() => {
-    if (!selectedRegion || selectedRegion === "ALL") return [];
-    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
-    return areasToUse
-      .filter(area => area.regionName === selectedRegion)
-      .map(area => ({ name: area.areaName, count: area.count }))
-      .sort((a, b) => b.count - a.count);
-  }, [selectedRegion, filteredAreas, areas]);
-
-  // Get towns for a specific region with filtered counts
-  const getTownsForRegion = (regionName: string) => {
-    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
-    return areasToUse
-      .filter(area => area.regionName === regionName)
-      .map(area => ({ name: area.areaName, count: area.count }))
-      .sort((a, b) => b.count - a.count);
-  };
-
-  // Areas with coordinates (use filtered areas if filters are active)
+  // Areas with coordinates (use filtered areas)
   const areasWithCoordinates = useMemo((): AreaWithCoordinates[] => {
-    const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
-    return areasToUse
+    return filteredAreas
       .filter(area => {
-        if (selectedTown) return area.areaName === selectedTown;
-        if (selectedRegion && selectedRegion !== "ALL") return area.regionName === selectedRegion;
+        if (selectedArea) return area.areaId === selectedArea;
+        if (selectedRegion) return area.regionId === selectedRegion;
         return true;
       })
       .filter(area => area.lat && area.lng) // only valid coordinates
@@ -451,7 +445,7 @@ export default function MapSearchPage() {
         lat: area.lat!,
         lng: area.lng!
       }));
-  }, [filteredAreas, areas, selectedRegion, selectedTown]);
+  }, [filteredAreas, selectedRegion, selectedArea]);
 
   // Helper function to update URL with current filter state
   const updateURL = (updates: {
@@ -460,11 +454,19 @@ export default function MapSearchPage() {
     minBaths?: string | null;
     minPrice?: string | null;
     maxPrice?: string | null;
-    region?: string | null;
-    town?: string | null;
+    regionId?: number | null;
+    areaId?: number | null;
   }) => {
     if (!searchParams) return;
     const params = new URLSearchParams(searchParams.toString());
+    
+    // Get current regionId and areaId from updates, state, or URL (in that priority order)
+    const currentRegionId = updates.regionId !== undefined 
+      ? updates.regionId 
+      : (selectedRegion || (searchParams.get('regionId') ? Number(searchParams.get('regionId')) : null));
+    const currentAreaId = updates.areaId !== undefined 
+      ? updates.areaId 
+      : (selectedArea || (searchParams.get('areaId') ? Number(searchParams.get('areaId')) : null));
     
     // Update or remove filter parameters
     if (updates.propertyType !== undefined) {
@@ -502,68 +504,36 @@ export default function MapSearchPage() {
         params.delete('maxPrice');
       }
     }
-    if (updates.region !== undefined) {
-      if (updates.region && updates.region !== "ALL") {
-        params.set('region', updates.region);
-      } else {
-        params.delete('region');
-      }
-    }
-    if (updates.town !== undefined) {
-      if (updates.town) {
-        params.set('town', updates.town);
-      } else {
-        params.delete('town');
-      }
+    
+    // Always preserve regionId and areaId if they exist
+    if (currentRegionId) {
+      params.set('regionId', String(currentRegionId));
+    } else {
+      params.delete('regionId');
     }
     
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
-
-  const handleRegionSelect = (regionName: string) => {
-    const newSelected = regionName === selectedRegion ? null : regionName;
-    setSelectedRegion(newSelected || "ALL");
-    setSelectedTown(null);
-    updateURL({ region: newSelected || "ALL", town: null });
-    
-    // Auto-expand if region is selected and has towns
-    if (newSelected && newSelected !== "ALL") {
-      const areasToUse = filteredAreas.length > 0 ? filteredAreas : areas;
-      const regionTowns = areasToUse.filter(area => area.regionName === newSelected);
-      if (regionTowns.length > 0) {
-        setExpandedRegions(prev => new Set(prev).add(newSelected));
-      }
+    if (currentAreaId) {
+      params.set('areaId', String(currentAreaId));
+    } else {
+      params.delete('areaId');
     }
-  };
-
-  const handleTownSelect = (townName: string) => {
-    const newSelected = townName === selectedTown ? null : townName;
-    setSelectedTown(newSelected);
-    updateURL({ town: newSelected });
-  };
-
-  const toggleRegion = (regionName: string) => {
-    setExpandedRegions(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(regionName)) {
-        newSet.delete(regionName);
-      } else {
-        newSet.add(regionName);
-      }
-      return newSet;
-    });
+    
+    router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   const handleAreaClick = (area: AreaWithCoordinates) => {
-    setSelectedArea(area);
+    setSelectedAreaMarker(area);
   };
 
-  if (!isLoaded) return <div className="text-center py-20"><PageOverlayLoader/></div>;
-  if (loading) return <div className="text-center py-20">{tCommon('loadingRegionsAndAreas')}</div>;
-  if (error) return <div className="text-center py-20 text-red-600">{tCommon('error')}: {error}</div>;
+  // Show error if critical error occurred
+  if (error && initialLoading) {
+    return <div className="text-center py-20 text-red-600">{tCommon('error')}: {error}</div>;
+  }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
+    <>
+      <GlobalLoader active={loading || initialLoading} />
+      <div className="mx-auto max-w-7xl px-4 py-12">
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-heading lg:text-3xl md:text-2xl text-xl font-bold text-primary-600">{t('g_map')}</h1>
         {/* Mobile Toggle Button */}
@@ -593,7 +563,9 @@ export default function MapSearchPage() {
         >
           <div className="h-full lg:h-auto lg:max-h-[calc(100vh-12rem)] bg-white lg:rounded-xl lg:border lg:border-neutral-200 p-4 overflow-y-auto shadow-xl lg:shadow-none">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-primary-900">Advanced Search</h2>
+              <h2 className="text-lg font-semibold text-primary-900">
+                {tFilters('advance_search')}
+              </h2>
               <button
                 onClick={() => setIsSidebarOpen(false)}
                 className="lg:hidden flex items-center justify-center w-8 h-8 rounded-lg text-neutral-600 hover:bg-neutral-100 transition-colors"
@@ -602,267 +574,202 @@ export default function MapSearchPage() {
                 <XMarkIcon className="h-5 w-5" />
               </button>
             </div>
+            <div className="space-y-4">
+              {/* Property Type */}
+              <div>
+                <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
+                  {tFilters('propertyTypeLabel')}
+                </label>
+                <select
+                  id="propertyType"
+                  value={selectedPropertyType || ''}
+                  onChange={(e) => {
+                    const value = e.target.value || null;
+                    setSelectedPropertyType(value);
+                    updateURL({ 
+                      propertyType: value,
+                      regionId: selectedRegion || null,
+                      areaId: selectedArea || null
+                    });
+                  }}
+                  className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                >
+                  <option value="">{tFilters('allTypes')}</option>
+                  {propertyTypesList.map((type) => (
+                    <option key={type.id} value={type.code}>
+                      {type.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Advanced Search Filters */}
-            <div className="pb-4 mb-4 border-b border-neutral-200">
-              <div className="space-y-4">
-                {/* Property Type */}
-                <div>
-                  <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Property Type
-                  </label>
-                  <select
-                    id="propertyType"
-                    value={selectedPropertyType || ''}
-                    onChange={(e) => {
-                      const value = e.target.value || null;
-                      setSelectedPropertyType(value);
-                      updateURL({ propertyType: value });
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">Any Type</option>
-                    {propertyTypesList.map((type) => (
-                      <option key={type.id} value={type.code}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              {/* Min. Bedrooms */}
+              <div>
+                <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
+                  {tFilters('min_bed')}
+                </label>
+                <select
+                  id="minBeds"
+                  value={minBeds || ''}
+                  onChange={(e) => {
+                    const value = e.target.value || null;
+                    setMinBeds(value);
+                    updateURL({ 
+                      minBeds: value,
+                      regionId: selectedRegion || null,
+                      areaId: selectedArea || null
+                    });
+                  }}
+                  className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                >
+                  <option value="">{tFilters('any')}</option>
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <option key={n} value={n}>
+                      {n}+
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                {/* Min. Bedrooms */}
-                <div>
-                  <label htmlFor="minBeds" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Min. Bedrooms
-                  </label>
-                  <select
-                    id="minBeds"
-                    value={minBeds || ''}
-                    onChange={(e) => {
-                      const value = e.target.value || null;
-                      setMinBeds(value);
-                      updateURL({ minBeds: value });
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">Any</option>
-                    {[1, 2, 3, 4, 5, 6].map((n) => (
-                      <option key={n} value={n}>
-                        {n}+
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              {/* Min. Bathrooms */}
+              <div>
+                <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
+                  {tFilters('min_bathrooms')}
+                </label>
+                <select
+                  id="minBaths"
+                  value={minBaths || ''}
+                  onChange={(e) => {
+                    const value = e.target.value || null;
+                    setMinBaths(value);
+                    updateURL({ 
+                      minBaths: value,
+                      regionId: selectedRegion || null,
+                      areaId: selectedArea || null
+                    });
+                  }}
+                  className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                >
+                  <option value="">{tFilters('any')}</option>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <option key={n} value={n}>
+                      {n}+
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                {/* Min. Bathrooms */}
-                <div>
-                  <label htmlFor="minBaths" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Min. Bathrooms
-                  </label>
-                  <select
-                    id="minBaths"
-                    value={minBaths || ''}
-                    onChange={(e) => {
-                      const value = e.target.value || null;
-                      setMinBaths(value);
-                      updateURL({ minBaths: value });
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">Any</option>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <option key={n} value={n}>
-                        {n}+
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              {/* Min. Price */}
+              <div>
+                <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                  {tFilters('min_price')}
+                </label>
+                <select
+                  id="minPrice"
+                  value={minPrice || ''}
+                  onChange={(e) => {
+                    const value = e.target.value || null;
+                    setMinPrice(value);
+                    updateURL({ 
+                      minPrice: value,
+                      regionId: selectedRegion || null,
+                      areaId: selectedArea || null
+                    });
+                  }}
+                  className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                >
+                  <option value="">{tFilters('noMin') || 'No Min'}</option>
+                  <option value="50000">€50,000</option>
+                  <option value="100000">€100,000</option>
+                  <option value="150000">€150,000</option>
+                  <option value="200000">€200,000</option>
+                  <option value="250000">€250,000</option>
+                  <option value="300000">€300,000</option>
+                  <option value="400000">€400,000</option>
+                  <option value="500000">€500,000</option>
+                </select>
+              </div>
 
-                {/* Min. Price */}
-                <div>
-                  <label htmlFor="minPrice" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Min. Price
-                  </label>
-                  <select
-                    id="minPrice"
-                    value={minPrice || ''}
-                    onChange={(e) => {
-                      const value = e.target.value || null;
-                      setMinPrice(value);
-                      updateURL({ minPrice: value });
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">No Min</option>
-                    <option value="50000">€50,000</option>
-                    <option value="100000">€100,000</option>
-                    <option value="150000">€150,000</option>
-                    <option value="200000">€200,000</option>
-                    <option value="250000">€250,000</option>
-                    <option value="300000">€300,000</option>
-                    <option value="400000">€400,000</option>
-                    <option value="500000">€500,000</option>
-                  </select>
-                </div>
-
-                {/* Max. Price */}
-                <div>
-                  <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
-                    Max. Price
-                  </label>
-                  <select
-                    id="maxPrice"
-                    value={maxPrice || ''}
-                    onChange={(e) => {
-                      const value = e.target.value || null;
-                      setMaxPrice(value);
-                      updateURL({ maxPrice: value });
-                    }}
-                    className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
-                  >
-                    <option value="">No Max</option>
-                    <option value="200000">€200,000</option>
-                    <option value="300000">€300,000</option>
-                    <option value="400000">€400,000</option>
-                    <option value="500000">€500,000</option>
-                    <option value="600000">€600,000</option>
-                    <option value="750000">€750,000</option>
-                    <option value="1000000">€1,000,000</option>
-                    <option value="1500000">€1,500,000</option>
-                    <option value="2000000">€2,000,000+</option>
-                  </select>
-                </div>
+              {/* Max. Price */}
+              <div>
+                <label htmlFor="maxPrice" className="block text-sm font-medium text-neutral-700 mb-1">
+                  {tFilters('max_price')}
+                </label>
+                <select
+                  id="maxPrice"
+                  value={maxPrice || ''}
+                  onChange={(e) => {
+                    const value = e.target.value || null;
+                    setMaxPrice(value);
+                    updateURL({ 
+                      maxPrice: value,
+                      regionId: selectedRegion || null,
+                      areaId: selectedArea || null
+                    });
+                  }}
+                  className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
+                >
+                  <option value="">{tFilters('noMax') || 'No Max'}</option>
+                  <option value="200000">€200,000</option>
+                  <option value="300000">€300,000</option>
+                  <option value="400000">€400,000</option>
+                  <option value="500000">€500,000</option>
+                  <option value="600000">€600,000</option>
+                  <option value="750000">€750,000</option>
+                  <option value="1000000">€1,000,000</option>
+                  <option value="1500000">€1,500,000</option>
+                  <option value="2000000">€2,000,000+</option>
+                </select>
               </div>
             </div>
             
-            {/* All Regions Option */}
-            <div className="mb-2">
-              <button
-                onClick={() => handleRegionSelect("ALL")}
-                className={`w-full flex items-center justify-between rounded-lg px-4 py-3 text-base font-medium transition-colors
-                  ${selectedRegion === "ALL"
-                    ? "bg-primary-600 text-white"
-                    : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
-                  }`}
-              >
-                <div className="flex items-center gap-2">
-                  {selectedRegion === "ALL" && <CheckIcon className="h-5 w-5 text-white" />}
-                  <span>{tCommon("allRegions")}</span>
-                </div>
-                <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
-                  ${selectedRegion === "ALL"
-                    ? "bg-white/20 text-white"
-                    : "bg-white text-neutral-600"
-                  }`}>
-                  {regionStats.find(r => r.name === "ALL")?.count || 0}
-                </span>
-              </button>
-            </div>
-
-            {/* Region Accordions */}
-            <div className="space-y-1">
-              {regionStats
-                .filter(({ name }) => name !== "ALL")
-                .map(({ name, count }) => {
-                  const colors = getRegionColors(name);
-                  const isActive = selectedRegion === name;
-                  const isExpanded = expandedRegions.has(name);
-                  const regionTowns = getTownsForRegion(name);
-
-                  return (
-                    <div key={name} className="border border-neutral-200 rounded-lg overflow-hidden">
-                      {/* Region Header */}
-                      <button
-                        onClick={() => {
-                          handleRegionSelect(name);
-                          if (!isExpanded && regionTowns.length > 0) {
-                            toggleRegion(name);
-                          }
-                        }}
-                        className={`w-full flex items-center justify-between px-4 py-3 text-base font-medium transition-colors
-                          ${isActive
-                            ? "bg-primary-600 text-white"
-                            : "bg-white text-neutral-700 hover:bg-neutral-50"
-                          }`}
-                      >
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          {isActive && <CheckIcon className="h-5 w-5 text-white flex-shrink-0" />}
-                          <span className="truncate">{name}</span>
-                        </div>
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className={`rounded-full px-2.5 py-0.5 text-sm font-semibold
-                            ${isActive
-                              ? "bg-white/20 text-white"
-                              : "bg-neutral-100 text-neutral-600"
-                            }`}>
-                            {count}
-                          </span>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleRegion(name);
-                            }}
-                            className={`p-1 rounded transition-colors ${
-                              isActive 
-                                ? "hover:bg-white/20" 
-                                : "hover:bg-neutral-200"
-                            }`}
-                          >
-                            {isExpanded ? (
-                              <ChevronDownIcon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-neutral-600'}`} />
-                            ) : (
-                              <ChevronRightIcon className={`h-5 w-5 ${isActive ? 'text-white' : 'text-neutral-600'}`} />
-                            )}
-                          </button>
-                        </div>
-                      </button>
-
-                      {/* Towns List (Accordion Content) */}
-                      {isExpanded && regionTowns.length > 0 && (
-                        <div className="bg-neutral-50 border-t border-neutral-200">
-                          {regionTowns.map(town => {
-                            const townColors = getAreaColors(name);
-                            const isTownActive = selectedTown === town.name;
-
-                            return (
-                              <button
-                                key={town.name}
-                                onClick={() => handleTownSelect(town.name)}
-                                className={`w-full flex items-center justify-between px-6 py-2.5 text-sm font-medium transition-colors
-                                  ${isTownActive
-                                    ? "bg-primary-500 text-white"
-                                    : "text-neutral-700 hover:bg-neutral-100"
-                                  }`}
-                              >
-                                <div className="flex items-center gap-2 flex-1 min-w-0">
-                                  {isTownActive && <CheckIcon className="h-4 w-4 text-white flex-shrink-0" />}
-                                  <span className="truncate">{town.name}</span>
-                                </div>
-                                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold flex-shrink-0
-                                  ${isTownActive
-                                    ? "bg-white/20 text-white"
-                                    : "bg-white text-neutral-600"
-                                  }`}>
-                                  {town.count}
-                                </span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+            <div className="space-y-4 mt-4">
+              <AreaFilter
+                properties={[]}
+                selectedProvince={selectedProvince}
+                selectedTown={selectedTown}
+                selectedRegion={selectedRegion}
+                selectedArea={selectedArea}
+                regions={regionCounts}
+                areas={filteredAreas.map(area => ({
+                  areaId: area.areaId,
+                  areaName: area.areaName,
+                  count: area.count
+                }))}
+                allCount={totalPropertiesCount}
+                onProvinceChange={(province) => {
+                  setSelectedProvince(province);
+                }}
+                onTownChange={(town) => {
+                  setSelectedTown(town);
+                }}
+                onRegionChange={(regionId) => {
+                  setSelectedRegion(regionId);
+                  setSelectedArea(null);
+                  updateURL({ 
+                    regionId: regionId,
+                    areaId: null
+                  });
+                }}
+                onAreaChange={(areaId) => {
+                  setSelectedArea(areaId);
+                  updateURL({ 
+                    areaId: areaId,
+                    regionId: selectedRegion || null
+                  });
+                }}
+              />
             </div>
           </div>
         </div>
 
         {/* Map */}
         <div className="flex-1 rounded-xl overflow-hidden border border-neutral-200">
+          {isLoaded ? (
           <GoogleMap mapContainerStyle={containerStyle} center={defaultCenter} zoom={defaultZoom}>
             {areasWithCoordinates.map(area => (
               <Marker
-                key={`${area.areaId}-${area.areaName}`}
+                key={`region-${area.regionId}-area-${area.areaId}`}
                 position={{ lat: area.lat, lng: area.lng }}
                 onClick={() => handleAreaClick(area)}
                 icon={{
@@ -873,36 +780,36 @@ export default function MapSearchPage() {
               />
             ))}
 
-            {selectedArea && (
+            {selectedAreaMarker && (
               <InfoWindow
-                position={{ lat: selectedArea.lat, lng: selectedArea.lng }}
-                onCloseClick={() => setSelectedArea(null)}
+                position={{ lat: selectedAreaMarker.lat, lng: selectedAreaMarker.lng }}
+                onCloseClick={() => setSelectedAreaMarker(null)}
               >
                 <div className="min-w-[300px] max-w-[400px] overflow-hidden rounded-lg bg-white">
                   <div className="relative h-[160px] w-full">
                     <Image
-                      src={areaImages[selectedArea.areaName] || areaImages.default}
-                      alt={`${selectedArea.areaName} area`}
+                      src={areaImages[selectedAreaMarker.areaName] || areaImages.default}
+                      alt={`${selectedAreaMarker.areaName} area`}
                       fill
                       className="object-cover"
                       priority
                     />
                   </div>
                   <div className="p-4">
-                    <h2 className="text-xl font-bold text-primary-900 mb-2">{selectedArea.areaName}</h2>
+                    <h2 className="text-xl font-bold text-primary-900 mb-2">{selectedAreaMarker.areaName}</h2>
                     <p className="text-neutral-600 mb-4">
-                      {selectedArea.count === 1 ? tCommon('thereIs') : tCommon('thereAre')} <span className="font-semibold text-primary-700">{selectedArea.count}</span> {selectedArea.count === 1 ? tCommon('property') : tCommon('properties')} {tCommon('available')}
+                      {selectedAreaMarker.count === 1 ? tCommon('thereIs') : tCommon('thereAre')} <span className="font-semibold text-primary-700">{selectedAreaMarker.count}</span> {selectedAreaMarker.count === 1 ? tCommon('property') : tCommon('properties')} {tCommon('available')}
                     </p>
                     <div className="mb-4">
                       <span
                         className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium text-white"
-                        style={{ backgroundColor: getRegionColors(selectedArea.regionName || 'default').hex }}
+                        style={{ backgroundColor: getRegionColors(selectedAreaMarker.regionName || 'default').hex }}
                       >
-                        {selectedArea.regionName || tCommon('unknown')}
+                        {selectedAreaMarker.regionName || tCommon('unknown')}
                       </span>
                     </div>
                     <a
-                      href={`/properties?location=${encodeURIComponent(selectedArea.areaName)}&regionId=${selectedArea.regionId}&areaId=${selectedArea.areaId}${selectedPropertyType ? `&propertyType=${selectedPropertyType}` : ''}${minBeds ? `&minBeds=${minBeds}` : ''}${minBaths ? `&minBaths=${minBaths}` : ''}${minPrice ? `&minPrice=${minPrice}` : ''}${maxPrice ? `&maxPrice=${maxPrice}` : ''}`}
+                      href={`/properties?regionId=${selectedAreaMarker.regionId}&areaId=${selectedAreaMarker.areaId}${selectedPropertyType ? `&propertyType=${selectedPropertyType}` : ''}${minBeds ? `&minBeds=${minBeds}` : ''}${minBaths ? `&minBaths=${minBaths}` : ''}${minPrice ? `&minPrice=${minPrice}` : ''}${maxPrice ? `&maxPrice=${maxPrice}` : ''}`}
                       className="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
                     >
                       View Properties
@@ -912,11 +819,15 @@ export default function MapSearchPage() {
               </InfoWindow>
             )}
           </GoogleMap>
+          ) : (
+            <div className="h-[70vh] bg-neutral-100" />
+          )}
         </div>
       </div>
       {/* <div>
         <PromoSidebar />
       </div> */}
     </div>
+    </>
   );
 }
