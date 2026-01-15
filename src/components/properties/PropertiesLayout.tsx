@@ -278,28 +278,60 @@ export default function PropertiesLayout({
           const typesList: PropertyType[] = [];
           data.data.forEach((type: any) => {
             typesMap[type.id] = type.name;
+            // CRITICAL: Use the actual Property_Code from database (AP, BA, etc.)
+            // Do NOT generate codes from names - always use type.code from API
+            const actualCode = type.code || String(type.id);
             typesList.push({
               id: type.id,
               name: type.name,
-              code: type.code || String(type.id)
+              code: actualCode // This should be the Property_Code from database (AP, BA, CH, etc.)
             });
           });
           // Always update both map and list to ensure consistency
           setPropertyTypesMap(typesMap);
           setPropertyTypesList(typesList);
           propertyTypesLoadedRef.current = true;
+          
+          console.log('[PROPERTY TYPES] ✅ Loaded types from API:', typesList.map(t => ({ code: t.code, name: t.name })));
+          console.log('[PROPERTY TYPES] Raw API response:', data.data.map((t: any) => ({ id: t.id, code: t.code, name: t.name })));
+          
+          // After property types load, re-apply URL params to ensure dropdowns are synced
+          // This handles the case where URL params were read before property types loaded
+          if (searchParams && mounted) {
+            const propertyTypeParam = searchParams.get('propertyType');
+            console.log('[PROPERTY TYPES] Checking URL param after types loaded:', propertyTypeParam);
+            if (propertyTypeParam !== null && propertyTypeParam !== '') {
+              // Verify the code exists in the loaded types (case-insensitive match)
+              const normalizedParam = propertyTypeParam.trim().toLowerCase();
+              const matchingType = typesList.find(t => 
+                t.code.toLowerCase() === normalizedParam
+              );
+              if (matchingType) {
+                // Use the exact code from the loaded type (preserves case)
+                const exactCode = matchingType.code;
+                console.log('[PROPERTY TYPES] ✅ Re-applying propertyType from URL:', propertyTypeParam, '->', exactCode);
+                setSelectedPropertyType(exactCode);
+              } else {
+                console.warn('[PROPERTY TYPES] ❌ Property type code from URL not found in loaded types:', propertyTypeParam);
+                console.warn('[PROPERTY TYPES] Available codes:', typesList.map(t => t.code));
+                // Try matching by name
+                const matchingByName = typesList.find(t => 
+                  t.name.toLowerCase() === propertyTypeParam.toLowerCase()
+                );
+                if (matchingByName) {
+                  console.log('[PROPERTY TYPES] Found by name, using code:', matchingByName.code);
+                  setSelectedPropertyType(matchingByName.code);
+                }
+              }
+            }
+          }
         }
       } catch (err) {
         console.error("Error loading property types:", err);
-        // On error, try to build list from cache if available
-        if (Object.keys(propertyTypesMap).length > 0 && propertyTypesList.length === 0 && mounted) {
-          const typesListFromCache: PropertyType[] = Object.entries(propertyTypesMap).map(([id, name]) => ({
-            id: Number(id),
-            name: name || `Property Type ${id}`,
-            code: (name || '').toLowerCase().replace(/\s+/g, '-') || String(id)
-          }));
-          setPropertyTypesList(typesListFromCache);
-        }
+        // On error, we cannot generate codes from names - we MUST have the actual Property_Code from database
+        // So we don't build from cache - we need to fetch from API to get the codes
+        // The cache only has names, not codes, so we can't use it
+        console.warn('[PROPERTY TYPES] Error loading types - cannot use cache because codes are required');
         // Even on error, mark as loaded to prevent blocking
         propertyTypesLoadedRef.current = true;
       }
@@ -312,15 +344,34 @@ export default function PropertiesLayout({
     if (hasMap && hasList) {
       // Both are available, mark as loaded
       propertyTypesLoadedRef.current = true;
+      
+      // Re-apply URL params if property types are already loaded
+      // This ensures dropdowns are synced when component mounts with URL params
+      if (searchParams && mounted) {
+        const propertyTypeParam = searchParams.get('propertyType');
+        if (propertyTypeParam !== null && propertyTypeParam !== '') {
+          // Use case-insensitive matching to find the type
+          const matchingType = propertyTypesList.find(t => 
+            t.code.toLowerCase() === propertyTypeParam.toLowerCase()
+          );
+          if (matchingType) {
+            // Use the exact code from the loaded type (preserves case)
+            const exactCode = matchingType.code;
+            if (selectedPropertyType !== exactCode) {
+              console.log('[PROPERTY TYPES] Re-applying propertyType from URL (already loaded):', propertyTypeParam, '->', exactCode);
+              setSelectedPropertyType(exactCode);
+            }
+          } else {
+            console.warn('[PROPERTY TYPES] Property type code from URL not found in loaded types:', propertyTypeParam, 'Available codes:', propertyTypesList.map(t => t.code));
+          }
+        }
+      }
     } else if (hasMap && !hasList) {
-      // Map exists but list is missing - initialize list from map
-      const typesListFromCache: PropertyType[] = Object.entries(propertyTypesMap).map(([id, name]) => ({
-        id: Number(id),
-        name: name || `Property Type ${id}`,
-        code: (name || '').toLowerCase().replace(/\s+/g, '-') || String(id)
-      }));
-      setPropertyTypesList(typesListFromCache);
-      propertyTypesLoadedRef.current = true;
+      // Map exists but list is missing - we CANNOT generate codes from names
+      // We MUST fetch from API to get the actual Property_Code from database
+      // The cache only has names, not codes, so we need to fetch fresh data
+      console.log('[PROPERTY TYPES] Map exists but list missing - fetching from API to get codes');
+      loadPropertyTypes();
     } else {
       // Either missing or incomplete, fetch fresh data
       loadPropertyTypes();
@@ -329,22 +380,99 @@ export default function PropertiesLayout({
     return () => {
       mounted = false;
     };
-  }, [languageId, setPropertyTypesMap, API_BASE_URL, propertyTypesMap, propertyTypesList.length]); // Include propertyTypesList.length to check if list is populated
+  }, [languageId, setPropertyTypesMap, API_BASE_URL, propertyTypesMap, propertyTypesList.length]); // Removed searchParams and selectedPropertyType from deps to avoid loops
+
+  // Separate effect to sync propertyType from URL after property types are loaded
+  // This ensures the dropdown shows the correct value even if URL params were read before types loaded
+  useEffect(() => {
+    if (!searchParams) {
+      console.log('[PROPERTY TYPE SYNC] No searchParams, skipping');
+      return;
+    }
+    
+    const propertyTypeParam = searchParams.get('propertyType');
+    console.log('[PROPERTY TYPE SYNC] ===== START =====');
+    console.log('[PROPERTY TYPE SYNC] URL param:', propertyTypeParam);
+    console.log('[PROPERTY TYPE SYNC] Current state:', selectedPropertyType);
+    console.log('[PROPERTY TYPE SYNC] Property types loaded:', propertyTypesList.length > 0);
+    console.log('[PROPERTY TYPE SYNC] Available property types:', propertyTypesList.map(t => ({ code: t.code, name: t.name })));
+    
+    // If property types aren't loaded yet, set the value directly from URL (will be updated once types load)
+    if (propertyTypesList.length === 0) {
+      if (propertyTypeParam !== null && propertyTypeParam !== '') {
+        // Set it directly so the dropdown shows something, even if not the exact code
+        // Always set it, don't check if different - ensures it's set on initial load
+        console.log('[PROPERTY TYPE SYNC] Property types not loaded yet, setting propertyType directly from URL:', propertyTypeParam);
+        // Use the param value as-is (case-sensitive) - will be corrected once types load
+        setSelectedPropertyType(propertyTypeParam);
+      } else if (propertyTypeParam === null && selectedPropertyType !== null) {
+        // Clear if URL doesn't have it
+        console.log('[PROPERTY TYPE SYNC] Clearing propertyType (not in URL, types not loaded)');
+        setSelectedPropertyType(null);
+      }
+      console.log('[PROPERTY TYPE SYNC] ===== END (types not loaded) =====');
+      return;
+    }
+    
+    // Property types are loaded - now match and set the exact code
+    if (propertyTypeParam !== null && propertyTypeParam !== '') {
+      // Check if the code exists in loaded types (case-insensitive match)
+      const normalizedParam = propertyTypeParam.trim().toLowerCase();
+      const matchingType = propertyTypesList.find(t => 
+        t.code.toLowerCase() === normalizedParam
+      );
+      
+      if (matchingType) {
+        // Use the exact code from the loaded type (preserves case from API)
+        const exactCode = matchingType.code;
+        // CRITICAL: Always update, even if it seems the same - this ensures React re-renders the dropdown
+        // The issue might be that selectedPropertyType is "AP" but the API code is "ap", so we need to update it
+        console.log('[PROPERTY TYPE SYNC] ✅ Setting propertyType from URL:', propertyTypeParam, '->', exactCode, '(current:', selectedPropertyType, ')');
+        // Always set it - don't check if different, because case might differ and React needs the exact match
+        setSelectedPropertyType(exactCode);
+      } else {
+        console.warn('[PROPERTY TYPE SYNC] ❌ Property type code from URL not found:', propertyTypeParam);
+        console.warn('[PROPERTY TYPE SYNC] Available codes:', propertyTypesList.map(t => t.code));
+        // Try to find by name as fallback (case-insensitive)
+        const matchingByName = propertyTypesList.find(t => 
+          t.name.toLowerCase() === propertyTypeParam.toLowerCase()
+        );
+        if (matchingByName) {
+          console.log('[PROPERTY TYPE SYNC] Found by name, using code:', matchingByName.code);
+          setSelectedPropertyType(matchingByName.code);
+        } else {
+          // Even if not found, set it so the dropdown shows the value from URL
+          console.log('[PROPERTY TYPE SYNC] Setting propertyType to URL value even though not found in types:', propertyTypeParam);
+          setSelectedPropertyType(propertyTypeParam);
+        }
+      }
+    } else {
+      // URL doesn't have propertyType - clear it
+      if (selectedPropertyType !== null) {
+        console.log('[PROPERTY TYPE SYNC] Clearing propertyType (not in URL)');
+        setSelectedPropertyType(null);
+      }
+    }
+    console.log('[PROPERTY TYPE SYNC] ===== END =====');
+  }, [searchParams, propertyTypesList.length]); // Use length to trigger when list is populated, avoid loops
 
   // Consolidated useEffect for search parameters - only on mount or when searchParams change
   useEffect(() => {
     if (!searchParams) return;
 
-    // Skip updating state if we're programmatically updating the URL
+    // Skip updating state if we're programmatically updating the URL (but allow on initial mount)
     // This prevents race conditions where our manual update gets overwritten
-    if (isUpdatingURLRef.current) {
+    // However, on initial mount (firstLoadFromParams), we MUST read URL params to populate filters
+    if (isUpdatingURLRef.current && !firstLoadFromParams) {
       console.log('[SEARCH PARAMS EFFECT] Skipping update - URL is being updated programmatically');
       console.log('[SEARCH PARAMS EFFECT] Pending region update:', pendingRegionUpdateRef.current);
       return;
     }
-
+    
     console.log('[SEARCH PARAMS EFFECT] ===== START =====');
+    console.log('[SEARCH PARAMS EFFECT] Property types loaded:', propertyTypesList.length > 0);
     console.log('[SEARCH PARAMS EFFECT] searchParams changed, current URL:', searchParams.toString());
+    console.log('[SEARCH PARAMS EFFECT] First load from params:', firstLoadFromParams);
 
     // Extract all parameters at once
     const regionIdParam = searchParams.get('regionId');
@@ -358,8 +486,23 @@ export default function PropertiesLayout({
     const maxPriceParam = searchParams.get('maxPrice');
     const locationParam = searchParams.get('location');
 
-    console.log('[SEARCH PARAMS EFFECT] Extracted params - regionId:', regionIdParam, 'areaId:', areaIdParam);
-    console.log('[SEARCH PARAMS EFFECT] Current selectedRegion state:', selectedRegion);
+    console.log('[SEARCH PARAMS EFFECT] Extracted params:', {
+      regionId: regionIdParam,
+      areaId: areaIdParam,
+      propertyType: propertyTypeParam,
+      minBeds: minBedsParam,
+      minBaths: minBathsParam,
+      minPrice: minPriceParam,
+      maxPrice: maxPriceParam
+    });
+    console.log('[SEARCH PARAMS EFFECT] Current state:', {
+      selectedRegion,
+      selectedPropertyType,
+      minBeds,
+      minBaths,
+      minPrice,
+      maxPrice
+    });
 
     // Always update state from URL params when they exist
     // Use !== null check to distinguish between "not in URL" vs "empty value in URL"
@@ -379,30 +522,158 @@ export default function PropertiesLayout({
         setSelectedRegion(null);
       }
     }
+    
     if (areaIdParam !== null) {
       const newAreaId = areaIdParam ? Number(areaIdParam) : null;
-      setSelectedArea(newAreaId);
+      if (newAreaId !== selectedArea) {
+        setSelectedArea(newAreaId);
+      }
+    } else {
+      // Clear areaId if not in URL
+      if (selectedArea !== null) {
+        setSelectedArea(null);
+      }
     }
+    
     if (provinceParam !== null) {
       setSelectedProvince(provinceParam || null);
+    } else {
+      // Clear province if not in URL
+      if (selectedProvince !== null) {
+        setSelectedProvince(null);
+      }
     }
+    
     if (townParam !== null) {
       setSelectedTown(townParam || null);
+    } else {
+      // Clear town if not in URL
+      if (selectedTown !== null) {
+        setSelectedTown(null);
+      }
     }
-    if (propertyTypeParam !== null) {
-      setSelectedPropertyType(propertyTypeParam || null);
+    
+    // Handle propertyType - always sync with URL
+    if (propertyTypeParam !== null && propertyTypeParam !== '') {
+      // Use the param value, but try to match with loaded property types first
+      // This ensures we use the exact code from the loaded types (preserves case)
+      const normalizedParam = propertyTypeParam.trim();
+      
+      if (propertyTypesList.length > 0) {
+        // Property types are loaded - find matching type and use exact code
+        const normalizedParamLower = normalizedParam.toLowerCase();
+        const matchingType = propertyTypesList.find(t => 
+          t.code.toLowerCase() === normalizedParamLower
+        );
+        
+        if (matchingType) {
+          const exactCode = matchingType.code;
+          // Always set it, don't check if different - ensures dropdown is updated
+          console.log('[SEARCH PARAMS EFFECT] Setting propertyType from URL (with type match):', normalizedParam, '->', exactCode);
+          setSelectedPropertyType(exactCode);
+        } else {
+          // Code not found in loaded types - try matching by name
+          const matchingByName = propertyTypesList.find(t => 
+            t.name.toLowerCase() === normalizedParamLower
+          );
+          if (matchingByName) {
+            console.log('[SEARCH PARAMS EFFECT] Found by name, using code:', matchingByName.code);
+            setSelectedPropertyType(matchingByName.code);
+          } else {
+            // Code not found in loaded types, but set it anyway (might be valid but not loaded yet)
+            console.warn('[SEARCH PARAMS EFFECT] Property type code not found in loaded types:', normalizedParam);
+            console.warn('[SEARCH PARAMS EFFECT] Available codes:', propertyTypesList.map(t => t.code));
+            console.log('[SEARCH PARAMS EFFECT] Setting propertyType from URL (no match):', normalizedParam);
+            setSelectedPropertyType(normalizedParam);
+          }
+        }
+      } else {
+        // Property types not loaded yet - ALWAYS set the param value directly
+        // The sync effect will update it with the exact code once types load
+        // Don't check if different - always set to ensure it's populated from URL
+        console.log('[SEARCH PARAMS EFFECT] Setting propertyType from URL (types not loaded yet):', normalizedParam);
+        setSelectedPropertyType(normalizedParam);
+      }
+    } else {
+      // If URL doesn't have propertyType param, clear it
+      // Only clear if property types are loaded to avoid clearing during initial load
+      if (selectedPropertyType !== null && propertyTypesList.length > 0) {
+        console.log('[SEARCH PARAMS EFFECT] Clearing propertyType (not in URL and types loaded)');
+        setSelectedPropertyType(null);
+      } else if (selectedPropertyType !== null && firstLoadFromParams) {
+        // On initial load, if URL doesn't have propertyType, clear it even if types aren't loaded yet
+        console.log('[SEARCH PARAMS EFFECT] Clearing propertyType on initial load (not in URL)');
+        setSelectedPropertyType(null);
+      }
     }
-    if (minBedsParam !== null) {
-      setMinBeds(minBedsParam || null);
+    
+    // Handle minBeds - always sync with URL
+    if (minBedsParam !== null && minBedsParam !== '') {
+      if (minBeds !== minBedsParam) {
+        console.log('[SEARCH PARAMS EFFECT] Setting minBeds from URL:', minBedsParam);
+        setMinBeds(minBedsParam);
+      }
+    } else {
+      // Clear minBeds if not in URL
+      if (minBeds !== null) {
+        console.log('[SEARCH PARAMS EFFECT] Clearing minBeds (not in URL)');
+        setMinBeds(null);
+      }
     }
-    if (minBathsParam !== null) {
-      setMinBaths(minBathsParam || null);
+    
+    // Handle minBaths - always sync with URL
+    if (minBathsParam !== null && minBathsParam !== '') {
+      if (minBaths !== minBathsParam) {
+        console.log('[SEARCH PARAMS EFFECT] Setting minBaths from URL:', minBathsParam);
+        setMinBaths(minBathsParam);
+      }
+    } else {
+      // Clear minBaths if not in URL
+      if (minBaths !== null) {
+        console.log('[SEARCH PARAMS EFFECT] Clearing minBaths (not in URL)');
+        setMinBaths(null);
+      }
     }
-    if (minPriceParam !== null) {
-      setminPrice(minPriceParam || null);
+    
+    // Handle minPrice - always sync with URL
+    if (minPriceParam !== null && minPriceParam !== '') {
+      // minPriceParam can be "0" which means "No Min" - normalize it to empty string for dropdown
+      // The dropdown uses empty string for "No Min" option
+      if (minPriceParam === '0' || minPriceParam === '') {
+        // minPrice=0 means no minimum, so set to null/empty to show "No Min" in dropdown
+        if (minPrice !== null && minPrice !== '') {
+          console.log('[SEARCH PARAMS EFFECT] Setting minPrice to empty (0 means No Min):', minPriceParam);
+          setminPrice(null);
+        }
+      } else {
+        // Valid minPrice value (not 0)
+        if (minPrice !== minPriceParam) {
+          console.log('[SEARCH PARAMS EFFECT] Setting minPrice from URL:', minPriceParam);
+          setminPrice(minPriceParam);
+        }
+      }
+    } else {
+      // Clear minPrice if not in URL
+      if (minPrice !== null) {
+        console.log('[SEARCH PARAMS EFFECT] Clearing minPrice (not in URL)');
+        setminPrice(null);
+      }
     }
-    if (maxPriceParam !== null) {
-      setmaxPrice(maxPriceParam || null);
+    
+    // Handle maxPrice - always sync with URL
+    if (maxPriceParam !== null && maxPriceParam !== '') {
+      // maxPriceParam can be "0" which is falsy, so we need to check for null specifically
+      // If param exists in URL (even if "0"), use it; only use null if param doesn't exist
+      if (maxPrice !== maxPriceParam) {
+        console.log('[SEARCH PARAMS EFFECT] Setting maxPrice from URL:', maxPriceParam);
+        setmaxPrice(maxPriceParam);
+      }
+    } else {
+      // Clear maxPrice if not in URL
+      if (maxPrice !== null) {
+        console.log('[SEARCH PARAMS EFFECT] Clearing maxPrice (not in URL)');
+        setmaxPrice(null);
+      }
     }
 
     // Handle location parameter
@@ -428,7 +699,7 @@ export default function PropertiesLayout({
     }
     
     console.log('[SEARCH PARAMS EFFECT] ===== END =====');
-  }, [searchParams, firstLoadFromParams, properties.length, selectedRegion]); // Include selectedRegion to check for changes
+  }, [searchParams, firstLoadFromParams, properties.length, selectedRegion, propertyTypesList.length]); // Include propertyTypesList.length to know when types are loaded
 
   // Fetch region counts with current filters applied
   // This ALWAYS runs to ensure counts reflect current filters
@@ -594,18 +865,42 @@ export default function PropertiesLayout({
         // Get current state values - prioritize state over URL to avoid race conditions
         // When filters change, state updates immediately but URL update via router.replace is async
         // So we check state first (most up-to-date), then URL as fallback
-        const getFromURL = (key: string) => searchParams?.get(key) || null;
+        const getFromURL = (key: string) => {
+          const value = searchParams?.get(key);
+          // Return null only if param doesn't exist, not if it's "0" or empty string
+          return value !== null ? value : null;
+        };
         const getFromStateOrURL = (stateValue: string | number | null, urlKey: string, isNumber = false) => {
-          // Check state first - it updates immediately when filters change
-          if (stateValue !== null && stateValue !== '') {
-            return stateValue;
+          // On initial load from URL params, state might not be set yet, so prioritize URL
+          // After initial load, state is the source of truth
+          if (firstLoadFromParams) {
+            // On initial load, read from URL first (most reliable)
+            const urlValue = getFromURL(urlKey);
+            if (urlValue !== null) {
+              // Even if urlValue is "0" or empty string, use it
+              // Empty string means "no filter", "0" means actual value 0
+              if (urlValue === '') {
+                return null;
+              }
+              return isNumber ? Number(urlValue) : urlValue;
+            }
+            // Fallback to state if URL doesn't have it
+            if (stateValue !== null && stateValue !== '') {
+              return stateValue;
+            }
+            return null;
+          } else {
+            // After initial load, prioritize state (updates immediately when filters change)
+            if (stateValue !== null && stateValue !== '') {
+              return stateValue;
+            }
+            // Fallback to URL if state is not set
+            const urlValue = getFromURL(urlKey);
+            if (urlValue !== null && urlValue !== '') {
+              return isNumber ? Number(urlValue) : urlValue;
+            }
+            return null;
           }
-          // Fallback to URL if state is not set (e.g., on initial load from URL)
-          const urlValue = getFromURL(urlKey);
-          if (urlValue !== null && urlValue !== '') {
-            return isNumber ? Number(urlValue) : urlValue;
-          }
-          return null;
         };
         
         // Resolve parameters - prioritize state (updates immediately) over URL (async update)
@@ -660,11 +955,27 @@ export default function PropertiesLayout({
         } else {
           console.log('[PROPERTIES FETCH] ⚠️ currentAreaId is null/undefined, not including in query');
         }
-        if (currentPropertyType) queryParams.propertyType = String(currentPropertyType);
-        if (currentMinBeds) queryParams.minBeds = String(currentMinBeds);
-        if (currentMinBaths) queryParams.minBaths = String(currentMinBaths);
-        if (currentMinPrice) queryParams.minPrice = String(currentMinPrice);
-        if (currentMaxPrice) queryParams.maxPrice = String(currentMaxPrice);
+        // Add filter params - check for null/undefined, not truthiness (to handle "0" correctly)
+        if (currentPropertyType !== null && currentPropertyType !== undefined && currentPropertyType !== '') {
+          queryParams.propertyType = String(currentPropertyType);
+        }
+        if (currentMinBeds !== null && currentMinBeds !== undefined && currentMinBeds !== '') {
+          queryParams.minBeds = String(currentMinBeds);
+        }
+        if (currentMinBaths !== null && currentMinBaths !== undefined && currentMinBaths !== '') {
+          queryParams.minBaths = String(currentMinBaths);
+        }
+        // Handle minPrice: if state is null/empty (No Min), check URL for minPrice=0
+        // If URL has minPrice=0, use it; otherwise omit it
+        if (currentMinPrice !== null && currentMinPrice !== undefined && currentMinPrice !== '') {
+          queryParams.minPrice = String(currentMinPrice);
+        } else if (searchParams && searchParams.get('minPrice') === '0') {
+          // State is empty (No Min selected), but URL has minPrice=0, so use it
+          queryParams.minPrice = '0';
+        }
+        if (currentMaxPrice !== null && currentMaxPrice !== undefined && currentMaxPrice !== '') {
+          queryParams.maxPrice = String(currentMaxPrice);
+        }
 
         const query = new URLSearchParams(queryParams);
         const queryString = query.toString();
@@ -883,9 +1194,14 @@ export default function PropertiesLayout({
       }
     }
     if (updates.minPrice !== undefined) {
-      if (updates.minPrice) {
+      if (updates.minPrice && updates.minPrice !== '0') {
+        // Valid minPrice value (not empty and not 0)
         params.set('minPrice', updates.minPrice);
+      } else if (updates.minPrice === '0' || updates.minPrice === null || updates.minPrice === '') {
+        // minPrice=0 means "No Min" - set it to "0" in URL to match API expectations
+        params.set('minPrice', '0');
       } else {
+        // Remove if explicitly set to null/undefined
         params.delete('minPrice');
       }
     }
@@ -1330,6 +1646,8 @@ export default function PropertiesLayout({
                       value={selectedPropertyType || ''}
                       onChange={(e) => {
                         const value = e.target.value || null;
+                        console.log('[PROPERTY TYPE DROPDOWN] onChange - value:', value);
+                        console.log('[PROPERTY TYPE DROPDOWN] Available types:', propertyTypesList.map(t => ({ code: t.code, name: t.name })));
                         setProperties([]);
                         setLoading(true);
                         setError(null);
@@ -1430,9 +1748,12 @@ export default function PropertiesLayout({
                         setLoading(true);
                         setError(null);
                         lastFetchParamsRef.current = '';
+                        // Store empty string in state for "No Min" (so dropdown shows correctly)
                         setminPrice(value);
+                        // But in URL, use "0" for "No Min" to match API expectations
+                        const urlValue = value === null || value === '' ? '0' : value;
                         updateURL({ 
-                          minPrice: value,
+                          minPrice: urlValue,
                           regionId: selectedRegion || null,
                           areaId: selectedArea || null
                         });

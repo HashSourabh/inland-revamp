@@ -101,6 +101,9 @@ export default function AdvancedSearch() {
       }
     });
 
+    // Always add page=1 when navigating from home page
+    params.set("page", "1");
+
     return params.toString();
   };
 
