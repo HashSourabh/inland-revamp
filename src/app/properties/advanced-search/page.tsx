@@ -41,20 +41,8 @@ export default function AdvancedSearchPage() {
   };
   const languageId = localeToLanguageId[locale] || 1;
 
-  // Convert property types map to array format for select
-  const propertyTypes = React.useMemo(() => {
-    return Object.entries(propertyTypesMap)
-      .filter(([id, name]) => name != null && name.trim() !== '') // Filter out null/undefined/empty names
-      .map(([id, name]) => {
-        // Performance: Safely handle null/undefined names (especially for PT locale)
-        const safeName = name || `Property Type ${id}`;
-        return {
-          id: Number(id),
-          name: safeName,
-          code: safeName.toLowerCase().replace(/\s+/g, '-'), // Generate code from name
-        };
-      });
-  }, [propertyTypesMap]);
+  // Store property types with actual codes from API
+  const [propertyTypesList, setPropertyTypesList] = React.useState<Array<{ id: number; name: string; code: string }>>([]);
 
   // Convert region counts to format needed for select
   const regionCountsFormatted = React.useMemo(() => {
@@ -69,24 +57,31 @@ export default function AdvancedSearchPage() {
   useEffect(() => {
     let mounted = true;
     const loadData = async () => {
-      // Load property types first if not cached
-      if (Object.keys(propertyTypesMap).length === 0) {
-        try {
-          const res = await fetch(
-            `${API_BASE_URL}/properties/types?languageId=${languageId}`
-          );
-          if (!res.ok) throw new Error(`Failed: ${res.status}`);
-          const data = await res.json();
-          if (data?.success && data.data && mounted) {
-            const typesMap: Record<number, string> = {};
-            data.data.forEach((type: any) => {
-              typesMap[type.id] = type.name;
+      // Load property types with actual codes from API
+      try {
+        const res = await fetch(
+          `${API_BASE_URL}/properties/types?languageId=${languageId}`
+        );
+        if (!res.ok) throw new Error(`Failed: ${res.status}`);
+        const data = await res.json();
+        if (data?.success && data.data && mounted) {
+          const typesMap: Record<number, string> = {};
+          const typesList: Array<{ id: number; name: string; code: string }> = [];
+          data.data.forEach((type: any) => {
+            typesMap[type.id] = type.name;
+            // Use actual Property_Code from database (AP, BA, CH, etc.)
+            const actualCode = type.code || String(type.id);
+            typesList.push({
+              id: type.id,
+              name: type.name,
+              code: actualCode
             });
-            setPropertyTypesMap(typesMap);
-          }
-        } catch (err) {
-          console.error("Error loading property types:", err);
+          });
+          setPropertyTypesMap(typesMap);
+          setPropertyTypesList(typesList);
         }
+      } catch (err) {
+        console.error("Error loading property types:", err);
       }
 
       // Then load region counts (can use cache)
@@ -104,7 +99,7 @@ export default function AdvancedSearchPage() {
     return () => {
       mounted = false;
     };
-  }, [API_BASE_URL, languageId, propertyTypesMap, setPropertyTypesMap, fetchRegionCounts]);
+  }, [API_BASE_URL, languageId, setPropertyTypesMap, fetchRegionCounts]);
 
   // handle form submit -> build query string
   const handleSubmit = (e: React.FormEvent) => {
@@ -206,9 +201,9 @@ export default function AdvancedSearchPage() {
                 className="w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
               >
                 <option value="">{tFilters('all')}</option>
-                {propertyTypes.map((t) => (
-                  <option key={t.id} value={t.code}>
-                    {t.name}
+                {propertyTypesList.map((type) => (
+                  <option key={type.id} value={type.code}>
+                    {type.name}
                   </option>
                 ))}
               </select>

@@ -1694,11 +1694,11 @@ export default function PropertiesLayout({
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
                       <option value="">{tFilters('any')}</option>
-                      {[1, 2, 3, 4, 5, 6].map((n) => (
-                        <option key={n} value={n}>
-                          {n}+
-                        </option>
-                      ))}
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5+</option>
                     </select>
                   </div>
 
@@ -1726,11 +1726,11 @@ export default function PropertiesLayout({
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
                       <option value="">{tFilters('any')}</option>
-                      {[1, 2, 3, 4, 5].map((n) => (
-                        <option key={n} value={n}>
-                          {n}+
-                        </option>
-                      ))}
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5+</option>
                     </select>
                   </div>
 
@@ -1760,15 +1760,14 @@ export default function PropertiesLayout({
                       }}
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
-                      <option value="">{tFilters('noMin') || 'No Min'}</option>
+                      <option value="">{tFilters('any')}</option>
                       <option value="50000">€50,000</option>
                       <option value="100000">€100,000</option>
                       <option value="150000">€150,000</option>
                       <option value="200000">€200,000</option>
-                      <option value="250000">€250,000</option>
                       <option value="300000">€300,000</option>
-                      <option value="400000">€400,000</option>
                       <option value="500000">€500,000</option>
+                      <option value="1000000">€1,000,000</option>
                     </select>
                   </div>
 
@@ -1795,15 +1794,13 @@ export default function PropertiesLayout({
                       }}
                       className="w-full rounded-md border-neutral-300 py-2.5 text-sm focus:border-primary-500 focus:ring-primary-500"
                     >
-                      <option value="">{tFilters('noMax') || 'No Max'}</option>
+                      <option value="">{tFilters('any')}</option>
+                      <option value="100000">€100,000</option>
+                      <option value="150000">€150,000</option>
                       <option value="200000">€200,000</option>
                       <option value="300000">€300,000</option>
-                      <option value="400000">€400,000</option>
                       <option value="500000">€500,000</option>
-                      <option value="600000">€600,000</option>
-                      <option value="750000">€750,000</option>
                       <option value="1000000">€1,000,000</option>
-                      <option value="1500000">€1,500,000</option>
                       <option value="2000000">€2,000,000+</option>
                     </select>
                   </div>

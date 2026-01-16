@@ -16,4 +16,4 @@ export default function ExclusivesPage() {
       <PropertiesLayout properties={exclusiveProperties} />
     </Suspense>
   );
-} 
+}
