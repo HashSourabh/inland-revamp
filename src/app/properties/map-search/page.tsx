@@ -13,7 +13,6 @@ import { usePropertyCache } from '@/context/PropertyCacheContext';
 import AreaFilter from '@/components/properties/AreaFilter';
 import { useRegionData } from '@/hooks/useRegionData';
 import GlobalLoader from '@/components/shared/GlobalLoader';
-import propertyThumbnail from '@/assets/images/property-thumbnail.jpg';
 
 // Performance: Import useJsApiLoader normally as it's needed for initialization
 // This hook is lightweight and needed early in the component lifecycle
@@ -832,14 +831,14 @@ export default function MapSearchPage() {
                 <div className="min-w-[300px] max-w-[400px] overflow-hidden rounded-lg bg-white">
                   <div className="relative h-[160px] w-full">
                     <Image
-                      src={propertyThumbnail.src}
+                      src={areaImages[selectedAreaMarker.areaName] || areaImages.default}
                       alt={`${selectedAreaMarker.areaName} area`}
                       fill
                       className="object-cover"
                       priority
                     />
                   </div>
-                  <div className="pt-4">
+                  <div className="p-4">
                     <h2 className="text-xl font-bold text-primary-900 mb-2">{selectedAreaMarker.areaName}</h2>
                     <p className="text-neutral-600 mb-4">
                       {selectedAreaMarker.count === 1 ? tCommon('thereIs') : tCommon('thereAre')} <span className="font-semibold text-primary-700">{selectedAreaMarker.count}</span> {selectedAreaMarker.count === 1 ? tCommon('property') : tCommon('properties')} {tCommon('available')}

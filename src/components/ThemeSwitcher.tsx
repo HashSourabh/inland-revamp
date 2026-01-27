@@ -53,6 +53,10 @@ export default function ThemeSwitcher() {
     document.documentElement.style.setProperty('--color-secondary', currentTheme.secondary);
   }, [currentTheme]);
 
+  // Commented out the theme switcher UI - functionality still works via useEffect above
+  return null;
+  
+  /* 
   return (
     <div className="fixed right-0 top-1/2 -translate-y-1/2 z-40">
       <button
@@ -110,4 +114,5 @@ export default function ThemeSwitcher() {
       )}
     </div>
   );
+  */
 } 

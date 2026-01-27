@@ -1526,6 +1526,7 @@ export default function PropertiesLayout({
     titleDesc: `${getTranslation('title', 'Title')}: Z-A`,
     priceAsc: `${getTranslation('price', 'Price')}: ${getTranslation('lowToHigh', 'Low to High')}`,
     priceDesc: `${getTranslation('price', 'Price')}: ${getTranslation('highToLow', 'High to Low')}`,
+    viewedDesc: getTranslation('mostViewed', 'Most Viewed'),
   };
 
   // Get display title for filter header
@@ -1912,6 +1913,7 @@ export default function PropertiesLayout({
                         <option value="title:DESC">{sortOptions.titleDesc}</option>
                         <option value="price:ASC">{sortOptions.priceAsc}</option>
                         <option value="price:DESC">{sortOptions.priceDesc}</option>
+                        <option value="viewed:DESC">{sortOptions.viewedDesc}</option>
                       </select>
                     </div>
                     {/* Layout Switcher */}
