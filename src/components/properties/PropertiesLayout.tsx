@@ -485,6 +485,7 @@ export default function PropertiesLayout({
     const minPriceParam = searchParams.get('minPrice');
     const maxPriceParam = searchParams.get('maxPrice');
     const locationParam = searchParams.get('location');
+    const pageParam = searchParams.get('page');
 
     console.log('[SEARCH PARAMS EFFECT] Extracted params:', {
       regionId: regionIdParam,
@@ -690,9 +691,10 @@ export default function PropertiesLayout({
       }
     }
 
-    // Reset to page 1 when filters change
-    setCurrentPage(1);
-    
+    // Sync current page from URL (so pagination clicks and back/forward work)
+    const pageNum = pageParam ? Math.max(1, parseInt(pageParam, 10) || 1) : 1;
+    setCurrentPage(pageNum);
+
     // Mark that URL params have been processed (for initial load)
     if (firstLoadFromParams) {
       setFirstLoadFromParams(false);
@@ -1142,6 +1144,12 @@ export default function PropertiesLayout({
   const handlePageChange = (page: number) => {
     if (page !== currentPage && page >= 1 && page <= displayedTotalPages) {
       setCurrentPage(page);
+      // Update URL so page is reflected in address bar and browser history
+      if (searchParams) {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('page', String(page));
+        router.replace(`?${params.toString()}`, { scroll: false });
+      }
     }
   };
 
