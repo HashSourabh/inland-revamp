@@ -80,15 +80,8 @@ export function transformPropertyForCard(
     currency: 'EUR',
     shortDescription: db.Property_Notes || '',
     location: {
-      // Priority 1: If Property_Address exists, use it (split by comma)
-      // Priority 2: Otherwise use Area_Name and Region_Name
-      // Priority 3: If neither exists, return null (don't display location)
-      town: db.Property_Address?.trim() 
-            ? db.Property_Address.split(',')[0]?.trim() || null
-            : (db.Area_Name?.trim() || null),
-      province: db.Property_Address?.trim()
-                ? db.Property_Address.split(',')[1]?.trim() || null
-                : (db.Region_Name?.trim() || null),
+      town: db.Area_Name?.trim() || null,
+      province: db.Region_Name?.trim() || null,
     },
     features: {
       bedrooms: db.Bedrooms || 0,

@@ -181,12 +181,12 @@ function PropertyCard({ property, card = 'grid', featured = false, favouriteIds 
                 {property.title}
               </h3>
             </Link>
-            {/* Location - Only show if we have valid location data */}
+            {/* Location: Region_Name / Area_Name */}
             {(property.location.town || property.location.province) && (
             <div className="sm:mt-1 mt-0.5 flex items-center text-sm text-neutral-500">
               <MapPinIcon className="mr-1 h-4 w-4 flex-[0_0_auto]" />
                 <span className='block flex-auto'>
-                  {[property.location.town, property.location.province].filter(Boolean).join(', ')}
+                  {[property.location.province, property.location.town].filter(Boolean).join(' / ')}
                 </span>
             </div>
             )}

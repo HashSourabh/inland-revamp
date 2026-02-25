@@ -16,11 +16,7 @@ import { fetchPropertyTypes, PropertyType } from '@/utils/api';
 import { useLocale } from 'next-intl';
 
 const transformPropertyForCard = (property: any, propertyTypesMap: Record<number, string>, tCommon?: any) => {
-  // Try to get property type from various sources, with priority order:
-  // 1. Look up by Property_Type_ID using the types map (this has the correct language)
-  // 2. PropertyType from API (always use this if available, even if map lookup fails)
-  // 3. Only use generic "Property" as last resort if nothing else is available
-  // Ensure propertyType is always a string (never undefined)
+  // Resolve property type: types map by Property_Type_ID, then API PropertyType, else generic fallback; always string.
   let propertyType: string = tCommon?.('property') || 'Property'; // Default fallback
   
   // First priority: Look up by Property_Type_ID in the types map (translated to current language)
@@ -53,12 +49,6 @@ const transformPropertyForCard = (property: any, propertyTypesMap: Record<number
     isFeatured: i === 0,
   }));
 
-  const address = property.Property_Address || property.address || '';
-  const addressParts = address
-    .split(',')
-    .map((part: string) => part.trim())
-    .filter(Boolean);
-
   return {
     id: property.id?.toString() || property.Property_ID?.toString() || "",
     title,
@@ -70,15 +60,8 @@ const transformPropertyForCard = (property: any, propertyTypesMap: Record<number
     currency: "EUR",
     shortDescription: property.short_description || property.Property_Notes || "",
     location: {
-      // Priority 1: If Property_Address exists, use it (split by comma)
-      // Priority 2: Otherwise use Area_Name and Region_Name
-      // Priority 3: If neither exists, return null (don't display location)
-      town: property.Property_Address?.trim()
-            ? property.Property_Address.split(',')[0]?.trim() || null
-            : (property.Area_Name?.trim() || property.town?.trim() || (addressParts.length > 0 ? addressParts[0] : null)),
-      province: property.Property_Address?.trim()
-                ? property.Property_Address.split(',')[1]?.trim() || null
-                : (property.Region_Name?.trim() || property.province?.trim() || (addressParts.length > 1 ? addressParts[addressParts.length - 1] : null)),
+      town: property.Area_Name?.trim() || null,
+      province: property.Region_Name?.trim() || null,
     },
     features: {
       bedrooms: property.Bedrooms ?? property.bedrooms ?? 0,

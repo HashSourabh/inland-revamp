@@ -70,26 +70,9 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
 
         if (data.success && data.data) {
           const db = data.data;
-          // Priority 1: If Property_Address exists and is not empty, use it (split by comma)
-          // Priority 2: Otherwise use Area_Name and Region_Name from API
-          // Priority 3: If neither exists, return null (don't display location)
-          let town: string | null = null;
-          let province: string | null = null;
-          
-          if (db.Property_Address && db.Property_Address.trim()) {
-            // Use Property_Address if it exists
-            const addressParts = db.Property_Address.split(",").map((part: string) => part.trim()).filter(Boolean);
-            town = addressParts[0] || null;
-            province = addressParts[1] || null;
-          } else {
-            // Use Area_Name and Region_Name from API
-            town = db.Area_Name?.trim() || null;
-            province = db.Region_Name?.trim() || null;
-          }
-          
           const location = {
-            town,
-            province,
+            town: db.Area_Name?.trim() || null,
+            province: db.Region_Name?.trim() || null,
           };
 
           const numPhotos = db.Num_Photos && db.Num_Photos > 0 ? db.Num_Photos : 1;
@@ -107,7 +90,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
           setProperty({
             id: db.Property_ID.toString(),
             propertyRef: db.Property_Ref || "",
-            title: `${propertyType}(${db.Property_Ref})`,
+            title: `${propertyType} (${db.Property_Ref})`,
             price: { 
               current: db.Public_Price, 
               original: (db.Original_Price && db.Original_Price > 0) ? db.Original_Price : undefined 
@@ -230,7 +213,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               <h1 className="text-xl sm:text-2xl font-bold">{property.title}</h1>
               {(property.location.town || property.location.province) && (
                 <p className="mt-1 text-sm sm:text-base text-neutral-600">
-                  {[property.location.town, property.location.province].filter(Boolean).join(' / ')}
+                  {[property.location.province, property.location.town].filter(Boolean).join(' / ')}
                 </p>
               )}
             </div>
@@ -253,7 +236,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               title={property.title}
               description={property.description}
               location={(property.location.town || property.location.province) 
-                ? `${property.location.town || ''}/${property.location.province || ''}`.replace(/^\/|\/$/g, '')
+                ? [property.location.province, property.location.town].filter(Boolean).join(' / ')
                 : undefined}
               beds={property.features.bedrooms}
               baths={property.features.bathrooms}
@@ -311,7 +294,7 @@ export default function PropertyDetails({ params }: PropertyDetailsProps) {
               plot={property.features.plotSize.toString()}
               views={property.viewed.toString()}
               location={(property.location.town || property.location.province) 
-                ? `${property.location.town || ''}/${property.location.province || ''}`.replace(/^\/|\/$/g, '')
+                ? [property.location.province, property.location.town].filter(Boolean).join(' / ')
                 : undefined}
             />
             {/* Description */}
