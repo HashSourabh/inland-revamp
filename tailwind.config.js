@@ -19,7 +19,7 @@ module.exports = {
           600: 'rgba(var(--color-primary))',
           700: '#3d4d79',
           800: '#354065',
-          900: '#2f3854',
+          900: 'rgba(var(--color-primary-hover))',
           950: '#1e2235',
         },
         secondary: {
@@ -29,7 +29,7 @@ module.exports = {
           300: '#fab88d',
           400: '#f79158',
           500: 'rgba(var(--color-secondary))',
-          600: '#e6541d',
+          600: 'rgba(var(--color-secondary-hover))',
           700: '#bc3d19',
           800: '#96331b',
           900: '#792e19',

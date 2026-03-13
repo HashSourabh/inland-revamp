@@ -219,7 +219,7 @@ export const areaColors: Record<string, { bg: string; hover: string; hex: string
   export function getIAMarkerIcon(province: string) {
     //const color = provinceColors[province]?.hex || '#FFD600';
     
-    const color = '#f6702f';
+    const color = '#dab900';
     const svg = `
       <svg width="44" height="54" viewBox="0 0 44 54" xmlns="http://www.w3.org/2000/svg">
         <defs>

@@ -6,39 +6,55 @@ import { useTranslations } from 'next-intl';
 type Theme = {
   name: string;
   primary: string;
+  primaryHover: string;
   secondary: string;
+  secondaryHover: string;
 };
 
 const themes: Theme[] = [
   {
     name: 'Classic Blue',
-    primary: '61, 77, 121',
-    secondary: '246, 112, 47'
+    primary: '47, 49, 148',
+    primaryHover: '33, 35, 108',
+    secondary: '218, 185, 0',
+    secondaryHover: '179, 152, 0',
+
   },
   {
     name: 'Forest Green',
     primary: '34, 97, 74',
-    secondary: '234, 179, 8'
+    primaryHover: '27, 97, 60',
+    secondary: '234, 179, 8',
+    secondaryHover: '117, 179, 0',
+
   },
   {
     name: 'Royal Purple',
     primary: '88, 28, 135',
-    secondary: '234, 88, 12'
+    primaryHover: '68, 21, 105',
+    secondary: '234, 88, 12',
+    secondaryHover: '117, 150, 0',
   },
   {
     name: 'Ocean Teal',
     primary: '15, 118, 110',
-    secondary: '249, 115, 22'
+    primaryHover: '11, 90, 90',
+    secondary: '249, 115, 22',
+    secondaryHover: '117, 150, 0',
   },
   {
     name: 'Burgundy',
     primary: '127, 29, 29',
-    secondary: '252, 211, 77'
+    primaryHover: '97, 22, 22',
+    secondary: '252, 211, 77',
+    secondaryHover: '117, 150, 0',
   },
   {
     name: 'Slate Blue',
     primary: '30, 58, 138',
-    secondary: '239, 68, 68'
+    primaryHover: '23, 44, 108',
+    secondary: '239, 68, 68',
+    secondaryHover: '117, 150, 0',
   }
 ];
 
@@ -51,6 +67,8 @@ export default function ThemeSwitcher() {
     // Apply theme
     document.documentElement.style.setProperty('--color-primary', currentTheme.primary);
     document.documentElement.style.setProperty('--color-secondary', currentTheme.secondary);
+    document.documentElement.style.setProperty('--color-primary-hover', currentTheme.primaryHover);
+    document.documentElement.style.setProperty('--color-secondary-hover', currentTheme.secondaryHover);
   }, [currentTheme]);
 
   // Commented out the theme switcher UI - functionality still works via useEffect above

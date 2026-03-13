@@ -10,8 +10,8 @@
   --background-end-rgb: 255, 255, 255;
   
   /* Theme Colors */
-  --color-primary: 61, 77, 121;
-  --color-secondary: 246, 112, 47;
+  --color-primary: 47, 49, 148;
+  --color-secondary: 218, 185, 0;
 }
 
 /* @media (prefers-color-scheme: dark) {
